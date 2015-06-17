@@ -1,0 +1,510 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		AA6B7E8D1B309FF800424F05 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6B7E8C1B309FF800424F05 /* AppDelegate.swift */; };
+		AA6B7E8F1B309FF800424F05 /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6B7E8E1B309FF800424F05 /* MasterViewController.swift */; };
+		AA6B7E911B309FF800424F05 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6B7E901B309FF800424F05 /* DetailViewController.swift */; };
+		AA6B7E941B309FF800424F05 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA6B7E921B309FF800424F05 /* Main.storyboard */; };
+		AA6B7E961B309FF800424F05 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA6B7E951B309FF800424F05 /* Images.xcassets */; };
+		AA6B7E991B309FF800424F05 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = AA6B7E971B309FF800424F05 /* LaunchScreen.xib */; };
+		AA6B7EA51B309FF800424F05 /* UrchinTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6B7EA41B309FF800424F05 /* UrchinTests.swift */; };
+		AA6B7EAF1B30A15400424F05 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6B7EAE1B30A15400424F05 /* User.swift */; };
+		AA6B7EB11B30A34100424F05 /* UserMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6B7EB01B30A34100424F05 /* UserMetadata.swift */; };
+		AA6B7EB31B30A41200424F05 /* Value.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6B7EB21B30A41200424F05 /* Value.swift */; };
+		AA6B7EB51B30A55800424F05 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6B7EB41B30A55800424F05 /* Profile.swift */; };
+		AA6B7EB71B30A5B200424F05 /* Group.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6B7EB61B30A5B200424F05 /* Group.swift */; };
+		AA6B7EB91B30A64A00424F05 /* Groups.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6B7EB81B30A64A00424F05 /* Groups.swift */; };
+		AA6B7EBB1B30A72700424F05 /* PatientData.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6B7EBA1B30A72700424F05 /* PatientData.swift */; };
+		AA6B7EBD1B30A7D700424F05 /* Health.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6B7EBC1B30A7D700424F05 /* Health.swift */; };
+		AA6B7EBF1B30A82100424F05 /* Demographic.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6B7EBE1B30A82100424F05 /* Demographic.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		AA6B7E9F1B309FF800424F05 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AA6B7E7F1B309FF800424F05 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AA6B7E861B309FF800424F05;
+			remoteInfo = Urchin;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		AA6B7E871B309FF800424F05 /* Urchin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Urchin.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA6B7E8B1B309FF800424F05 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AA6B7E8C1B309FF800424F05 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		AA6B7E8E1B309FF800424F05 /* MasterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasterViewController.swift; sourceTree = "<group>"; };
+		AA6B7E901B309FF800424F05 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
+		AA6B7E931B309FF800424F05 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		AA6B7E951B309FF800424F05 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		AA6B7E981B309FF800424F05 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		AA6B7E9E1B309FF800424F05 /* UrchinTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UrchinTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA6B7EA31B309FF800424F05 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AA6B7EA41B309FF800424F05 /* UrchinTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UrchinTests.swift; sourceTree = "<group>"; };
+		AA6B7EAE1B30A15400424F05 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		AA6B7EB01B30A34100424F05 /* UserMetadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserMetadata.swift; sourceTree = "<group>"; };
+		AA6B7EB21B30A41200424F05 /* Value.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Value.swift; sourceTree = "<group>"; };
+		AA6B7EB41B30A55800424F05 /* Profile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
+		AA6B7EB61B30A5B200424F05 /* Group.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Group.swift; sourceTree = "<group>"; };
+		AA6B7EB81B30A64A00424F05 /* Groups.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Groups.swift; sourceTree = "<group>"; };
+		AA6B7EBA1B30A72700424F05 /* PatientData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PatientData.swift; sourceTree = "<group>"; };
+		AA6B7EBC1B30A7D700424F05 /* Health.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Health.swift; sourceTree = "<group>"; };
+		AA6B7EBE1B30A82100424F05 /* Demographic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Demographic.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		AA6B7E841B309FF800424F05 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AA6B7E9B1B309FF800424F05 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		AA6B7E7E1B309FF800424F05 = {
+			isa = PBXGroup;
+			children = (
+				AA6B7E891B309FF800424F05 /* Urchin */,
+				AA6B7EA11B309FF800424F05 /* UrchinTests */,
+				AA6B7E881B309FF800424F05 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		AA6B7E881B309FF800424F05 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				AA6B7E871B309FF800424F05 /* Urchin.app */,
+				AA6B7E9E1B309FF800424F05 /* UrchinTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		AA6B7E891B309FF800424F05 /* Urchin */ = {
+			isa = PBXGroup;
+			children = (
+				AA6B7E8C1B309FF800424F05 /* AppDelegate.swift */,
+				AA6B7EBC1B30A7D700424F05 /* Health.swift */,
+				AA6B7E8E1B309FF800424F05 /* MasterViewController.swift */,
+				AA6B7E901B309FF800424F05 /* DetailViewController.swift */,
+				AA6B7E921B309FF800424F05 /* Main.storyboard */,
+				AA6B7E951B309FF800424F05 /* Images.xcassets */,
+				AA6B7E971B309FF800424F05 /* LaunchScreen.xib */,
+				AA6B7E8A1B309FF800424F05 /* Supporting Files */,
+				AA7534B31B30ED770010F92B /* User */,
+			);
+			path = Urchin;
+			sourceTree = "<group>";
+		};
+		AA6B7E8A1B309FF800424F05 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				AA6B7E8B1B309FF800424F05 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		AA6B7EA11B309FF800424F05 /* UrchinTests */ = {
+			isa = PBXGroup;
+			children = (
+				AA6B7EA41B309FF800424F05 /* UrchinTests.swift */,
+				AA6B7EA21B309FF800424F05 /* Supporting Files */,
+			);
+			path = UrchinTests;
+			sourceTree = "<group>";
+		};
+		AA6B7EA21B309FF800424F05 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				AA6B7EA31B309FF800424F05 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		AA7534B31B30ED770010F92B /* User */ = {
+			isa = PBXGroup;
+			children = (
+				AA6B7EAE1B30A15400424F05 /* User.swift */,
+				AA7534B41B30ED8F0010F92B /* UserMetadata */,
+			);
+			name = User;
+			sourceTree = "<group>";
+		};
+		AA7534B41B30ED8F0010F92B /* UserMetadata */ = {
+			isa = PBXGroup;
+			children = (
+				AA6B7EB01B30A34100424F05 /* UserMetadata.swift */,
+				AA7534B51B30EDA90010F92B /* Value */,
+			);
+			name = UserMetadata;
+			sourceTree = "<group>";
+		};
+		AA7534B51B30EDA90010F92B /* Value */ = {
+			isa = PBXGroup;
+			children = (
+				AA6B7EB21B30A41200424F05 /* Value.swift */,
+				AA6B7EB41B30A55800424F05 /* Profile.swift */,
+				AA7534B71B30EEEE0010F92B /* PatientData */,
+				AA7534B61B30EDD50010F92B /* Groups */,
+			);
+			name = Value;
+			sourceTree = "<group>";
+		};
+		AA7534B61B30EDD50010F92B /* Groups */ = {
+			isa = PBXGroup;
+			children = (
+				AA6B7EB61B30A5B200424F05 /* Group.swift */,
+				AA6B7EB81B30A64A00424F05 /* Groups.swift */,
+			);
+			name = Groups;
+			sourceTree = "<group>";
+		};
+		AA7534B71B30EEEE0010F92B /* PatientData */ = {
+			isa = PBXGroup;
+			children = (
+				AA6B7EBE1B30A82100424F05 /* Demographic.swift */,
+				AA6B7EBA1B30A72700424F05 /* PatientData.swift */,
+			);
+			name = PatientData;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		AA6B7E861B309FF800424F05 /* Urchin */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AA6B7EA81B309FF800424F05 /* Build configuration list for PBXNativeTarget "Urchin" */;
+			buildPhases = (
+				AA6B7E831B309FF800424F05 /* Sources */,
+				AA6B7E841B309FF800424F05 /* Frameworks */,
+				AA6B7E851B309FF800424F05 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Urchin;
+			productName = Urchin;
+			productReference = AA6B7E871B309FF800424F05 /* Urchin.app */;
+			productType = "com.apple.product-type.application";
+		};
+		AA6B7E9D1B309FF800424F05 /* UrchinTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AA6B7EAB1B309FF800424F05 /* Build configuration list for PBXNativeTarget "UrchinTests" */;
+			buildPhases = (
+				AA6B7E9A1B309FF800424F05 /* Sources */,
+				AA6B7E9B1B309FF800424F05 /* Frameworks */,
+				AA6B7E9C1B309FF800424F05 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				AA6B7EA01B309FF800424F05 /* PBXTargetDependency */,
+			);
+			name = UrchinTests;
+			productName = UrchinTests;
+			productReference = AA6B7E9E1B309FF800424F05 /* UrchinTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		AA6B7E7F1B309FF800424F05 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0630;
+				ORGANIZATIONNAME = Tidepool;
+				TargetAttributes = {
+					AA6B7E861B309FF800424F05 = {
+						CreatedOnToolsVersion = 6.3.2;
+					};
+					AA6B7E9D1B309FF800424F05 = {
+						CreatedOnToolsVersion = 6.3.2;
+						TestTargetID = AA6B7E861B309FF800424F05;
+					};
+				};
+			};
+			buildConfigurationList = AA6B7E821B309FF800424F05 /* Build configuration list for PBXProject "Urchin" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = AA6B7E7E1B309FF800424F05;
+			productRefGroup = AA6B7E881B309FF800424F05 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				AA6B7E861B309FF800424F05 /* Urchin */,
+				AA6B7E9D1B309FF800424F05 /* UrchinTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		AA6B7E851B309FF800424F05 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA6B7E941B309FF800424F05 /* Main.storyboard in Resources */,
+				AA6B7E991B309FF800424F05 /* LaunchScreen.xib in Resources */,
+				AA6B7E961B309FF800424F05 /* Images.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AA6B7E9C1B309FF800424F05 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		AA6B7E831B309FF800424F05 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA6B7EBD1B30A7D700424F05 /* Health.swift in Sources */,
+				AA6B7EAF1B30A15400424F05 /* User.swift in Sources */,
+				AA6B7EB11B30A34100424F05 /* UserMetadata.swift in Sources */,
+				AA6B7E911B309FF800424F05 /* DetailViewController.swift in Sources */,
+				AA6B7EB71B30A5B200424F05 /* Group.swift in Sources */,
+				AA6B7EB51B30A55800424F05 /* Profile.swift in Sources */,
+				AA6B7EBB1B30A72700424F05 /* PatientData.swift in Sources */,
+				AA6B7EBF1B30A82100424F05 /* Demographic.swift in Sources */,
+				AA6B7E8F1B309FF800424F05 /* MasterViewController.swift in Sources */,
+				AA6B7E8D1B309FF800424F05 /* AppDelegate.swift in Sources */,
+				AA6B7EB31B30A41200424F05 /* Value.swift in Sources */,
+				AA6B7EB91B30A64A00424F05 /* Groups.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AA6B7E9A1B309FF800424F05 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA6B7EA51B309FF800424F05 /* UrchinTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		AA6B7EA01B309FF800424F05 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AA6B7E861B309FF800424F05 /* Urchin */;
+			targetProxy = AA6B7E9F1B309FF800424F05 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		AA6B7E921B309FF800424F05 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				AA6B7E931B309FF800424F05 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		AA6B7E971B309FF800424F05 /* LaunchScreen.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				AA6B7E981B309FF800424F05 /* Base */,
+			);
+			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		AA6B7EA61B309FF800424F05 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		AA6B7EA71B309FF800424F05 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		AA6B7EA91B309FF800424F05 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = Urchin/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		AA6B7EAA1B309FF800424F05 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = Urchin/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		AA6B7EAC1B309FF800424F05 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = UrchinTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Urchin.app/Urchin";
+			};
+			name = Debug;
+		};
+		AA6B7EAD1B309FF800424F05 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = UrchinTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Urchin.app/Urchin";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		AA6B7E821B309FF800424F05 /* Build configuration list for PBXProject "Urchin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA6B7EA61B309FF800424F05 /* Debug */,
+				AA6B7EA71B309FF800424F05 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AA6B7EA81B309FF800424F05 /* Build configuration list for PBXNativeTarget "Urchin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA6B7EA91B309FF800424F05 /* Debug */,
+				AA6B7EAA1B309FF800424F05 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AA6B7EAB1B309FF800424F05 /* Build configuration list for PBXNativeTarget "UrchinTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA6B7EAC1B309FF800424F05 /* Debug */,
+				AA6B7EAD1B309FF800424F05 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = AA6B7E7F1B309FF800424F05 /* Project object */;
+}
