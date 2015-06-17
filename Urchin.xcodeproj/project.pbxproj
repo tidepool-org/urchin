@@ -98,7 +98,6 @@
 			isa = PBXGroup;
 			children = (
 				AA6B7E8C1B309FF800424F05 /* AppDelegate.swift */,
-				AA6B7EBC1B30A7D700424F05 /* Health.swift */,
 				AA6B7E8E1B309FF800424F05 /* MasterViewController.swift */,
 				AA6B7E901B309FF800424F05 /* DetailViewController.swift */,
 				AA6B7E921B309FF800424F05 /* Main.storyboard */,
@@ -176,8 +175,9 @@
 		AA7534B71B30EEEE0010F92B /* PatientData */ = {
 			isa = PBXGroup;
 			children = (
-				AA6B7EBE1B30A82100424F05 /* Demographic.swift */,
 				AA6B7EBA1B30A72700424F05 /* PatientData.swift */,
+				AA6B7EBC1B30A7D700424F05 /* Health.swift */,
+				AA6B7EBE1B30A82100424F05 /* Demographic.swift */,
 			);
 			name = PatientData;
 			sourceTree = "<group>";

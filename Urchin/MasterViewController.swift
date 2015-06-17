@@ -11,7 +11,7 @@ import UIKit
 class MasterViewController: UITableViewController {
 
     var detailViewController: DetailViewController? = nil
-    var objects = [AnyObject]()
+    var patients = [AnyObject]()
 
 
     override func awakeFromNib() {
@@ -33,6 +33,21 @@ class MasterViewController: UITableViewController {
             let controllers = split.viewControllers
             self.detailViewController = controllers[controllers.count-1].topViewController as? DetailViewController
         }
+        
+        // Obtain the patients and self whose notes are accessible
+        getPatients()
+    }
+    
+    func getPatients() {
+        let saraProfile = Profile(fullname: "Sara Krugman", shortname: "Sara", publicbio: "A am an incredible designer, and I have T1D.")
+        let saraHealth = Health(diagnosisdate: NSDate())
+        let saraDemographic = Demographic(birthdate: NSDate(), zipcode: 12345, gender: "Awesome")
+        let saraPatientData = PatientData(patientid: "saraKPatient", health: saraHealth, demographic: saraDemographic)
+        let saraValue = Value(profile: saraProfile, groups: Groups(), patientData: saraPatientData)
+        let saraMetadata = UserMetadata(metaid: "saraKMeta", value: saraValue)
+        let saraK = User(userid: "saraK", username: "sarakrugman", userMetadata: saraMetadata)
+        
+        patients.append(saraK)
     }
 
     override func didReceiveMemoryWarning() {
@@ -41,7 +56,7 @@ class MasterViewController: UITableViewController {
     }
 
     func insertNewObject(sender: AnyObject) {
-        objects.insert(NSDate(), atIndex: 0)
+        patients.insert(NSDate(), atIndex: 0)
         let indexPath = NSIndexPath(forRow: 0, inSection: 0)
         self.tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
     }
@@ -51,7 +66,7 @@ class MasterViewController: UITableViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "showDetail" {
             if let indexPath = self.tableView.indexPathForSelectedRow() {
-                let object = objects[indexPath.row] as! NSDate
+                let object = patients[indexPath.row] as! User
                 let controller = (segue.destinationViewController as! UINavigationController).topViewController as! DetailViewController
                 controller.detailItem = object
                 controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
@@ -67,14 +82,14 @@ class MasterViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return objects.count
+        return patients.count
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! UITableViewCell
 
-        let object = objects[indexPath.row] as! NSDate
-        cell.textLabel!.text = object.description
+        let object = patients[indexPath.row] as! User
+        cell.textLabel!.text = object.userMetadata.value.profile.fullname
         return cell
     }
 
@@ -85,7 +100,7 @@ class MasterViewController: UITableViewController {
 
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
-            objects.removeAtIndex(indexPath.row)
+            patients.removeAtIndex(indexPath.row)
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
         } else if editingStyle == .Insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.

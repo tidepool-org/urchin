@@ -19,6 +19,12 @@ class Groups {
     
     init() {
         // Groups are optional
+        team = Group(groupid: "team", members: [])
+        uploaders = Group(groupid: "uploaders", members: [])
+        viewers = Group(groupid: "viewers", members: [])
+        patients = Group(groupid: "patients", members: [])
+        invited = Group(groupid: "invited", members: [])
+        invitedby = Group(groupid: "invitedby", members: [])
     }
     
 }
