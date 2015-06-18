@@ -37,8 +37,11 @@ class NotesViewController: UITableViewController {
     }
     
     func loadNotes() {
-        let newnote = Note(text: "This is a new note")
+        let newnote = Note(text: "This is a new note. I am making the note longer to see if wrapping occurs or not.")
         notes.append(newnote)
+        
+        let anothernote = Note(text: "This is a another note. I am making the note longer to see if how this looks with multiple notes of different heights. If it goes well, I will be thrilled.")
+        notes.append(anothernote)
         
         self.tableView.reloadData()
     }
@@ -55,5 +58,11 @@ class NotesViewController: UITableViewController {
         return notes.count
     }
     
+    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        let cell = NoteCell(style: .Default, reuseIdentifier: nil)
+        cell.configureWithNote(notes[indexPath.row])
+        
+        return cell.cellHeight
+    }
     
 }

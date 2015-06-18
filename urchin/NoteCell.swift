@@ -9,31 +9,55 @@
 import Foundation
 import UIKit
 
-let noteCellHeight: CGFloat = 128
+let noteCellHeight: CGFloat = 256
 let noteCellInset: CGFloat = 16
-let labelSpacing: CGFloat = 8
+let labelSpacing: CGFloat = 6
 
 class NoteCell: UITableViewCell {
     
+    let borders = true
+    
+    var cellHeight: CGFloat
+    
     let usernameLabel: UILabel
     let timedateLabel: UILabel
-    let textView: UITextView
+    let messageLabel: UILabel
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         
-        usernameLabel = UILabel(frame: CGRectMake(noteCellInset, noteCellInset, 100.0, 17.0))
-        usernameLabel.font = UIFont.systemFontOfSize(17)
+        usernameLabel = UILabel(frame: CGRectZero)
+        usernameLabel.font = UIFont.boldSystemFontOfSize(17)
         
-        timedateLabel = UILabel(frame: CGRectMake(noteCellInset, noteCellInset + usernameLabel.frame.height + labelSpacing, 100.0, 17.0))
+        timedateLabel = UILabel(frame: CGRectZero)
         timedateLabel.font = UIFont.systemFontOfSize(17)
 
-        textView = UITextView(frame: CGRectMake(noteCellInset, noteCellInset + usernameLabel.frame.height + timedateLabel.frame.height + 2*labelSpacing, 100.0, 17.0))
+        messageLabel = UILabel(frame: CGRectZero)
+        messageLabel.font = UIFont.systemFontOfSize(17)
+        messageLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
+        messageLabel.numberOfLines = 0
+        
+        cellHeight = CGFloat(0)
+        
+        if (borders) {
+            usernameLabel.layer.borderWidth = 1
+            usernameLabel.layer.borderColor = UIColor.redColor().CGColor
+            
+            timedateLabel.layer.borderWidth = 1
+            timedateLabel.layer.borderColor = UIColor.redColor().CGColor
+            
+            messageLabel.layer.borderWidth = 1
+            messageLabel.layer.borderColor = UIColor.redColor().CGColor
+        }
         
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+        usernameLabel.frame = CGRectMake(noteCellInset, noteCellInset, contentView.frame.width + noteCellInset, 20.0)
+        timedateLabel.frame = CGRectMake(noteCellInset, noteCellInset + usernameLabel.frame.height + labelSpacing, contentView.frame.width + noteCellInset, 20.0)
+        messageLabel.frame = CGRectMake(noteCellInset, noteCellInset + usernameLabel.frame.height + timedateLabel.frame.height + 2*labelSpacing, contentView.frame.width + noteCellInset, CGFloat.max)
 
         contentView.addSubview(usernameLabel)
         contentView.addSubview(timedateLabel)
-        contentView.addSubview(textView)
+        contentView.addSubview(messageLabel)
         
     }
 
@@ -43,10 +67,15 @@ class NoteCell: UITableViewCell {
     
     func configureWithNote(note: Note) {
         usernameLabel.text = "Ethan Look"
+        usernameLabel.sizeToFit()
         timedateLabel.text = "Right now on Today"
-        println(note.text)
-        textView.text = note.text
-        println(textView.text)
+        timedateLabel.sizeToFit()
+        messageLabel.text = note.text
+        messageLabel.sizeToFit()
+        
+        messageLabel.frame = CGRect(x: noteCellInset, y: noteCellInset + usernameLabel.frame.height + timedateLabel.frame.height + 2*labelSpacing, width: messageLabel.frame.width, height: messageLabel.frame.height)
+        
+        cellHeight = noteCellInset + usernameLabel.frame.height + labelSpacing + timedateLabel.frame.height + labelSpacing + messageLabel.frame.height + noteCellInset
     }
     
     
