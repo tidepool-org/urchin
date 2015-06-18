@@ -7,66 +7,54 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		AA6B7E8D1B309FF800424F05 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6B7E8C1B309FF800424F05 /* AppDelegate.swift */; };
-		AA6B7E8F1B309FF800424F05 /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6B7E8E1B309FF800424F05 /* MasterViewController.swift */; };
-		AA6B7E911B309FF800424F05 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6B7E901B309FF800424F05 /* DetailViewController.swift */; };
-		AA6B7E941B309FF800424F05 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA6B7E921B309FF800424F05 /* Main.storyboard */; };
-		AA6B7E961B309FF800424F05 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA6B7E951B309FF800424F05 /* Images.xcassets */; };
-		AA6B7E991B309FF800424F05 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = AA6B7E971B309FF800424F05 /* LaunchScreen.xib */; };
-		AA6B7EA51B309FF800424F05 /* UrchinTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6B7EA41B309FF800424F05 /* UrchinTests.swift */; };
-		AA6B7EAF1B30A15400424F05 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6B7EAE1B30A15400424F05 /* User.swift */; };
-		AA6B7EB11B30A34100424F05 /* UserMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6B7EB01B30A34100424F05 /* UserMetadata.swift */; };
-		AA6B7EB31B30A41200424F05 /* Value.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6B7EB21B30A41200424F05 /* Value.swift */; };
-		AA6B7EB51B30A55800424F05 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6B7EB41B30A55800424F05 /* Profile.swift */; };
-		AA6B7EB71B30A5B200424F05 /* Group.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6B7EB61B30A5B200424F05 /* Group.swift */; };
-		AA6B7EB91B30A64A00424F05 /* Groups.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6B7EB81B30A64A00424F05 /* Groups.swift */; };
-		AA6B7EBB1B30A72700424F05 /* PatientData.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6B7EBA1B30A72700424F05 /* PatientData.swift */; };
-		AA6B7EBD1B30A7D700424F05 /* Health.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6B7EBC1B30A7D700424F05 /* Health.swift */; };
-		AA6B7EBF1B30A82100424F05 /* Demographic.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6B7EBE1B30A82100424F05 /* Demographic.swift */; };
+		AA993E301B3316C10027804C /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA993E2F1B3316C10027804C /* LoginViewController.swift */; };
+		AABCEF8A1B3231910064FE49 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABCEF891B3231910064FE49 /* AppDelegate.swift */; };
+		AABCEF8C1B3231910064FE49 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABCEF8B1B3231910064FE49 /* ViewController.swift */; };
+		AABCEF8F1B3231910064FE49 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AABCEF8D1B3231910064FE49 /* Main.storyboard */; };
+		AABCEF911B3231910064FE49 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AABCEF901B3231910064FE49 /* Images.xcassets */; };
+		AABCEF941B3231910064FE49 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = AABCEF921B3231910064FE49 /* LaunchScreen.xib */; };
+		AABCEFA01B3231910064FE49 /* urchinTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABCEF9F1B3231910064FE49 /* urchinTests.swift */; };
+		AABCEFAA1B3232900064FE49 /* NotesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABCEFA91B3232900064FE49 /* NotesViewController.swift */; };
+		AABCEFAC1B3232C60064FE49 /* NoteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABCEFAB1B3232C60064FE49 /* NoteCell.swift */; };
+		AABCEFAE1B3234360064FE49 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABCEFAD1B3234360064FE49 /* Note.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		AA6B7E9F1B309FF800424F05 /* PBXContainerItemProxy */ = {
+		AABCEF9A1B3231910064FE49 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = AA6B7E7F1B309FF800424F05 /* Project object */;
+			containerPortal = AABCEF7C1B3231910064FE49 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = AA6B7E861B309FF800424F05;
-			remoteInfo = Urchin;
+			remoteGlobalIDString = AABCEF831B3231910064FE49;
+			remoteInfo = urchin;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		AA6B7E871B309FF800424F05 /* Urchin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Urchin.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		AA6B7E8B1B309FF800424F05 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		AA6B7E8C1B309FF800424F05 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		AA6B7E8E1B309FF800424F05 /* MasterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasterViewController.swift; sourceTree = "<group>"; };
-		AA6B7E901B309FF800424F05 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
-		AA6B7E931B309FF800424F05 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		AA6B7E951B309FF800424F05 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		AA6B7E981B309FF800424F05 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
-		AA6B7E9E1B309FF800424F05 /* UrchinTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UrchinTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		AA6B7EA31B309FF800424F05 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		AA6B7EA41B309FF800424F05 /* UrchinTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UrchinTests.swift; sourceTree = "<group>"; };
-		AA6B7EAE1B30A15400424F05 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
-		AA6B7EB01B30A34100424F05 /* UserMetadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserMetadata.swift; sourceTree = "<group>"; };
-		AA6B7EB21B30A41200424F05 /* Value.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Value.swift; sourceTree = "<group>"; };
-		AA6B7EB41B30A55800424F05 /* Profile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
-		AA6B7EB61B30A5B200424F05 /* Group.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Group.swift; sourceTree = "<group>"; };
-		AA6B7EB81B30A64A00424F05 /* Groups.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Groups.swift; sourceTree = "<group>"; };
-		AA6B7EBA1B30A72700424F05 /* PatientData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PatientData.swift; sourceTree = "<group>"; };
-		AA6B7EBC1B30A7D700424F05 /* Health.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Health.swift; sourceTree = "<group>"; };
-		AA6B7EBE1B30A82100424F05 /* Demographic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Demographic.swift; sourceTree = "<group>"; };
+		AA993E2F1B3316C10027804C /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		AABCEF841B3231910064FE49 /* urchin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = urchin.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AABCEF881B3231910064FE49 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AABCEF891B3231910064FE49 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		AABCEF8B1B3231910064FE49 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		AABCEF8E1B3231910064FE49 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		AABCEF901B3231910064FE49 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		AABCEF931B3231910064FE49 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		AABCEF991B3231910064FE49 /* urchinTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = urchinTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		AABCEF9E1B3231910064FE49 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AABCEF9F1B3231910064FE49 /* urchinTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = urchinTests.swift; sourceTree = "<group>"; };
+		AABCEFA91B3232900064FE49 /* NotesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotesViewController.swift; sourceTree = "<group>"; };
+		AABCEFAB1B3232C60064FE49 /* NoteCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteCell.swift; sourceTree = "<group>"; };
+		AABCEFAD1B3234360064FE49 /* Note.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		AA6B7E841B309FF800424F05 /* Frameworks */ = {
+		AABCEF811B3231910064FE49 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		AA6B7E9B1B309FF800424F05 /* Frameworks */ = {
+		AABCEF961B3231910064FE49 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -76,169 +64,123 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		AA6B7E7E1B309FF800424F05 = {
+		AABCEF7B1B3231910064FE49 = {
 			isa = PBXGroup;
 			children = (
-				AA6B7E891B309FF800424F05 /* Urchin */,
-				AA6B7EA11B309FF800424F05 /* UrchinTests */,
-				AA6B7E881B309FF800424F05 /* Products */,
+				AABCEF861B3231910064FE49 /* urchin */,
+				AABCEF9C1B3231910064FE49 /* urchinTests */,
+				AABCEF851B3231910064FE49 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		AA6B7E881B309FF800424F05 /* Products */ = {
+		AABCEF851B3231910064FE49 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				AA6B7E871B309FF800424F05 /* Urchin.app */,
-				AA6B7E9E1B309FF800424F05 /* UrchinTests.xctest */,
+				AABCEF841B3231910064FE49 /* urchin.app */,
+				AABCEF991B3231910064FE49 /* urchinTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		AA6B7E891B309FF800424F05 /* Urchin */ = {
+		AABCEF861B3231910064FE49 /* urchin */ = {
 			isa = PBXGroup;
 			children = (
-				AA6B7E8C1B309FF800424F05 /* AppDelegate.swift */,
-				AA6B7E8E1B309FF800424F05 /* MasterViewController.swift */,
-				AA6B7E901B309FF800424F05 /* DetailViewController.swift */,
-				AA6B7E921B309FF800424F05 /* Main.storyboard */,
-				AA6B7E951B309FF800424F05 /* Images.xcassets */,
-				AA6B7E971B309FF800424F05 /* LaunchScreen.xib */,
-				AA6B7E8A1B309FF800424F05 /* Supporting Files */,
-				AA7534B31B30ED770010F92B /* User */,
+				AABCEF891B3231910064FE49 /* AppDelegate.swift */,
+				AABCEF8B1B3231910064FE49 /* ViewController.swift */,
+				AABCEF8D1B3231910064FE49 /* Main.storyboard */,
+				AABCEF901B3231910064FE49 /* Images.xcassets */,
+				AABCEF921B3231910064FE49 /* LaunchScreen.xib */,
+				AABCEF871B3231910064FE49 /* Supporting Files */,
+				AABCEFA91B3232900064FE49 /* NotesViewController.swift */,
+				AABCEFAD1B3234360064FE49 /* Note.swift */,
+				AABCEFAB1B3232C60064FE49 /* NoteCell.swift */,
+				AA993E2F1B3316C10027804C /* LoginViewController.swift */,
 			);
-			path = Urchin;
+			path = urchin;
 			sourceTree = "<group>";
 		};
-		AA6B7E8A1B309FF800424F05 /* Supporting Files */ = {
+		AABCEF871B3231910064FE49 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				AA6B7E8B1B309FF800424F05 /* Info.plist */,
+				AABCEF881B3231910064FE49 /* Info.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		AA6B7EA11B309FF800424F05 /* UrchinTests */ = {
+		AABCEF9C1B3231910064FE49 /* urchinTests */ = {
 			isa = PBXGroup;
 			children = (
-				AA6B7EA41B309FF800424F05 /* UrchinTests.swift */,
-				AA6B7EA21B309FF800424F05 /* Supporting Files */,
+				AABCEF9F1B3231910064FE49 /* urchinTests.swift */,
+				AABCEF9D1B3231910064FE49 /* Supporting Files */,
 			);
-			path = UrchinTests;
+			path = urchinTests;
 			sourceTree = "<group>";
 		};
-		AA6B7EA21B309FF800424F05 /* Supporting Files */ = {
+		AABCEF9D1B3231910064FE49 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				AA6B7EA31B309FF800424F05 /* Info.plist */,
+				AABCEF9E1B3231910064FE49 /* Info.plist */,
 			);
 			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		AA7534B31B30ED770010F92B /* User */ = {
-			isa = PBXGroup;
-			children = (
-				AA6B7EAE1B30A15400424F05 /* User.swift */,
-				AA7534B41B30ED8F0010F92B /* UserMetadata */,
-			);
-			name = User;
-			sourceTree = "<group>";
-		};
-		AA7534B41B30ED8F0010F92B /* UserMetadata */ = {
-			isa = PBXGroup;
-			children = (
-				AA6B7EB01B30A34100424F05 /* UserMetadata.swift */,
-				AA7534B51B30EDA90010F92B /* Value */,
-			);
-			name = UserMetadata;
-			sourceTree = "<group>";
-		};
-		AA7534B51B30EDA90010F92B /* Value */ = {
-			isa = PBXGroup;
-			children = (
-				AA6B7EB21B30A41200424F05 /* Value.swift */,
-				AA6B7EB41B30A55800424F05 /* Profile.swift */,
-				AA7534B71B30EEEE0010F92B /* PatientData */,
-				AA7534B61B30EDD50010F92B /* Groups */,
-			);
-			name = Value;
-			sourceTree = "<group>";
-		};
-		AA7534B61B30EDD50010F92B /* Groups */ = {
-			isa = PBXGroup;
-			children = (
-				AA6B7EB61B30A5B200424F05 /* Group.swift */,
-				AA6B7EB81B30A64A00424F05 /* Groups.swift */,
-			);
-			name = Groups;
-			sourceTree = "<group>";
-		};
-		AA7534B71B30EEEE0010F92B /* PatientData */ = {
-			isa = PBXGroup;
-			children = (
-				AA6B7EBA1B30A72700424F05 /* PatientData.swift */,
-				AA6B7EBC1B30A7D700424F05 /* Health.swift */,
-				AA6B7EBE1B30A82100424F05 /* Demographic.swift */,
-			);
-			name = PatientData;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		AA6B7E861B309FF800424F05 /* Urchin */ = {
+		AABCEF831B3231910064FE49 /* urchin */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = AA6B7EA81B309FF800424F05 /* Build configuration list for PBXNativeTarget "Urchin" */;
+			buildConfigurationList = AABCEFA31B3231910064FE49 /* Build configuration list for PBXNativeTarget "urchin" */;
 			buildPhases = (
-				AA6B7E831B309FF800424F05 /* Sources */,
-				AA6B7E841B309FF800424F05 /* Frameworks */,
-				AA6B7E851B309FF800424F05 /* Resources */,
+				AABCEF801B3231910064FE49 /* Sources */,
+				AABCEF811B3231910064FE49 /* Frameworks */,
+				AABCEF821B3231910064FE49 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = Urchin;
-			productName = Urchin;
-			productReference = AA6B7E871B309FF800424F05 /* Urchin.app */;
+			name = urchin;
+			productName = urchin;
+			productReference = AABCEF841B3231910064FE49 /* urchin.app */;
 			productType = "com.apple.product-type.application";
 		};
-		AA6B7E9D1B309FF800424F05 /* UrchinTests */ = {
+		AABCEF981B3231910064FE49 /* urchinTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = AA6B7EAB1B309FF800424F05 /* Build configuration list for PBXNativeTarget "UrchinTests" */;
+			buildConfigurationList = AABCEFA61B3231910064FE49 /* Build configuration list for PBXNativeTarget "urchinTests" */;
 			buildPhases = (
-				AA6B7E9A1B309FF800424F05 /* Sources */,
-				AA6B7E9B1B309FF800424F05 /* Frameworks */,
-				AA6B7E9C1B309FF800424F05 /* Resources */,
+				AABCEF951B3231910064FE49 /* Sources */,
+				AABCEF961B3231910064FE49 /* Frameworks */,
+				AABCEF971B3231910064FE49 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				AA6B7EA01B309FF800424F05 /* PBXTargetDependency */,
+				AABCEF9B1B3231910064FE49 /* PBXTargetDependency */,
 			);
-			name = UrchinTests;
-			productName = UrchinTests;
-			productReference = AA6B7E9E1B309FF800424F05 /* UrchinTests.xctest */;
+			name = urchinTests;
+			productName = urchinTests;
+			productReference = AABCEF991B3231910064FE49 /* urchinTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		AA6B7E7F1B309FF800424F05 /* Project object */ = {
+		AABCEF7C1B3231910064FE49 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0630;
 				ORGANIZATIONNAME = Tidepool;
 				TargetAttributes = {
-					AA6B7E861B309FF800424F05 = {
+					AABCEF831B3231910064FE49 = {
 						CreatedOnToolsVersion = 6.3.2;
 					};
-					AA6B7E9D1B309FF800424F05 = {
+					AABCEF981B3231910064FE49 = {
 						CreatedOnToolsVersion = 6.3.2;
-						TestTargetID = AA6B7E861B309FF800424F05;
+						TestTargetID = AABCEF831B3231910064FE49;
 					};
 				};
 			};
-			buildConfigurationList = AA6B7E821B309FF800424F05 /* Build configuration list for PBXProject "Urchin" */;
+			buildConfigurationList = AABCEF7F1B3231910064FE49 /* Build configuration list for PBXProject "urchin" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -246,29 +188,29 @@
 				en,
 				Base,
 			);
-			mainGroup = AA6B7E7E1B309FF800424F05;
-			productRefGroup = AA6B7E881B309FF800424F05 /* Products */;
+			mainGroup = AABCEF7B1B3231910064FE49;
+			productRefGroup = AABCEF851B3231910064FE49 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				AA6B7E861B309FF800424F05 /* Urchin */,
-				AA6B7E9D1B309FF800424F05 /* UrchinTests */,
+				AABCEF831B3231910064FE49 /* urchin */,
+				AABCEF981B3231910064FE49 /* urchinTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		AA6B7E851B309FF800424F05 /* Resources */ = {
+		AABCEF821B3231910064FE49 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AA6B7E941B309FF800424F05 /* Main.storyboard in Resources */,
-				AA6B7E991B309FF800424F05 /* LaunchScreen.xib in Resources */,
-				AA6B7E961B309FF800424F05 /* Images.xcassets in Resources */,
+				AABCEF8F1B3231910064FE49 /* Main.storyboard in Resources */,
+				AABCEF941B3231910064FE49 /* LaunchScreen.xib in Resources */,
+				AABCEF911B3231910064FE49 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		AA6B7E9C1B309FF800424F05 /* Resources */ = {
+		AABCEF971B3231910064FE49 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -278,56 +220,50 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		AA6B7E831B309FF800424F05 /* Sources */ = {
+		AABCEF801B3231910064FE49 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AA6B7EBD1B30A7D700424F05 /* Health.swift in Sources */,
-				AA6B7EAF1B30A15400424F05 /* User.swift in Sources */,
-				AA6B7EB11B30A34100424F05 /* UserMetadata.swift in Sources */,
-				AA6B7E911B309FF800424F05 /* DetailViewController.swift in Sources */,
-				AA6B7EB71B30A5B200424F05 /* Group.swift in Sources */,
-				AA6B7EB51B30A55800424F05 /* Profile.swift in Sources */,
-				AA6B7EBB1B30A72700424F05 /* PatientData.swift in Sources */,
-				AA6B7EBF1B30A82100424F05 /* Demographic.swift in Sources */,
-				AA6B7E8F1B309FF800424F05 /* MasterViewController.swift in Sources */,
-				AA6B7E8D1B309FF800424F05 /* AppDelegate.swift in Sources */,
-				AA6B7EB31B30A41200424F05 /* Value.swift in Sources */,
-				AA6B7EB91B30A64A00424F05 /* Groups.swift in Sources */,
+				AA993E301B3316C10027804C /* LoginViewController.swift in Sources */,
+				AABCEFAE1B3234360064FE49 /* Note.swift in Sources */,
+				AABCEF8C1B3231910064FE49 /* ViewController.swift in Sources */,
+				AABCEF8A1B3231910064FE49 /* AppDelegate.swift in Sources */,
+				AABCEFAA1B3232900064FE49 /* NotesViewController.swift in Sources */,
+				AABCEFAC1B3232C60064FE49 /* NoteCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		AA6B7E9A1B309FF800424F05 /* Sources */ = {
+		AABCEF951B3231910064FE49 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AA6B7EA51B309FF800424F05 /* UrchinTests.swift in Sources */,
+				AABCEFA01B3231910064FE49 /* urchinTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		AA6B7EA01B309FF800424F05 /* PBXTargetDependency */ = {
+		AABCEF9B1B3231910064FE49 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = AA6B7E861B309FF800424F05 /* Urchin */;
-			targetProxy = AA6B7E9F1B309FF800424F05 /* PBXContainerItemProxy */;
+			target = AABCEF831B3231910064FE49 /* urchin */;
+			targetProxy = AABCEF9A1B3231910064FE49 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		AA6B7E921B309FF800424F05 /* Main.storyboard */ = {
+		AABCEF8D1B3231910064FE49 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				AA6B7E931B309FF800424F05 /* Base */,
+				AABCEF8E1B3231910064FE49 /* Base */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
-		AA6B7E971B309FF800424F05 /* LaunchScreen.xib */ = {
+		AABCEF921B3231910064FE49 /* LaunchScreen.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				AA6B7E981B309FF800424F05 /* Base */,
+				AABCEF931B3231910064FE49 /* Base */,
 			);
 			name = LaunchScreen.xib;
 			sourceTree = "<group>";
@@ -335,7 +271,7 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		AA6B7EA61B309FF800424F05 /* Debug */ = {
+		AABCEFA11B3231910064FE49 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -380,7 +316,7 @@
 			};
 			name = Debug;
 		};
-		AA6B7EA71B309FF800424F05 /* Release */ = {
+		AABCEFA21B3231910064FE49 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -418,29 +354,27 @@
 			};
 			name = Release;
 		};
-		AA6B7EA91B309FF800424F05 /* Debug */ = {
+		AABCEFA41B3231910064FE49 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				INFOPLIST_FILE = Urchin/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				INFOPLIST_FILE = urchin/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
 		};
-		AA6B7EAA1B309FF800424F05 /* Release */ = {
+		AABCEFA51B3231910064FE49 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				INFOPLIST_FILE = Urchin/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				INFOPLIST_FILE = urchin/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
 		};
-		AA6B7EAC1B309FF800424F05 /* Debug */ = {
+		AABCEFA71B3231910064FE49 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -452,14 +386,14 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = UrchinTests/Info.plist;
+				INFOPLIST_FILE = urchinTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Urchin.app/Urchin";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/urchin.app/urchin";
 			};
 			name = Debug;
 		};
-		AA6B7EAD1B309FF800424F05 /* Release */ = {
+		AABCEFA81B3231910064FE49 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -467,44 +401,44 @@
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = UrchinTests/Info.plist;
+				INFOPLIST_FILE = urchinTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Urchin.app/Urchin";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/urchin.app/urchin";
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		AA6B7E821B309FF800424F05 /* Build configuration list for PBXProject "Urchin" */ = {
+		AABCEF7F1B3231910064FE49 /* Build configuration list for PBXProject "urchin" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				AA6B7EA61B309FF800424F05 /* Debug */,
-				AA6B7EA71B309FF800424F05 /* Release */,
+				AABCEFA11B3231910064FE49 /* Debug */,
+				AABCEFA21B3231910064FE49 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		AA6B7EA81B309FF800424F05 /* Build configuration list for PBXNativeTarget "Urchin" */ = {
+		AABCEFA31B3231910064FE49 /* Build configuration list for PBXNativeTarget "urchin" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				AA6B7EA91B309FF800424F05 /* Debug */,
-				AA6B7EAA1B309FF800424F05 /* Release */,
+				AABCEFA41B3231910064FE49 /* Debug */,
+				AABCEFA51B3231910064FE49 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		AA6B7EAB1B309FF800424F05 /* Build configuration list for PBXNativeTarget "UrchinTests" */ = {
+		AABCEFA61B3231910064FE49 /* Build configuration list for PBXNativeTarget "urchinTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				AA6B7EAC1B309FF800424F05 /* Debug */,
-				AA6B7EAD1B309FF800424F05 /* Release */,
+				AABCEFA71B3231910064FE49 /* Debug */,
+				AABCEFA81B3231910064FE49 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = AA6B7E7F1B309FF800424F05 /* Project object */;
+	rootObject = AABCEF7C1B3231910064FE49 /* Project object */;
 }

@@ -1,0 +1,59 @@
+//
+//  NotesTableViewController.swift
+//  urchin
+//
+//  Created by Ethan Look on 6/17/15.
+//  Copyright (c) 2015 Tidepool. All rights reserved.
+//
+
+import Foundation
+import UIKit
+
+class NotesViewController: UITableViewController {
+    
+    var notes: [Note] = []
+    
+    let userId: String
+    
+    init(userId: String) {
+        self.userId = userId
+        
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init!(coder aDecoder: NSCoder!) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        tableView.backgroundColor = UIColor(red: 250/255, green: 250/255, blue: 250/255, alpha: 1)
+        tableView.rowHeight = noteCellHeight
+        tableView.separatorInset.left = noteCellInset
+        tableView.registerClass(NoteCell.self, forCellReuseIdentifier: NSStringFromClass(NoteCell))
+        
+        self.loadNotes()
+    }
+    
+    func loadNotes() {
+        let newnote = Note(text: "This is a new note")
+        notes.append(newnote)
+        
+        self.tableView.reloadData()
+    }
+    
+    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(NoteCell), forIndexPath: indexPath) as! NoteCell
+        
+        cell.configureWithNote(notes[indexPath.row])
+        
+        return cell
+    }
+    
+    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return notes.count
+    }
+    
+    
+}

@@ -4,7 +4,7 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>Urchin.xcscheme</key>
+		<key>urchin.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>0</integer>
@@ -12,12 +12,12 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>AA6B7E861B309FF800424F05</key>
+		<key>AABCEF831B3231910064FE49</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>AA6B7E9D1B309FF800424F05</key>
+		<key>AABCEF981B3231910064FE49</key>
 		<dict>
 			<key>primary</key>
 			<true/>

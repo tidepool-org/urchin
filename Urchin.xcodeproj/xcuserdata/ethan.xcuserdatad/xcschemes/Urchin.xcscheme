@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "AA6B7E861B309FF800424F05"
-               BuildableName = "Urchin.app"
-               BlueprintName = "Urchin"
-               ReferencedContainer = "container:Urchin.xcodeproj">
+               BlueprintIdentifier = "AABCEF831B3231910064FE49"
+               BuildableName = "urchin.app"
+               BlueprintName = "urchin"
+               ReferencedContainer = "container:urchin.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -28,10 +28,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "AA6B7E9D1B309FF800424F05"
-               BuildableName = "UrchinTests.xctest"
-               BlueprintName = "UrchinTests"
-               ReferencedContainer = "container:Urchin.xcodeproj">
+               BlueprintIdentifier = "AABCEF981B3231910064FE49"
+               BuildableName = "urchinTests.xctest"
+               BlueprintName = "urchinTests"
+               ReferencedContainer = "container:urchin.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -46,20 +46,20 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "AA6B7E9D1B309FF800424F05"
-               BuildableName = "UrchinTests.xctest"
-               BlueprintName = "UrchinTests"
-               ReferencedContainer = "container:Urchin.xcodeproj">
+               BlueprintIdentifier = "AABCEF981B3231910064FE49"
+               BuildableName = "urchinTests.xctest"
+               BlueprintName = "urchinTests"
+               ReferencedContainer = "container:urchin.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "AA6B7E861B309FF800424F05"
-            BuildableName = "Urchin.app"
-            BlueprintName = "Urchin"
-            ReferencedContainer = "container:Urchin.xcodeproj">
+            BlueprintIdentifier = "AABCEF831B3231910064FE49"
+            BuildableName = "urchin.app"
+            BlueprintName = "urchin"
+            ReferencedContainer = "container:urchin.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -76,10 +76,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "AA6B7E861B309FF800424F05"
-            BuildableName = "Urchin.app"
-            BlueprintName = "Urchin"
-            ReferencedContainer = "container:Urchin.xcodeproj">
+            BlueprintIdentifier = "AABCEF831B3231910064FE49"
+            BuildableName = "urchin.app"
+            BlueprintName = "urchin"
+            ReferencedContainer = "container:urchin.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -95,10 +95,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "AA6B7E861B309FF800424F05"
-            BuildableName = "Urchin.app"
-            BlueprintName = "Urchin"
-            ReferencedContainer = "container:Urchin.xcodeproj">
+            BlueprintIdentifier = "AABCEF831B3231910064FE49"
+            BuildableName = "urchin.app"
+            BlueprintName = "urchin"
+            ReferencedContainer = "container:urchin.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:Urchin.xcodeproj">
+      location = "self:urchin.xcodeproj">
    </FileRef>
 </Workspace>

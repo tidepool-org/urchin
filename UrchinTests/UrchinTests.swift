@@ -1,15 +1,15 @@
 //
-//  UrchinTests.swift
-//  UrchinTests
+//  urchinTests.swift
+//  urchinTests
 //
-//  Created by Ethan Look on 6/16/15.
+//  Created by Ethan Look on 6/17/15.
 //  Copyright (c) 2015 Tidepool. All rights reserved.
 //
 
 import UIKit
 import XCTest
 
-class UrchinTests: XCTestCase {
+class urchinTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
