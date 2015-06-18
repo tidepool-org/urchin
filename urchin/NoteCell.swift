@@ -15,7 +15,7 @@ let labelSpacing: CGFloat = 6
 
 class NoteCell: UITableViewCell {
     
-    let borders = true
+    let borders = false
     
     var cellHeight: CGFloat
     
@@ -27,12 +27,15 @@ class NoteCell: UITableViewCell {
         
         usernameLabel = UILabel(frame: CGRectZero)
         usernameLabel.font = UIFont.boldSystemFontOfSize(17)
+        usernameLabel.textColor = UIColor(red: 57/255, green: 61/255, blue: 70/255, alpha: 1)
         
         timedateLabel = UILabel(frame: CGRectZero)
         timedateLabel.font = UIFont.systemFontOfSize(17)
+        timedateLabel.textColor = UIColor(red: 84/255, green: 92/255, blue: 104/255, alpha: 1)
 
         messageLabel = UILabel(frame: CGRectZero)
         messageLabel.font = UIFont.systemFontOfSize(17)
+        messageLabel.textColor = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 1)
         messageLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
         messageLabel.numberOfLines = 0
         

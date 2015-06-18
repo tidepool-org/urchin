@@ -9,14 +9,14 @@
 import Foundation
 import UIKit
 
-class NotesViewController: UITableViewController {
+class NotesTableViewController: UITableViewController {
     
     var notes: [Note] = []
     
-    let userId: String
+    let user: User
     
-    init(userId: String) {
-        self.userId = userId
+    init(user: User) {
+        self.user = user
         
         super.init(nibName: nil, bundle: nil)
     }
@@ -28,10 +28,13 @@ class NotesViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.backgroundColor = UIColor(red: 250/255, green: 250/255, blue: 250/255, alpha: 1)
+        tableView.backgroundColor = UIColor(red: 246/255, green: 246/255, blue: 246/255, alpha: 1)
         tableView.rowHeight = noteCellHeight
         tableView.separatorInset.left = noteCellInset
         tableView.registerClass(NoteCell.self, forCellReuseIdentifier: NSStringFromClass(NoteCell))
+        
+        self.title = user.name
+        
         
         self.loadNotes()
     }
