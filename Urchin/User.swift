@@ -10,10 +10,18 @@ import Foundation
 
 class User {
     
-    let name: String
+    let firstName: String
+    let lastName: String
+    let fullName: String
+    let shortName: String
+    let patient: Patient
     
-    init(name: String) {
-        self.name = name
+    init(firstName: String, lastName: String, patient: Patient) {
+        self.firstName = firstName
+        self.lastName = lastName
+        self.fullName = firstName + " " + lastName
+        self.shortName = firstName
+        self.patient = patient
     }
     
 }

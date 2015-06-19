@@ -15,7 +15,7 @@ let labelSpacing: CGFloat = 6
 
 class NoteCell: UITableViewCell {
     
-    let borders = true
+    let borders = false
     
     var cellHeight: CGFloat
     
@@ -69,13 +69,15 @@ class NoteCell: UITableViewCell {
     }
     
     func configureWithNote(note: Note) {
-        usernameLabel.text = "Ethan Look"
+        usernameLabel.text = note.user.fullName
         usernameLabel.sizeToFit()
         
-        timedateLabel.text = "Right now on Today"
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "h:mma EEEE, MMMM d, yyyy"
+        timedateLabel.text = dateFormatter.stringFromDate(note.timestamp)
         timedateLabel.sizeToFit()
         
-        messageLabel.text = note.text
+        messageLabel.text = note.messagetext
         var messageLabelFrame = messageLabel.frame
         messageLabelFrame.size.width = contentView.frame.width - 2*noteCellInset
         messageLabel.frame = messageLabelFrame

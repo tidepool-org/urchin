@@ -12,6 +12,8 @@
 		AA3652C61B3396DC001F514D /* newnote.png in Resources */ = {isa = PBXBuildFile; fileRef = AA3652C51B3396DC001F514D /* newnote.png */; };
 		AA3652C81B33A4AB001F514D /* newnote@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AA3652C71B33A4AB001F514D /* newnote@2x.png */; };
 		AA3652CA1B348737001F514D /* DropDownTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3652C91B348737001F514D /* DropDownTableView.swift */; };
+		AA3652CC1B34A163001F514D /* Patient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3652CB1B34A163001F514D /* Patient.swift */; };
+		AA3652CE1B34A8E4001F514D /* UserDropDownCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3652CD1B34A8E4001F514D /* UserDropDownCell.swift */; };
 		AA993E301B3316C10027804C /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA993E2F1B3316C10027804C /* LoginViewController.swift */; };
 		AABCEF8A1B3231910064FE49 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABCEF891B3231910064FE49 /* AppDelegate.swift */; };
 		AABCEF8C1B3231910064FE49 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABCEF8B1B3231910064FE49 /* ViewController.swift */; };
@@ -39,6 +41,8 @@
 		AA3652C51B3396DC001F514D /* newnote.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = newnote.png; sourceTree = "<group>"; };
 		AA3652C71B33A4AB001F514D /* newnote@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "newnote@2x.png"; sourceTree = "<group>"; };
 		AA3652C91B348737001F514D /* DropDownTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DropDownTableView.swift; sourceTree = "<group>"; };
+		AA3652CB1B34A163001F514D /* Patient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Patient.swift; sourceTree = "<group>"; };
+		AA3652CD1B34A8E4001F514D /* UserDropDownCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDropDownCell.swift; sourceTree = "<group>"; };
 		AA993E2F1B3316C10027804C /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		AABCEF841B3231910064FE49 /* urchin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = urchin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AABCEF881B3231910064FE49 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -100,9 +104,11 @@
 				AABCEF921B3231910064FE49 /* LaunchScreen.xib */,
 				AABCEF871B3231910064FE49 /* Supporting Files */,
 				AABCEFAD1B3234360064FE49 /* Note.swift */,
+				AA3652CD1B34A8E4001F514D /* UserDropDownCell.swift */,
 				AABCEFAB1B3232C60064FE49 /* NoteCell.swift */,
 				AA993E2F1B3316C10027804C /* LoginViewController.swift */,
 				AA3652C11B33847A001F514D /* User.swift */,
+				AA3652CB1B34A163001F514D /* Patient.swift */,
 				AA3652C31B338525001F514D /* NotesViewController.swift */,
 				AA3652C51B3396DC001F514D /* newnote.png */,
 				AA3652C71B33A4AB001F514D /* newnote@2x.png */,
@@ -240,6 +246,8 @@
 			files = (
 				AA993E301B3316C10027804C /* LoginViewController.swift in Sources */,
 				AABCEFAE1B3234360064FE49 /* Note.swift in Sources */,
+				AA3652CC1B34A163001F514D /* Patient.swift in Sources */,
+				AA3652CE1B34A8E4001F514D /* UserDropDownCell.swift in Sources */,
 				AABCEF8C1B3231910064FE49 /* ViewController.swift in Sources */,
 				AABCEF8A1B3231910064FE49 /* AppDelegate.swift in Sources */,
 				AA3652C41B338525001F514D /* NotesViewController.swift in Sources */,

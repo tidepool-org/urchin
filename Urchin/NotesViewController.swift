@@ -29,12 +29,12 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         self.refreshControl = UIRefreshControl()
         
-        self.dropDownMenu = DropDownTableView()
+        self.dropDownMenu = DropDownTableView(frame: CGRectZero)
         
         super.init(nibName: nil, bundle: nil)
         
         self.view.backgroundColor = UIColor(red: 253/255, green: 253/255, blue: 253/255, alpha: 1)
-        self.title = user.name
+        self.title = user.fullName
         
         self.notesTable = UITableView(frame: self.view.frame)
         
@@ -79,26 +79,42 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     func loadNotes() {
-        let newnote = Note(text: "This is a new note. I am making the note longer to see if wrapping occurs or not.")
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        
+        let howardbirthday = dateFormatter.dateFromString("1966-05-21")
+        let howarddiagnosis = dateFormatter.dateFromString("2011-01-01")
+        
+        let howardpatient = Patient(birthday: howardbirthday!, diagnosisDate: howarddiagnosis!, aboutMe: "Fakabetic.")
+        let howard = User(firstName: "Howard", lastName: "Look", patient: howardpatient)
+        let newnote = Note(id: "someid", userid: "howardlook", groupid: "katielook", timestamp: NSDate(), createdtime: NSDate(), messagetext: "This is a new note. I am making the note longer to see if wrapping occurs or not.", user: howard)
         notes.append(newnote)
         
-        let anothernote = Note(text: "This is a another note. I am making the note longer to see if how this looks with multiple notes of different heights. If it goes well, I will be thrilled.")
+        let anothernote = Note(id: "someid", userid: "howardlook", groupid: "katielook", timestamp: NSDate(), createdtime: NSDate(), messagetext: "This is a another note. I am making the note longer to see if how this looks with multiple notes of different heights. If it goes well, I will be thrilled.", user: howard)
         notes.append(anothernote)
         
-        let more = Note(text: "The 2005 United States Grand Prix was the ninth race and only American race of the 2005 Formula One season. Held at the Indianapolis Motor Speedway, it was won by Ferrari's Michael Schumacher (pictured).")
+        let more = Note(id: "someid", userid: "howardlook", groupid: "katielook", timestamp: NSDate(), createdtime: NSDate(), messagetext: "The 2005 United States Grand Prix was the ninth race and only American race of the 2005 Formula One season. Held at the Indianapolis Motor Speedway, it was won by Ferrari's Michael Schumacher (pictured).", user: howard)
         notes.append(more)
         
-        let another = Note(text: "In basketball, the Golden State Warriors defeat the Cleveland Cavaliers to win the NBA Finals.")
+        let another = Note(id: "someid", userid: "howardlook", groupid: "katielook", timestamp: NSDate(), createdtime: NSDate(), messagetext: "In basketball, the Golden State Warriors defeat the Cleveland Cavaliers to win the NBA Finals.", user: howard)
         notes.append(another)
         
-        let lastone = Note(text: "On this day, the royal wedding between Victoria, Crown Princess of Sweden, and Daniel Westling (both pictured) took place in Stockholm Cathedral..")
+        let lastone = Note(id: "someid", userid: "howardlook", groupid: "katielook", timestamp: NSDate(), createdtime: NSDate(), messagetext: "On this day, the royal wedding between Victoria, Crown Princess of Sweden, and Daniel Westling (both pictured) took place in Stockholm Cathedral.", user: howard)
         notes.append(lastone)
         
         notesTable.reloadData()
     }
     
     func newNote(sender: UIButton!) {
-        let newnote = Note(text: "The new note button was pressed! Here's your new note!")
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        
+        let howardbirthday = dateFormatter.dateFromString("1966-05-21")
+        let howarddiagnosis = dateFormatter.dateFromString("2011-01-01")
+        
+        let howardpatient = Patient(birthday: howardbirthday!, diagnosisDate: howarddiagnosis!, aboutMe: "Fakabetic.")
+        let howard = User(firstName: "Howard", lastName: "Look", patient: howardpatient)
+        let newnote = Note(id: "someid", userid: "howardlook", groupid: "katielook", timestamp: NSDate(), createdtime: NSDate(), messagetext: "Adding a brand spanking new note!", user: howard)
         notes.insert(newnote, atIndex: 0)
         
         notesTable.reloadData()
@@ -111,26 +127,25 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     func dropDownMenuPressed(sender: AnyObject) {
         if (dropDownMenu.isDisplayed) {
-            println("currently displayed")
-            println(self.dropDownMenu.frame.origin.y)
             self.hideDropDownMenu()
         } else {
-            println("currently not displayed")
-            println(self.dropDownMenu.frame.origin.y)
             self.showDropDownMenu()
         }
     }
     
     func hideDropDownMenu() {
+        dropDownMenu.accounts = []
+        
         var frame: CGRect = self.dropDownMenu.frame
         frame.origin.y = CGFloat(66) - CGFloat(250)
-        println("hiding drop down menu")
         self.animateDropDownToFrame(frame) {
             self.dropDownMenu.isDisplayed = false
         }
     }
     
     func showDropDownMenu() {
+        dropDownMenu.loadUsers()
+        
         var frame: CGRect = self.dropDownMenu.frame
         frame.origin.y = CGFloat(66)
         self.animateDropDownToFrame(frame) {
