@@ -23,7 +23,7 @@ class UserDropDownCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         nameLabel = UILabel(frame: CGRectZero)
         nameLabel.font = UIFont.boldSystemFontOfSize(17)
-        nameLabel.textColor = UIColor(red: 57/255, green: 61/255, blue: 70/255, alpha: 1)
+        nameLabel.textColor = UIColor(red: 253/255, green: 253/255, blue: 253/255, alpha: 1)
         
         self.cellHeight = CGFloat(0)
         
@@ -33,6 +33,8 @@ class UserDropDownCell: UITableViewCell {
         }
         
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+        self.backgroundColor = UIColor(red: 61/255, green: 61/255, blue: 61/255, alpha: 1)
         
         nameLabel.frame = CGRectMake(userCellInset, userCellInset, contentView.frame.width + userCellInset, 20.0)
         
@@ -45,6 +47,20 @@ class UserDropDownCell: UITableViewCell {
     
     func configureWithGroup(user: User) {
         self.nameLabel.text = user.fullName
+        nameLabel.sizeToFit()
+        
+        self.cellHeight = userCellInset + nameLabel.frame.height + userCellInset
+    }
+    
+    func configureAllUsers() {
+        self.nameLabel.text = "All"
+        nameLabel.sizeToFit()
+        
+        self.cellHeight = userCellInset + nameLabel.frame.height + userCellInset
+    }
+    
+    func configureLogout() {
+        self.nameLabel.text = "Logout"
         nameLabel.sizeToFit()
         
         self.cellHeight = userCellInset + nameLabel.frame.height + userCellInset

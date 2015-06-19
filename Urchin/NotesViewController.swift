@@ -54,7 +54,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         let dropDownWidth = self.view.frame.width
         self.dropDownMenu = UITableView(frame: CGRect(x: CGFloat(0), y: CGFloat(66) - dropDownHeight, width: dropDownWidth, height: dropDownHeight))
         
-        dropDownMenu.backgroundColor = UIColor(red: 253/255, green: 253/255, blue: 253/255, alpha: 1)
+        dropDownMenu.backgroundColor = UIColor(red: 61/255, green: 61/255, blue: 61/255, alpha: 1)
         dropDownMenu.rowHeight = userCellHeight
         dropDownMenu.separatorInset.left = userCellInset
         dropDownMenu.registerClass(UserDropDownCell.self, forCellReuseIdentifier: NSStringFromClass(UserDropDownCell))
@@ -152,8 +152,10 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     func dropDownMenuPressed(sender: AnyObject) {
         if (isDropDownDisplayed) {
+            self.title = self.user.fullName
             self.hideDropDownMenu()
         } else {
+            self.title = "Notes"
             self.showDropDownMenu()
         }
     }
@@ -194,19 +196,33 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
             
             return cell
         } else {
-            let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(UserDropDownCell), forIndexPath: indexPath) as! UserDropDownCell
-            
-            cell.configureWithGroup(groups[indexPath.row])
-            
-            return cell
+            if (indexPath.row == 0) {
+                let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(UserDropDownCell), forIndexPath: indexPath) as! UserDropDownCell
+                
+                cell.configureAllUsers()
+                
+                return cell
+            } else {
+                let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(UserDropDownCell), forIndexPath: indexPath) as! UserDropDownCell
+                
+                cell.configureWithGroup(groups[indexPath.row - 1])
+                
+                return cell
+            }
         }
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if (tableView.isEqual(notesTable)) {
             return notes.count
+        } else if (tableView.isEqual(dropDownMenu)){
+            if (section == 0) {
+                return groups.count + 1
+            } else {
+                return 1
+            }
         } else {
-            return groups.count
+            return 0
         }
     }
     
@@ -216,9 +232,15 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
             cell.configureWithNote(notes[indexPath.row])
             return cell.cellHeight
         } else {
-            let cell = UserDropDownCell(style: .Default, reuseIdentifier: nil)
-            cell.configureWithGroup(groups[indexPath.row])
-            return cell.cellHeight
+            if (indexPath.row == 0) {
+                let cell = UserDropDownCell(style: .Default, reuseIdentifier: nil)
+                cell.configureAllUsers()
+                return cell.cellHeight
+            } else {
+                let cell = UserDropDownCell(style: .Default, reuseIdentifier: nil)
+                cell.configureWithGroup(groups[indexPath.row - 1])
+                return cell.cellHeight
+            }
         }
     }
     
@@ -233,6 +255,14 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
             let cell = UserDropDownCell(style: .Default, reuseIdentifier: nil)
             cell.configureWithGroup(groups[indexPath.row])
             println(cell.nameLabel.text)
+        }
+    }
+    
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        if (tableView.isEqual(dropDownMenu)) {
+            return 2
+        } else {
+            return 1
         }
     }
     
