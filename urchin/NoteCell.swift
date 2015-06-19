@@ -56,7 +56,7 @@ class NoteCell: UITableViewCell {
         
         usernameLabel.frame = CGRectMake(noteCellInset, noteCellInset, contentView.frame.width + noteCellInset, 20.0)
         timedateLabel.frame = CGRectMake(noteCellInset, noteCellInset + usernameLabel.frame.height + labelSpacing, contentView.frame.width + noteCellInset, 20.0)
-        messageLabel.frame = CGRectMake(noteCellInset, noteCellInset + usernameLabel.frame.height + timedateLabel.frame.height + 2*labelSpacing, contentView.frame.width + noteCellInset, CGFloat.max)
+        messageLabel.frame = CGRectMake(noteCellInset, noteCellInset + usernameLabel.frame.height + timedateLabel.frame.height + 2*labelSpacing, contentView.frame.width - 2*noteCellInset, CGFloat.max)
 
         contentView.addSubview(usernameLabel)
         contentView.addSubview(timedateLabel)
@@ -71,11 +71,15 @@ class NoteCell: UITableViewCell {
     func configureWithNote(note: Note) {
         usernameLabel.text = "Ethan Look"
         usernameLabel.sizeToFit()
+        
         timedateLabel.text = "Right now on Today"
         timedateLabel.sizeToFit()
-        messageLabel.text = note.text
-        messageLabel.sizeToFit()
         
+        messageLabel.text = note.text
+        var messageLabelFrame = messageLabel.frame
+        messageLabelFrame.size.width = contentView.frame.width - 2*noteCellInset
+        messageLabel.frame = messageLabelFrame
+        messageLabel.sizeToFit()
         messageLabel.frame = CGRect(x: noteCellInset, y: noteCellInset + usernameLabel.frame.height + timedateLabel.frame.height + 2*labelSpacing, width: messageLabel.frame.width, height: messageLabel.frame.height)
         
         cellHeight = noteCellInset + usernameLabel.frame.height + labelSpacing + timedateLabel.frame.height + labelSpacing + messageLabel.frame.height + noteCellInset
