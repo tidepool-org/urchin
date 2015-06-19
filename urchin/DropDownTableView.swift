@@ -59,7 +59,7 @@ class DropDownTableView: UITableView, UITableViewDelegate, UITableViewDataSource
 
         let cell = self.dequeueReusableCellWithIdentifier(NSStringFromClass(UserDropDownCell), forIndexPath: indexPath) as! UserDropDownCell
         
-        cell.configureWithUser(accounts[indexPath.row])
+        cell.configureWithGroup(accounts[indexPath.row])
         println(cell.nameLabel.text)
         
         return cell
@@ -67,7 +67,7 @@ class DropDownTableView: UITableView, UITableViewDelegate, UITableViewDataSource
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         let cell = UserDropDownCell(style: .Default, reuseIdentifier: nil)
-        cell.configureWithUser(accounts[indexPath.row])
+        cell.configureWithGroup(accounts[indexPath.row])
         return cell.cellHeight
     }
     

@@ -14,29 +14,36 @@ let userCellInset: CGFloat = 16
 
 class UserDropDownCell: UITableViewCell {
     
-    let borders = false
+    let borders = true
     
     var cellHeight: CGFloat
     
     let nameLabel: UILabel
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        self.nameLabel = UILabel(frame: CGRectZero)
+        nameLabel = UILabel(frame: CGRectZero)
         nameLabel.font = UIFont.boldSystemFontOfSize(17)
         nameLabel.textColor = UIColor(red: 57/255, green: 61/255, blue: 70/255, alpha: 1)
         
         self.cellHeight = CGFloat(0)
         
+        if (borders) {
+            nameLabel.layer.borderWidth = 1
+            nameLabel.layer.borderColor = UIColor.redColor().CGColor
+        }
+        
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         nameLabel.frame = CGRectMake(userCellInset, userCellInset, contentView.frame.width + userCellInset, 20.0)
+        
+        contentView.addSubview(nameLabel)
     }
 
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configureWithUser(user: User) {
+    func configureWithGroup(user: User) {
         self.nameLabel.text = user.fullName
         nameLabel.sizeToFit()
         

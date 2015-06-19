@@ -12,6 +12,7 @@ import UIKit
 class NotesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     var notes: [Note] = []
+    var groups: [User] = []
     
     let user: User
     var notesTable: UITableView!
@@ -20,7 +21,9 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     let refreshControl: UIRefreshControl!
     
-    let dropDownMenu: DropDownTableView
+    var dropDownMenu: UITableView!
+    var isDropDownDisplayed: Bool = false
+    var isDropDownAnimating: Bool = false
     
     init(user: User) {
         self.user = user
@@ -28,8 +31,6 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         self.newNoteButton = UIButton.buttonWithType(UIButtonType.System) as! UIButton
         
         self.refreshControl = UIRefreshControl()
-        
-        self.dropDownMenu = DropDownTableView(frame: CGRectZero)
         
         super.init(nibName: nil, bundle: nil)
         
@@ -49,6 +50,21 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         self.view.addSubview(notesTable)
         
+        let dropDownHeight = CGFloat(250)
+        let dropDownWidth = self.view.frame.width
+        self.dropDownMenu = UITableView(frame: CGRect(x: CGFloat(0), y: CGFloat(66) - dropDownHeight, width: dropDownWidth, height: dropDownHeight))
+        
+        dropDownMenu.backgroundColor = UIColor(red: 253/255, green: 253/255, blue: 253/255, alpha: 1)
+        dropDownMenu.rowHeight = userCellHeight
+        dropDownMenu.separatorInset.left = userCellInset
+        dropDownMenu.registerClass(UserDropDownCell.self, forCellReuseIdentifier: NSStringFromClass(UserDropDownCell))
+        dropDownMenu.dataSource = self
+        dropDownMenu.delegate = self
+        
+        self.loadGroups()
+        
+        self.view.addSubview(dropDownMenu)
+        
         let image = UIImage(named: "newnote") as UIImage!
         newNoteButton.setBackgroundImage(image, forState: .Normal)
         let buttonWidth = CGFloat(128)
@@ -66,12 +82,6 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         var rightDropDownMenuButton: UIBarButtonItem = UIBarButtonItem(title: "Drop Down", style: .Plain, target: self, action: "dropDownMenuPressed:")
         self.navigationItem.setRightBarButtonItem(rightDropDownMenuButton, animated: true)
-        
-        let dropDownHeight = CGFloat(250)
-        let dropDownWidth = self.view.frame.width
-        dropDownMenu.setDropDownFrame(CGRect(x: CGFloat(0), y: CGFloat(66) - dropDownHeight, width: dropDownWidth, height: dropDownHeight))
-        
-        self.view.addSubview(dropDownMenu)
     }
 
     required init(coder aDecoder: NSCoder) {
@@ -120,46 +130,55 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         notesTable.reloadData()
     }
     
+    func loadGroups() {
+        let sarapatient = Patient(birthday: NSDate(), diagnosisDate: NSDate(), aboutMe: "Designer guru.")
+        let sara = User(firstName: "Sara", lastName: "Krugman", patient: sarapatient)
+        let katiepatient = Patient(birthday: NSDate(), diagnosisDate: NSDate(), aboutMe: "Annoying little sister. Everyone's inspiration.")
+        let katie = User(firstName: "Katie", lastName: "Look", patient: katiepatient)
+        let shellypatient = Patient(birthday: NSDate(), diagnosisDate: NSDate(), aboutMe: "Shelly is a rockstar.")
+        let shelly = User(firstName: "Shelly", lastName: "Surabouti", patient: shellypatient)
+        
+        groups.append(sara)
+        groups.append(katie)
+        groups.append(shelly)
+        
+        dropDownMenu.reloadData()
+    }
+    
     func refreshNotesTable(sender: AnyObject) {
         notesTable.reloadData()
         self.refreshControl.endRefreshing()
     }
     
     func dropDownMenuPressed(sender: AnyObject) {
-        if (dropDownMenu.isDisplayed) {
+        if (isDropDownDisplayed) {
             self.hideDropDownMenu()
         } else {
             self.showDropDownMenu()
         }
     }
     
-    func hideDropDownMenu() {
-        dropDownMenu.accounts = []
-        
-        var frame: CGRect = self.dropDownMenu.frame
+    func hideDropDownMenu() {var frame: CGRect = self.dropDownMenu.frame
         frame.origin.y = CGFloat(66) - CGFloat(250)
         self.animateDropDownToFrame(frame) {
-            self.dropDownMenu.isDisplayed = false
+            self.isDropDownDisplayed = false
         }
     }
     
-    func showDropDownMenu() {
-        dropDownMenu.loadUsers()
-        
-        var frame: CGRect = self.dropDownMenu.frame
+    func showDropDownMenu() {var frame: CGRect = self.dropDownMenu.frame
         frame.origin.y = CGFloat(66)
         self.animateDropDownToFrame(frame) {
-            self.dropDownMenu.isDisplayed = true
+            self.isDropDownDisplayed = true
         }
     }
     
     func animateDropDownToFrame(frame: CGRect, completion:() -> Void) {
-        if (!dropDownMenu.isAnimating) {
-            dropDownMenu.isAnimating = true
+        if (!isDropDownAnimating) {
+            isDropDownAnimating = true
             UIView.animateKeyframesWithDuration(0.5, delay: 0.0, options: nil, animations: { () -> Void in
                 self.dropDownMenu.frame = frame
                 }, completion: { (completed: Bool) -> Void in
-                    self.dropDownMenu.isAnimating = false
+                    self.isDropDownAnimating = false
                     if (completed) {
                         completion()
                     }
@@ -168,29 +187,53 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(NoteCell), forIndexPath: indexPath) as! NoteCell
-        
-        cell.configureWithNote(notes[indexPath.row])
-        
-        return cell
+        if (tableView.isEqual(notesTable)) {
+            let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(NoteCell), forIndexPath: indexPath) as! NoteCell
+            
+            cell.configureWithNote(notes[indexPath.row])
+            
+            return cell
+        } else {
+            let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(UserDropDownCell), forIndexPath: indexPath) as! UserDropDownCell
+            
+            cell.configureWithGroup(groups[indexPath.row])
+            
+            return cell
+        }
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return notes.count
+        if (tableView.isEqual(notesTable)) {
+            return notes.count
+        } else {
+            return groups.count
+        }
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        let cell = NoteCell(style: .Default, reuseIdentifier: nil)
-        cell.configureWithNote(notes[indexPath.row])
-        return cell.cellHeight
+        if (tableView.isEqual(notesTable)) {
+            let cell = NoteCell(style: .Default, reuseIdentifier: nil)
+            cell.configureWithNote(notes[indexPath.row])
+            return cell.cellHeight
+        } else {
+            let cell = UserDropDownCell(style: .Default, reuseIdentifier: nil)
+            cell.configureWithGroup(groups[indexPath.row])
+            return cell.cellHeight
+        }
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let cell = NoteCell(style: .Default, reuseIdentifier: nil)
-        cell.configureWithNote(notes[indexPath.row])
-        let expectedHeight = noteCellInset + cell.usernameLabel.frame.height + cell.timedateLabel.frame.height + 2*labelSpacing + cell.messageLabel.frame.height
-        println(cell.cellHeight)
-        println(expectedHeight)
+        if (tableView.isEqual(notesTable)) {
+            let cell = NoteCell(style: .Default, reuseIdentifier: nil)
+            cell.configureWithNote(notes[indexPath.row])
+            let expectedHeight = noteCellInset + cell.usernameLabel.frame.height + cell.timedateLabel.frame.height + 2*labelSpacing + cell.messageLabel.frame.height
+            println(cell.cellHeight)
+            println(expectedHeight)
+        } else {
+            let cell = UserDropDownCell(style: .Default, reuseIdentifier: nil)
+            cell.configureWithGroup(groups[indexPath.row])
+            println(cell.nameLabel.text)
+        }
     }
     
 }

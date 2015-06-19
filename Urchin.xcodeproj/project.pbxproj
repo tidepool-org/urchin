@@ -11,7 +11,6 @@
 		AA3652C41B338525001F514D /* NotesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3652C31B338525001F514D /* NotesViewController.swift */; };
 		AA3652C61B3396DC001F514D /* newnote.png in Resources */ = {isa = PBXBuildFile; fileRef = AA3652C51B3396DC001F514D /* newnote.png */; };
 		AA3652C81B33A4AB001F514D /* newnote@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AA3652C71B33A4AB001F514D /* newnote@2x.png */; };
-		AA3652CA1B348737001F514D /* DropDownTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3652C91B348737001F514D /* DropDownTableView.swift */; };
 		AA3652CC1B34A163001F514D /* Patient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3652CB1B34A163001F514D /* Patient.swift */; };
 		AA3652CE1B34A8E4001F514D /* UserDropDownCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3652CD1B34A8E4001F514D /* UserDropDownCell.swift */; };
 		AA993E301B3316C10027804C /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA993E2F1B3316C10027804C /* LoginViewController.swift */; };
@@ -40,7 +39,6 @@
 		AA3652C31B338525001F514D /* NotesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotesViewController.swift; sourceTree = "<group>"; };
 		AA3652C51B3396DC001F514D /* newnote.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = newnote.png; sourceTree = "<group>"; };
 		AA3652C71B33A4AB001F514D /* newnote@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "newnote@2x.png"; sourceTree = "<group>"; };
-		AA3652C91B348737001F514D /* DropDownTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DropDownTableView.swift; sourceTree = "<group>"; };
 		AA3652CB1B34A163001F514D /* Patient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Patient.swift; sourceTree = "<group>"; };
 		AA3652CD1B34A8E4001F514D /* UserDropDownCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDropDownCell.swift; sourceTree = "<group>"; };
 		AA993E2F1B3316C10027804C /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -112,7 +110,6 @@
 				AA3652C31B338525001F514D /* NotesViewController.swift */,
 				AA3652C51B3396DC001F514D /* newnote.png */,
 				AA3652C71B33A4AB001F514D /* newnote@2x.png */,
-				AA3652C91B348737001F514D /* DropDownTableView.swift */,
 			);
 			path = urchin;
 			sourceTree = "<group>";
@@ -251,7 +248,6 @@
 				AABCEF8C1B3231910064FE49 /* ViewController.swift in Sources */,
 				AABCEF8A1B3231910064FE49 /* AppDelegate.swift in Sources */,
 				AA3652C41B338525001F514D /* NotesViewController.swift in Sources */,
-				AA3652CA1B348737001F514D /* DropDownTableView.swift in Sources */,
 				AABCEFAC1B3232C60064FE49 /* NoteCell.swift in Sources */,
 				AA3652C21B33847A001F514D /* User.swift in Sources */,
 			);
