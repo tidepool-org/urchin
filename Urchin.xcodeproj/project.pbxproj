@@ -16,7 +16,6 @@
 		AABCEF911B3231910064FE49 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AABCEF901B3231910064FE49 /* Images.xcassets */; };
 		AABCEF941B3231910064FE49 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = AABCEF921B3231910064FE49 /* LaunchScreen.xib */; };
 		AABCEFA01B3231910064FE49 /* urchinTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABCEF9F1B3231910064FE49 /* urchinTests.swift */; };
-		AABCEFAA1B3232900064FE49 /* NotesTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABCEFA91B3232900064FE49 /* NotesTableView.swift */; };
 		AABCEFAC1B3232C60064FE49 /* NoteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABCEFAB1B3232C60064FE49 /* NoteCell.swift */; };
 		AABCEFAE1B3234360064FE49 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABCEFAD1B3234360064FE49 /* Note.swift */; };
 /* End PBXBuildFile section */
@@ -45,7 +44,6 @@
 		AABCEF991B3231910064FE49 /* urchinTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = urchinTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AABCEF9E1B3231910064FE49 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AABCEF9F1B3231910064FE49 /* urchinTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = urchinTests.swift; sourceTree = "<group>"; };
-		AABCEFA91B3232900064FE49 /* NotesTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotesTableView.swift; sourceTree = "<group>"; };
 		AABCEFAB1B3232C60064FE49 /* NoteCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteCell.swift; sourceTree = "<group>"; };
 		AABCEFAD1B3234360064FE49 /* Note.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -95,7 +93,6 @@
 				AABCEF901B3231910064FE49 /* Images.xcassets */,
 				AABCEF921B3231910064FE49 /* LaunchScreen.xib */,
 				AABCEF871B3231910064FE49 /* Supporting Files */,
-				AABCEFA91B3232900064FE49 /* NotesTableView.swift */,
 				AABCEFAD1B3234360064FE49 /* Note.swift */,
 				AABCEFAB1B3232C60064FE49 /* NoteCell.swift */,
 				AA993E2F1B3316C10027804C /* LoginViewController.swift */,
@@ -235,7 +232,6 @@
 				AABCEF8C1B3231910064FE49 /* ViewController.swift in Sources */,
 				AABCEF8A1B3231910064FE49 /* AppDelegate.swift in Sources */,
 				AA3652C41B338525001F514D /* NotesViewController.swift in Sources */,
-				AABCEFAA1B3232900064FE49 /* NotesTableView.swift in Sources */,
 				AABCEFAC1B3232C60064FE49 /* NoteCell.swift in Sources */,
 				AA3652C21B33847A001F514D /* User.swift in Sources */,
 			);

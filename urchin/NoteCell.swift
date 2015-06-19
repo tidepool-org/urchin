@@ -9,13 +9,13 @@
 import Foundation
 import UIKit
 
-let noteCellHeight: CGFloat = 256
+let noteCellHeight: CGFloat = 128
 let noteCellInset: CGFloat = 16
 let labelSpacing: CGFloat = 6
 
 class NoteCell: UITableViewCell {
     
-    let borders = false
+    let borders = true
     
     var cellHeight: CGFloat
     

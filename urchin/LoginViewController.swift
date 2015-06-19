@@ -21,7 +21,7 @@ class logInViewController : UIViewController {
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
-        let notesScene = UINavigationController(rootViewController: NotesTableViewController(user: User(name: "Sara Krugman")))
+        let notesScene = UINavigationController(rootViewController: NotesViewController(user: User(name: "Sara Krugman")))
         self.presentViewController(notesScene, animated: true, completion: nil)
     }
 
