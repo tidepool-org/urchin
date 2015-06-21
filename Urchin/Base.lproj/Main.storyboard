@@ -1,26 +1,43 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14E36b" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="lEC-9k-W1c">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14E36b" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="31G-gh-V3v">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
     </dependencies>
     <scenes>
-        <!--Log In View Controller-->
-        <scene sceneID="HLv-2R-hES">
+        <!--initialNavigationController-->
+        <scene sceneID="qIw-Fg-att">
             <objects>
-                <viewController id="lEC-9k-W1c" customClass="logInViewController" customModule="urchin" customModuleProvider="target" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="initialNavigationController" title="initialNavigationController" id="31G-gh-V3v" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="a6q-hG-6cf">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="EWM-8r-ktC" kind="relationship" relationship="rootViewController" id="Nu4-Pk-btK"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Avt-lM-oQH" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1403" y="615"/>
+        </scene>
+        <!--Log In View Controller-->
+        <scene sceneID="Y09-CP-LRR">
+            <objects>
+                <viewController id="EWM-8r-ktC" customClass="LogInViewController" customModule="urchin" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="d6B-2X-awa"/>
-                        <viewControllerLayoutGuide type="bottom" id="ya7-et-ON6"/>
+                        <viewControllerLayoutGuide type="top" id="fj8-kR-w7c"/>
+                        <viewControllerLayoutGuide type="bottom" id="S9a-y0-Fsv"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="H70-XQ-z4O">
+                    <view key="view" contentMode="scaleToFill" id="qgr-74-IDX">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
+                    <navigationItem key="navigationItem" id="xk7-tm-jSu"/>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="vjg-hx-PCN" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="8KG-Ui-zqR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1549" y="560"/>
+            <point key="canvasLocation" x="2176" y="615"/>
         </scene>
     </scenes>
 </document>

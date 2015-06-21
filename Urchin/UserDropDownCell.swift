@@ -9,16 +9,18 @@
 import Foundation
 import UIKit
 
-let userCellHeight: CGFloat = 64
+let userCellHeight: CGFloat = 52.5
 let userCellInset: CGFloat = 16
 
 class UserDropDownCell: UITableViewCell {
     
-    let borders = true
+    let borders = false
     
     var cellHeight: CGFloat
     
     let nameLabel: UILabel
+
+    var user: User!
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         nameLabel = UILabel(frame: CGRectZero)
@@ -36,7 +38,7 @@ class UserDropDownCell: UITableViewCell {
         
         self.backgroundColor = UIColor(red: 61/255, green: 61/255, blue: 61/255, alpha: 1)
         
-        nameLabel.frame = CGRectMake(userCellInset, userCellInset, contentView.frame.width + userCellInset, 20.0)
+        nameLabel.frame = CGRectMake(2*userCellInset, userCellInset, contentView.frame.width + userCellInset, 20.0)
         
         contentView.addSubview(nameLabel)
     }
@@ -46,6 +48,9 @@ class UserDropDownCell: UITableViewCell {
     }
     
     func configureWithGroup(user: User) {
+        self.user = user
+        
+        nameLabel.frame = CGRectMake(6*userCellInset, userCellInset, contentView.frame.width + userCellInset, 20.0)
         self.nameLabel.text = user.fullName
         nameLabel.sizeToFit()
         
