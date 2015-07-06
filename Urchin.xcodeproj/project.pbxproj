@@ -22,6 +22,9 @@
 		AABCEFA01B3231910064FE49 /* urchinTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABCEF9F1B3231910064FE49 /* urchinTests.swift */; };
 		AABCEFAC1B3232C60064FE49 /* NoteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABCEFAB1B3232C60064FE49 /* NoteCell.swift */; };
 		AABCEFAE1B3234360064FE49 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABCEFAD1B3234360064FE49 /* Note.swift */; };
+		AACE31941B4AE15700F90E1D /* urchinlogo.png in Resources */ = {isa = PBXBuildFile; fileRef = AACE31921B4AE15700F90E1D /* urchinlogo.png */; };
+		AACE31951B4AE15700F90E1D /* urchinlogo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AACE31931B4AE15700F90E1D /* urchinlogo@2x.png */; };
+		AACE31981B4AE17700F90E1D /* tidepoollogo.png in Resources */ = {isa = PBXBuildFile; fileRef = AACE31971B4AE17700F90E1D /* tidepoollogo.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +57,9 @@
 		AABCEF9F1B3231910064FE49 /* urchinTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = urchinTests.swift; sourceTree = "<group>"; };
 		AABCEFAB1B3232C60064FE49 /* NoteCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteCell.swift; sourceTree = "<group>"; };
 		AABCEFAD1B3234360064FE49 /* Note.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
+		AACE31921B4AE15700F90E1D /* urchinlogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = urchinlogo.png; sourceTree = "<group>"; };
+		AACE31931B4AE15700F90E1D /* urchinlogo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "urchinlogo@2x.png"; sourceTree = "<group>"; };
+		AACE31971B4AE17700F90E1D /* tidepoollogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tidepoollogo.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,8 +114,7 @@
 				AA3652C11B33847A001F514D /* User.swift */,
 				AA3652CB1B34A163001F514D /* Patient.swift */,
 				AA3652C31B338525001F514D /* NotesViewController.swift */,
-				AA3652C51B3396DC001F514D /* newnote.png */,
-				AA3652C71B33A4AB001F514D /* newnote@2x.png */,
+				AACE31961B4AE15D00F90E1D /* Logos and Images */,
 			);
 			path = urchin;
 			sourceTree = "<group>";
@@ -137,6 +142,18 @@
 				AABCEF9E1B3231910064FE49 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		AACE31961B4AE15D00F90E1D /* Logos and Images */ = {
+			isa = PBXGroup;
+			children = (
+				AACE31971B4AE17700F90E1D /* tidepoollogo.png */,
+				AA3652C51B3396DC001F514D /* newnote.png */,
+				AA3652C71B33A4AB001F514D /* newnote@2x.png */,
+				AACE31921B4AE15700F90E1D /* urchinlogo.png */,
+				AACE31931B4AE15700F90E1D /* urchinlogo@2x.png */,
+			);
+			name = "Logos and Images";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -220,8 +237,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				AABCEF8F1B3231910064FE49 /* Main.storyboard in Resources */,
+				AACE31951B4AE15700F90E1D /* urchinlogo@2x.png in Resources */,
 				AA3652C81B33A4AB001F514D /* newnote@2x.png in Resources */,
 				AABCEF941B3231910064FE49 /* LaunchScreen.xib in Resources */,
+				AACE31981B4AE17700F90E1D /* tidepoollogo.png in Resources */,
+				AACE31941B4AE15700F90E1D /* urchinlogo.png in Resources */,
 				AA3652C61B3396DC001F514D /* newnote.png in Resources */,
 				AABCEF911B3231910064FE49 /* Images.xcassets in Resources */,
 			);

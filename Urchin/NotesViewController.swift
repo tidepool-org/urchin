@@ -168,15 +168,17 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         }
     }
     
-    func hideDropDownMenu() {var frame: CGRect = self.dropDownMenu.frame
-        frame.origin.y = CGFloat(66) - dropDownHeight
+    func hideDropDownMenu() {
+        var frame: CGRect = self.dropDownMenu.frame
+        frame.origin.y = CGFloat(64) - dropDownHeight
         self.animateDropDownToFrame(frame) {
             self.isDropDownDisplayed = false
         }
     }
     
-    func showDropDownMenu() {var frame: CGRect = self.dropDownMenu.frame
-        frame.origin.y = CGFloat(66)
+    func showDropDownMenu() {
+        var frame: CGRect = self.dropDownMenu.frame
+        frame.origin.y = CGFloat(64)
         self.animateDropDownToFrame(frame) {
             self.isDropDownDisplayed = true
         }
@@ -282,7 +284,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
                 // Logout selected
                 // Unwind VC
                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                let vc = storyboard.instantiateViewControllerWithIdentifier("initialNavigationController") as! UIViewController
+                let vc = storyboard.instantiateViewControllerWithIdentifier("logInViewController") as! UIViewController
                 self.presentViewController(vc, animated: true, completion: nil)
             }
         }
