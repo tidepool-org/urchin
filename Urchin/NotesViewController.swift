@@ -38,17 +38,25 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         super.init(nibName: nil, bundle: nil)
         
+        
+    }
+
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func viewDidLoad() {
         let dropDownRatio = CGFloat(dropDownHeight / self.view.frame.height)
         if (dropDownRatio > maxDropDownRatio) {
-            dropDownHeight = maxDropDownRatio * self.view.frame.height
+        dropDownHeight = maxDropDownRatio * self.view.frame.height
         }
         
-        self.view.backgroundColor = UIColor(red: 253/255, green: 253/255, blue: 253/255, alpha: 1)
+        self.view.backgroundColor = UIColor(red: 247/255, green: 247/255, blue: 248/255, alpha: 1)
         self.title = user.fullName
         
         self.notesTable = UITableView(frame: self.view.frame)
         
-        notesTable.backgroundColor = UIColor(red: 253/255, green: 253/255, blue: 253/255, alpha: 1)
+        notesTable.backgroundColor = UIColor(red: 247/255, green: 247/255, blue: 248/255, alpha: 1)
         notesTable.rowHeight = noteCellHeight
         notesTable.separatorInset.left = noteCellInset
         notesTable.registerClass(NoteCell.self, forCellReuseIdentifier: NSStringFromClass(NoteCell))
@@ -60,27 +68,29 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         self.view.addSubview(notesTable)
         
         let dropDownWidth = self.view.frame.width
-        self.dropDownMenu = UITableView(frame: CGRect(x: CGFloat(0), y: CGFloat(66) - dropDownHeight, width: dropDownWidth, height: dropDownHeight))
+        self.dropDownMenu = UITableView(frame: CGRect(x: CGFloat(0), y: -dropDownHeight, width: dropDownWidth, height: dropDownHeight))
         
-        dropDownMenu.backgroundColor = UIColor(red: 61/255, green: 61/255, blue: 61/255, alpha: 1)
+        dropDownMenu.backgroundColor = UIColor(red: 0/255, green: 54/255, blue: 62/255, alpha: 1)
         dropDownMenu.rowHeight = userCellHeight
         dropDownMenu.separatorInset.left = userCellInset
         dropDownMenu.registerClass(UserDropDownCell.self, forCellReuseIdentifier: NSStringFromClass(UserDropDownCell))
         dropDownMenu.dataSource = self
         dropDownMenu.delegate = self
+        dropDownMenu.separatorStyle = UITableViewCellSeparatorStyle.None
         
         self.loadGroups()
         
         self.view.addSubview(dropDownMenu)
         
-        let image = UIImage(named: "newnote") as UIImage!
-        newNoteButton.setBackgroundImage(image, forState: .Normal)
-        let buttonWidth = CGFloat(128)
-        let buttonHeight = CGFloat(128)
-        let buttonX = self.view.frame.width / 2 - CGFloat(buttonWidth / 2)
-        let buttonY = self.view.frame.height - CGFloat(buttonHeight + 16)
+        let buttonWidth = self.view.frame.width
+        let buttonHeight = CGFloat(105)
+        let buttonX = CGFloat(0)
+        let buttonY = self.view.frame.height - (buttonHeight + CGFloat(64))
         newNoteButton.frame = CGRect(x: buttonX, y: buttonY, width: buttonWidth, height: buttonHeight)
+        newNoteButton.backgroundColor = UIColor(red: 0/255, green: 150/255, blue: 171/255, alpha: 1)
         newNoteButton.addTarget(self, action: "newNote:", forControlEvents: .TouchUpInside)
+        
+        let addNoteImage = UIImage(named: "note") as UIImage!
         
         self.view.addSubview(newNoteButton)
         
@@ -90,10 +100,6 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         var rightDropDownMenuButton: UIBarButtonItem = UIBarButtonItem(title: "Drop Down", style: .Plain, target: self, action: "dropDownMenuPressed")
         self.navigationItem.setRightBarButtonItem(rightDropDownMenuButton, animated: true)
-    }
-
-    required init(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
     
     func loadNotes() {
@@ -170,7 +176,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     func hideDropDownMenu() {
         var frame: CGRect = self.dropDownMenu.frame
-        frame.origin.y = CGFloat(64) - dropDownHeight
+        frame.origin.y = -dropDownHeight
         self.animateDropDownToFrame(frame) {
             self.isDropDownDisplayed = false
         }
@@ -178,7 +184,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     func showDropDownMenu() {
         var frame: CGRect = self.dropDownMenu.frame
-        frame.origin.y = CGFloat(64)
+        frame.origin.y = 0.0
         self.animateDropDownToFrame(frame) {
             self.isDropDownDisplayed = true
         }

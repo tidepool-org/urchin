@@ -73,8 +73,11 @@ class NoteCell: UITableViewCell {
         usernameLabel.sizeToFit()
         
         let dateFormatter = NSDateFormatter()
-        dateFormatter.dateFormat = "h:mma EEEE, MMMM d, yyyy"
-        timedateLabel.text = dateFormatter.stringFromDate(note.timestamp)
+        dateFormatter.dateFormat = "h:mm a EEEE M.d.yy"
+        var dateString = dateFormatter.stringFromDate(note.timestamp)
+        dateString = dateString.stringByReplacingOccurrencesOfString("PM", withString: "pm", options: NSStringCompareOptions.LiteralSearch, range: nil)
+        dateString = dateString.stringByReplacingOccurrencesOfString("AM", withString: "am", options: NSStringCompareOptions.LiteralSearch, range: nil)
+        timedateLabel.text = dateString
         timedateLabel.sizeToFit()
         
         messageLabel.text = note.messagetext

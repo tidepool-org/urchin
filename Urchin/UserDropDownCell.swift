@@ -36,11 +36,13 @@ class UserDropDownCell: UITableViewCell {
         
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        self.backgroundColor = UIColor(red: 61/255, green: 61/255, blue: 61/255, alpha: 1)
+        self.backgroundColor = UIColor(red: 0/255, green: 54/255, blue: 62/255, alpha: 1)
         
         nameLabel.frame = CGRectMake(2*userCellInset, userCellInset, contentView.frame.width + userCellInset, 20.0)
         
         contentView.addSubview(nameLabel)
+        
+        self.layoutMargins = UIEdgeInsetsZero
     }
 
     required init(coder aDecoder: NSCoder) {
