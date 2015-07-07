@@ -17,6 +17,12 @@
 		AA66BA7E1B4C2D5500CCB008 /* right@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AA66BA7C1B4C2D5500CCB008 /* right@2x.png */; };
 		AA66BA851B4C40FD00CCB008 /* OpenSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AA66BA831B4C40FD00CCB008 /* OpenSans-Bold.ttf */; };
 		AA66BA8A1B4C426E00CCB008 /* OpenSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AA66BA891B4C426E00CCB008 /* OpenSans-Regular.ttf */; };
+		AA66BA8D1B4C695400CCB008 /* notesicon.png in Resources */ = {isa = PBXBuildFile; fileRef = AA66BA8B1B4C695400CCB008 /* notesicon.png */; };
+		AA66BA8E1B4C695400CCB008 /* notesicon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AA66BA8C1B4C695400CCB008 /* notesicon@2x.png */; };
+		AA66BA931B4C7CC400CCB008 /* checked.png in Resources */ = {isa = PBXBuildFile; fileRef = AA66BA8F1B4C7CC400CCB008 /* checked.png */; };
+		AA66BA941B4C7CC400CCB008 /* checked@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AA66BA901B4C7CC400CCB008 /* checked@2x.png */; };
+		AA66BA951B4C7CC400CCB008 /* unchecked.png in Resources */ = {isa = PBXBuildFile; fileRef = AA66BA911B4C7CC400CCB008 /* unchecked.png */; };
+		AA66BA961B4C7CC400CCB008 /* unchecked@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AA66BA921B4C7CC400CCB008 /* unchecked@2x.png */; };
 		AA993E301B3316C10027804C /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA993E2F1B3316C10027804C /* LoginViewController.swift */; };
 		AABCEF8A1B3231910064FE49 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABCEF891B3231910064FE49 /* AppDelegate.swift */; };
 		AABCEF8F1B3231910064FE49 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AABCEF8D1B3231910064FE49 /* Main.storyboard */; };
@@ -25,8 +31,6 @@
 		AABCEFA01B3231910064FE49 /* urchinTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABCEF9F1B3231910064FE49 /* urchinTests.swift */; };
 		AABCEFAC1B3232C60064FE49 /* NoteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABCEFAB1B3232C60064FE49 /* NoteCell.swift */; };
 		AABCEFAE1B3234360064FE49 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABCEFAD1B3234360064FE49 /* Note.swift */; };
-		AACE31941B4AE15700F90E1D /* urchinlogo.png in Resources */ = {isa = PBXBuildFile; fileRef = AACE31921B4AE15700F90E1D /* urchinlogo.png */; };
-		AACE31951B4AE15700F90E1D /* urchinlogo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AACE31931B4AE15700F90E1D /* urchinlogo@2x.png */; };
 		AACE31981B4AE17700F90E1D /* tidepoollogo.png in Resources */ = {isa = PBXBuildFile; fileRef = AACE31971B4AE17700F90E1D /* tidepoollogo.png */; };
 		AAE778A41B4B408F00949CEE /* note.png in Resources */ = {isa = PBXBuildFile; fileRef = AAE778A21B4B408F00949CEE /* note.png */; };
 		AAE778A51B4B408F00949CEE /* note@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AAE778A31B4B408F00949CEE /* note@2x.png */; };
@@ -53,6 +57,12 @@
 		AA66BA7C1B4C2D5500CCB008 /* right@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "right@2x.png"; sourceTree = "<group>"; };
 		AA66BA831B4C40FD00CCB008 /* OpenSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Bold.ttf"; sourceTree = "<group>"; };
 		AA66BA891B4C426E00CCB008 /* OpenSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Regular.ttf"; sourceTree = "<group>"; };
+		AA66BA8B1B4C695400CCB008 /* notesicon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = notesicon.png; sourceTree = "<group>"; };
+		AA66BA8C1B4C695400CCB008 /* notesicon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "notesicon@2x.png"; sourceTree = "<group>"; };
+		AA66BA8F1B4C7CC400CCB008 /* checked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checked.png; sourceTree = "<group>"; };
+		AA66BA901B4C7CC400CCB008 /* checked@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checked@2x.png"; sourceTree = "<group>"; };
+		AA66BA911B4C7CC400CCB008 /* unchecked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = unchecked.png; sourceTree = "<group>"; };
+		AA66BA921B4C7CC400CCB008 /* unchecked@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "unchecked@2x.png"; sourceTree = "<group>"; };
 		AA993E2F1B3316C10027804C /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		AABCEF841B3231910064FE49 /* urchin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = urchin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AABCEF881B3231910064FE49 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -65,8 +75,6 @@
 		AABCEF9F1B3231910064FE49 /* urchinTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = urchinTests.swift; sourceTree = "<group>"; };
 		AABCEFAB1B3232C60064FE49 /* NoteCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteCell.swift; sourceTree = "<group>"; };
 		AABCEFAD1B3234360064FE49 /* Note.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
-		AACE31921B4AE15700F90E1D /* urchinlogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = urchinlogo.png; sourceTree = "<group>"; };
-		AACE31931B4AE15700F90E1D /* urchinlogo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "urchinlogo@2x.png"; sourceTree = "<group>"; };
 		AACE31971B4AE17700F90E1D /* tidepoollogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tidepoollogo.png; sourceTree = "<group>"; };
 		AAE778A21B4B408F00949CEE /* note.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = note.png; sourceTree = "<group>"; };
 		AAE778A31B4B408F00949CEE /* note@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "note@2x.png"; sourceTree = "<group>"; };
@@ -100,8 +108,12 @@
 				AAE778A21B4B408F00949CEE /* note.png */,
 				AAE778A31B4B408F00949CEE /* note@2x.png */,
 				AACE31971B4AE17700F90E1D /* tidepoollogo.png */,
-				AACE31921B4AE15700F90E1D /* urchinlogo.png */,
-				AACE31931B4AE15700F90E1D /* urchinlogo@2x.png */,
+				AA66BA8B1B4C695400CCB008 /* notesicon.png */,
+				AA66BA8C1B4C695400CCB008 /* notesicon@2x.png */,
+				AA66BA8F1B4C7CC400CCB008 /* checked.png */,
+				AA66BA901B4C7CC400CCB008 /* checked@2x.png */,
+				AA66BA911B4C7CC400CCB008 /* unchecked.png */,
+				AA66BA921B4C7CC400CCB008 /* unchecked@2x.png */,
 			);
 			name = Images;
 			sourceTree = "<group>";
@@ -267,16 +279,20 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA66BA931B4C7CC400CCB008 /* checked.png in Resources */,
 				AABCEF8F1B3231910064FE49 /* Main.storyboard in Resources */,
-				AACE31951B4AE15700F90E1D /* urchinlogo@2x.png in Resources */,
+				AA66BA941B4C7CC400CCB008 /* checked@2x.png in Resources */,
+				AA66BA961B4C7CC400CCB008 /* unchecked@2x.png in Resources */,
 				AA66BA7D1B4C2D5500CCB008 /* right.png in Resources */,
 				AA66BA7A1B4C292400CCB008 /* down@2x.png in Resources */,
+				AA66BA8D1B4C695400CCB008 /* notesicon.png in Resources */,
 				AA66BA791B4C292400CCB008 /* down.png in Resources */,
+				AA66BA951B4C7CC400CCB008 /* unchecked.png in Resources */,
 				AAE778A41B4B408F00949CEE /* note.png in Resources */,
 				AABCEF941B3231910064FE49 /* LaunchScreen.xib in Resources */,
 				AACE31981B4AE17700F90E1D /* tidepoollogo.png in Resources */,
 				AAE778A51B4B408F00949CEE /* note@2x.png in Resources */,
-				AACE31941B4AE15700F90E1D /* urchinlogo.png in Resources */,
+				AA66BA8E1B4C695400CCB008 /* notesicon@2x.png in Resources */,
 				AA66BA8A1B4C426E00CCB008 /* OpenSans-Regular.ttf in Resources */,
 				AA66BA851B4C40FD00CCB008 /* OpenSans-Bold.ttf in Resources */,
 				AABCEF911B3231910064FE49 /* Images.xcassets in Resources */,

@@ -13,11 +13,13 @@ let labelInset: CGFloat = 16
 
 class LogInViewController : UIViewController {
     
+    // UI Elements
     let logoView: UIImageView
     let titleLabel: UILabel
     let emailField: UITextField
     let passwordField: UITextField
-    let rememberMeSwitch: UISwitch
+    let rememberMeCheckbox: UIButton
+    var rememberMe: Bool
     let rememberMeLabel: UILabel
     let logInButton: UIButton
     let tidepoolLogoView: UIImageView
@@ -30,11 +32,14 @@ class LogInViewController : UIViewController {
     var keyboardFrame: CGRect
     
     required init(coder aDecoder: NSCoder) {
+        
+        // UI Elements
         logoView = UIImageView(frame: CGRectZero)
         titleLabel = UILabel(frame: CGRectMake(0, 0, CGFloat.max, CGFloat.max))
         emailField = UITextField(frame: CGRectZero)
         passwordField = UITextField(frame: CGRectZero)
-        rememberMeSwitch = UISwitch(frame: CGRectZero)
+        rememberMeCheckbox = UIButton(frame: CGRectZero)
+        rememberMe = false
         rememberMeLabel = UILabel(frame: CGRectZero)
         logInButton = UIButton(frame: CGRectZero)
         tidepoolLogoView = UIImageView(frame: CGRectZero)
@@ -57,12 +62,11 @@ class LogInViewController : UIViewController {
         self.view.backgroundColor = UIColor(red: 247/255, green: 247/255, blue: 247/255, alpha: 1)
         
         // configure logo
-        let image = UIImage(named: "urchinlogo") as UIImage!
+        let image = UIImage(named: "notesicon") as UIImage!
         logoView.image = image
-        let imageWidth = CGFloat(128)
-        let imageHeight = CGFloat(128)
-        let imageX = self.view.frame.width / 2 - CGFloat(imageWidth / 2)
-        logoView.frame = CGRect(x: imageX, y: 0, width: imageWidth, height: imageHeight)
+        let imageSize = logoView.image!.size.height
+        let imageX = self.view.frame.width / 2 - CGFloat(imageSize / 2)
+        logoView.frame = CGRect(x: imageX, y: 0, width: imageSize, height: imageSize)
         
         // configure title
         titleLabel.text = "urchin"
@@ -123,16 +127,18 @@ class LogInViewController : UIViewController {
         passwordField.secureTextEntry = true
         
         // configure the remember me check box
-        // NEED TO CHANGE FROM SWITCH TO CHECK BOX
         let rememberX = labelInset
-        rememberMeSwitch.frame = CGRectMake(rememberX, 0, 0, 0)
+        let unchecked = UIImage(named: "unchecked") as UIImage!
+        rememberMeCheckbox.setImage(unchecked, forState: .Normal)
+        rememberMeCheckbox.addTarget(self, action: "checkboxPressed:", forControlEvents: .TouchUpInside)
+        rememberMeCheckbox.frame = CGRectMake(rememberX, 0, unchecked.size.width, unchecked.size.height)
         
         // configure remember me label
         rememberMeLabel.text = "Remember me"
         rememberMeLabel.font = UIFont(name: "OpenSans", size: 17.5)!
         rememberMeLabel.textColor = UIColor(red: 152/255, green: 152/255, blue: 151/255, alpha: 1)
         rememberMeLabel.sizeToFit()
-        let rememberLabelX = rememberX + rememberMeSwitch.frame.width + 2 * labelSpacing
+        let rememberLabelX = rememberX + rememberMeCheckbox.frame.width + labelSpacing
         rememberMeLabel.frame = CGRectMake(rememberLabelX, 0, rememberMeLabel.frame.width, rememberMeLabel.frame.height)
         
         // configure log in button
@@ -158,7 +164,7 @@ class LogInViewController : UIViewController {
         self.view.addSubview(logoView)
         self.view.addSubview(emailField)
         self.view.addSubview(passwordField)
-        self.view.addSubview(rememberMeSwitch)
+        self.view.addSubview(rememberMeCheckbox)
         self.view.addSubview(rememberMeLabel)
         self.view.addSubview(logInButton)
         
@@ -190,6 +196,19 @@ class LogInViewController : UIViewController {
         let sarapatient = Patient(birthday: NSDate(), diagnosisDate: NSDate(), aboutMe: "Designer guru.")
         let notesScene = UINavigationController(rootViewController: NotesViewController(user: User(firstName: "Sara", lastName: "Krugman", patient: sarapatient)))
         self.presentViewController(notesScene, animated: true, completion: nil)
+    }
+    
+    func checkboxPressed(sender: UIButton!) {
+        if (rememberMe) {
+            rememberMe = false
+            let unchecked = UIImage(named: "unchecked") as UIImage!
+            rememberMeCheckbox.setImage(unchecked, forState: .Normal)
+        } else {
+            rememberMe = true
+            let unchecked = UIImage(named: "checked") as UIImage!
+            rememberMeCheckbox.setImage(unchecked, forState: .Normal)
+        }
+        println(rememberMe)
     }
     
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
@@ -244,15 +263,34 @@ class LogInViewController : UIViewController {
     }
     
     func uiElementLocationFromCenterY(centerY: CGFloat) {
-        let topY = centerY - halfHeight
+        let bottomY = centerY + halfHeight
         
-        titleLabel.frame.origin.y = topY
-        logoView.frame.origin.y = titleLabel.frame.origin.y + titleLabel.frame.height + labelSpacing
-        emailField.frame.origin.y = logoView.frame.origin.y + logoView.frame.height + 4*labelSpacing
-        passwordField.frame.origin.y = emailField.frame.origin.y + emailField.frame.height + labelSpacing
-        logInButton.frame.origin.y = passwordField.frame.origin.y + passwordField.frame.height + 2*labelSpacing
-        rememberMeSwitch.frame.origin.y = logInButton.frame.midY - rememberMeSwitch.frame.height / 2
+        logInButton.frame.origin.y = bottomY - logInButton.frame.height
+        rememberMeCheckbox.frame.origin.y = logInButton.frame.midY - rememberMeCheckbox.frame.height / 2
         rememberMeLabel.frame.origin.y = logInButton.frame.midY - rememberMeLabel.frame.height / 2
+        passwordField.frame.origin.y = logInButton.frame.origin.y - (2*labelSpacing + passwordField.frame.height)
+        emailField.frame.origin.y = passwordField.frame.origin.y - (labelSpacing + emailField.frame.height)
+        configureLogoFrame()
+        logoView.frame.origin.y = emailField.frame.origin.y - (4*labelSpacing + logoView.frame.height)
+        if (logoView.frame.height >= 50) {
+            titleLabel.frame.origin.y = logoView.frame.origin.y - (labelSpacing + titleLabel.frame.height)
+        } else {
+            titleLabel.frame.origin.y = emailField.frame.origin.y - (2*labelSpacing + titleLabel.frame.height)
+        }
+    }
+    
+    func configureLogoFrame() {
+        let topToEmailField = emailField.frame.minY
+        var proposedLogoSize = topToEmailField - (9 * labelSpacing + titleLabel.frame.height)
+        proposedLogoSize = min(proposedLogoSize, logoView.image!.size.height)
+        println(proposedLogoSize)
+        let imageX = self.view.frame.width / 2 - CGFloat(proposedLogoSize / 2)
+        logoView.frame = CGRect(x: imageX, y: 0, width: proposedLogoSize, height: proposedLogoSize)
+    }
+    
+    func scaleLogo() {
+        configureLogoFrame()
+        
     }
     
     override func shouldAutorotate() -> Bool {
