@@ -9,6 +9,8 @@
 import Foundation
 import UIKit
 
+let addNoteButtonHeight = CGFloat(105)
+
 class NotesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     var notes: [Note] = []
@@ -16,6 +18,8 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     var user: User!
     var notesTable: UITableView!
+    
+    var opaqueOverlay: UIView!
     
     let newNoteButton: UIButton
     
@@ -34,11 +38,9 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         self.refreshControl = UIRefreshControl()
         
-        self.dropDownHeight = (3+2)*userCellHeight
+        self.dropDownHeight = (3+2)*userCellHeight + (3-1)*userCellThinSeparator + 2*userCellThickSeparator
         
         super.init(nibName: nil, bundle: nil)
-        
-        
     }
 
     required init(coder aDecoder: NSCoder) {
@@ -54,7 +56,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         self.view.backgroundColor = UIColor(red: 247/255, green: 247/255, blue: 248/255, alpha: 1)
         self.title = user.fullName
         
-        self.notesTable = UITableView(frame: self.view.frame)
+        self.notesTable = UITableView(frame: CGRectMake(0, 0, self.view.frame.width, self.view.frame.height - (CGFloat(64) + addNoteButtonHeight)))
         
         notesTable.backgroundColor = UIColor(red: 247/255, green: 247/255, blue: 248/255, alpha: 1)
         notesTable.rowHeight = noteCellHeight
@@ -66,6 +68,10 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         self.loadNotes()
         
         self.view.addSubview(notesTable)
+        
+        opaqueOverlay = UIView(frame: CGRectMake(0, -self.view.frame.height, self.view.frame.width, self.view.frame.height))
+        opaqueOverlay.backgroundColor = UIColor(red: 61/255, green: 61/255, blue: 61/255, alpha: 0.75)
+        self.view.addSubview(opaqueOverlay)
         
         let dropDownWidth = self.view.frame.width
         self.dropDownMenu = UITableView(frame: CGRect(x: CGFloat(0), y: -dropDownHeight, width: dropDownWidth, height: dropDownHeight))
@@ -83,18 +89,33 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         self.view.addSubview(dropDownMenu)
         
         let buttonWidth = self.view.frame.width
-        let buttonHeight = CGFloat(105)
         let buttonX = CGFloat(0)
-        let buttonY = self.view.frame.height - (buttonHeight + CGFloat(64))
-        newNoteButton.frame = CGRect(x: buttonX, y: buttonY, width: buttonWidth, height: buttonHeight)
+        let buttonY = self.view.frame.height - (addNoteButtonHeight + CGFloat(64))
+        newNoteButton.frame = CGRect(x: buttonX, y: buttonY, width: buttonWidth, height: addNoteButtonHeight)
         newNoteButton.backgroundColor = UIColor(red: 0/255, green: 150/255, blue: 171/255, alpha: 1)
         newNoteButton.addTarget(self, action: "newNote:", forControlEvents: .TouchUpInside)
         
         let addNoteImage = UIImage(named: "note") as UIImage!
+        let addNoteImageView = UIImageView(image: addNoteImage)
+        addNoteImageView.frame = CGRectMake(0, 0, addNoteImage.size.width / 2, addNoteImage.size.height / 2)
+        
+        let addNoteLabel = UILabel(frame: CGRectZero)
+        addNoteLabel.text = "Add note"
+        addNoteLabel.font = UIFont.boldSystemFontOfSize(17)
+        addNoteLabel.textColor = UIColor.whiteColor()
+        addNoteLabel.sizeToFit()
+        
+        let addNoteX = newNoteButton.frame.width / 2
+        let addNoteY = newNoteButton.frame.height / 2
+        let halfHeight = (addNoteImageView.frame.height + labelSpacing + addNoteLabel.frame.height) / 2
+        addNoteImageView.frame.origin = CGPoint(x: addNoteX  - addNoteImageView.frame.width / 2, y: addNoteY - halfHeight)
+        addNoteLabel.frame.origin = CGPoint(x: addNoteX - addNoteLabel.frame.width / 2, y: addNoteY + halfHeight - addNoteLabel.frame.height)
+        
+        newNoteButton.addSubview(addNoteImageView)
+        newNoteButton.addSubview(addNoteLabel)
         
         self.view.addSubview(newNoteButton)
         
-        self.refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
         self.refreshControl.addTarget(self, action: "refreshNotesTable:", forControlEvents: UIControlEvents.ValueChanged)
         self.notesTable.addSubview(refreshControl)
         
@@ -177,7 +198,9 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
     func hideDropDownMenu() {
         var frame: CGRect = self.dropDownMenu.frame
         frame.origin.y = -dropDownHeight
-        self.animateDropDownToFrame(frame) {
+        var obstructionFrame: CGRect = self.opaqueOverlay.frame
+        obstructionFrame.origin.y = -self.view.frame.height
+        self.animateDropDownToFrame(frame, obstructionFrame: obstructionFrame) {
             self.isDropDownDisplayed = false
         }
     }
@@ -185,16 +208,19 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
     func showDropDownMenu() {
         var frame: CGRect = self.dropDownMenu.frame
         frame.origin.y = 0.0
-        self.animateDropDownToFrame(frame) {
+        var obstructionFrame: CGRect = self.opaqueOverlay.frame
+        obstructionFrame.origin.y = 0.0
+        self.animateDropDownToFrame(frame, obstructionFrame: obstructionFrame) {
             self.isDropDownDisplayed = true
         }
     }
     
-    func animateDropDownToFrame(frame: CGRect, completion:() -> Void) {
+    func animateDropDownToFrame(frame: CGRect, obstructionFrame: CGRect, completion:() -> Void) {
         if (!isDropDownAnimating) {
             isDropDownAnimating = true
             UIView.animateKeyframesWithDuration(0.5, delay: 0.0, options: nil, animations: { () -> Void in
                 self.dropDownMenu.frame = frame
+                self.opaqueOverlay.frame = obstructionFrame
                 }, completion: { (completed: Bool) -> Void in
                     self.isDropDownAnimating = false
                     if (completed) {
@@ -209,6 +235,14 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
             let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(NoteCell), forIndexPath: indexPath) as! NoteCell
             
             cell.configureWithNote(notes[indexPath.row])
+            
+            if (indexPath.row % 2 == 0) {
+                // even cell
+                cell.backgroundColor = UIColor(red: 247/255, green: 247/255, blue: 248/255, alpha: 1)
+            } else {
+                // odd cell
+                cell.backgroundColor = UIColor(red: 152/255, green: 152/255, blue: 151/255, alpha: 0.23)
+            }
             
             return cell
         } else {

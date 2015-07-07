@@ -11,6 +11,8 @@ import UIKit
 
 let userCellHeight: CGFloat = 52.5
 let userCellInset: CGFloat = 16
+let userCellThickSeparator: CGFloat = 4
+let userCellThinSeparator: CGFloat = 1
 
 class UserDropDownCell: UITableViewCell {
     
@@ -24,7 +26,7 @@ class UserDropDownCell: UITableViewCell {
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         nameLabel = UILabel(frame: CGRectZero)
-        nameLabel.font = UIFont.boldSystemFontOfSize(17)
+        nameLabel.font = UIFont.systemFontOfSize(17)
         nameLabel.textColor = UIColor(red: 253/255, green: 253/255, blue: 253/255, alpha: 1)
         
         self.cellHeight = CGFloat(0)
@@ -56,20 +58,35 @@ class UserDropDownCell: UITableViewCell {
         self.nameLabel.text = user.fullName
         nameLabel.sizeToFit()
         
-        self.cellHeight = userCellInset + nameLabel.frame.height + userCellInset
+        let separator = UIView(frame: CGRectMake(0, self.frame.height - userCellThinSeparator, self.frame.width, userCellThinSeparator))
+        separator.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.25)
+        self.addSubview(separator)
+        
+        self.cellHeight = userCellInset + nameLabel.frame.height + userCellInset + separator.frame.height
     }
     
     func configureAllUsers() {
         self.nameLabel.text = "All"
+        nameLabel.font = UIFont.boldSystemFontOfSize(17)
         nameLabel.sizeToFit()
         
-        self.cellHeight = userCellInset + nameLabel.frame.height + userCellInset
+        let separator = UIView(frame: CGRectMake(0, self.frame.height - userCellThickSeparator, self.frame.width, userCellThickSeparator))
+        separator.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.25)
+        self.addSubview(separator)
+        
+        self.cellHeight = userCellInset + nameLabel.frame.height + userCellInset + separator.frame.height
     }
     
     func configureLogout() {
         self.nameLabel.text = "Logout"
+        nameLabel.font = UIFont.boldSystemFontOfSize(17)
         nameLabel.sizeToFit()
+        nameLabel.frame.origin.y = nameLabel.frame.origin.y + userCellThickSeparator - userCellThinSeparator
         
-        self.cellHeight = userCellInset + nameLabel.frame.height + userCellInset
+        let separator = UIView(frame: CGRectMake(0, 0, self.frame.width, userCellThickSeparator - userCellThinSeparator))
+        separator.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.25)
+        self.addSubview(separator)
+        
+        self.cellHeight = userCellInset + nameLabel.frame.height + userCellInset + separator.frame.height
     }
 }

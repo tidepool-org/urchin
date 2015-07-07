@@ -61,7 +61,6 @@ class NoteCell: UITableViewCell {
         contentView.addSubview(usernameLabel)
         contentView.addSubview(timedateLabel)
         contentView.addSubview(messageLabel)
-        
     }
 
     required init(coder aDecoder: NSCoder) {
