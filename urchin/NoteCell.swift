@@ -26,15 +26,15 @@ class NoteCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         
         usernameLabel = UILabel(frame: CGRectZero)
-        usernameLabel.font = UIFont.boldSystemFontOfSize(17)
+        usernameLabel.font = UIFont(name: "OpenSans-Bold", size: 17.5)!
         usernameLabel.textColor = UIColor(red: 57/255, green: 61/255, blue: 70/255, alpha: 1)
         
         timedateLabel = UILabel(frame: CGRectZero)
-        timedateLabel.font = UIFont.systemFontOfSize(17)
+        timedateLabel.font = UIFont(name: "OpenSans", size: 12.5)!
         timedateLabel.textColor = UIColor(red: 84/255, green: 92/255, blue: 104/255, alpha: 1)
 
         messageLabel = UILabel(frame: CGRectZero)
-        messageLabel.font = UIFont.systemFontOfSize(17)
+        messageLabel.font = UIFont(name: "OpenSans", size: 17.5)!
         messageLabel.textColor = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 1)
         messageLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
         messageLabel.numberOfLines = 0

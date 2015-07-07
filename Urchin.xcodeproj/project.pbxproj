@@ -11,6 +11,12 @@
 		AA3652C41B338525001F514D /* NotesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3652C31B338525001F514D /* NotesViewController.swift */; };
 		AA3652CC1B34A163001F514D /* Patient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3652CB1B34A163001F514D /* Patient.swift */; };
 		AA3652CE1B34A8E4001F514D /* UserDropDownCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3652CD1B34A8E4001F514D /* UserDropDownCell.swift */; };
+		AA66BA791B4C292400CCB008 /* down.png in Resources */ = {isa = PBXBuildFile; fileRef = AA66BA771B4C292400CCB008 /* down.png */; };
+		AA66BA7A1B4C292400CCB008 /* down@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AA66BA781B4C292400CCB008 /* down@2x.png */; };
+		AA66BA7D1B4C2D5500CCB008 /* right.png in Resources */ = {isa = PBXBuildFile; fileRef = AA66BA7B1B4C2D5500CCB008 /* right.png */; };
+		AA66BA7E1B4C2D5500CCB008 /* right@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AA66BA7C1B4C2D5500CCB008 /* right@2x.png */; };
+		AA66BA851B4C40FD00CCB008 /* OpenSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AA66BA831B4C40FD00CCB008 /* OpenSans-Bold.ttf */; };
+		AA66BA8A1B4C426E00CCB008 /* OpenSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AA66BA891B4C426E00CCB008 /* OpenSans-Regular.ttf */; };
 		AA993E301B3316C10027804C /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA993E2F1B3316C10027804C /* LoginViewController.swift */; };
 		AABCEF8A1B3231910064FE49 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABCEF891B3231910064FE49 /* AppDelegate.swift */; };
 		AABCEF8F1B3231910064FE49 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AABCEF8D1B3231910064FE49 /* Main.storyboard */; };
@@ -41,6 +47,12 @@
 		AA3652C31B338525001F514D /* NotesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotesViewController.swift; sourceTree = "<group>"; };
 		AA3652CB1B34A163001F514D /* Patient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Patient.swift; sourceTree = "<group>"; };
 		AA3652CD1B34A8E4001F514D /* UserDropDownCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDropDownCell.swift; sourceTree = "<group>"; };
+		AA66BA771B4C292400CCB008 /* down.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = down.png; sourceTree = "<group>"; };
+		AA66BA781B4C292400CCB008 /* down@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "down@2x.png"; sourceTree = "<group>"; };
+		AA66BA7B1B4C2D5500CCB008 /* right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = right.png; sourceTree = "<group>"; };
+		AA66BA7C1B4C2D5500CCB008 /* right@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "right@2x.png"; sourceTree = "<group>"; };
+		AA66BA831B4C40FD00CCB008 /* OpenSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Bold.ttf"; sourceTree = "<group>"; };
+		AA66BA891B4C426E00CCB008 /* OpenSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Regular.ttf"; sourceTree = "<group>"; };
 		AA993E2F1B3316C10027804C /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		AABCEF841B3231910064FE49 /* urchin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = urchin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AABCEF881B3231910064FE49 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -78,6 +90,31 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AA66BA7F1B4C3E4B00CCB008 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				AA66BA771B4C292400CCB008 /* down.png */,
+				AA66BA781B4C292400CCB008 /* down@2x.png */,
+				AA66BA7B1B4C2D5500CCB008 /* right.png */,
+				AA66BA7C1B4C2D5500CCB008 /* right@2x.png */,
+				AAE778A21B4B408F00949CEE /* note.png */,
+				AAE778A31B4B408F00949CEE /* note@2x.png */,
+				AACE31971B4AE17700F90E1D /* tidepoollogo.png */,
+				AACE31921B4AE15700F90E1D /* urchinlogo.png */,
+				AACE31931B4AE15700F90E1D /* urchinlogo@2x.png */,
+			);
+			name = Images;
+			sourceTree = "<group>";
+		};
+		AA66BA801B4C3E5300CCB008 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				AA66BA831B4C40FD00CCB008 /* OpenSans-Bold.ttf */,
+				AA66BA891B4C426E00CCB008 /* OpenSans-Regular.ttf */,
+			);
+			name = Fonts;
+			sourceTree = "<group>";
+		};
 		AABCEF7B1B3231910064FE49 = {
 			isa = PBXGroup;
 			children = (
@@ -111,7 +148,7 @@
 				AA3652C11B33847A001F514D /* User.swift */,
 				AA3652CB1B34A163001F514D /* Patient.swift */,
 				AA3652C31B338525001F514D /* NotesViewController.swift */,
-				AACE31961B4AE15D00F90E1D /* Logos and Images */,
+				AACE31961B4AE15D00F90E1D /* Resources */,
 			);
 			path = urchin;
 			sourceTree = "<group>";
@@ -141,16 +178,13 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		AACE31961B4AE15D00F90E1D /* Logos and Images */ = {
+		AACE31961B4AE15D00F90E1D /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				AAE778A21B4B408F00949CEE /* note.png */,
-				AAE778A31B4B408F00949CEE /* note@2x.png */,
-				AACE31971B4AE17700F90E1D /* tidepoollogo.png */,
-				AACE31921B4AE15700F90E1D /* urchinlogo.png */,
-				AACE31931B4AE15700F90E1D /* urchinlogo@2x.png */,
+				AA66BA801B4C3E5300CCB008 /* Fonts */,
+				AA66BA7F1B4C3E4B00CCB008 /* Images */,
 			);
-			name = "Logos and Images";
+			name = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -235,12 +269,18 @@
 			files = (
 				AABCEF8F1B3231910064FE49 /* Main.storyboard in Resources */,
 				AACE31951B4AE15700F90E1D /* urchinlogo@2x.png in Resources */,
+				AA66BA7D1B4C2D5500CCB008 /* right.png in Resources */,
+				AA66BA7A1B4C292400CCB008 /* down@2x.png in Resources */,
+				AA66BA791B4C292400CCB008 /* down.png in Resources */,
 				AAE778A41B4B408F00949CEE /* note.png in Resources */,
 				AABCEF941B3231910064FE49 /* LaunchScreen.xib in Resources */,
 				AACE31981B4AE17700F90E1D /* tidepoollogo.png in Resources */,
 				AAE778A51B4B408F00949CEE /* note@2x.png in Resources */,
 				AACE31941B4AE15700F90E1D /* urchinlogo.png in Resources */,
+				AA66BA8A1B4C426E00CCB008 /* OpenSans-Regular.ttf in Resources */,
+				AA66BA851B4C40FD00CCB008 /* OpenSans-Bold.ttf in Resources */,
 				AABCEF911B3231910064FE49 /* Images.xcassets in Resources */,
+				AA66BA7E1B4C2D5500CCB008 /* right@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

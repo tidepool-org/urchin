@@ -29,7 +29,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
     var isDropDownDisplayed: Bool = false
     var isDropDownAnimating: Bool = false
     var dropDownHeight: CGFloat
-    let maxDropDownRatio = CGFloat(0.550974512743628)
+    var overlayHeight: CGFloat
     
     init(user: User) {
         self.user = user
@@ -40,6 +40,8 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         self.dropDownHeight = (3+2)*userCellHeight + (3-1)*userCellThinSeparator + 2*userCellThickSeparator
         
+        self.overlayHeight = CGFloat(0)
+        
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -48,10 +50,6 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     override func viewDidLoad() {
-        let dropDownRatio = CGFloat(dropDownHeight / self.view.frame.height)
-        if (dropDownRatio > maxDropDownRatio) {
-        dropDownHeight = maxDropDownRatio * self.view.frame.height
-        }
         
         self.view.backgroundColor = UIColor(red: 247/255, green: 247/255, blue: 248/255, alpha: 1)
         self.title = user.fullName
@@ -69,7 +67,36 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         self.view.addSubview(notesTable)
         
-        opaqueOverlay = UIView(frame: CGRectMake(0, -self.view.frame.height, self.view.frame.width, self.view.frame.height))
+        let buttonWidth = self.view.frame.width
+        let buttonX = CGFloat(0)
+        let buttonY = self.view.frame.height - (addNoteButtonHeight + CGFloat(64))
+        newNoteButton.frame = CGRect(x: buttonX, y: buttonY, width: buttonWidth, height: addNoteButtonHeight)
+        newNoteButton.backgroundColor = UIColor(red: 0/255, green: 150/255, blue: 171/255, alpha: 1)
+        newNoteButton.addTarget(self, action: "newNote:", forControlEvents: .TouchUpInside)
+        
+        let addNoteImage = UIImage(named: "note") as UIImage!
+        let addNoteImageView = UIImageView(image: addNoteImage)
+        addNoteImageView.frame = CGRectMake(0, 0, addNoteImage.size.width / 2, addNoteImage.size.height / 2)
+        
+        let addNoteLabel = UILabel(frame: CGRectZero)
+        addNoteLabel.text = "Add note"
+        addNoteLabel.font = UIFont(name: "OpenSans-Bold", size: 17.5)!
+        addNoteLabel.textColor = UIColor.whiteColor()
+        addNoteLabel.sizeToFit()
+        
+        let addNoteX = newNoteButton.frame.width / 2
+        let addNoteY = newNoteButton.frame.height / 2
+        let halfHeight = (addNoteImageView.frame.height + labelSpacing + addNoteLabel.frame.height) / 2
+        addNoteImageView.frame.origin = CGPoint(x: addNoteX  - addNoteImageView.frame.width / 2, y: addNoteY - halfHeight)
+        addNoteLabel.frame.origin = CGPoint(x: addNoteX - addNoteLabel.frame.width / 2, y: addNoteY + halfHeight - addNoteLabel.frame.height)
+        
+        newNoteButton.addSubview(addNoteImageView)
+        newNoteButton.addSubview(addNoteLabel)
+        
+        self.view.addSubview(newNoteButton)
+        
+        overlayHeight = self.view.frame.height
+        opaqueOverlay = UIView(frame: CGRectMake(0, -overlayHeight, self.view.frame.width, overlayHeight))
         opaqueOverlay.backgroundColor = UIColor(red: 61/255, green: 61/255, blue: 61/255, alpha: 0.75)
         self.view.addSubview(opaqueOverlay)
         
@@ -88,38 +115,10 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         self.view.addSubview(dropDownMenu)
         
-        let buttonWidth = self.view.frame.width
-        let buttonX = CGFloat(0)
-        let buttonY = self.view.frame.height - (addNoteButtonHeight + CGFloat(64))
-        newNoteButton.frame = CGRect(x: buttonX, y: buttonY, width: buttonWidth, height: addNoteButtonHeight)
-        newNoteButton.backgroundColor = UIColor(red: 0/255, green: 150/255, blue: 171/255, alpha: 1)
-        newNoteButton.addTarget(self, action: "newNote:", forControlEvents: .TouchUpInside)
-        
-        let addNoteImage = UIImage(named: "note") as UIImage!
-        let addNoteImageView = UIImageView(image: addNoteImage)
-        addNoteImageView.frame = CGRectMake(0, 0, addNoteImage.size.width / 2, addNoteImage.size.height / 2)
-        
-        let addNoteLabel = UILabel(frame: CGRectZero)
-        addNoteLabel.text = "Add note"
-        addNoteLabel.font = UIFont.boldSystemFontOfSize(17)
-        addNoteLabel.textColor = UIColor.whiteColor()
-        addNoteLabel.sizeToFit()
-        
-        let addNoteX = newNoteButton.frame.width / 2
-        let addNoteY = newNoteButton.frame.height / 2
-        let halfHeight = (addNoteImageView.frame.height + labelSpacing + addNoteLabel.frame.height) / 2
-        addNoteImageView.frame.origin = CGPoint(x: addNoteX  - addNoteImageView.frame.width / 2, y: addNoteY - halfHeight)
-        addNoteLabel.frame.origin = CGPoint(x: addNoteX - addNoteLabel.frame.width / 2, y: addNoteY + halfHeight - addNoteLabel.frame.height)
-        
-        newNoteButton.addSubview(addNoteImageView)
-        newNoteButton.addSubview(addNoteLabel)
-        
-        self.view.addSubview(newNoteButton)
-        
         self.refreshControl.addTarget(self, action: "refreshNotesTable:", forControlEvents: UIControlEvents.ValueChanged)
         self.notesTable.addSubview(refreshControl)
         
-        var rightDropDownMenuButton: UIBarButtonItem = UIBarButtonItem(title: "Drop Down", style: .Plain, target: self, action: "dropDownMenuPressed")
+        var rightDropDownMenuButton: UIBarButtonItem = UIBarButtonItem(image: UIImage(named: "down"), style: .Plain, target: self, action: "dropDownMenuPressed")
         self.navigationItem.setRightBarButtonItem(rightDropDownMenuButton, animated: true)
     }
     
@@ -199,7 +198,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         var frame: CGRect = self.dropDownMenu.frame
         frame.origin.y = -dropDownHeight
         var obstructionFrame: CGRect = self.opaqueOverlay.frame
-        obstructionFrame.origin.y = -self.view.frame.height
+        obstructionFrame.origin.y = -overlayHeight
         self.animateDropDownToFrame(frame, obstructionFrame: obstructionFrame) {
             self.isDropDownDisplayed = false
         }
@@ -338,4 +337,11 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         }
     }
     
+    override func shouldAutorotate() -> Bool {
+        return false
+    }
+    
+    override func supportedInterfaceOrientations() -> Int {
+        return UIInterfaceOrientation.Portrait.rawValue
+    }
 }
