@@ -31,6 +31,8 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
     var dropDownHeight: CGFloat
     var overlayHeight: CGFloat
     
+    let addNoteViewController: AddNoteViewController
+    
     init(user: User) {
         self.user = user
         
@@ -42,6 +44,8 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         self.overlayHeight = CGFloat(0)
         
+         addNoteViewController = AddNoteViewController(currentUser: user)
+        
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -52,7 +56,9 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
     override func viewDidLoad() {
         
         self.view.backgroundColor = UIColor(red: 247/255, green: 247/255, blue: 248/255, alpha: 1)
+        
         self.title = user.fullName
+        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor(),NSFontAttributeName: UIFont(name: "OpenSans", size: 25)!]
         
         self.notesTable = UITableView(frame: CGRectMake(0, 0, self.view.frame.width, self.view.frame.height - (CGFloat(64) + addNoteButtonHeight)))
         
@@ -126,6 +132,9 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         var rightDropDownMenuButton: UIBarButtonItem = UIBarButtonItem(image: UIImage(named: "down"), style: .Plain, target: self, action: "dropDownMenuPressed")
         self.navigationItem.setRightBarButtonItem(rightDropDownMenuButton, animated: true)
+        
+        let notificationCenter = NSNotificationCenter.defaultCenter()
+        notificationCenter.addObserver(self, selector: "addNote:", name: "addNote", object: nil)
     }
     
     func loadNotes() {
@@ -156,18 +165,10 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     func newNote(sender: UIButton!) {
-        let dateFormatter = NSDateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
         
-        let howardbirthday = dateFormatter.dateFromString("1966-05-21")
-        let howarddiagnosis = dateFormatter.dateFromString("2011-01-01")
-        
-        let howardpatient = Patient(birthday: howardbirthday!, diagnosisDate: howarddiagnosis!, aboutMe: "Fakabetic.")
-        let howard = User(firstName: "Howard", lastName: "Look", patient: howardpatient)
-        let newnote = Note(id: "someid", userid: "howardlook", groupid: "katielook", timestamp: NSDate(), createdtime: NSDate(), messagetext: "Adding a brand spanking new note!", user: howard)
-        notes.insert(newnote, atIndex: 0)
-        
-        notesTable.reloadData()
+        addNoteViewController.user = user
+        let addNoteScene = UINavigationController(rootViewController: addNoteViewController)
+        self.presentViewController(addNoteScene, animated: true, completion: nil)
     }
     
     func loadGroups() {
@@ -325,9 +326,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
             } else {
                 // Logout selected
                 // Unwind VC
-                let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                let vc = storyboard.instantiateViewControllerWithIdentifier("logInViewController") as! UIViewController
-                self.presentViewController(vc, animated: true, completion: nil)
+                self.dismissViewControllerAnimated(true, completion: nil)
             }
         }
     }

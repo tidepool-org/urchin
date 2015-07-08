@@ -23,6 +23,9 @@
 		AA66BA941B4C7CC400CCB008 /* checked@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AA66BA901B4C7CC400CCB008 /* checked@2x.png */; };
 		AA66BA951B4C7CC400CCB008 /* unchecked.png in Resources */ = {isa = PBXBuildFile; fileRef = AA66BA911B4C7CC400CCB008 /* unchecked.png */; };
 		AA66BA961B4C7CC400CCB008 /* unchecked@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AA66BA921B4C7CC400CCB008 /* unchecked@2x.png */; };
+		AA8301001B4D986300F8ADE6 /* AddNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA8300FF1B4D986300F8ADE6 /* AddNoteViewController.swift */; };
+		AA8301031B4DB4A400F8ADE6 /* closex.png in Resources */ = {isa = PBXBuildFile; fileRef = AA8301011B4DB4A400F8ADE6 /* closex.png */; };
+		AA8301041B4DB4A400F8ADE6 /* closex@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AA8301021B4DB4A400F8ADE6 /* closex@2x.png */; };
 		AA993E301B3316C10027804C /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA993E2F1B3316C10027804C /* LoginViewController.swift */; };
 		AABCEF8A1B3231910064FE49 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABCEF891B3231910064FE49 /* AppDelegate.swift */; };
 		AABCEF8F1B3231910064FE49 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AABCEF8D1B3231910064FE49 /* Main.storyboard */; };
@@ -63,6 +66,9 @@
 		AA66BA901B4C7CC400CCB008 /* checked@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checked@2x.png"; sourceTree = "<group>"; };
 		AA66BA911B4C7CC400CCB008 /* unchecked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = unchecked.png; sourceTree = "<group>"; };
 		AA66BA921B4C7CC400CCB008 /* unchecked@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "unchecked@2x.png"; sourceTree = "<group>"; };
+		AA8300FF1B4D986300F8ADE6 /* AddNoteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddNoteViewController.swift; sourceTree = "<group>"; };
+		AA8301011B4DB4A400F8ADE6 /* closex.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = closex.png; sourceTree = "<group>"; };
+		AA8301021B4DB4A400F8ADE6 /* closex@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "closex@2x.png"; sourceTree = "<group>"; };
 		AA993E2F1B3316C10027804C /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		AABCEF841B3231910064FE49 /* urchin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = urchin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AABCEF881B3231910064FE49 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -101,6 +107,8 @@
 		AA66BA7F1B4C3E4B00CCB008 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				AA8301011B4DB4A400F8ADE6 /* closex.png */,
+				AA8301021B4DB4A400F8ADE6 /* closex@2x.png */,
 				AA66BA771B4C292400CCB008 /* down.png */,
 				AA66BA781B4C292400CCB008 /* down@2x.png */,
 				AA66BA7B1B4C2D5500CCB008 /* right.png */,
@@ -155,6 +163,7 @@
 				AABCEF871B3231910064FE49 /* Supporting Files */,
 				AABCEFAD1B3234360064FE49 /* Note.swift */,
 				AA3652CD1B34A8E4001F514D /* UserDropDownCell.swift */,
+				AA8300FF1B4D986300F8ADE6 /* AddNoteViewController.swift */,
 				AABCEFAB1B3232C60064FE49 /* NoteCell.swift */,
 				AA993E2F1B3316C10027804C /* LoginViewController.swift */,
 				AA3652C11B33847A001F514D /* User.swift */,
@@ -283,6 +292,7 @@
 				AABCEF8F1B3231910064FE49 /* Main.storyboard in Resources */,
 				AA66BA941B4C7CC400CCB008 /* checked@2x.png in Resources */,
 				AA66BA961B4C7CC400CCB008 /* unchecked@2x.png in Resources */,
+				AA8301041B4DB4A400F8ADE6 /* closex@2x.png in Resources */,
 				AA66BA7D1B4C2D5500CCB008 /* right.png in Resources */,
 				AA66BA7A1B4C292400CCB008 /* down@2x.png in Resources */,
 				AA66BA8D1B4C695400CCB008 /* notesicon.png in Resources */,
@@ -292,6 +302,7 @@
 				AABCEF941B3231910064FE49 /* LaunchScreen.xib in Resources */,
 				AACE31981B4AE17700F90E1D /* tidepoollogo.png in Resources */,
 				AAE778A51B4B408F00949CEE /* note@2x.png in Resources */,
+				AA8301031B4DB4A400F8ADE6 /* closex.png in Resources */,
 				AA66BA8E1B4C695400CCB008 /* notesicon@2x.png in Resources */,
 				AA66BA8A1B4C426E00CCB008 /* OpenSans-Regular.ttf in Resources */,
 				AA66BA851B4C40FD00CCB008 /* OpenSans-Bold.ttf in Resources */,
@@ -320,6 +331,7 @@
 				AA3652CE1B34A8E4001F514D /* UserDropDownCell.swift in Sources */,
 				AABCEF8A1B3231910064FE49 /* AppDelegate.swift in Sources */,
 				AA3652C41B338525001F514D /* NotesViewController.swift in Sources */,
+				AA8301001B4D986300F8ADE6 /* AddNoteViewController.swift in Sources */,
 				AABCEFAC1B3232C60064FE49 /* NoteCell.swift in Sources */,
 				AA3652C21B33847A001F514D /* User.swift in Sources */,
 			);

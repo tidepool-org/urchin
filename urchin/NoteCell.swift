@@ -15,7 +15,7 @@ let labelSpacing: CGFloat = 6
 
 class NoteCell: UITableViewCell {
     
-    let borders = true
+    let borders = false
     
     var cellHeight: CGFloat = CGFloat()
     
@@ -25,7 +25,7 @@ class NoteCell: UITableViewCell {
     
     func configureWithNote(note: Note) {
         
-        usernameLabel.text = note.user.fullName
+        usernameLabel.text = note.user!.fullName
         usernameLabel.font = UIFont(name: "OpenSans-Bold", size: 17.5)!
         usernameLabel.textColor = UIColor.blackColor()
         usernameLabel.sizeToFit()

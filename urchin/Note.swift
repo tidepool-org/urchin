@@ -10,13 +10,13 @@ import Foundation
 
 class Note {
     
-    let id: String
-    let userid: String
-    let groupid: String
-    let timestamp: NSDate
-    let createdtime: NSDate
-    let messagetext: String
-    let user: User
+    var id: String
+    var userid: String
+    var groupid: String
+    var timestamp: NSDate
+    var createdtime: NSDate
+    var messagetext: String
+    var user: User?
     
     init(id: String, userid: String, groupid: String, timestamp: NSDate, createdtime: NSDate, messagetext: String, user: User) {
         self.id = id
@@ -26,6 +26,15 @@ class Note {
         self.createdtime = createdtime
         self.messagetext = messagetext
         self.user = user
+    }
+    
+    init() {
+        self.id = ""
+        self.userid = ""
+        self.groupid = ""
+        self.timestamp = NSDate()
+        self.createdtime = NSDate()
+        self.messagetext = ""
     }
     
 }

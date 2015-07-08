@@ -26,7 +26,6 @@ class LogInViewController : UIViewController {
     
     var isLogoDisplayed: Bool
     var isAnimating: Bool
-    var logoDisplayShift: CGFloat
     var halfHeight: CGFloat
     
     var keyboardFrame: CGRect
@@ -46,7 +45,6 @@ class LogInViewController : UIViewController {
         
         isLogoDisplayed = true
         isAnimating = false
-        logoDisplayShift = 0
         halfHeight = 0
         
         keyboardFrame = CGRectZero
@@ -57,7 +55,7 @@ class LogInViewController : UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.view.backgroundColor = UIColor(red: 247/255, green: 247/255, blue: 247/255, alpha: 1)
+        self.view.backgroundColor = UIColor(red: 247/255, green: 247/255, blue: 248/255, alpha: 1)
         
         // configure logo
         let image = UIImage(named: "notesicon") as UIImage!
@@ -181,8 +179,6 @@ class LogInViewController : UIViewController {
         
         self.view.addSubview(tidepoolLogoView)
         
-        logoDisplayShift = 0 + logoView.frame.height + labelSpacing + titleLabel.frame.height
-        
         let notificationCenter = NSNotificationCenter.defaultCenter()
         notificationCenter.addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
         notificationCenter.addObserver(self, selector: "keyboardDidShow:", name: UIKeyboardDidShowNotification, object: nil)
@@ -284,11 +280,6 @@ class LogInViewController : UIViewController {
         proposedLogoSize = min(proposedLogoSize, logoView.image!.size.height)
         let imageX = self.view.frame.width / 2 - CGFloat(proposedLogoSize / 2)
         logoView.frame = CGRect(x: imageX, y: 0, width: proposedLogoSize, height: proposedLogoSize)
-    }
-    
-    func scaleLogo() {
-        configureLogoFrame()
-        
     }
     
     override func shouldAutorotate() -> Bool {
