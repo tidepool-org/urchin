@@ -15,31 +15,53 @@ let labelSpacing: CGFloat = 6
 
 class NoteCell: UITableViewCell {
     
-    let borders = false
+    let borders = true
     
-    var cellHeight: CGFloat
+    var cellHeight: CGFloat = CGFloat()
     
-    let usernameLabel: UILabel
-    let timedateLabel: UILabel
-    let messageLabel: UILabel
+    let usernameLabel: UILabel = UILabel()
+    let timedateLabel: UILabel = UILabel()
+    var messageLabel: UILabel = UILabel()
     
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    func configureWithNote(note: Note) {
         
-        usernameLabel = UILabel(frame: CGRectZero)
+        usernameLabel.text = note.user.fullName
         usernameLabel.font = UIFont(name: "OpenSans-Bold", size: 17.5)!
-        usernameLabel.textColor = UIColor(red: 57/255, green: 61/255, blue: 70/255, alpha: 1)
+        usernameLabel.textColor = UIColor.blackColor()
+        usernameLabel.sizeToFit()
+        let usernameX = noteCellInset
+        let usernameY = noteCellInset
+        usernameLabel.frame.origin = CGPoint(x: usernameX, y: usernameY)
         
-        timedateLabel = UILabel(frame: CGRectZero)
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "h:mm a EEEE M.d.yy"
+        var dateString = dateFormatter.stringFromDate(note.timestamp)
+        dateString = dateString.stringByReplacingOccurrencesOfString("PM", withString: "pm", options: NSStringCompareOptions.LiteralSearch, range: nil)
+        dateString = dateString.stringByReplacingOccurrencesOfString("AM", withString: "am", options: NSStringCompareOptions.LiteralSearch, range: nil)
+        timedateLabel.text = dateString
         timedateLabel.font = UIFont(name: "OpenSans", size: 12.5)!
-        timedateLabel.textColor = UIColor(red: 84/255, green: 92/255, blue: 104/255, alpha: 1)
-
-        messageLabel = UILabel(frame: CGRectZero)
+        timedateLabel.textColor = UIColor.blackColor()
+        timedateLabel.sizeToFit()
+        let timedateX = contentView.frame.width - (noteCellInset + timedateLabel.frame.width)
+        let timedateY = usernameLabel.frame.midY - timedateLabel.frame.height / 2
+        timedateLabel.frame.origin = CGPoint(x: timedateX, y: timedateY)
+        
+        messageLabel.frame.size = CGSize(width: contentView.frame.width - 2 * noteCellInset, height: CGFloat.max)
         messageLabel.font = UIFont(name: "OpenSans", size: 17.5)!
-        messageLabel.textColor = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 1)
+        messageLabel.adjustsFontSizeToFitWidth = false
         messageLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
         messageLabel.numberOfLines = 0
+        messageLabel.text = note.messagetext
+        messageLabel.sizeToFit()
+        let messageX = noteCellInset
+        let messageY = usernameLabel.frame.maxY + 2 * labelSpacing
+        messageLabel.frame.origin = CGPoint(x: messageX, y: messageY)
         
-        cellHeight = CGFloat(0)
+        contentView.addSubview(usernameLabel)
+        contentView.addSubview(timedateLabel)
+        contentView.addSubview(messageLabel)
+        
+        cellHeight = messageLabel.frame.maxY + noteCellInset
         
         if (borders) {
             usernameLabel.layer.borderWidth = 1
@@ -51,42 +73,6 @@ class NoteCell: UITableViewCell {
             messageLabel.layer.borderWidth = 1
             messageLabel.layer.borderColor = UIColor.redColor().CGColor
         }
-        
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-        usernameLabel.frame = CGRectMake(noteCellInset, noteCellInset, contentView.frame.width + noteCellInset, 20.0)
-        timedateLabel.frame = CGRectMake(noteCellInset, noteCellInset + usernameLabel.frame.height + labelSpacing, contentView.frame.width + noteCellInset, 20.0)
-        messageLabel.frame = CGRectMake(noteCellInset, noteCellInset + usernameLabel.frame.height + timedateLabel.frame.height + 3*labelSpacing, contentView.frame.width - 2*noteCellInset, CGFloat.max)
-
-        contentView.addSubview(usernameLabel)
-        contentView.addSubview(timedateLabel)
-        contentView.addSubview(messageLabel)
-    }
-
-    required init(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    func configureWithNote(note: Note) {
-        usernameLabel.text = note.user.fullName
-        usernameLabel.sizeToFit()
-        
-        let dateFormatter = NSDateFormatter()
-        dateFormatter.dateFormat = "h:mm a EEEE M.d.yy"
-        var dateString = dateFormatter.stringFromDate(note.timestamp)
-        dateString = dateString.stringByReplacingOccurrencesOfString("PM", withString: "pm", options: NSStringCompareOptions.LiteralSearch, range: nil)
-        dateString = dateString.stringByReplacingOccurrencesOfString("AM", withString: "am", options: NSStringCompareOptions.LiteralSearch, range: nil)
-        timedateLabel.text = dateString
-        timedateLabel.sizeToFit()
-        
-        messageLabel.text = note.messagetext
-        var messageLabelFrame = messageLabel.frame
-        messageLabelFrame.size.width = contentView.frame.width - 2*noteCellInset
-        messageLabel.frame = messageLabelFrame
-        messageLabel.sizeToFit()
-        messageLabel.frame = CGRect(x: noteCellInset, y: noteCellInset + usernameLabel.frame.height + timedateLabel.frame.height + 3*labelSpacing, width: messageLabel.frame.width, height: messageLabel.frame.height)
-        
-        cellHeight = noteCellInset + usernameLabel.frame.height + labelSpacing + timedateLabel.frame.height + labelSpacing + messageLabel.frame.height + noteCellInset
     }
     
     

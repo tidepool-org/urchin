@@ -110,6 +110,12 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         dropDownMenu.dataSource = self
         dropDownMenu.delegate = self
         dropDownMenu.separatorStyle = UITableViewCellSeparatorStyle.None
+        if (dropDownMenu.contentSize.height <= dropDownMenu.frame.size.height) {
+            dropDownMenu.scrollEnabled = false;
+        }
+        else {
+            dropDownMenu.scrollEnabled = true;
+        }
         
         self.loadGroups()
         
@@ -308,9 +314,6 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         if (tableView.isEqual(notesTable)) {
             let cell = NoteCell(style: .Default, reuseIdentifier: nil)
             cell.configureWithNote(notes[indexPath.row])
-            let expectedHeight = noteCellInset + cell.usernameLabel.frame.height + cell.timedateLabel.frame.height + 2*labelSpacing + cell.messageLabel.frame.height
-            println(cell.cellHeight)
-            println(expectedHeight)
         } else {
             if (indexPath.section == 0) {
                 // A group or all seleceted

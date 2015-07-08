@@ -93,7 +93,6 @@ class UserDropDownCell: UITableViewCell {
         self.addSubview(separator)
         
         self.cellHeight = userCellInset + nameLabel.frame.height + userCellInset + separator.frame.height
-        println(userCellInset + nameLabel.frame.height + userCellInset)
     }
     
     func configureLogout() {
