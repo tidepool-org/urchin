@@ -34,7 +34,7 @@ class NoteCell: UITableViewCell {
         usernameLabel.frame.origin = CGPoint(x: usernameX, y: usernameY)
         
         let dateFormatter = NSDateFormatter()
-        dateFormatter.dateFormat = "h:mm a EEEE M.d.yy"
+        dateFormatter.dateFormat = "EEEE M.d.yy h:mm a"
         var dateString = dateFormatter.stringFromDate(note.timestamp)
         dateString = dateString.stringByReplacingOccurrencesOfString("PM", withString: "pm", options: NSStringCompareOptions.LiteralSearch, range: nil)
         dateString = dateString.stringByReplacingOccurrencesOfString("AM", withString: "am", options: NSStringCompareOptions.LiteralSearch, range: nil)
@@ -61,7 +61,7 @@ class NoteCell: UITableViewCell {
         contentView.addSubview(timedateLabel)
         contentView.addSubview(messageLabel)
         
-        cellHeight = messageLabel.frame.maxY + noteCellInset
+        cellHeight = noteCellInset + usernameLabel.frame.height + 2 * labelSpacing + messageLabel.frame.height + noteCellInset
         
         if (borders) {
             usernameLabel.layer.borderWidth = 1
@@ -72,7 +72,13 @@ class NoteCell: UITableViewCell {
             
             messageLabel.layer.borderWidth = 1
             messageLabel.layer.borderColor = UIColor.redColor().CGColor
+            
+            self.contentView.layer.borderWidth = 1
+            self.contentView.layer.borderColor = UIColor.blueColor().CGColor
         }
+        
+        self.contentView.frame.size = CGSize(width: self.contentView.frame.width, height: cellHeight)
+//        println("cell height: \(self.contentView.frame.height) expected: \(cellHeight)")
     }
     
     

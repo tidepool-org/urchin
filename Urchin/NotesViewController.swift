@@ -31,7 +31,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
     var dropDownHeight: CGFloat
     var overlayHeight: CGFloat
     
-    let addNoteViewController: AddNoteViewController
+    var addNoteViewController: AddNoteViewController
     
     init(user: User) {
         self.user = user
@@ -167,8 +167,18 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
     func newNote(sender: UIButton!) {
         
         addNoteViewController.user = user
+        addNoteViewController.note.createdtime = NSDate()
+        addNoteViewController.note.timestamp = NSDate()
         let addNoteScene = UINavigationController(rootViewController: addNoteViewController)
         self.presentViewController(addNoteScene, animated: true, completion: nil)
+    }
+    
+    func addNote(sender: AnyObject) {
+        let newnote = addNoteViewController.note
+        println("what i think the note text is --> " + newnote.messagetext)
+        notes.insert(newnote, atIndex: 0)
+        notesTable.reloadData()
+        addNoteViewController = AddNoteViewController(currentUser: user)
     }
     
     func loadGroups() {
