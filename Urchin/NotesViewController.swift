@@ -175,7 +175,6 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     func addNote(sender: AnyObject) {
         let newnote = addNoteViewController.note
-        println("what i think the note text is --> " + newnote.messagetext)
         notes.insert(newnote, atIndex: 0)
         notesTable.reloadData()
         addNoteViewController = AddNoteViewController(currentUser: user)

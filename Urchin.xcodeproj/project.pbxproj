@@ -35,6 +35,10 @@
 		AABCEFAC1B3232C60064FE49 /* NoteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABCEFAB1B3232C60064FE49 /* NoteCell.swift */; };
 		AABCEFAE1B3234360064FE49 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABCEFAD1B3234360064FE49 /* Note.swift */; };
 		AACE31981B4AE17700F90E1D /* tidepoollogo.png in Resources */ = {isa = PBXBuildFile; fileRef = AACE31971B4AE17700F90E1D /* tidepoollogo.png */; };
+		AADECC7A1B4F34AA0043E888 /* location.png in Resources */ = {isa = PBXBuildFile; fileRef = AADECC761B4F34AA0043E888 /* location.png */; };
+		AADECC7B1B4F34AA0043E888 /* location@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AADECC771B4F34AA0043E888 /* location@2x.png */; };
+		AADECC7C1B4F34AA0043E888 /* camera.png in Resources */ = {isa = PBXBuildFile; fileRef = AADECC781B4F34AA0043E888 /* camera.png */; };
+		AADECC7D1B4F34AA0043E888 /* camera@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AADECC791B4F34AA0043E888 /* camera@2x.png */; };
 		AAE778A41B4B408F00949CEE /* note.png in Resources */ = {isa = PBXBuildFile; fileRef = AAE778A21B4B408F00949CEE /* note.png */; };
 		AAE778A51B4B408F00949CEE /* note@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AAE778A31B4B408F00949CEE /* note@2x.png */; };
 /* End PBXBuildFile section */
@@ -82,6 +86,10 @@
 		AABCEFAB1B3232C60064FE49 /* NoteCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteCell.swift; sourceTree = "<group>"; };
 		AABCEFAD1B3234360064FE49 /* Note.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
 		AACE31971B4AE17700F90E1D /* tidepoollogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tidepoollogo.png; sourceTree = "<group>"; };
+		AADECC761B4F34AA0043E888 /* location.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = location.png; sourceTree = "<group>"; };
+		AADECC771B4F34AA0043E888 /* location@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "location@2x.png"; sourceTree = "<group>"; };
+		AADECC781B4F34AA0043E888 /* camera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera.png; sourceTree = "<group>"; };
+		AADECC791B4F34AA0043E888 /* camera@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera@2x.png"; sourceTree = "<group>"; };
 		AAE778A21B4B408F00949CEE /* note.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = note.png; sourceTree = "<group>"; };
 		AAE778A31B4B408F00949CEE /* note@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "note@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -122,6 +130,10 @@
 				AA66BA901B4C7CC400CCB008 /* checked@2x.png */,
 				AA66BA911B4C7CC400CCB008 /* unchecked.png */,
 				AA66BA921B4C7CC400CCB008 /* unchecked@2x.png */,
+				AADECC761B4F34AA0043E888 /* location.png */,
+				AADECC771B4F34AA0043E888 /* location@2x.png */,
+				AADECC781B4F34AA0043E888 /* camera.png */,
+				AADECC791B4F34AA0043E888 /* camera@2x.png */,
 			);
 			name = Images;
 			sourceTree = "<group>";
@@ -292,16 +304,20 @@
 				AABCEF8F1B3231910064FE49 /* Main.storyboard in Resources */,
 				AA66BA941B4C7CC400CCB008 /* checked@2x.png in Resources */,
 				AA66BA961B4C7CC400CCB008 /* unchecked@2x.png in Resources */,
+				AADECC7C1B4F34AA0043E888 /* camera.png in Resources */,
+				AADECC7A1B4F34AA0043E888 /* location.png in Resources */,
 				AA8301041B4DB4A400F8ADE6 /* closex@2x.png in Resources */,
 				AA66BA7D1B4C2D5500CCB008 /* right.png in Resources */,
 				AA66BA7A1B4C292400CCB008 /* down@2x.png in Resources */,
 				AA66BA8D1B4C695400CCB008 /* notesicon.png in Resources */,
 				AA66BA791B4C292400CCB008 /* down.png in Resources */,
+				AADECC7D1B4F34AA0043E888 /* camera@2x.png in Resources */,
 				AA66BA951B4C7CC400CCB008 /* unchecked.png in Resources */,
 				AAE778A41B4B408F00949CEE /* note.png in Resources */,
 				AABCEF941B3231910064FE49 /* LaunchScreen.xib in Resources */,
 				AACE31981B4AE17700F90E1D /* tidepoollogo.png in Resources */,
 				AAE778A51B4B408F00949CEE /* note@2x.png in Resources */,
+				AADECC7B1B4F34AA0043E888 /* location@2x.png in Resources */,
 				AA8301031B4DB4A400F8ADE6 /* closex.png in Resources */,
 				AA66BA8E1B4C695400CCB008 /* notesicon@2x.png in Resources */,
 				AA66BA8A1B4C426E00CCB008 /* OpenSans-Regular.ttf in Resources */,
