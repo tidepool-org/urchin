@@ -435,6 +435,11 @@ class AddNoteViewController: UIViewController, UITextViewDelegate {
                     let usages = (result.valueForKey("usages") as! Int) + 1
                     result.setValue(usages, forKey: "usages")
                     
+                    var errorTwo: NSError?
+                    if !managedContext.save(&errorTwo) {
+                        println("Could not save \(errorTwo), \(errorTwo?.userInfo)")
+                    }
+                    
                     break
                 }
             }
@@ -560,36 +565,27 @@ class AddNoteViewController: UIViewController, UITextViewDelegate {
         hashtagButtons.append(buttonRow)
         
         row = 0
-        col = 0
-        var totalButtonWidth: CGFloat = 0
         for bRow in hashtagButtons {
             
             let buttonY = CGFloat(row + 1) * labelInset + CGFloat(row) * hashtagHeight
             
+            var totalButtonWidth: CGFloat = CGFloat(0)
+            var i = 0
             for button in bRow {
-                totalButtonWidth += button.frame.width
-                col++
+                totalButtonWidth += button.frame.width + 2 * labelSpacing
+                i++
             }
-            let gap = (self.view.frame.width - (2 * labelInset + totalButtonWidth)) / CGFloat(col - 1)
             
-            col = 0
+            let totalWidth = totalButtonWidth - 2 * labelSpacing
+            let halfWidth = totalWidth / 2
+            
+            var buttonX = self.view.frame.width / 2 - halfWidth
             for button in bRow {
-                let buttonX: CGFloat
-                
-                if (col == 0) {
-                    buttonX = labelInset
-                } else {
-                    buttonX = bRow[col - 1].frame.maxX + gap
-                }
-                
                 button.frame.origin = CGPoint(x: buttonX, y: buttonY)
                 self.hashtagsView.addSubview(button)
-                
-                col++
+                buttonX = button.frame.maxX + 2 * labelSpacing
             }
             
-            totalButtonWidth = 0
-            col = 0
             row++
         }
     }
