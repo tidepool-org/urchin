@@ -64,7 +64,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         notesTable.backgroundColor = UIColor(red: 247/255, green: 247/255, blue: 248/255, alpha: 1)
         notesTable.rowHeight = noteCellHeight
-        notesTable.separatorInset.left = noteCellInset
+        notesTable.separatorStyle = UITableViewCellSeparatorStyle.None
         notesTable.registerClass(NoteCell.self, forCellReuseIdentifier: NSStringFromClass(NoteCell))
         notesTable.dataSource = self
         notesTable.delegate = self
@@ -258,6 +258,8 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
                 // odd cell
                 cell.backgroundColor = UIColor(red: 152/255, green: 152/255, blue: 151/255, alpha: 0.23)
             }
+            
+            cell.userInteractionEnabled = false
             
             return cell
         } else {

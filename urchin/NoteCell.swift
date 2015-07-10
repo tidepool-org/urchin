@@ -47,11 +47,22 @@ class NoteCell: UITableViewCell {
         timedateLabel.frame.origin = CGPoint(x: timedateX, y: timedateY)
         
         messageLabel.frame.size = CGSize(width: contentView.frame.width - 2 * noteCellInset, height: CGFloat.max)
-        messageLabel.font = UIFont(name: "OpenSans", size: 17.5)!
+        let text = note.messagetext as NSString
+        let attributedText = NSMutableAttributedString(string: text as String)
+        attributedText.addAttributes([NSFontAttributeName: UIFont(name: "OpenSans", size: 17.5)!, NSForegroundColorAttributeName: UIColor(red: 61/255, green: 61/255, blue: 61/255, alpha: 1)], range: NSRange(location: 0, length: attributedText.length))
+        let words = text.componentsSeparatedByString(" ")
+        
+        for word in words {
+            if (word.hasPrefix("#")) {
+                let range: NSRange = text.rangeOfString(word as! String, options: NSStringCompareOptions.BackwardsSearch)
+                attributedText.removeAttribute(NSFontAttributeName, range: range)
+                attributedText.addAttributes([NSFontAttributeName: UIFont(name: "OpenSans-Bold", size: 17.5)!], range: range)
+            }
+        }
+        messageLabel.attributedText = attributedText
         messageLabel.adjustsFontSizeToFitWidth = false
         messageLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
         messageLabel.numberOfLines = 0
-        messageLabel.text = note.messagetext
         messageLabel.sizeToFit()
         let messageX = noteCellInset
         let messageY = usernameLabel.frame.maxY + 2 * labelSpacing

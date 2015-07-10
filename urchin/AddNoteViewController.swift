@@ -13,8 +13,8 @@ let hashtagHeight: CGFloat = 41
 
 class AddNoteViewController: UIViewController, UITextViewDelegate {
     
-    let hashtags = ["#exercise", "#low", "#high", "#meal", "#snack", "#stress", "#pumpfail", "#cgmfail", "#success"]
-    var hashtagButtons: [UIButton] = []
+    let hashtags: [String] = ["#exercise", "#low", "#high", "#meal", "#snack", "#stress", "#pumpfail", "#cgmfail", "#success", "#juicebox", "#pumpchange", "#cgmchange"]
+    var hashtagButtons: [[UIButton]] = []
     
     
     let timedateLabel: UILabel
@@ -138,13 +138,14 @@ class AddNoteViewController: UIViewController, UITextViewDelegate {
         
         // configure hashtags view
         hashtagsView.backgroundColor = UIColor.clearColor()
-        let hashtagsViewH = labelInset + 3 * hashtagHeight + 4 * labelSpacing + labelInset
+        let hashtagsViewH = 3 * hashtagHeight + 4 * labelInset
         hashtagsView.frame.size = CGSize(width: self.view.frame.width, height: hashtagsViewH)
         hashtagsView.frame.origin.x = 0
         hashtagsView.frame.origin.y = separatorOne.frame.maxY
-        configureHashtagButtons()
+        
         
         self.view.addSubview(hashtagsView)
+        configureHashtagButtons()
         
         // configure second separator
         separatorTwo.backgroundColor = UIColor(red: 151/255, green: 151/255, blue: 151/255, alpha: 1)
@@ -222,8 +223,9 @@ class AddNoteViewController: UIViewController, UITextViewDelegate {
     }
     
     func closeVC(sender: UIBarButtonItem!) {
-        note.messagetext = messageBox.text
-        closeDatePicker(false)
+        self.note.messagetext = self.messageBox.text
+        self.view.endEditing(true)
+        self.closeDatePicker(false)
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     
@@ -244,7 +246,7 @@ class AddNoteViewController: UIViewController, UITextViewDelegate {
             UIView.animateKeyframesWithDuration(0.3, delay: 0.0, options: nil, animations: { () -> Void in
                 
                 self.separatorOne.frame.origin.y = self.timedateLabel.frame.maxY + labelInset
-                let hashtagsViewH = labelInset + 3 * hashtagHeight + 4 * labelSpacing + labelInset
+                let hashtagsViewH = 3 * hashtagHeight + 4 * labelInset
                 self.hashtagsView.frame.size = CGSize(width: self.hashtagsView.frame.width, height: hashtagsViewH)
                 self.hashtagsView.frame.origin.y = self.separatorOne.frame.maxY
                 self.separatorTwo.frame.origin.y = self.hashtagsView.frame.maxY
@@ -340,7 +342,7 @@ class AddNoteViewController: UIViewController, UITextViewDelegate {
             isAnimating = true
             UIView.animateKeyframesWithDuration(0.3, delay: 0.0, options: nil, animations: { () -> Void in
                 
-                let hashtagsViewH = labelInset + 3 * hashtagHeight + 4 * labelSpacing + labelInset
+                let hashtagsViewH = 3 * hashtagHeight + 4 * labelInset
                 self.hashtagsView.frame.size = CGSize(width: self.hashtagsView.frame.width, height: hashtagsViewH)
                 self.hashtagsView.frame.origin.y = self.separatorOne.frame.maxY
                 self.separatorTwo.frame.origin.y = self.hashtagsView.frame.maxY
@@ -387,7 +389,10 @@ class AddNoteViewController: UIViewController, UITextViewDelegate {
     }
     
     func postNote(sender: UIButton!) {
-        if (messageBox.text != "Type a note...") {
+        if (messageBox.text != "Type a note..." && !messageBox.text.isEmpty) {
+            self.note.messagetext = self.messageBox.text
+            self.view.endEditing(true)
+            self.closeDatePicker(false)
             let notification = NSNotification(name: "addNote", object: nil)
             NSNotificationCenter.defaultCenter().postNotification(notification)
             self.dismissViewControllerAnimated(true, completion: nil)
@@ -395,40 +400,100 @@ class AddNoteViewController: UIViewController, UITextViewDelegate {
     }
     
     func configureHashtagButtons() {
-        for hashtag in hashtags {
-            let hashtagButton = UIButton(frame: CGRectZero)
-            hashtagButton.setAttributedTitle(NSAttributedString(string:hashtag,
-                attributes:[NSForegroundColorAttributeName: UIColor(red: 61/255, green: 61/255, blue: 61/255, alpha: 1), NSFontAttributeName: UIFont(name: "OpenSans", size: 17.5)!]), forState: .Normal)
-            hashtagButton.frame.size.height = hashtagHeight
-            hashtagButton.sizeToFit()
-            hashtagButton.frame.size.width = hashtagButton.frame.width + 2 * labelSpacing
-            hashtagButton.backgroundColor = UIColor.whiteColor()
-            hashtagButton.layer.cornerRadius = hashtagButton.frame.height / 2
-            hashtagButton.layer.borderWidth = 1
-            hashtagButton.layer.borderColor = UIColor(red: 167/255, green: 167/255, blue: 167/255, alpha: 1).CGColor
-            hashtagButton.addTarget(self, action: "hashtagPressed:", forControlEvents: .TouchUpInside)
-            hashtagButtons.append(hashtagButton)
+        
+        var index = 0
+        var row = 0
+        var col = 0
+        
+        var buttonRow: [UIButton] = []
+        
+        while (true) {
+            
+            if (index >= hashtags.count || row > 2) {
+                break
+            }
+            
+            let hashtagButton = configureHashtagButton(index)
+            
+            var buttonX: CGFloat
+            
+            if (col == 0) {
+                buttonX = labelInset
+            } else {
+                buttonX = buttonRow[col - 1].frame.maxX + 2 * labelSpacing
+            }
+            
+            if ((buttonX + hashtagButton.frame.width) > (self.view.frame.width - labelInset)) {
+                hashtagButtons.append(buttonRow)
+                buttonRow = []
+                row++
+                col = 0
+                continue
+            } else {
+                buttonRow.append(hashtagButton)
+            }
+            
+            buttonRow[col].frame.origin.x = buttonX
+            
+            index++
+            col++
         }
+        hashtagButtons.append(buttonRow)
         
-        hashtagButtons[0].frame.origin = CGPoint(x: 0, y: 0)
-        hashtagButtons[1].frame.origin = CGPoint(x: 100, y: 0)
-        hashtagButtons[2].frame.origin = CGPoint(x: 200, y: 0)
-        hashtagButtons[3].frame.origin = CGPoint(x: 300, y: 0)
-        hashtagButtons[4].frame.origin = CGPoint(x: 0, y: 100)
-        hashtagButtons[5].frame.origin = CGPoint(x: 100, y: 100)
-        hashtagButtons[6].frame.origin = CGPoint(x: 200, y: 100)
-        hashtagButtons[7].frame.origin = CGPoint(x: 300, y: 100)
-        hashtagButtons[8].frame.origin = CGPoint(x: 0, y: 50)
-        
-        for button in hashtagButtons {
-            self.hashtagsView.addSubview(button)
+        row = 0
+        col = 0
+        var totalButtonWidth: CGFloat = 0
+        for bRow in hashtagButtons {
+            
+            let buttonY = CGFloat(row + 1) * labelInset + CGFloat(row) * hashtagHeight
+            
+            for button in bRow {
+                totalButtonWidth += button.frame.width
+                col++
+            }
+            let gap = (self.view.frame.width - (2 * labelInset + totalButtonWidth)) / CGFloat(col - 1)
+            
+            col = 0
+            for button in bRow {
+                let buttonX: CGFloat
+                
+                if (col == 0) {
+                    buttonX = labelInset
+                } else {
+                    buttonX = bRow[col - 1].frame.maxX + gap
+                }
+                
+                button.frame.origin = CGPoint(x: buttonX, y: buttonY)
+                self.hashtagsView.addSubview(button)
+                
+                col++
+            }
+            
+            totalButtonWidth = 0
+            col = 0
+            row++
         }
     }
     
+    func configureHashtagButton(index: Int) -> UIButton {
+        let hashtagButton = UIButton(frame: CGRectZero)
+        hashtagButton.setAttributedTitle(NSAttributedString(string:hashtags[index],
+            attributes:[NSForegroundColorAttributeName: UIColor(red: 61/255, green: 61/255, blue: 61/255, alpha: 1), NSFontAttributeName: UIFont(name: "OpenSans", size: 17.5)!]), forState: .Normal)
+        hashtagButton.frame.size.height = hashtagHeight
+        hashtagButton.sizeToFit()
+        hashtagButton.frame.size.width = hashtagButton.frame.width + 4 * labelSpacing
+        hashtagButton.backgroundColor = UIColor.whiteColor()
+        hashtagButton.layer.cornerRadius = hashtagButton.frame.height / 2
+        hashtagButton.layer.borderWidth = 1
+        hashtagButton.layer.borderColor = UIColor(red: 167/255, green: 167/255, blue: 167/255, alpha: 1).CGColor
+        hashtagButton.addTarget(self, action: "hashtagPressed:", forControlEvents: .TouchUpInside)
+        
+        return hashtagButton
+    }
+    
     func hashtagPressed(sender: UIButton!) {
-        if messageBox.textColor == UIColor(red: 167/255, green: 167/255, blue: 167/255, alpha: 1) {
+        if (messageBox.text == "Type a note...") {
             messageBox.text = sender.titleLabel!.text!
-            messageBox.textColor = UIColor(red: 61/255, green: 61/255, blue: 61/255, alpha: 1)
         } else {
             if (self.messageBox.text.hasSuffix(" ")) {
                 messageBox.text = messageBox.text + sender.titleLabel!.text!
@@ -437,26 +502,32 @@ class AddNoteViewController: UIViewController, UITextViewDelegate {
             }
         }
         note.messagetext = messageBox.text
+        textViewDidChange(messageBox)
     }
     
     func textViewDidChange(textView: UITextView) {
         if (textView.text != "Type a note...") {
             note.messagetext = textView.text
             
-//            let words = textView.text.componentsSeparatedByString(" ")
-//            for word in words {
-//                if word.hasPrefix("#") {
-//                    let attributedString = NSMutableAttributedString(string: word)
-//                    attributedString.addAttributes([NSFontAttributeName:UIFont(name: "OpenSans-Bold", size: 17.5)!], range: NSRange(location: 0, length: 5))
-//                }
-//            }
+            let text = textView.text as NSString
+            let attributedText = NSMutableAttributedString(string: text as String)
+            attributedText.addAttributes([NSFontAttributeName: UIFont(name: "OpenSans", size: 17.5)!, NSForegroundColorAttributeName: UIColor(red: 61/255, green: 61/255, blue: 61/255, alpha: 1)], range: NSRange(location: 0, length: attributedText.length))
+            let words = text.componentsSeparatedByString(" ")
+            
+            for word in words {
+                if (word.hasPrefix("#")) {
+                    let range: NSRange = text.rangeOfString(word as! String, options: NSStringCompareOptions.BackwardsSearch)
+                    attributedText.addAttributes([NSFontAttributeName: UIFont(name: "OpenSans-Bold", size: 17.5)!], range: range)
+                }
+            }
+            
+            textView.attributedText = attributedText
         }
     }
     
     func textViewDidBeginEditing(textView: UITextView) {
-        if textView.textColor == UIColor(red: 167/255, green: 167/255, blue: 167/255, alpha: 1) {
+        if (textView.text == "Type a note...") {
             textView.text = nil
-            textView.textColor = UIColor(red: 61/255, green: 61/255, blue: 61/255, alpha: 1)
         }
     }
     
