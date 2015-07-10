@@ -47,18 +47,8 @@ class NoteCell: UITableViewCell {
         timedateLabel.frame.origin = CGPoint(x: timedateX, y: timedateY)
         
         messageLabel.frame.size = CGSize(width: contentView.frame.width - 2 * noteCellInset, height: CGFloat.max)
-        let text = note.messagetext as NSString
-        let attributedText = NSMutableAttributedString(string: text as String)
-        attributedText.addAttributes([NSFontAttributeName: UIFont(name: "OpenSans", size: 17.5)!, NSForegroundColorAttributeName: UIColor(red: 61/255, green: 61/255, blue: 61/255, alpha: 1)], range: NSRange(location: 0, length: attributedText.length))
-        let words = text.componentsSeparatedByString(" ")
-        
-        for word in words {
-            if (word.hasPrefix("#")) {
-                let range: NSRange = text.rangeOfString(word as! String, options: NSStringCompareOptions.BackwardsSearch)
-                attributedText.removeAttribute(NSFontAttributeName, range: range)
-                attributedText.addAttributes([NSFontAttributeName: UIFont(name: "OpenSans-Bold", size: 17.5)!], range: range)
-            }
-        }
+        let hashtagBolder = HashtagBolder()
+        let attributedText = hashtagBolder.boldHashtags(note.messagetext)
         messageLabel.attributedText = attributedText
         messageLabel.adjustsFontSizeToFitWidth = false
         messageLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
