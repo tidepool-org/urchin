@@ -14,7 +14,7 @@ let hashtagHeight: CGFloat = 41
 
 class AddNoteViewController: UIViewController, UITextViewDelegate {
     
-    var hashtags: [NSManagedObject] = [NSManagedObject]()
+    var hashtags = [NSManagedObject]()
     var hashtagButtons: [[UIButton]] = []
     
     
@@ -402,8 +402,6 @@ class AddNoteViewController: UIViewController, UITextViewDelegate {
                 }
             }
             
-            // Do Core Data Stuff
-            
             self.view.endEditing(true)
             self.closeDatePicker(false)
             let notification = NSNotification(name: "addNote", object: nil)
@@ -437,9 +435,6 @@ class AddNoteViewController: UIViewController, UITextViewDelegate {
                     let usages = (result.valueForKey("usages") as! Int) + 1
                     result.setValue(usages, forKey: "usages")
                     
-                    println(result.valueForKey("text") as! String)
-                    println(result.valueForKey("usages") as! Int)
-                    
                     break
                 }
             }
@@ -454,23 +449,29 @@ class AddNoteViewController: UIViewController, UITextViewDelegate {
                 
                 hashtag.setValue(text, forKey: "text")
                 hashtag.setValue(1, forKey: "usages")
+                
+                var errorTwo: NSError?
+                if !managedContext.save(&errorTwo) {
+                    println("Could not save \(errorTwo), \(errorTwo?.userInfo)")
+                }
             }
             
         } else {
-            println("Could not fetch/save \(error), \(error!.userInfo)")
+            println("Could not fetch \(error), \(error!.userInfo)")
         }
     }
     
     func fetchHashtags() {
 
-        println("fetching hashtags...")
-        
         let appDelegate =
         UIApplication.sharedApplication().delegate as! AppDelegate
         
         let managedContext = appDelegate.managedObjectContext!
         
         let fetchRequest = NSFetchRequest(entityName:"Hashtag")
+        
+        let sortDescriptor = NSSortDescriptor(key: "usages", ascending: false)
+        fetchRequest.sortDescriptors = [sortDescriptor]
         
         var error: NSError?
         
@@ -480,14 +481,40 @@ class AddNoteViewController: UIViewController, UITextViewDelegate {
         
         if let results = fetchedResults {
             self.hashtags = results
-            
-            println(hashtags.count)
-            
-            for hashtag in hashtags {
-                println(hashtag.valueForKey("text") as! String)
-            }
         } else {
             println("Could not fetch \(error), \(error!.userInfo)")
+        }
+        
+        if (self.hashtags.count == 0) {
+            self.getAndSetDefaultHashtags()
+        }
+    }
+    
+    func getAndSetDefaultHashtags() {
+        let defaults = ["#exercise", "#low", "#high", "#meal", "#snack", "#stress", "#pumpfail", "#cgmfail", "#success", "#juicebox", "#pumpchange", "#cgmchange"]
+        
+        let appDelegate =
+        UIApplication.sharedApplication().delegate as! AppDelegate
+        
+        let managedContext = appDelegate.managedObjectContext!
+        
+        for text in defaults {
+            let entity =  NSEntityDescription.entityForName("Hashtag",
+                inManagedObjectContext:
+                managedContext)
+            
+            let hashtag = NSManagedObject(entity: entity!,
+                insertIntoManagedObjectContext:managedContext)
+            
+            hashtag.setValue(text, forKey: "text")
+            hashtag.setValue(1, forKey: "usages")
+            
+            var error: NSError?
+            if !managedContext.save(&error) {
+                println("Could not save \(error), \(error?.userInfo)")
+            }
+
+            hashtags.append(hashtag)
         }
     }
     

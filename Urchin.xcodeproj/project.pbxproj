@@ -179,7 +179,6 @@
 				AAEFB1651B5049FC000EF8B4 /* Data */,
 				AAEFB1661B504A08000EF8B4 /* Custom Cells */,
 				AAEFB1671B504A15000EF8B4 /* View Controllers */,
-				AAEFB1641B5049E3000EF8B4 /* Hashtags */,
 				AACE31961B4AE15D00F90E1D /* Resources */,
 			);
 			path = urchin;
@@ -217,13 +216,6 @@
 				AA66BA7F1B4C3E4B00CCB008 /* Images */,
 			);
 			name = Resources;
-			sourceTree = "<group>";
-		};
-		AAEFB1641B5049E3000EF8B4 /* Hashtags */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Hashtags;
 			sourceTree = "<group>";
 		};
 		AAEFB1651B5049FC000EF8B4 /* Data */ = {
