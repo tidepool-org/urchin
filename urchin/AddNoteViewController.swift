@@ -8,12 +8,13 @@
 
 import Foundation
 import UIKit
+import CoreData
 
 let hashtagHeight: CGFloat = 41
 
 class AddNoteViewController: UIViewController, UITextViewDelegate {
     
-    let hashtags: [String] = ["#exercise", "#low", "#high", "#meal", "#snack", "#stress", "#pumpfail", "#cgmfail", "#success", "#juicebox", "#pumpchange", "#cgmchange"]
+    var hashtags: [NSManagedObject] = [NSManagedObject]()
     var hashtagButtons: [[UIButton]] = []
     
     
@@ -142,10 +143,10 @@ class AddNoteViewController: UIViewController, UITextViewDelegate {
         hashtagsView.frame.size = CGSize(width: self.view.frame.width, height: hashtagsViewH)
         hashtagsView.frame.origin.x = 0
         hashtagsView.frame.origin.y = separatorOne.frame.maxY
-        
+        fetchHashtags()
+        configureHashtagButtons()
         
         self.view.addSubview(hashtagsView)
-        configureHashtagButtons()
         
         // configure second separator
         separatorTwo.backgroundColor = UIColor(red: 151/255, green: 151/255, blue: 151/255, alpha: 1)
@@ -391,11 +392,102 @@ class AddNoteViewController: UIViewController, UITextViewDelegate {
     func postNote(sender: UIButton!) {
         if (messageBox.text != "Type a note..." && !messageBox.text.isEmpty) {
             self.note.messagetext = self.messageBox.text
+            
+            // Identify hashtags
+            let words = self.note.messagetext.componentsSeparatedByString(" ")
+            
+            for word in words {
+                if (word.hasPrefix("#")) {
+                    self.handleHashtagCoreData(word)
+                }
+            }
+            
+            // Do Core Data Stuff
+            
             self.view.endEditing(true)
             self.closeDatePicker(false)
             let notification = NSNotification(name: "addNote", object: nil)
             NSNotificationCenter.defaultCenter().postNotification(notification)
             self.dismissViewControllerAnimated(true, completion: nil)
+        }
+    }
+    
+    func handleHashtagCoreData(text: String) {
+        
+        let appDelegate =
+        UIApplication.sharedApplication().delegate as! AppDelegate
+        
+        let managedContext = appDelegate.managedObjectContext!
+        
+        let fetchRequest = NSFetchRequest(entityName:"Hashtag")
+        
+        var error: NSError?
+        
+        let fetchedResults =
+        managedContext.executeFetchRequest(fetchRequest,
+            error: &error) as? [NSManagedObject]
+        
+        if let results = fetchedResults {
+            var found = false
+            
+            for result in results {
+                if (result.valueForKey("text") as! String == text) {
+                    found = true
+                    
+                    let usages = (result.valueForKey("usages") as! Int) + 1
+                    result.setValue(usages, forKey: "usages")
+                    
+                    println(result.valueForKey("text") as! String)
+                    println(result.valueForKey("usages") as! Int)
+                    
+                    break
+                }
+            }
+            
+            if (!found) {
+                let entity =  NSEntityDescription.entityForName("Hashtag",
+                    inManagedObjectContext:
+                    managedContext)
+                
+                let hashtag = NSManagedObject(entity: entity!,
+                    insertIntoManagedObjectContext:managedContext)
+                
+                hashtag.setValue(text, forKey: "text")
+                hashtag.setValue(1, forKey: "usages")
+            }
+            
+        } else {
+            println("Could not fetch/save \(error), \(error!.userInfo)")
+        }
+    }
+    
+    func fetchHashtags() {
+
+        println("fetching hashtags...")
+        
+        let appDelegate =
+        UIApplication.sharedApplication().delegate as! AppDelegate
+        
+        let managedContext = appDelegate.managedObjectContext!
+        
+        let fetchRequest = NSFetchRequest(entityName:"Hashtag")
+        
+        var error: NSError?
+        
+        let fetchedResults =
+        managedContext.executeFetchRequest(fetchRequest,
+            error: &error) as? [NSManagedObject]
+        
+        if let results = fetchedResults {
+            self.hashtags = results
+            
+            println(hashtags.count)
+            
+            for hashtag in hashtags {
+                println(hashtag.valueForKey("text") as! String)
+            }
+        } else {
+            println("Could not fetch \(error), \(error!.userInfo)")
         }
     }
     
@@ -477,7 +569,9 @@ class AddNoteViewController: UIViewController, UITextViewDelegate {
     
     func configureHashtagButton(index: Int) -> UIButton {
         let hashtagButton = UIButton(frame: CGRectZero)
-        hashtagButton.setAttributedTitle(NSAttributedString(string:hashtags[index],
+        let hashtag = hashtags[index]
+        let hashtagText = hashtag.valueForKey("text") as! String
+        hashtagButton.setAttributedTitle(NSAttributedString(string: hashtagText,
             attributes:[NSForegroundColorAttributeName: UIColor(red: 61/255, green: 61/255, blue: 61/255, alpha: 1), NSFontAttributeName: UIFont(name: "OpenSans", size: 17.5)!]), forState: .Normal)
         hashtagButton.frame.size.height = hashtagHeight
         hashtagButton.sizeToFit()

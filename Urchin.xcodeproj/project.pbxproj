@@ -41,6 +41,7 @@
 		AADECC7D1B4F34AA0043E888 /* camera@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AADECC791B4F34AA0043E888 /* camera@2x.png */; };
 		AAE778A41B4B408F00949CEE /* note.png in Resources */ = {isa = PBXBuildFile; fileRef = AAE778A21B4B408F00949CEE /* note.png */; };
 		AAE778A51B4B408F00949CEE /* note@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AAE778A31B4B408F00949CEE /* note@2x.png */; };
+		AAEFB16D1B5062CE000EF8B4 /* Hashtags.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = AAEFB16B1B5062CE000EF8B4 /* Hashtags.xcdatamodeld */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -92,6 +93,7 @@
 		AADECC791B4F34AA0043E888 /* camera@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera@2x.png"; sourceTree = "<group>"; };
 		AAE778A21B4B408F00949CEE /* note.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = note.png; sourceTree = "<group>"; };
 		AAE778A31B4B408F00949CEE /* note@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "note@2x.png"; sourceTree = "<group>"; };
+		AAEFB16C1B5062CE000EF8B4 /* Hashtags.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Hashtags.xcdatamodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -169,6 +171,7 @@
 			isa = PBXGroup;
 			children = (
 				AABCEF891B3231910064FE49 /* AppDelegate.swift */,
+				AAEFB16B1B5062CE000EF8B4 /* Hashtags.xcdatamodeld */,
 				AABCEF8D1B3231910064FE49 /* Main.storyboard */,
 				AABCEF901B3231910064FE49 /* Images.xcassets */,
 				AABCEF921B3231910064FE49 /* LaunchScreen.xib */,
@@ -373,6 +376,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AAEFB16D1B5062CE000EF8B4 /* Hashtags.xcdatamodeld in Sources */,
 				AA993E301B3316C10027804C /* LoginViewController.swift in Sources */,
 				AABCEFAE1B3234360064FE49 /* Note.swift in Sources */,
 				AA3652CC1B34A163001F514D /* Patient.swift in Sources */,
@@ -591,6 +595,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		AAEFB16B1B5062CE000EF8B4 /* Hashtags.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				AAEFB16C1B5062CE000EF8B4 /* Hashtags.xcdatamodel */,
+			);
+			currentVersion = AAEFB16C1B5062CE000EF8B4 /* Hashtags.xcdatamodel */;
+			path = Hashtags.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = AABCEF7C1B3231910064FE49 /* Project object */;
 }
