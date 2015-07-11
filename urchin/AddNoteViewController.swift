@@ -187,7 +187,7 @@ class AddNoteViewController: UIViewController, UITextViewDelegate {
         messageBox.frame.origin.y = separatorTwo.frame.maxY + labelInset
         messageBox.delegate = self
         messageBox.autocapitalizationType = UITextAutocapitalizationType.Sentences
-        messageBox.autocorrectionType = UITextAutocorrectionType.Default
+        messageBox.autocorrectionType = UITextAutocorrectionType.No
         messageBox.spellCheckingType = UITextSpellCheckingType.Default
         messageBox.keyboardAppearance = UIKeyboardAppearance.Dark
         messageBox.keyboardType = UIKeyboardType.Default
