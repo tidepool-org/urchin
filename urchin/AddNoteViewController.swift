@@ -80,7 +80,7 @@ class AddNoteViewController: UIViewController, UITextViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-    
+        
         self.view.backgroundColor = UIColor(red: 247/255, green: 247/255, blue: 248/255, alpha: 1)
         
         self.title = user.fullName
@@ -220,7 +220,8 @@ class AddNoteViewController: UIViewController, UITextViewDelegate {
         
         let notificationCenter = NSNotificationCenter.defaultCenter()
         notificationCenter.addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("keyboardWillHide:"), name:UIKeyboardWillHideNotification, object: nil)
+        notificationCenter.addObserver(self, selector: "keyboardDidShow:", name: UIKeyboardDidShowNotification, object: nil)
+        notificationCenter.addObserver(self, selector: Selector("keyboardWillHide:"), name:UIKeyboardWillHideNotification, object: nil)
     }
     
     func closeVC(sender: UIBarButtonItem!) {
@@ -322,16 +323,33 @@ class AddNoteViewController: UIViewController, UITextViewDelegate {
                 let coverUpH = self.view.frame.height - self.separatorTwo.frame.maxY
                 self.coverUp.frame.size = CGSize(width: self.view.frame.width, height: coverUpH)
                 self.coverUp.frame.origin = CGPoint(x: 0, y: self.separatorTwo.frame.maxY)
-                self.postButton.frame.origin.y = self.view.frame.height - (self.keyboardFrame.height + labelInset + self.postButton.frame.height)
-                self.cameraButton.frame.origin.y = self.postButton.frame.midY - self.cameraButton.frame.height / 2
-                self.locationButton.frame.origin.y = self.postButton.frame.midY - self.locationButton.frame.height / 2
-                let messageBoxH = (self.postButton.frame.minY - self.separatorTwo.frame.maxY) - 2 * labelInset
-                self.messageBox.frame.size = CGSize(width: self.messageBox.frame.width, height: messageBoxH)
-                self.messageBox.frame.origin.y = self.separatorTwo.frame.maxY + labelInset
+                if (UIDevice.currentDevice().modelName != "iPhone 4S") {
+                    // Not an iPhone 4s
+                    
+                    self.postButton.frame.origin.y = self.view.frame.height - (self.keyboardFrame.height + labelInset + self.postButton.frame.height)
+                    self.cameraButton.frame.origin.y = self.postButton.frame.midY - self.cameraButton.frame.height / 2
+                    self.locationButton.frame.origin.y = self.postButton.frame.midY - self.locationButton.frame.height / 2
+                    let messageBoxH = (self.postButton.frame.minY - self.separatorTwo.frame.maxY) - 2 * labelInset
+                    self.messageBox.frame.size = CGSize(width: self.messageBox.frame.width, height: messageBoxH)
+                    self.messageBox.frame.origin.y = self.separatorTwo.frame.maxY + labelInset
+                } else {
+                    // An iPhone 4S
+                    
+                    let messageBoxH = self.view.frame.height - (self.separatorTwo.frame.maxY + self.keyboardFrame.height + 2 * labelInset)
+                    self.messageBox.frame.size = CGSize(width: self.messageBox.frame.width, height: messageBoxH)
+                    self.messageBox.frame.origin.y = self.separatorTwo.frame.maxY + labelInset
+                }
                 
                 }, completion: { (completed: Bool) -> Void in
                     self.isAnimating = false
                     if (completed) {
+                        if (UIDevice.currentDevice().modelName == "iPhone 4S") {
+                            self.changeDateLabel.text = "done"
+                            self.changeDateLabel.font = UIFont(name: "OpenSans-Bold", size: 17.5)!
+                            self.changeDateLabel.sizeToFit()
+                            self.changeDateLabel.frame.origin.x = self.view.frame.width - (labelInset + self.changeDateLabel.frame.width)
+                        }
+                        
                         self.hashtagsCollapsed = true
                     }
             })
@@ -360,6 +378,13 @@ class AddNoteViewController: UIViewController, UITextViewDelegate {
                 }, completion: { (completed: Bool) -> Void in
                     self.isAnimating = false
                     if (completed) {
+                        if (UIDevice.currentDevice().modelName == "iPhone 4S") {
+                            self.changeDateLabel.text = "change"
+                            self.changeDateLabel.font = UIFont(name: "OpenSans", size: 17.5)!
+                            self.changeDateLabel.sizeToFit()
+                            self.changeDateLabel.frame.origin.x = self.view.frame.width - (labelInset + self.changeDateLabel.frame.width)
+                        }
+                        
                         self.hashtagsCollapsed = false
                     }
             })
@@ -663,6 +688,10 @@ class AddNoteViewController: UIViewController, UITextViewDelegate {
         } else {
             self.closeHashtagsPartially()
         }
+    }
+    
+    func keyboardDidShow(notification: NSNotification) {
+        keyboardFrame = (notification.userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue()
     }
     
     func keyboardWillHide(notification: NSNotification) {
