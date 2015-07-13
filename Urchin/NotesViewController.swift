@@ -63,7 +63,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         self.notesTable = UITableView(frame: CGRectMake(0, 0, self.view.frame.width, self.view.frame.height - (CGFloat(64) + addNoteButtonHeight)))
         
         notesTable.backgroundColor = UIColor(red: 247/255, green: 247/255, blue: 248/255, alpha: 1)
-        notesTable.rowHeight = noteCellHeight
+//        notesTable.rowHeight = noteCellHeight
         notesTable.separatorStyle = UITableViewCellSeparatorStyle.None
         notesTable.registerClass(NoteCell.self, forCellReuseIdentifier: NSStringFromClass(NoteCell))
         notesTable.dataSource = self
@@ -301,9 +301,23 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         if (tableView.isEqual(notesTable)) {
-            let cell = NoteCell(style: .Default, reuseIdentifier: nil)
-            cell.configureWithNote(notes[indexPath.row])
-            return cell.cellHeight
+            let usernameLabel = UILabel(frame: CGRectZero)
+            usernameLabel.font = UIFont(name: "OpenSans-Bold", size: 17.5)!
+            usernameLabel.text = notes[indexPath.row].user!.fullName
+            usernameLabel.sizeToFit()
+            
+            let messageLabel = UILabel(frame: CGRect(x: 0, y: 0, width: self.view.frame.width - 2*noteCellInset, height: CGFloat.max))
+            let hashtagBolder = HashtagBolder()
+            let attributedText = hashtagBolder.boldHashtags(notes[indexPath.row].messagetext)
+            messageLabel.attributedText = attributedText
+            messageLabel.adjustsFontSizeToFitWidth = false
+            messageLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
+            messageLabel.numberOfLines = 0
+            messageLabel.sizeToFit()
+            
+            let cellHeight = noteCellInset + usernameLabel.frame.height + 2 * labelSpacing + messageLabel.frame.height + noteCellInset
+            
+            return cellHeight
         } else {
             if (indexPath.section == 0 && indexPath.row == 0) {
                 let cell = UserDropDownCell(style: .Default, reuseIdentifier: nil)

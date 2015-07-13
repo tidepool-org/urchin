@@ -58,11 +58,15 @@ class NoteCell: UITableViewCell {
         let messageY = usernameLabel.frame.maxY + 2 * labelSpacing
         messageLabel.frame.origin = CGPoint(x: messageX, y: messageY)
         
+        usernameLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
+        timedateLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
+        messageLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
+        
         contentView.addSubview(usernameLabel)
         contentView.addSubview(timedateLabel)
         contentView.addSubview(messageLabel)
         
-        cellHeight = noteCellInset + usernameLabel.frame.height + 2 * labelSpacing + messageLabel.frame.height + noteCellInset
+//        createConstraints()
         
         if (borders) {
             usernameLabel.layer.borderWidth = 1
@@ -77,9 +81,29 @@ class NoteCell: UITableViewCell {
             self.contentView.layer.borderWidth = 1
             self.contentView.layer.borderColor = UIColor.blueColor().CGColor
         }
-        
-        self.contentView.frame.size = CGSize(width: self.contentView.frame.width, height: cellHeight)
 //        println("cell height: \(self.contentView.frame.height) expected: \(cellHeight)")
+    }
+    
+    func createConstraints() {
+        // Views to add constraints to
+        let views = Dictionary(dictionaryLiteral: ("username", usernameLabel), ("date", timedateLabel), ("message", messageLabel))
+        
+        // Horizontal Constraints
+        let horizontalConstraintsOne = NSLayoutConstraint.constraintsWithVisualFormat("H:|-\(labelInset)-[username]", options: nil, metrics: nil, views: views)
+        let horizontalConstraintsTwo = NSLayoutConstraint.constraintsWithVisualFormat("H:[date]-\(labelInset)-|", options: nil, metrics: nil, views: views)
+        let horizontalConstraintsThree = NSLayoutConstraint.constraintsWithVisualFormat("H:|-\(labelInset)-[message]-\(labelInset)-|", options: nil, metrics: nil, views: views)
+        self.addConstraints(horizontalConstraintsOne)
+        self.addConstraints(horizontalConstraintsTwo)
+        self.addConstraints(horizontalConstraintsThree)
+        
+        let verticalConstraintOne = NSLayoutConstraint(item: usernameLabel, attribute: .Top, relatedBy: .Equal, toItem: self, attribute: .Top, multiplier: 1, constant: labelInset)
+        let verticalConstraintTwo = NSLayoutConstraint(item: timedateLabel, attribute: .CenterY, relatedBy: .Equal, toItem: usernameLabel, attribute: .CenterY, multiplier: 1, constant: 0)
+        let verticalConstraintThree = NSLayoutConstraint(item: messageLabel, attribute: .Bottom, relatedBy: .Equal, toItem: self, attribute: .Bottom, multiplier: 1, constant: -labelInset)
+        let verticalConstraintFour = NSLayoutConstraint(item: usernameLabel, attribute: .Bottom, relatedBy: .Equal, toItem: messageLabel, attribute: .Top, multiplier: 1, constant: 2*labelSpacing)
+        self.addConstraint(verticalConstraintOne)
+        self.addConstraint(verticalConstraintTwo)
+        self.addConstraint(verticalConstraintThree)
+        self.addConstraint(verticalConstraintFour)
     }
     
     
