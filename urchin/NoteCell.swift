@@ -24,7 +24,7 @@ class NoteCell: UITableViewCell {
     let editButton: UIButton = UIButton()
     var messageLabel: UILabel = UILabel()
     
-    func configureWithNote(note: Note) {
+    func configureWithNote(note: Note, user: User) {
         
         self.note = note
         
@@ -71,19 +71,23 @@ class NoteCell: UITableViewCell {
         let messageY = usernameLabel.frame.maxY + 2 * labelSpacing
         messageLabel.frame.origin = CGPoint(x: messageX, y: messageY)
         
-        editButton.frame = CGRectZero
-        let editTitle = NSAttributedString(string: "edit", attributes: [NSForegroundColorAttributeName: UIColor(red: 0/255, green: 150/255, blue: 171/255, alpha: 1), NSFontAttributeName: UIFont(name: "OpenSans", size: 17.5)!])
-        editButton.setAttributedTitle(editTitle, forState: .Normal)
-        editButton.sizeToFit()
-        editButton.frame.size.height = 17.5
-        let editX = contentView.frame.width - (noteCellInset + editButton.frame.width)
-        let editY = messageLabel.frame.maxY + 2 * labelSpacing
-        editButton.frame.origin = CGPoint(x: editX, y: editY)
-        
         contentView.addSubview(usernameLabel)
         contentView.addSubview(timedateLabel)
         contentView.addSubview(messageLabel)
-        contentView.addSubview(editButton)
+        
+        if (note.user === user) {
+            println("adding the edit button")
+            editButton.frame = CGRectZero
+            let editTitle = NSAttributedString(string: "edit", attributes: [NSForegroundColorAttributeName: UIColor(red: 0/255, green: 150/255, blue: 171/255, alpha: 1), NSFontAttributeName: UIFont(name: "OpenSans", size: 17.5)!])
+            editButton.setAttributedTitle(editTitle, forState: .Normal)
+            editButton.sizeToFit()
+            editButton.frame.size.height = 17.5
+            let editX = contentView.frame.width - (noteCellInset + editButton.frame.width)
+            let editY = messageLabel.frame.maxY + 2 * labelSpacing
+            editButton.frame.origin = CGPoint(x: editX, y: editY)
+            
+            contentView.addSubview(editButton)
+        }
         
         if (borders) {
             usernameLabel.layer.borderWidth = 1

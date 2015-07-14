@@ -11,11 +11,9 @@ import UIKit
 import CoreData
 
 let hashtagHeight: CGFloat = 41
+let defaultMessage: String = "What's going on?"
 
 class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDataSource, UITableViewDelegate {
-    
-    var hashtags = [NSManagedObject]()
-    var hashtagButtons: [[UIButton]] = []
     
     var dropDownMenu: UITableView!
     var isDropDownDisplayed: Bool = false
@@ -33,8 +31,7 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
     
     let separatorOne: UIView
     
-    let hashtagsView: UIView
-    var hashtagsCollapsed: Bool
+    let hashtagsView: HashtagsView
     
     let separatorTwo: UIView
     let coverUp: UIView
@@ -63,8 +60,7 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
         
         separatorOne = UIView(frame: CGRectZero)
         
-        hashtagsView = UIView(frame: CGRectZero)
-        hashtagsCollapsed = false
+        hashtagsView = HashtagsView(frame: CGRectZero)
         
         separatorTwo = UIView(frame: CGRectZero)
         coverUp = UIView(frame: CGRectZero)
@@ -78,7 +74,7 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
         note = Note()
         note.user = user
         note.groupid = group.groupid
-        note.messagetext = "This is a new note created from the new note view controller."
+        note.messagetext = ""
         self.group = group
         self.groups = groups
         self.user = user
@@ -97,8 +93,7 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
         
         self.view.backgroundColor = UIColor(red: 247/255, green: 247/255, blue: 248/255, alpha: 1)
         
-        self.title = group.name
-        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor(),NSFontAttributeName: UIFont(name: "OpenSans", size: 25)!]
+        configureTitleView(group.name)
         
         var closeButton: UIBarButtonItem = UIBarButtonItem(image: UIImage(named: "closex")!, style: .Plain, target: self, action: "closeVC:")
         self.navigationItem.setLeftBarButtonItem(closeButton, animated: true)
@@ -156,12 +151,11 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
         
         // configure hashtags view
         hashtagsView.backgroundColor = UIColor.clearColor()
-        let hashtagsViewH = 3 * hashtagHeight + 4 * labelInset
+        let hashtagsViewH = 3 * hashtagHeight + 2 * labelInset + 4 * labelSpacing
         hashtagsView.frame.size = CGSize(width: self.view.frame.width, height: hashtagsViewH)
         hashtagsView.frame.origin.x = 0
         hashtagsView.frame.origin.y = separatorOne.frame.maxY
-        fetchHashtags()
-        configureHashtagButtons()
+        hashtagsView.configureHashtagsView()
         
         self.view.addSubview(hashtagsView)
         
@@ -195,7 +189,7 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
         // configure message box
         messageBox.backgroundColor = UIColor(red: 247/255, green: 247/255, blue: 248/255, alpha: 1)
         messageBox.font = UIFont(name: "OpenSans", size: 17.5)!
-        messageBox.text = "Type a note..."
+        messageBox.text = defaultMessage
         messageBox.textColor = UIColor(red: 167/255, green: 167/255, blue: 167/255, alpha: 1)
         let messageBoxW = self.view.frame.width - 2 * labelInset
         let messageBoxH = (postButton.frame.minY - separatorTwo.frame.maxY) - 2 * labelInset
@@ -238,6 +232,9 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
         overlayHeight = self.view.frame.height
         opaqueOverlay = UIView(frame: CGRectMake(0, -overlayHeight, self.view.frame.width, overlayHeight))
         opaqueOverlay.backgroundColor = UIColor(red: 61/255, green: 61/255, blue: 61/255, alpha: 0.75)
+        let tapGesture = UITapGestureRecognizer(target: self, action: "dropDownMenuPressed")
+        tapGesture.numberOfTapsRequired = 1
+        opaqueOverlay.addGestureRecognizer(tapGesture)
         self.view.addSubview(opaqueOverlay)
         
         let dropDownWidth = self.view.frame.width
@@ -265,17 +262,38 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
         notificationCenter.addObserver(self, selector: Selector("keyboardWillHide:"), name:UIKeyboardWillHideNotification, object: nil)
     }
     
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
+    func configureTitleView(text: String) {
+        let titleView = UILabel()
+        titleView.text = text
+        titleView.font = UIFont(name: "OpenSans", size: 25)!
+        titleView.textColor = UIColor.whiteColor()
+        let width = titleView.sizeThatFits(CGSizeMake(CGFloat.max, CGFloat.max)).width
+        titleView.frame = CGRect(origin:CGPointZero, size:CGSizeMake(width, 500))
+        self.navigationItem.titleView = titleView
         
-        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor(),NSFontAttributeName: UIFont(name: "OpenSans", size: 25)!]
+        let recognizer = UITapGestureRecognizer(target: self, action: "dropDownMenuPressed")
+        titleView.userInteractionEnabled = true
+        titleView.addGestureRecognizer(recognizer)
     }
     
     func closeVC(sender: UIBarButtonItem!) {
-        self.note.messagetext = self.messageBox.text
-        self.view.endEditing(true)
-        self.closeDatePicker(false)
-        self.dismissViewControllerAnimated(true, completion: nil)
+        if (!messageBox.text.isEmpty && messageBox.text != defaultMessage) {
+            let alert = UIAlertController(title: "Discard Changes?", message: "You have made changes to this note. Would you like to discard these changes?", preferredStyle: UIAlertControllerStyle.Alert)
+            alert.addAction(UIAlertAction(title: "Discard",
+                style: UIAlertActionStyle.Destructive,
+                handler: {(alert: UIAlertAction!) in
+                    self.view.endEditing(true)
+                    self.closeDatePicker(false)
+                    self.dismissViewControllerAnimated(true, completion: nil)}))
+            alert.addAction(UIAlertAction(title: "Cancel",
+                style: UIAlertActionStyle.Default,
+                handler: nil))
+            self.presentViewController(alert, animated: true, completion: nil)
+        } else {
+            self.view.endEditing(true)
+            self.closeDatePicker(false)
+            self.dismissViewControllerAnimated(true, completion: nil)
+        }
     }
     
     func changeDatePressed(sender: UIView!) {
@@ -295,7 +313,7 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
             UIView.animateKeyframesWithDuration(0.3, delay: 0.0, options: nil, animations: { () -> Void in
                 
                 self.separatorOne.frame.origin.y = self.timedateLabel.frame.maxY + labelInset
-                let hashtagsViewH = 3 * hashtagHeight + 4 * labelInset
+                let hashtagsViewH = 3 * hashtagHeight + 2 * labelInset + 4 * labelSpacing
                 self.hashtagsView.frame.size = CGSize(width: self.hashtagsView.frame.width, height: hashtagsViewH)
                 self.hashtagsView.frame.origin.y = self.separatorOne.frame.maxY
                 self.separatorTwo.frame.origin.y = self.hashtagsView.frame.maxY
@@ -351,7 +369,7 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
     }
     
     func toggleHashtags() {
-        if (hashtagsCollapsed) {
+        if (hashtagsView.hashtagsCollapsed) {
             openHashtagsCompletely()
         } else {
             closeHashtagsPartially()
@@ -359,13 +377,14 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
     }
     
     func closeHashtagsPartially() {
-        if (!hashtagsCollapsed && !isAnimating) {
+        if (!hashtagsView.hashtagsCollapsed && !isAnimating) {
             isAnimating = true
             UIView.animateKeyframesWithDuration(0.3, delay: 0.0, options: nil, animations: { () -> Void in
                 
                 let hashtagsViewH = labelInset + hashtagHeight + labelInset
                 self.hashtagsView.frame.size = CGSize(width: self.hashtagsView.frame.width, height: hashtagsViewH)
                 self.hashtagsView.frame.origin.y = self.separatorOne.frame.maxY
+                self.hashtagsView.linearHashtagArrangement()
                 self.separatorTwo.frame.origin.y = self.hashtagsView.frame.maxY
                 let coverUpH = self.view.frame.height - self.separatorTwo.frame.maxY
                 self.coverUp.frame.size = CGSize(width: self.view.frame.width, height: coverUpH)
@@ -397,19 +416,20 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
                             self.changeDateLabel.frame.origin.x = self.view.frame.width - (labelInset + self.changeDateLabel.frame.width)
                         }
                         
-                        self.hashtagsCollapsed = true
+                        self.hashtagsView.hashtagsCollapsed = true
                     }
             })
         }
     }
     
     func openHashtagsCompletely() {
-        if (hashtagsCollapsed && !isAnimating) {
+        if (hashtagsView.hashtagsCollapsed && !isAnimating) {
             isAnimating = true
             UIView.animateKeyframesWithDuration(0.3, delay: 0.0, options: nil, animations: { () -> Void in
                 
-                let hashtagsViewH = 3 * hashtagHeight + 4 * labelInset
+                let hashtagsViewH = 3 * hashtagHeight + 2 * labelInset + 4 * labelSpacing
                 self.hashtagsView.frame.size = CGSize(width: self.hashtagsView.frame.width, height: hashtagsViewH)
+                self.hashtagsView.pageHashtagArrangement()
                 self.hashtagsView.frame.origin.y = self.separatorOne.frame.maxY
                 self.separatorTwo.frame.origin.y = self.hashtagsView.frame.maxY
                 let coverUpH = self.view.frame.height - self.separatorTwo.frame.maxY
@@ -432,17 +452,16 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
                             self.changeDateLabel.frame.origin.x = self.view.frame.width - (labelInset + self.changeDateLabel.frame.width)
                         }
                         
-                        self.hashtagsCollapsed = false
+                        self.hashtagsView.hashtagsCollapsed = false
                     }
             })
         }
     }
-    
+        
     func datePickerAction(sender: UIDatePicker) {
-        note.timestamp = datePicker.date
         let dateFormatter = NSDateFormatter()
         dateFormatter.dateFormat = "EEEE M.d.yy h:mm a"
-        var dateString = dateFormatter.stringFromDate(note.timestamp)
+        var dateString = dateFormatter.stringFromDate(datePicker.date)
         dateString = dateString.stringByReplacingOccurrencesOfString("PM", withString: "pm", options: NSStringCompareOptions.LiteralSearch, range: nil)
         dateString = dateString.stringByReplacingOccurrencesOfString("AM", withString: "am", options: NSStringCompareOptions.LiteralSearch, range: nil)
         timedateLabel.text = dateString
@@ -462,15 +481,17 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
     }
     
     func postNote(sender: UIButton!) {
-        if (messageBox.text != "Type a note..." && !messageBox.text.isEmpty) {
+        if (messageBox.text != defaultMessage && !messageBox.text.isEmpty) {
             self.note.messagetext = self.messageBox.text
+            self.note.groupid = self.group.groupid
+            self.note.timestamp = self.datePicker.date
             
             // Identify hashtags
             let words = self.note.messagetext.componentsSeparatedByString(" ")
             
             for word in words {
                 if (word.hasPrefix("#")) {
-                    self.handleHashtagCoreData(word)
+                    self.hashtagsView.handleHashtagCoreData(word)
                 }
             }
             
@@ -482,206 +503,8 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
         }
     }
     
-    func handleHashtagCoreData(text: String) {
-        
-        let appDelegate =
-        UIApplication.sharedApplication().delegate as! AppDelegate
-        
-        let managedContext = appDelegate.managedObjectContext!
-        
-        let fetchRequest = NSFetchRequest(entityName:"Hashtag")
-        
-        var error: NSError?
-        
-        let fetchedResults =
-        managedContext.executeFetchRequest(fetchRequest,
-            error: &error) as? [NSManagedObject]
-        
-        if let results = fetchedResults {
-            var found = false
-            
-            for result in results {
-                if (result.valueForKey("text") as! String == text) {
-                    found = true
-                    
-                    let usages = (result.valueForKey("usages") as! Int) + 1
-                    result.setValue(usages, forKey: "usages")
-                    
-                    var errorTwo: NSError?
-                    if !managedContext.save(&errorTwo) {
-                        println("Could not save \(errorTwo), \(errorTwo?.userInfo)")
-                    }
-                    
-                    break
-                }
-            }
-            
-            if (!found) {
-                let entity =  NSEntityDescription.entityForName("Hashtag",
-                    inManagedObjectContext:
-                    managedContext)
-                
-                let hashtag = NSManagedObject(entity: entity!,
-                    insertIntoManagedObjectContext:managedContext)
-                
-                hashtag.setValue(text, forKey: "text")
-                hashtag.setValue(1, forKey: "usages")
-                
-                var errorTwo: NSError?
-                if !managedContext.save(&errorTwo) {
-                    println("Could not save \(errorTwo), \(errorTwo?.userInfo)")
-                }
-            }
-            
-        } else {
-            println("Could not fetch \(error), \(error!.userInfo)")
-        }
-    }
-    
-    func fetchHashtags() {
-
-        let appDelegate =
-        UIApplication.sharedApplication().delegate as! AppDelegate
-        
-        let managedContext = appDelegate.managedObjectContext!
-        
-        let fetchRequest = NSFetchRequest(entityName:"Hashtag")
-        
-        let sortDescriptor = NSSortDescriptor(key: "usages", ascending: false)
-        fetchRequest.sortDescriptors = [sortDescriptor]
-        
-        var error: NSError?
-        
-        let fetchedResults =
-        managedContext.executeFetchRequest(fetchRequest,
-            error: &error) as? [NSManagedObject]
-        
-        if let results = fetchedResults {
-            self.hashtags = results
-        } else {
-            println("Could not fetch \(error), \(error!.userInfo)")
-        }
-        
-        if (self.hashtags.count == 0) {
-            self.getAndSetDefaultHashtags()
-        }
-    }
-    
-    func getAndSetDefaultHashtags() {
-        let defaults = ["#exercise", "#low", "#high", "#meal", "#snack", "#stress", "#pumpfail", "#cgmfail", "#success", "#juicebox", "#pumpchange", "#cgmchange"]
-        
-        let appDelegate =
-        UIApplication.sharedApplication().delegate as! AppDelegate
-        
-        let managedContext = appDelegate.managedObjectContext!
-        
-        for text in defaults {
-            let entity =  NSEntityDescription.entityForName("Hashtag",
-                inManagedObjectContext:
-                managedContext)
-            
-            let hashtag = NSManagedObject(entity: entity!,
-                insertIntoManagedObjectContext:managedContext)
-            
-            hashtag.setValue(text, forKey: "text")
-            hashtag.setValue(1, forKey: "usages")
-            
-            var error: NSError?
-            if !managedContext.save(&error) {
-                println("Could not save \(error), \(error?.userInfo)")
-            }
-
-            hashtags.append(hashtag)
-        }
-    }
-    
-    func configureHashtagButtons() {
-        
-        var index = 0
-        var row = 0
-        var col = 0
-        
-        var buttonRow: [UIButton] = []
-        
-        while (true) {
-            
-            if (index >= hashtags.count || row > 2) {
-                break
-            }
-            
-            let hashtagButton = configureHashtagButton(index)
-            
-            var buttonX: CGFloat
-            
-            if (col == 0) {
-                buttonX = labelInset
-            } else {
-                buttonX = buttonRow[col - 1].frame.maxX + 2 * labelSpacing
-            }
-            
-            if ((buttonX + hashtagButton.frame.width) > (self.view.frame.width - labelInset)) {
-                hashtagButtons.append(buttonRow)
-                buttonRow = []
-                row++
-                col = 0
-                continue
-            } else {
-                buttonRow.append(hashtagButton)
-            }
-            
-            buttonRow[col].frame.origin.x = buttonX
-            
-            index++
-            col++
-        }
-        hashtagButtons.append(buttonRow)
-        
-        row = 0
-        for bRow in hashtagButtons {
-            
-            let buttonY = CGFloat(row + 1) * labelInset + CGFloat(row) * hashtagHeight
-            
-            var totalButtonWidth: CGFloat = CGFloat(0)
-            var i = 0
-            for button in bRow {
-                totalButtonWidth += button.frame.width + 2 * labelSpacing
-                i++
-            }
-            
-            let totalWidth = totalButtonWidth - 2 * labelSpacing
-            let halfWidth = totalWidth / 2
-            
-            var buttonX = self.view.frame.width / 2 - halfWidth
-            for button in bRow {
-                button.frame.origin = CGPoint(x: buttonX, y: buttonY)
-                self.hashtagsView.addSubview(button)
-                buttonX = button.frame.maxX + 2 * labelSpacing
-            }
-            
-            row++
-        }
-    }
-    
-    func configureHashtagButton(index: Int) -> UIButton {
-        let hashtagButton = UIButton(frame: CGRectZero)
-        let hashtag = hashtags[index]
-        let hashtagText = hashtag.valueForKey("text") as! String
-        hashtagButton.setAttributedTitle(NSAttributedString(string: hashtagText,
-            attributes:[NSForegroundColorAttributeName: UIColor(red: 61/255, green: 61/255, blue: 61/255, alpha: 1), NSFontAttributeName: UIFont(name: "OpenSans", size: 17.5)!]), forState: .Normal)
-        hashtagButton.frame.size.height = hashtagHeight
-        hashtagButton.sizeToFit()
-        hashtagButton.frame.size.width = hashtagButton.frame.width + 4 * labelSpacing
-        hashtagButton.backgroundColor = UIColor.whiteColor()
-        hashtagButton.layer.cornerRadius = hashtagButton.frame.height / 2
-        hashtagButton.layer.borderWidth = 1
-        hashtagButton.layer.borderColor = UIColor(red: 167/255, green: 167/255, blue: 167/255, alpha: 1).CGColor
-        hashtagButton.addTarget(self, action: "hashtagPressed:", forControlEvents: .TouchUpInside)
-        
-        return hashtagButton
-    }
-    
     func hashtagPressed(sender: UIButton!) {
-        if (messageBox.text == "Type a note...") {
+        if (messageBox.text == defaultMessage) {
             messageBox.text = sender.titleLabel!.text!
         } else {
             if (self.messageBox.text.hasSuffix(" ")) {
@@ -690,23 +513,21 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
                 messageBox.text = messageBox.text + " " + sender.titleLabel!.text!
             }
         }
-        note.messagetext = messageBox.text
         textViewDidChange(messageBox)
     }
     
     func textViewDidChange(textView: UITextView) {
-        if (textView.text != "Type a note...") {
-            note.messagetext = textView.text
+        if (textView.text != defaultMessage) {
             
             let hashtagBolder = HashtagBolder()
-            let attributedText = hashtagBolder.boldHashtags(note.messagetext)
+            let attributedText = hashtagBolder.boldHashtags(textView.text)
             
             textView.attributedText = attributedText
         }
     }
     
     func textViewDidBeginEditing(textView: UITextView) {
-        if (textView.text == "Type a note...") {
+        if (textView.text == defaultMessage) {
             textView.text = nil
         }
     }
@@ -714,17 +535,15 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
     func textViewDidEndEditing(textView: UITextView) {
         // shift things back down and stuff
         if textView.text.isEmpty {
-            textView.text = "Type a note..."
+            textView.text = defaultMessage
             textView.textColor = UIColor(red: 167/255, green: 167/255, blue: 167/255, alpha: 1)
-        } else {
-            note.messagetext = textView.text
         }
     }
     
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
-        if (!isAnimating) {
-            view.endEditing(true)
-        }
+//        if (!isAnimating) {
+//            view.endEditing(true)
+//        }
         super.touchesBegan(touches, withEvent: event)
     }
     
@@ -748,10 +567,10 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
     func dropDownMenuPressed() {
         view.endEditing(true)
         if (isDropDownDisplayed) {
-            self.title = group.name
+            configureTitleView(group.name)
             self.hideDropDownMenu()
         } else {
-            self.title = "Groups"
+            configureTitleView("")
             self.showDropDownMenu()
         }
     }
@@ -798,21 +617,21 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(UserDropDownCell), forIndexPath: indexPath) as! UserDropDownCell
         
-        cell.configureWithGroup(groups[indexPath.row])
+        cell.configureWithGroup(groups[indexPath.row], arrow: false)
         
         return cell
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         let cell = UserDropDownCell(style: .Default, reuseIdentifier: nil)
-        cell.configureWithGroup(groups[indexPath.row])
+        cell.configureWithGroup(groups[indexPath.row], arrow: false)
         return cell.cellHeight
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
         let cell = dropDownMenu.cellForRowAtIndexPath(indexPath) as! UserDropDownCell
-        self.title = cell.group.name
+        configureTitleView(cell.group.name)
         self.group = cell.group
         self.note.groupid = self.group.groupid
         self.dropDownMenuPressed()

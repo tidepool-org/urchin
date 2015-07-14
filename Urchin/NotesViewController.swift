@@ -58,8 +58,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         self.view.backgroundColor = UIColor(red: 247/255, green: 247/255, blue: 248/255, alpha: 1)
         
-        self.title = "All Notes"
-        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor(),NSFontAttributeName: UIFont(name: "OpenSans", size: 25)!]
+        configureTitleView("All Notes")
         
         self.notesTable = UITableView(frame: CGRectMake(0, 0, self.view.frame.width, self.view.frame.height - (CGFloat(64) + addNoteButtonHeight)))
         
@@ -104,6 +103,9 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         overlayHeight = self.view.frame.height
         opaqueOverlay = UIView(frame: CGRectMake(0, -overlayHeight, self.view.frame.width, overlayHeight))
         opaqueOverlay.backgroundColor = UIColor(red: 61/255, green: 61/255, blue: 61/255, alpha: 0.75)
+        let tapGesture = UITapGestureRecognizer(target: self, action: "dropDownMenuPressed")
+        tapGesture.numberOfTapsRequired = 1
+        opaqueOverlay.addGestureRecognizer(tapGesture)
         self.view.addSubview(opaqueOverlay)
         
         let dropDownWidth = self.view.frame.width
@@ -136,6 +138,20 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         let notificationCenter = NSNotificationCenter.defaultCenter()
         notificationCenter.addObserver(self, selector: "addNote:", name: "addNote", object: nil)
         notificationCenter.addObserver(self, selector: "saveNote:", name: "saveNote", object: nil)
+    }
+    
+    func configureTitleView(text: String) {
+        let titleView = UILabel()
+        titleView.text = text
+        titleView.font = UIFont(name: "OpenSans", size: 25)!
+        titleView.textColor = UIColor.whiteColor()
+        let width = titleView.sizeThatFits(CGSizeMake(CGFloat.max, CGFloat.max)).width
+        titleView.frame = CGRect(origin:CGPointZero, size:CGSizeMake(width, 500))
+        self.navigationItem.titleView = titleView
+        
+        let recognizer = UITapGestureRecognizer(target: self, action: "dropDownMenuPressed")
+        titleView.userInteractionEnabled = true
+        titleView.addGestureRecognizer(recognizer)
     }
     
     func loadNotes() {
@@ -249,13 +265,13 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
     func dropDownMenuPressed() {
         if (isDropDownDisplayed) {
             if (filter == nil) {
-                self.title = "All Notes"
+                self.configureTitleView("All Notes")
             } else {
-                self.title = filter.name
+                self.configureTitleView(filter.name)
             }
             self.hideDropDownMenu()
         } else {
-            self.title = "Notes"
+            self.configureTitleView("")
             self.showDropDownMenu()
         }
     }
@@ -300,7 +316,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
             
             let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(NoteCell), forIndexPath: indexPath) as! NoteCell
             
-            cell.configureWithNote(filteredNotes[indexPath.row])
+            cell.configureWithNote(filteredNotes[indexPath.row], user: user)
             
             if (indexPath.row % 2 == 0) {
                 // even cell
@@ -332,7 +348,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
             } else {
                 let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(UserDropDownCell), forIndexPath: indexPath) as! UserDropDownCell
                 
-                cell.configureWithGroup(groups[indexPath.row - 1])
+                cell.configureWithGroup(groups[indexPath.row - 1], arrow: true)
                 
                 return cell
             }
@@ -376,7 +392,12 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
             messageLabel.numberOfLines = 0
             messageLabel.sizeToFit()
             
-            let cellHeight = noteCellInset + usernameLabel.frame.height + 2 * labelSpacing + messageLabel.frame.height + 2 * labelSpacing + 17.5 + noteCellInset
+            let cellHeight: CGFloat
+            if (filteredNotes[indexPath.row].user === user) {
+                cellHeight = noteCellInset + usernameLabel.frame.height + 2 * labelSpacing + messageLabel.frame.height + 2 * labelSpacing + 17.5 + noteCellInset
+            } else {
+                cellHeight = noteCellInset + usernameLabel.frame.height + 2 * labelSpacing + messageLabel.frame.height + noteCellInset
+            }
             
             return cellHeight
         } else {
@@ -390,7 +411,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
                 return cell.cellHeight
             } else {
                 let cell = UserDropDownCell(style: .Default, reuseIdentifier: nil)
-                cell.configureWithGroup(groups[indexPath.row - 1])
+                cell.configureWithGroup(groups[indexPath.row - 1], arrow: true)
                 return cell.cellHeight
             }
         }
@@ -398,19 +419,16 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        if (tableView.isEqual(notesTable)) {
-            let cell = NoteCell(style: .Default, reuseIdentifier: nil)
-            cell.configureWithNote(filteredNotes[indexPath.row])
-        } else {
+        if (tableView.isEqual(dropDownMenu)) {
             if (indexPath.section == 0) {
                 // A group or all seleceted
                 if (indexPath.row == 0) {
-                    self.title = "All Notes"
+                    self.configureTitleView("All Notes")
                     self.filter = nil
                 } else {
                     let cell = dropDownMenu.cellForRowAtIndexPath(indexPath) as! UserDropDownCell
                     self.filter = cell.group
-                    self.title = filter.name
+                    self.configureTitleView(filter.name)
                 }
                 filteredNotes = []
                 if (filter != nil) {

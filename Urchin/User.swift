@@ -23,5 +23,4 @@ class User {
         self.shortName = firstName
         self.patient = patient
     }
-    
 }

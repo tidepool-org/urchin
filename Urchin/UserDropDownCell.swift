@@ -67,7 +67,7 @@ class UserDropDownCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configureWithGroup(group: Group) {
+    func configureWithGroup(group: Group, arrow: Bool) {
         self.group = group
         
         nameLabel.frame = CGRectMake(6*userCellInset, userCellInset, contentView.frame.width + userCellInset, 20.0)
@@ -80,6 +80,10 @@ class UserDropDownCell: UITableViewCell {
         self.addSubview(separator)
         
         self.cellHeight = userCellInset + nameLabel.frame.height + userCellInset + separator.frame.height
+        
+        if (!arrow) {
+            self.rightView.hidden = true
+        }
     }
     
     func configureAllUsers() {

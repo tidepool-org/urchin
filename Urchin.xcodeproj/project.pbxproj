@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AA3484F01B559EA10028C49B /* HashtagsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3484EF1B559EA10028C49B /* HashtagsView.swift */; };
 		AA3652C21B33847A001F514D /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3652C11B33847A001F514D /* User.swift */; };
 		AA3652C41B338525001F514D /* NotesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3652C31B338525001F514D /* NotesViewController.swift */; };
 		AA3652CC1B34A163001F514D /* Patient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3652CB1B34A163001F514D /* Patient.swift */; };
@@ -59,6 +60,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		AA3484EF1B559EA10028C49B /* HashtagsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HashtagsView.swift; sourceTree = "<group>"; };
 		AA3652C11B33847A001F514D /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		AA3652C31B338525001F514D /* NotesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotesViewController.swift; sourceTree = "<group>"; };
 		AA3652CB1B34A163001F514D /* Patient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Patient.swift; sourceTree = "<group>"; };
@@ -122,6 +124,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AA3484F11B559EAB0028C49B /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				AA3484EF1B559EA10028C49B /* HashtagsView.swift */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
 		AA66BA7F1B4C3E4B00CCB008 /* Images */ = {
 			isa = PBXGroup;
 			children = (
@@ -186,6 +196,7 @@
 				AABCEF871B3231910064FE49 /* Supporting Files */,
 				AAEFB1651B5049FC000EF8B4 /* Data */,
 				AAEFB1661B504A08000EF8B4 /* Custom Cells */,
+				AA3484F11B559EAB0028C49B /* Views */,
 				AAEFB1671B504A15000EF8B4 /* View Controllers */,
 				AACE31961B4AE15D00F90E1D /* Resources */,
 				AAA3F3121B508384000EB344 /* HashtagBolder.swift */,
@@ -383,6 +394,7 @@
 				AA698EED1B545A07004154E0 /* EditNoteViewController.swift in Sources */,
 				AAEFB16D1B5062CE000EF8B4 /* Hashtags.xcdatamodeld in Sources */,
 				AAA3F3131B508384000EB344 /* HashtagBolder.swift in Sources */,
+				AA3484F01B559EA10028C49B /* HashtagsView.swift in Sources */,
 				AA993E301B3316C10027804C /* LoginViewController.swift in Sources */,
 				AABCEFAE1B3234360064FE49 /* Note.swift in Sources */,
 				AA3652CC1B34A163001F514D /* Patient.swift in Sources */,
