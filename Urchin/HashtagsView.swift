@@ -321,4 +321,9 @@ class HashtagsView: UIView {
         
         return hashtagButton
     }
+    
+    func hashtagPressed(sender: UIButton!) {
+        let notification = NSNotification(name: "hashtagPressed", object: nil, userInfo: ["hashtag":sender.titleLabel!.text!])
+        NSNotificationCenter.defaultCenter().postNotification(notification)
+    }
 }

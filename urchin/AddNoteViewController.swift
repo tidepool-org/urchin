@@ -260,6 +260,7 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
         notificationCenter.addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
         notificationCenter.addObserver(self, selector: "keyboardDidShow:", name: UIKeyboardDidShowNotification, object: nil)
         notificationCenter.addObserver(self, selector: Selector("keyboardWillHide:"), name:UIKeyboardWillHideNotification, object: nil)
+        notificationCenter.addObserver(self, selector: "hashtagPressed:", name: "hashtagPressed", object: nil)
     }
     
     func configureTitleView(text: String) {
@@ -503,14 +504,16 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
         }
     }
     
-    func hashtagPressed(sender: UIButton!) {
+    func hashtagPressed(notification: NSNotification) {
+        let userInfo:Dictionary<String,String!> = notification.userInfo as! Dictionary<String,String!>
+        let hashtag = userInfo["hashtag"]!
         if (messageBox.text == defaultMessage) {
-            messageBox.text = sender.titleLabel!.text!
+            messageBox.text = hashtag
         } else {
             if (self.messageBox.text.hasSuffix(" ")) {
-                messageBox.text = messageBox.text + sender.titleLabel!.text!
+                messageBox.text = messageBox.text + hashtag
             } else {
-                messageBox.text = messageBox.text + " " + sender.titleLabel!.text!
+                messageBox.text = messageBox.text + " " + hashtag
             }
         }
         textViewDidChange(messageBox)
@@ -541,9 +544,16 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
     }
     
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
-//        if (!isAnimating) {
-//            view.endEditing(true)
-//        }
+        if let touch = touches.first as? UITouch {
+            let touchLocation = touch.locationInView(self.view)
+            let viewFrame = self.view.convertRect(hashtagsView.frame, fromView: hashtagsView.superview)
+            
+            if !CGRectContainsPoint(viewFrame, touchLocation) {
+                if (!isAnimating) {
+                    view.endEditing(true)
+                }
+            }
+        }
         super.touchesBegan(touches, withEvent: event)
     }
     
