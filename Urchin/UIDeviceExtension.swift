@@ -8,7 +8,7 @@
 
 import UIKit
 
-let deviceList =   ["x86_64":         "Simulator",
+let deviceList =   ["x86_64":         "iPhone 4S",
     "iPod1,1":      "iPod Touch",       // (Original)
     "iPod2,1":      "iPod Touch 2",     // (Second Generation)
     "iPod3,1":      "iPod Touch 3",     // (Third Generation)

@@ -23,7 +23,7 @@ class UserDropDownCell: UITableViewCell {
     let nameLabel: UILabel
     let rightView: UIImageView
 
-    var user: User!
+    var group: Group!
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         nameLabel = UILabel(frame: CGRectZero)
@@ -67,11 +67,11 @@ class UserDropDownCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configureWithGroup(user: User) {
-        self.user = user
+    func configureWithGroup(group: Group) {
+        self.group = group
         
         nameLabel.frame = CGRectMake(6*userCellInset, userCellInset, contentView.frame.width + userCellInset, 20.0)
-        self.nameLabel.text = user.fullName
+        self.nameLabel.text = group.name
         nameLabel.sizeToFit()
         rightView.frame.origin.y = nameLabel.frame.midY - rightView.frame.height / 2
         

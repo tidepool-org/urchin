@@ -14,9 +14,11 @@ let addNoteButtonHeight = CGFloat(105)
 class NotesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     var notes: [Note] = []
-    var groups: [User] = []
+    var filteredNotes: [Note] = []
+    var groups: [Group] = []
     
-    var user: User!
+    let user: User!
+    var filter: Group!
     var notesTable: UITableView!
     
     var opaqueOverlay: UIView!
@@ -31,7 +33,8 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
     var dropDownHeight: CGFloat
     var overlayHeight: CGFloat
     
-    var addNoteViewController: AddNoteViewController
+    var addNoteViewController: AddNoteViewController?
+    var editNoteViewController: EditNoteViewController?
     
     init(user: User) {
         self.user = user
@@ -44,8 +47,6 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         self.overlayHeight = CGFloat(0)
         
-         addNoteViewController = AddNoteViewController(currentUser: user)
-        
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -57,13 +58,12 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         self.view.backgroundColor = UIColor(red: 247/255, green: 247/255, blue: 248/255, alpha: 1)
         
-        self.title = user.fullName
+        self.title = "All Notes"
         self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor(),NSFontAttributeName: UIFont(name: "OpenSans", size: 25)!]
         
         self.notesTable = UITableView(frame: CGRectMake(0, 0, self.view.frame.width, self.view.frame.height - (CGFloat(64) + addNoteButtonHeight)))
         
         notesTable.backgroundColor = UIColor(red: 247/255, green: 247/255, blue: 248/255, alpha: 1)
-//        notesTable.rowHeight = noteCellHeight
         notesTable.separatorStyle = UITableViewCellSeparatorStyle.None
         notesTable.registerClass(NoteCell.self, forCellReuseIdentifier: NSStringFromClass(NoteCell))
         notesTable.dataSource = self
@@ -135,6 +135,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         let notificationCenter = NSNotificationCenter.defaultCenter()
         notificationCenter.addObserver(self, selector: "addNote:", name: "addNote", object: nil)
+        notificationCenter.addObserver(self, selector: "saveNote:", name: "saveNote", object: nil)
     }
     
     func loadNotes() {
@@ -152,41 +153,79 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         let anothernote = Note(id: "someid", userid: "howardlook", groupid: "katielook", timestamp: NSDate(), createdtime: NSDate(), messagetext: "This is a another note. I am making the note longer to see if how this looks with multiple notes of different heights. If it goes well, I will be thrilled.", user: howard)
         notes.append(anothernote)
         
-        let more = Note(id: "someid", userid: "howardlook", groupid: "katielook", timestamp: NSDate(), createdtime: NSDate(), messagetext: "The 2005 United States Grand Prix was the ninth race and only American race of the 2005 Formula One season. Held at the Indianapolis Motor Speedway, it was won by Ferrari's Michael Schumacher (pictured).", user: howard)
+        let more = Note(id: "someid", userid: "howardlook", groupid: "sarakrugman", timestamp: NSDate(), createdtime: NSDate(), messagetext: "The 2005 United States Grand Prix was the ninth race and only American race of the 2005 Formula One season. Held at the Indianapolis Motor Speedway, it was won by Ferrari's Michael Schumacher (pictured).", user: howard)
         notes.append(more)
         
         let another = Note(id: "someid", userid: "howardlook", groupid: "katielook", timestamp: NSDate(), createdtime: NSDate(), messagetext: "In basketball, the Golden State Warriors defeat the Cleveland Cavaliers to win the NBA Finals.", user: howard)
         notes.append(another)
         
-        let lastone = Note(id: "someid", userid: "howardlook", groupid: "katielook", timestamp: NSDate(), createdtime: NSDate(), messagetext: "On this day, the royal wedding between Victoria, Crown Princess of Sweden, and Daniel Westling (both pictured) took place in Stockholm Cathedral.", user: howard)
+        let lastone = Note(id: "someid", userid: "howardlook", groupid: "shellysurabouti", timestamp: NSDate(), createdtime: NSDate(), messagetext: "On this day, the royal wedding between Victoria, Crown Princess of Sweden, and Daniel Westling (both pictured) took place in Stockholm Cathedral.", user: howard)
         notes.append(lastone)
         
+        filteredNotes = []
+        if (filter != nil) {
+            for note in notes {
+                if (note.groupid == filter.groupid) {
+                    filteredNotes.append(note)
+                }
+            }
+        } else {
+            for note in notes {
+                filteredNotes.append(note)
+            }
+        }
         notesTable.reloadData()
     }
     
     func newNote(sender: UIButton!) {
+        let groupForVC: Group
+        if (filter == nil) {
+            groupForVC = groups[0]
+        } else {
+            groupForVC = filter
+        }
         
-        addNoteViewController.user = user
-        addNoteViewController.note.createdtime = NSDate()
-        addNoteViewController.note.timestamp = NSDate()
-        let addNoteScene = UINavigationController(rootViewController: addNoteViewController)
+        addNoteViewController = AddNoteViewController(user: user, group: groupForVC, groups: groups)
+        addNoteViewController!.note.createdtime = NSDate()
+        addNoteViewController!.note.timestamp = NSDate()
+        
+        let addNoteScene = UINavigationController(rootViewController: addNoteViewController!)
         self.presentViewController(addNoteScene, animated: true, completion: nil)
     }
     
     func addNote(sender: AnyObject) {
-        let newnote = addNoteViewController.note
+        let newnote = addNoteViewController!.note
         notes.insert(newnote, atIndex: 0)
+        filteredNotes = []
+        if (filter != nil) {
+            for note in notes {
+                if (note.groupid == filter.groupid) {
+                    filteredNotes.append(note)
+                }
+            }
+        } else {
+            for note in notes {
+                filteredNotes.append(note)
+            }
+        }
         notesTable.reloadData()
-        addNoteViewController = AddNoteViewController(currentUser: user)
+        let groupForVC: Group
+        if (filter == nil) {
+            groupForVC = groups[0]
+        } else {
+            groupForVC = filter
+        }
+        addNoteViewController = AddNoteViewController(user: user, group: groupForVC, groups: groups)
+    }
+    
+    func saveNote(sender: AnyObject) {
+        notesTable.reloadData()
     }
     
     func loadGroups() {
-        let sarapatient = Patient(birthday: NSDate(), diagnosisDate: NSDate(), aboutMe: "Designer guru.")
-        let sara = User(firstName: "Sara", lastName: "Krugman", patient: sarapatient)
-        let katiepatient = Patient(birthday: NSDate(), diagnosisDate: NSDate(), aboutMe: "Annoying little sister. Everyone's inspiration.")
-        let katie = User(firstName: "Katie", lastName: "Look", patient: katiepatient)
-        let shellypatient = Patient(birthday: NSDate(), diagnosisDate: NSDate(), aboutMe: "Shelly is a rockstar.")
-        let shelly = User(firstName: "Shelly", lastName: "Surabouti", patient: shellypatient)
+        let sara = Group(name: "Sara Krugman", groupid: "sarakrugman")
+        let katie = Group(name: "Katie Look", groupid: "katielook")
+        let shelly = Group(name: "Shelly Surabouti", groupid: "shellysurabouti")
         
         groups.append(sara)
         groups.append(katie)
@@ -200,9 +239,20 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         self.refreshControl.endRefreshing()
     }
     
+    func editPressed(sender: UIButton!) {
+        
+        editNoteViewController = EditNoteViewController(note: filteredNotes[sender.tag])
+        let editNoteScene = UINavigationController(rootViewController: editNoteViewController!)
+        self.presentViewController(editNoteScene, animated: true, completion: nil)
+    }
+    
     func dropDownMenuPressed() {
         if (isDropDownDisplayed) {
-            self.title = self.user.fullName
+            if (filter == nil) {
+                self.title = "All Notes"
+            } else {
+                self.title = filter.name
+            }
             self.hideDropDownMenu()
         } else {
             self.title = "Notes"
@@ -247,9 +297,10 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if (tableView.isEqual(notesTable)) {
+            
             let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(NoteCell), forIndexPath: indexPath) as! NoteCell
             
-            cell.configureWithNote(notes[indexPath.row])
+            cell.configureWithNote(filteredNotes[indexPath.row])
             
             if (indexPath.row % 2 == 0) {
                 // even cell
@@ -259,7 +310,10 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
                 cell.backgroundColor = UIColor(red: 152/255, green: 152/255, blue: 151/255, alpha: 0.23)
             }
             
-            cell.userInteractionEnabled = false
+            cell.userInteractionEnabled = true
+            
+            cell.editButton.tag = indexPath.row
+            cell.editButton.addTarget(self, action: "editPressed:", forControlEvents: .TouchUpInside)
             
             return cell
         } else {
@@ -287,7 +341,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if (tableView.isEqual(notesTable)) {
-            return notes.count
+            return filteredNotes.count
         } else if (tableView.isEqual(dropDownMenu)){
             if (section == 0) {
                 return groups.count + 1
@@ -301,21 +355,28 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         if (tableView.isEqual(notesTable)) {
+            
             let usernameLabel = UILabel(frame: CGRectZero)
+            let usernameWidth = (self.view.frame.width - 2*noteCellInset) / 2
+            usernameLabel.frame.size = CGSize(width: usernameWidth, height: CGFloat.max)
+            usernameLabel.text = filteredNotes[indexPath.row].user!.fullName
             usernameLabel.font = UIFont(name: "OpenSans-Bold", size: 17.5)!
-            usernameLabel.text = notes[indexPath.row].user!.fullName
+            usernameLabel.textColor = UIColor.blackColor()
+            usernameLabel.adjustsFontSizeToFitWidth = false
+            usernameLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
+            usernameLabel.numberOfLines = 0
             usernameLabel.sizeToFit()
             
             let messageLabel = UILabel(frame: CGRect(x: 0, y: 0, width: self.view.frame.width - 2*noteCellInset, height: CGFloat.max))
             let hashtagBolder = HashtagBolder()
-            let attributedText = hashtagBolder.boldHashtags(notes[indexPath.row].messagetext)
+            let attributedText = hashtagBolder.boldHashtags(filteredNotes[indexPath.row].messagetext)
             messageLabel.attributedText = attributedText
             messageLabel.adjustsFontSizeToFitWidth = false
             messageLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
             messageLabel.numberOfLines = 0
             messageLabel.sizeToFit()
             
-            let cellHeight = noteCellInset + usernameLabel.frame.height + 2 * labelSpacing + messageLabel.frame.height + noteCellInset
+            let cellHeight = noteCellInset + usernameLabel.frame.height + 2 * labelSpacing + messageLabel.frame.height + 2 * labelSpacing + 17.5 + noteCellInset
             
             return cellHeight
         } else {
@@ -339,14 +400,31 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
         if (tableView.isEqual(notesTable)) {
             let cell = NoteCell(style: .Default, reuseIdentifier: nil)
-            cell.configureWithNote(notes[indexPath.row])
+            cell.configureWithNote(filteredNotes[indexPath.row])
         } else {
             if (indexPath.section == 0) {
                 // A group or all seleceted
-                if (indexPath.row != 0) {
+                if (indexPath.row == 0) {
+                    self.title = "All Notes"
+                    self.filter = nil
+                } else {
                     let cell = dropDownMenu.cellForRowAtIndexPath(indexPath) as! UserDropDownCell
-                    self.user = cell.user
+                    self.filter = cell.group
+                    self.title = filter.name
                 }
+                filteredNotes = []
+                if (filter != nil) {
+                    for note in notes {
+                        if (note.groupid == filter.groupid) {
+                            filteredNotes.append(note)
+                        }
+                    }
+                } else {
+                    for note in notes {
+                        filteredNotes.append(note)
+                    }
+                }
+                self.notesTable.reloadData()
                 self.dropDownMenuPressed()
             } else {
                 // Logout selected

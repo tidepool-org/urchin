@@ -1,8 +1,8 @@
 //
-//  AddNoteView.swift
+//  EditNoteViewController.swift
 //  urchin
 //
-//  Created by Ethan Look on 7/8/15.
+//  Created by Ethan Look on 7/13/15.
 //  Copyright (c) 2015 Tidepool. All rights reserved.
 //
 
@@ -10,19 +10,11 @@ import Foundation
 import UIKit
 import CoreData
 
-let hashtagHeight: CGFloat = 41
-
-class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDataSource, UITableViewDelegate {
+class EditNoteViewController: UIViewController, UITextViewDelegate {
     
     var hashtags = [NSManagedObject]()
     var hashtagButtons: [[UIButton]] = []
     
-    var dropDownMenu: UITableView!
-    var isDropDownDisplayed: Bool = false
-    var isDropDownAnimating: Bool = false
-    var dropDownHeight: CGFloat
-    var opaqueOverlay: UIView!
-    var overlayHeight: CGFloat
     
     let timedateLabel: UILabel
     let changeDateLabel: UILabel
@@ -45,17 +37,11 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
     let locationButton: UIButton
     
     let note: Note
-    var group: Group
-    var groups: [Group]
-    let user: User
     
     var keyboardFrame: CGRect
     
-    init(user: User, group: Group, groups: [Group]) {
+    init(note: Note) {
         // UI Elements
-        self.dropDownHeight = CGFloat(groups.count) * userCellHeight + CGFloat(groups.count-1)*userCellThinSeparator
-        self.overlayHeight = CGFloat(0)
-        
         timedateLabel = UILabel(frame: CGRectZero)
         changeDateLabel = UILabel(frame: CGRectZero)
         
@@ -75,19 +61,13 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
         locationButton = UIButton(frame: CGRectZero)
         
         // data
-        note = Note()
-        note.user = user
-        note.groupid = group.groupid
-        note.messagetext = "This is a new note created from the new note view controller."
-        self.group = group
-        self.groups = groups
-        self.user = user
+        self.note = note
         
         keyboardFrame = CGRectZero
         
         super.init(nibName: nil, bundle: nil)
     }
-
+    
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -97,15 +77,12 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
         
         self.view.backgroundColor = UIColor(red: 247/255, green: 247/255, blue: 248/255, alpha: 1)
         
-        self.title = group.name
+        self.title = note.user!.fullName
         self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor(),NSFontAttributeName: UIFont(name: "OpenSans", size: 25)!]
         
         var closeButton: UIBarButtonItem = UIBarButtonItem(image: UIImage(named: "closex")!, style: .Plain, target: self, action: "closeVC:")
         self.navigationItem.setLeftBarButtonItem(closeButton, animated: true)
         
-        var rightDropDownMenuButton: UIBarButtonItem = UIBarButtonItem(image: UIImage(named: "down"), style: .Plain, target: self, action: "dropDownMenuPressed")
-        self.navigationItem.setRightBarButtonItem(rightDropDownMenuButton, animated: true)
-    
         // configure date label
         let dateFormatter = NSDateFormatter()
         dateFormatter.dateFormat = "EEEE M.d.yy h:mm a"
@@ -139,6 +116,7 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
         
         // configure date picker
         datePicker.datePickerMode = .DateAndTime
+        datePicker.date = note.timestamp
         datePicker.frame.origin.x = 0
         datePicker.frame.origin.y = timedateLabel.frame.maxY + labelInset / 2
         datePicker.hidden = true
@@ -172,7 +150,7 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
         separatorTwo.frame.origin.y = hashtagsView.frame.maxY
         
         self.view.addSubview(separatorTwo)
-
+        
         // configure backround view to cover things
         coverUp.backgroundColor = UIColor(red: 247/255, green: 247/255, blue: 248/255, alpha: 1)
         let coverUpH = self.view.frame.height - separatorTwo.frame.maxY
@@ -182,10 +160,10 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
         self.view.addSubview(coverUp)
         
         // configure post button
-        postButton.setAttributedTitle(NSAttributedString(string:"Post",
+        postButton.setAttributedTitle(NSAttributedString(string:"Save",
             attributes:[NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont(name: "OpenSans", size: 17.5)!]), forState: UIControlState.Normal)
         postButton.backgroundColor = UIColor(red: 0/255, green: 150/255, blue: 171/255, alpha: 1)
-        postButton.addTarget(self, action: "postNote:", forControlEvents: .TouchUpInside)
+        postButton.addTarget(self, action: "saveNote", forControlEvents: .TouchUpInside)
         postButton.frame.size = CGSize(width: 112, height: 41)
         postButton.frame.origin.x = self.view.frame.size.width - (labelInset + postButton.frame.width)
         postButton.frame.origin.y = self.view.frame.size.height - (labelInset + postButton.frame.height + 64)
@@ -195,8 +173,9 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
         // configure message box
         messageBox.backgroundColor = UIColor(red: 247/255, green: 247/255, blue: 248/255, alpha: 1)
         messageBox.font = UIFont(name: "OpenSans", size: 17.5)!
-        messageBox.text = "Type a note..."
-        messageBox.textColor = UIColor(red: 167/255, green: 167/255, blue: 167/255, alpha: 1)
+        let hashtagBolder = HashtagBolder()
+        let attributedText = hashtagBolder.boldHashtags(note.messagetext)
+        messageBox.attributedText = attributedText
         let messageBoxW = self.view.frame.width - 2 * labelInset
         let messageBoxH = (postButton.frame.minY - separatorTwo.frame.maxY) - 2 * labelInset
         messageBox.frame.size = CGSize(width: messageBoxW, height: messageBoxH)
@@ -235,47 +214,30 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
         
         self.view.addSubview(locationButton)
         
-        overlayHeight = self.view.frame.height
-        opaqueOverlay = UIView(frame: CGRectMake(0, -overlayHeight, self.view.frame.width, overlayHeight))
-        opaqueOverlay.backgroundColor = UIColor(red: 61/255, green: 61/255, blue: 61/255, alpha: 0.75)
-        self.view.addSubview(opaqueOverlay)
-        
-        let dropDownWidth = self.view.frame.width
-        self.dropDownMenu = UITableView(frame: CGRect(x: CGFloat(0), y: -dropDownHeight, width: dropDownWidth, height: dropDownHeight))
-        
-        dropDownMenu.backgroundColor = UIColor(red: 0/255, green: 54/255, blue: 62/255, alpha: 1)
-        dropDownMenu.rowHeight = userCellHeight
-        dropDownMenu.separatorInset.left = userCellInset
-        dropDownMenu.registerClass(UserDropDownCell.self, forCellReuseIdentifier: NSStringFromClass(UserDropDownCell))
-        dropDownMenu.dataSource = self
-        dropDownMenu.delegate = self
-        dropDownMenu.separatorStyle = UITableViewCellSeparatorStyle.None
-        if (dropDownMenu.contentSize.height <= dropDownMenu.frame.size.height) {
-            dropDownMenu.scrollEnabled = false;
-        }
-        else {
-            dropDownMenu.scrollEnabled = true;
-        }
-        
-        self.view.addSubview(dropDownMenu)
-        
         let notificationCenter = NSNotificationCenter.defaultCenter()
         notificationCenter.addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
         notificationCenter.addObserver(self, selector: "keyboardDidShow:", name: UIKeyboardDidShowNotification, object: nil)
         notificationCenter.addObserver(self, selector: Selector("keyboardWillHide:"), name:UIKeyboardWillHideNotification, object: nil)
     }
     
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor(),NSFontAttributeName: UIFont(name: "OpenSans", size: 25)!]
-    }
-    
     func closeVC(sender: UIBarButtonItem!) {
-        self.note.messagetext = self.messageBox.text
-        self.view.endEditing(true)
-        self.closeDatePicker(false)
-        self.dismissViewControllerAnimated(true, completion: nil)
+        if (note.messagetext != messageBox.text || note.timestamp != datePicker.date) {
+            let alert = UIAlertController(title: "Save Changes?", message: "You have made changes to this note. Would you like to save these changes?", preferredStyle: UIAlertControllerStyle.Alert)
+            alert.addAction(UIAlertAction(title: "Discard",
+                style: UIAlertActionStyle.Destructive,
+                handler: {(alert: UIAlertAction!) in
+                    self.view.endEditing(true)
+                    self.closeDatePicker(false)
+                    self.dismissViewControllerAnimated(true, completion: nil)}))
+            alert.addAction(UIAlertAction(title: "Save",
+                style: UIAlertActionStyle.Default,
+                handler: {(alert: UIAlertAction!) in self.saveNote()}))
+            self.presentViewController(alert, animated: true, completion: nil)
+        } else {
+            self.view.endEditing(true)
+            self.closeDatePicker(false)
+            self.dismissViewControllerAnimated(true, completion: nil)
+        }
     }
     
     func changeDatePressed(sender: UIView!) {
@@ -439,10 +401,9 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
     }
     
     func datePickerAction(sender: UIDatePicker) {
-        note.timestamp = datePicker.date
         let dateFormatter = NSDateFormatter()
         dateFormatter.dateFormat = "EEEE M.d.yy h:mm a"
-        var dateString = dateFormatter.stringFromDate(note.timestamp)
+        var dateString = dateFormatter.stringFromDate(datePicker.date)
         dateString = dateString.stringByReplacingOccurrencesOfString("PM", withString: "pm", options: NSStringCompareOptions.LiteralSearch, range: nil)
         dateString = dateString.stringByReplacingOccurrencesOfString("AM", withString: "am", options: NSStringCompareOptions.LiteralSearch, range: nil)
         timedateLabel.text = dateString
@@ -461,9 +422,10 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
         self.presentViewController(alert, animated: true, completion: nil)
     }
     
-    func postNote(sender: UIButton!) {
+    func saveNote() {
         if (messageBox.text != "Type a note..." && !messageBox.text.isEmpty) {
             self.note.messagetext = self.messageBox.text
+            self.note.timestamp = self.datePicker.date
             
             // Identify hashtags
             let words = self.note.messagetext.componentsSeparatedByString(" ")
@@ -476,7 +438,7 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
             
             self.view.endEditing(true)
             self.closeDatePicker(false)
-            let notification = NSNotification(name: "addNote", object: nil)
+            let notification = NSNotification(name: "saveNote", object: nil)
             NSNotificationCenter.defaultCenter().postNotification(notification)
             self.dismissViewControllerAnimated(true, completion: nil)
         }
@@ -539,7 +501,7 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
     }
     
     func fetchHashtags() {
-
+        
         let appDelegate =
         UIApplication.sharedApplication().delegate as! AppDelegate
         
@@ -590,7 +552,7 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
             if !managedContext.save(&error) {
                 println("Could not save \(error), \(error?.userInfo)")
             }
-
+            
             hashtags.append(hashtag)
         }
     }
@@ -690,16 +652,14 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
                 messageBox.text = messageBox.text + " " + sender.titleLabel!.text!
             }
         }
-        note.messagetext = messageBox.text
         textViewDidChange(messageBox)
     }
     
     func textViewDidChange(textView: UITextView) {
         if (textView.text != "Type a note...") {
-            note.messagetext = textView.text
             
             let hashtagBolder = HashtagBolder()
-            let attributedText = hashtagBolder.boldHashtags(note.messagetext)
+            let attributedText = hashtagBolder.boldHashtags(textView.text)
             
             textView.attributedText = attributedText
         }
@@ -716,8 +676,6 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
         if textView.text.isEmpty {
             textView.text = "Type a note..."
             textView.textColor = UIColor(red: 167/255, green: 167/255, blue: 167/255, alpha: 1)
-        } else {
-            note.messagetext = textView.text
         }
     }
     
@@ -743,83 +701,6 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
     
     func keyboardWillHide(notification: NSNotification) {
         self.openHashtagsCompletely()
-    }
-    
-    func dropDownMenuPressed() {
-        view.endEditing(true)
-        if (isDropDownDisplayed) {
-            self.title = group.name
-            self.hideDropDownMenu()
-        } else {
-            self.title = "Groups"
-            self.showDropDownMenu()
-        }
-    }
-    
-    func hideDropDownMenu() {
-        var frame: CGRect = self.dropDownMenu.frame
-        frame.origin.y = -dropDownHeight
-        var obstructionFrame: CGRect = self.opaqueOverlay.frame
-        obstructionFrame.origin.y = -overlayHeight
-        self.animateDropDownToFrame(frame, obstructionFrame: obstructionFrame) {
-            self.isDropDownDisplayed = false
-        }
-    }
-    
-    func showDropDownMenu() {
-        var frame: CGRect = self.dropDownMenu.frame
-        frame.origin.y = 0.0
-        var obstructionFrame: CGRect = self.opaqueOverlay.frame
-        obstructionFrame.origin.y = 0.0
-        self.animateDropDownToFrame(frame, obstructionFrame: obstructionFrame) {
-            self.isDropDownDisplayed = true
-        }
-    }
-    
-    func animateDropDownToFrame(frame: CGRect, obstructionFrame: CGRect, completion:() -> Void) {
-        if (!isDropDownAnimating) {
-            isDropDownAnimating = true
-            UIView.animateKeyframesWithDuration(0.5, delay: 0.0, options: nil, animations: { () -> Void in
-                self.dropDownMenu.frame = frame
-                self.opaqueOverlay.frame = obstructionFrame
-                }, completion: { (completed: Bool) -> Void in
-                    self.isDropDownAnimating = false
-                    if (completed) {
-                        completion()
-                    }
-            })
-        }
-    }
-    
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return groups.count
-    }
-    
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(UserDropDownCell), forIndexPath: indexPath) as! UserDropDownCell
-        
-        cell.configureWithGroup(groups[indexPath.row])
-        
-        return cell
-    }
-    
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        let cell = UserDropDownCell(style: .Default, reuseIdentifier: nil)
-        cell.configureWithGroup(groups[indexPath.row])
-        return cell.cellHeight
-    }
-    
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        let cell = dropDownMenu.cellForRowAtIndexPath(indexPath) as! UserDropDownCell
-        self.title = cell.group.name
-        self.group = cell.group
-        self.note.groupid = self.group.groupid
-        self.dropDownMenuPressed()
-    }
-    
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 1
     }
     
     override func shouldAutorotate() -> Bool {

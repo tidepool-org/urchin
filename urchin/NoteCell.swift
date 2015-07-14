@@ -17,17 +17,25 @@ class NoteCell: UITableViewCell {
     
     let borders = false
     
-    var cellHeight: CGFloat = CGFloat()
+    var note: Note?
     
     let usernameLabel: UILabel = UILabel()
     let timedateLabel: UILabel = UILabel()
+    let editButton: UIButton = UIButton()
     var messageLabel: UILabel = UILabel()
     
     func configureWithNote(note: Note) {
         
+        self.note = note
+        
+        let usernameWidth = (contentView.frame.width - 2*noteCellInset) / 2
+        usernameLabel.frame.size = CGSize(width: usernameWidth, height: CGFloat.max)
         usernameLabel.text = note.user!.fullName
         usernameLabel.font = UIFont(name: "OpenSans-Bold", size: 17.5)!
         usernameLabel.textColor = UIColor.blackColor()
+        usernameLabel.adjustsFontSizeToFitWidth = false
+        usernameLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
+        usernameLabel.numberOfLines = 0
         usernameLabel.sizeToFit()
         let usernameX = noteCellInset
         let usernameY = noteCellInset
@@ -42,8 +50,13 @@ class NoteCell: UITableViewCell {
         timedateLabel.font = UIFont(name: "OpenSans", size: 12.5)!
         timedateLabel.textColor = UIColor.blackColor()
         timedateLabel.sizeToFit()
+        let helperLabel = UILabel(frame: CGRectZero)
+        helperLabel.text = "Helper"
+        helperLabel.font = UIFont(name: "OpenSans-Bold", size: 17.5)!
+        helperLabel.sizeToFit()
+        helperLabel.frame.origin = usernameLabel.frame.origin
         let timedateX = contentView.frame.width - (noteCellInset + timedateLabel.frame.width)
-        let timedateY = usernameLabel.frame.midY - timedateLabel.frame.height / 2
+        let timedateY = helperLabel.frame.maxY - timedateLabel.frame.height
         timedateLabel.frame.origin = CGPoint(x: timedateX, y: timedateY)
         
         messageLabel.frame.size = CGSize(width: contentView.frame.width - 2 * noteCellInset, height: CGFloat.max)
@@ -58,15 +71,19 @@ class NoteCell: UITableViewCell {
         let messageY = usernameLabel.frame.maxY + 2 * labelSpacing
         messageLabel.frame.origin = CGPoint(x: messageX, y: messageY)
         
-        usernameLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
-        timedateLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
-        messageLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
+        editButton.frame = CGRectZero
+        let editTitle = NSAttributedString(string: "edit", attributes: [NSForegroundColorAttributeName: UIColor(red: 0/255, green: 150/255, blue: 171/255, alpha: 1), NSFontAttributeName: UIFont(name: "OpenSans", size: 17.5)!])
+        editButton.setAttributedTitle(editTitle, forState: .Normal)
+        editButton.sizeToFit()
+        editButton.frame.size.height = 17.5
+        let editX = contentView.frame.width - (noteCellInset + editButton.frame.width)
+        let editY = messageLabel.frame.maxY + 2 * labelSpacing
+        editButton.frame.origin = CGPoint(x: editX, y: editY)
         
         contentView.addSubview(usernameLabel)
         contentView.addSubview(timedateLabel)
         contentView.addSubview(messageLabel)
-        
-//        createConstraints()
+        contentView.addSubview(editButton)
         
         if (borders) {
             usernameLabel.layer.borderWidth = 1
@@ -75,36 +92,15 @@ class NoteCell: UITableViewCell {
             timedateLabel.layer.borderWidth = 1
             timedateLabel.layer.borderColor = UIColor.redColor().CGColor
             
+            editButton.layer.borderWidth = 1
+            editButton.layer.borderColor = UIColor.redColor().CGColor
+            
             messageLabel.layer.borderWidth = 1
             messageLabel.layer.borderColor = UIColor.redColor().CGColor
             
             self.contentView.layer.borderWidth = 1
             self.contentView.layer.borderColor = UIColor.blueColor().CGColor
         }
-//        println("cell height: \(self.contentView.frame.height) expected: \(cellHeight)")
     }
-    
-    func createConstraints() {
-        // Views to add constraints to
-        let views = Dictionary(dictionaryLiteral: ("username", usernameLabel), ("date", timedateLabel), ("message", messageLabel))
-        
-        // Horizontal Constraints
-        let horizontalConstraintsOne = NSLayoutConstraint.constraintsWithVisualFormat("H:|-\(labelInset)-[username]", options: nil, metrics: nil, views: views)
-        let horizontalConstraintsTwo = NSLayoutConstraint.constraintsWithVisualFormat("H:[date]-\(labelInset)-|", options: nil, metrics: nil, views: views)
-        let horizontalConstraintsThree = NSLayoutConstraint.constraintsWithVisualFormat("H:|-\(labelInset)-[message]-\(labelInset)-|", options: nil, metrics: nil, views: views)
-        self.addConstraints(horizontalConstraintsOne)
-        self.addConstraints(horizontalConstraintsTwo)
-        self.addConstraints(horizontalConstraintsThree)
-        
-        let verticalConstraintOne = NSLayoutConstraint(item: usernameLabel, attribute: .Top, relatedBy: .Equal, toItem: self, attribute: .Top, multiplier: 1, constant: labelInset)
-        let verticalConstraintTwo = NSLayoutConstraint(item: timedateLabel, attribute: .CenterY, relatedBy: .Equal, toItem: usernameLabel, attribute: .CenterY, multiplier: 1, constant: 0)
-        let verticalConstraintThree = NSLayoutConstraint(item: messageLabel, attribute: .Bottom, relatedBy: .Equal, toItem: self, attribute: .Bottom, multiplier: 1, constant: -labelInset)
-        let verticalConstraintFour = NSLayoutConstraint(item: usernameLabel, attribute: .Bottom, relatedBy: .Equal, toItem: messageLabel, attribute: .Top, multiplier: 1, constant: 2*labelSpacing)
-        self.addConstraint(verticalConstraintOne)
-        self.addConstraint(verticalConstraintTwo)
-        self.addConstraint(verticalConstraintThree)
-        self.addConstraint(verticalConstraintFour)
-    }
-    
     
 }
