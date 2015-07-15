@@ -278,7 +278,7 @@ class HashtagsView: UIView {
                 let totalWidth = totalButtonWidth - 2 * labelSpacing
                 let halfWidth = totalWidth / 2
                 
-                var buttonX = CGFloat(page - hashtagsPage) * (self.frame.width - 3.5 * labelInset) + self.frame.width / 2 - halfWidth
+                var buttonX = CGFloat(page - hashtagsPage) * (self.frame.width - 3.0 * labelInset) + self.frame.width / 2 - halfWidth
                 var col = 0
                 for button in bRow {
                     button.frame.origin = CGPoint(x: buttonX, y: buttonY)

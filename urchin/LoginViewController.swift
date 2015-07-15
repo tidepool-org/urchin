@@ -80,7 +80,10 @@ class LogInViewController : UIViewController, UITextFieldDelegate {
         
         // configure email entry field
         let emailFieldWidth = self.view.frame.width - 2 * 25.0
-        let emailFieldHeight = CGFloat(71)
+        var emailFieldHeight = CGFloat(71)
+        if (UIDevice.currentDevice().modelName == "iPhone 4S") {
+            emailFieldHeight = CGFloat(48)
+        }
         let emailFieldX = self.view.frame.width / 2 - emailFieldWidth / 2
         emailField.frame = CGRectMake(emailFieldX, 0, emailFieldWidth, emailFieldHeight)
         emailField.borderStyle = UITextBorderStyle.Line
@@ -107,7 +110,7 @@ class LogInViewController : UIViewController, UITextFieldDelegate {
         
         // configure password entry field
         let passwordFieldWidth = self.view.frame.width - 2 * 25.0
-        let passwordFieldHeight = CGFloat(71)
+        let passwordFieldHeight = emailFieldHeight
         let passwordFieldX = self.view.frame.width / 2 - passwordFieldWidth / 2
         passwordField.frame = CGRectMake(passwordFieldX, 0, passwordFieldWidth, passwordFieldHeight)
         passwordField.borderStyle = UITextBorderStyle.Line
@@ -288,7 +291,7 @@ class LogInViewController : UIViewController, UITextFieldDelegate {
         if (logoView.frame.height >= 50) {
             titleLabel.frame.origin.y = logoView.frame.origin.y - (14.5 + titleLabel.frame.height)
         } else {
-            titleLabel.frame.origin.y = emailField.frame.origin.y - (26.5 + titleLabel.frame.height)
+            titleLabel.frame.origin.y = emailField.frame.origin.y - (14.5 + titleLabel.frame.height)
         }
     }
     
@@ -296,6 +299,9 @@ class LogInViewController : UIViewController, UITextFieldDelegate {
         let topToEmailField = emailField.frame.minY
         var proposedLogoSize = topToEmailField - (73.5 + titleLabel.frame.height)
         proposedLogoSize = min(proposedLogoSize, logoView.image!.size.height)
+        if (proposedLogoSize < 50) {
+            proposedLogoSize = 0.0
+        }
         let imageX = self.view.frame.width / 2 - CGFloat(proposedLogoSize / 2)
         logoView.frame = CGRect(x: imageX, y: 0, width: proposedLogoSize, height: proposedLogoSize)
     }
@@ -327,10 +333,12 @@ class LogInViewController : UIViewController, UITextFieldDelegate {
     }
     
     func isValidEmail(testStr:String) -> Bool {
-        let emailRegEx = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
         
-        let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
-        return emailTest.evaluateWithObject(testStr)
+        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}"
+        let range = testStr.rangeOfString(emailRegEx, options:.RegularExpressionSearch)
+        let result = range != nil ? true : false
+        return result
+        
     }
     
     override func shouldAutorotate() -> Bool {

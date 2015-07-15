@@ -42,13 +42,7 @@ class NoteCell: UITableViewCell {
         usernameLabel.frame.origin = CGPoint(x: usernameX, y: usernameY)
         
         let dateFormatter = NSDateFormatter()
-        dateFormatter.dateFormat = "EEEE M.d.yy h:mma"
-        var dateString = dateFormatter.stringFromDate(note.timestamp)
-        dateString = dateString.stringByReplacingOccurrencesOfString("PM", withString: "pm", options: NSStringCompareOptions.LiteralSearch, range: nil)
-        dateString = dateString.stringByReplacingOccurrencesOfString("AM", withString: "am", options: NSStringCompareOptions.LiteralSearch, range: nil)
-        let attrStr = NSMutableAttributedString(string: dateString, attributes: [NSForegroundColorAttributeName: UIColor.blackColor(), NSFontAttributeName: UIFont(name: "OpenSans", size: 12.5)!])
-        attrStr.addAttribute(NSFontAttributeName, value: UIFont(name: "OpenSans-Bold", size: 12.5)!, range: NSRange(location: attrStr.length - 7, length: 7))
-        timedateLabel.attributedText = attrStr
+        timedateLabel.attributedText = dateFormatter.attributedStringFromDate(note.timestamp)
         timedateLabel.sizeToFit()
         let helperLabel = UILabel(frame: CGRectZero)
         helperLabel.text = "Howard"
@@ -56,7 +50,7 @@ class NoteCell: UITableViewCell {
         helperLabel.sizeToFit()
         helperLabel.frame.origin = usernameLabel.frame.origin
         let timedateX = contentView.frame.width - (noteCellInset + timedateLabel.frame.width)
-        let timedateY = helperLabel.frame.maxY - timedateLabel.frame.height
+        let timedateY = helperLabel.frame.maxY - (timedateLabel.frame.height + 2)
         timedateLabel.frame.origin = CGPoint(x: timedateX, y: timedateY)
         
         messageLabel.frame.size = CGSize(width: contentView.frame.width - 2 * noteCellInset, height: CGFloat.max)

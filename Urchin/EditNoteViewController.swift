@@ -85,13 +85,7 @@ class EditNoteViewController: UIViewController, UITextViewDelegate {
         
         // configure date label
         let dateFormatter = NSDateFormatter()
-        dateFormatter.dateFormat = "EEEE M.d.yy h:mma"
-        var dateString = dateFormatter.stringFromDate(note.timestamp)
-        dateString = dateString.stringByReplacingOccurrencesOfString("PM", withString: "pm", options: NSStringCompareOptions.LiteralSearch, range: nil)
-        dateString = dateString.stringByReplacingOccurrencesOfString("AM", withString: "am", options: NSStringCompareOptions.LiteralSearch, range: nil)
-        let attrStr = NSMutableAttributedString(string: dateString, attributes: [NSForegroundColorAttributeName: UIColor.blackColor(), NSFontAttributeName: UIFont(name: "OpenSans", size: 12.5)!])
-        attrStr.addAttribute(NSFontAttributeName, value: UIFont(name: "OpenSans-Bold", size: 12.5)!, range: NSRange(location: attrStr.length - 7, length: 7))
-        timedateLabel.attributedText = attrStr
+        timedateLabel.attributedText = dateFormatter.attributedStringFromDate(note.timestamp)
         timedateLabel.sizeToFit()
         timedateLabel.frame.origin.x = labelInset
         timedateLabel.frame.origin.y = labelInset

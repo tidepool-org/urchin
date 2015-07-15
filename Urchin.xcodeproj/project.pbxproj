@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		AA3484F01B559EA10028C49B /* HashtagsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3484EF1B559EA10028C49B /* HashtagsView.swift */; };
+		AA3484F41B56AED20028C49B /* UIDateFormatterExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3484F31B56AED20028C49B /* UIDateFormatterExtension.swift */; };
 		AA3652C21B33847A001F514D /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3652C11B33847A001F514D /* User.swift */; };
 		AA3652C41B338525001F514D /* NotesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3652C31B338525001F514D /* NotesViewController.swift */; };
 		AA3652CC1B34A163001F514D /* Patient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3652CB1B34A163001F514D /* Patient.swift */; };
@@ -61,6 +62,7 @@
 
 /* Begin PBXFileReference section */
 		AA3484EF1B559EA10028C49B /* HashtagsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HashtagsView.swift; sourceTree = "<group>"; };
+		AA3484F31B56AED20028C49B /* UIDateFormatterExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIDateFormatterExtension.swift; sourceTree = "<group>"; };
 		AA3652C11B33847A001F514D /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		AA3652C31B338525001F514D /* NotesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotesViewController.swift; sourceTree = "<group>"; };
 		AA3652CB1B34A163001F514D /* Patient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Patient.swift; sourceTree = "<group>"; };
@@ -132,6 +134,15 @@
 			name = Views;
 			sourceTree = "<group>";
 		};
+		AA3484F21B56AEBE0028C49B /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				AA698EEA1B541C0B004154E0 /* UIDeviceExtension.swift */,
+				AA3484F31B56AED20028C49B /* UIDateFormatterExtension.swift */,
+			);
+			name = Extensions;
+			sourceTree = "<group>";
+		};
 		AA66BA7F1B4C3E4B00CCB008 /* Images */ = {
 			isa = PBXGroup;
 			children = (
@@ -200,7 +211,7 @@
 				AAEFB1671B504A15000EF8B4 /* View Controllers */,
 				AACE31961B4AE15D00F90E1D /* Resources */,
 				AAA3F3121B508384000EB344 /* HashtagBolder.swift */,
-				AA698EEA1B541C0B004154E0 /* UIDeviceExtension.swift */,
+				AA3484F21B56AEBE0028C49B /* Extensions */,
 			);
 			path = urchin;
 			sourceTree = "<group>";
@@ -397,6 +408,7 @@
 				AA3484F01B559EA10028C49B /* HashtagsView.swift in Sources */,
 				AA993E301B3316C10027804C /* LoginViewController.swift in Sources */,
 				AABCEFAE1B3234360064FE49 /* Note.swift in Sources */,
+				AA3484F41B56AED20028C49B /* UIDateFormatterExtension.swift in Sources */,
 				AA3652CC1B34A163001F514D /* Patient.swift in Sources */,
 				AA3652CE1B34A8E4001F514D /* UserDropDownCell.swift in Sources */,
 				AA698EF01B546B7B004154E0 /* Group.swift in Sources */,
