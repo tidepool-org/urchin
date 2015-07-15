@@ -193,6 +193,19 @@ class LogInViewController : UIViewController, UITextFieldDelegate {
         
         self.view.addSubview(tidepoolLogoView)
         
+        // configure version number for below Tidepool logo, add version number to view
+        let versionNumber = UILabel(frame: CGRectZero)
+        if let version = NSBundle.mainBundle().infoDictionary?["CFBundleShortVersionString"] as? String {
+            versionNumber.text = "v.\(version)"
+            versionNumber.font = UIFont(name: "OpenSans", size: 12.5)!
+            versionNumber.textColor = UIColor(red: 61/255, green: 61/255, blue: 61/255, alpha: 1)
+            versionNumber.sizeToFit()
+            versionNumber.frame.origin.x = self.view.frame.width / 2 - versionNumber.frame.width / 2
+            versionNumber.frame.origin.y = tidepoolLogoView.frame.maxY + labelSpacing
+            
+            self.view.addSubview(versionNumber)
+        }
+        
         let notificationCenter = NSNotificationCenter.defaultCenter()
         notificationCenter.addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
         notificationCenter.addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
