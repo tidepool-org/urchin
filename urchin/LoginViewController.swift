@@ -24,10 +24,12 @@ class LogInViewController : UIViewController, UITextFieldDelegate {
     let logInButton: UIButton
     let tidepoolLogoView: UIImageView
     
+    // Helper values
     var isLogoDisplayed: Bool
     var isAnimating: Bool
     var halfHeight: CGFloat
     
+    // Keyboard frame, used for positioning
     var keyboardFrame: CGRect
     
     required init(coder aDecoder: NSCoder) {
@@ -43,10 +45,12 @@ class LogInViewController : UIViewController, UITextFieldDelegate {
         logInButton = UIButton(frame: CGRectZero)
         tidepoolLogoView = UIImageView(frame: CGRectZero)
         
+        // Helper values, used for animations of UI Elements
         isLogoDisplayed = true
         isAnimating = false
         halfHeight = 0
         
+        // Initialize with no keyboard, frame Zero
         keyboardFrame = CGRectZero
         
         super.init(coder: aDecoder)
@@ -55,22 +59,24 @@ class LogInViewController : UIViewController, UITextFieldDelegate {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
+        // Set status bar to dark (for light background color)
         UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.Default
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Set background color (light grey)
         self.view.backgroundColor = UIColor(red: 247/255, green: 247/255, blue: 248/255, alpha: 1)
         
-        // configure logo
+        // configure logo with notes icon
         let image = UIImage(named: "notesicon") as UIImage!
         logoView.image = image
         let imageSize = logoView.image!.size.height
         let imageX = self.view.frame.width / 2 - CGFloat(imageSize / 2)
         logoView.frame = CGRect(x: imageX, y: 0, width: imageSize, height: imageSize)
         
-        // configure title
+        // configure title to "Blip notes" (urchin is still a great name)
         titleLabel.text = "Blip notes"
         titleLabel.font = UIFont(name: "OpenSans", size: 25)!
         titleLabel.textColor = UIColor(red: 61/255, green: 61/255, blue: 61/255, alpha: 1)
@@ -80,6 +86,7 @@ class LogInViewController : UIViewController, UITextFieldDelegate {
         
         // configure email entry field
         let emailFieldWidth = self.view.frame.width - 2 * 25.0
+        // email field height smaller for iPhone 4S
         var emailFieldHeight = CGFloat(71)
         if (UIDevice.currentDevice().modelName == "iPhone 4S") {
             emailFieldHeight = CGFloat(48)
@@ -110,6 +117,7 @@ class LogInViewController : UIViewController, UITextFieldDelegate {
         
         // configure password entry field
         let passwordFieldWidth = self.view.frame.width - 2 * 25.0
+        // password field height based upon email field height
         let passwordFieldHeight = emailFieldHeight
         let passwordFieldX = self.view.frame.width / 2 - passwordFieldWidth / 2
         passwordField.frame = CGRectMake(passwordFieldX, 0, passwordFieldWidth, passwordFieldHeight)
@@ -206,19 +214,25 @@ class LogInViewController : UIViewController, UITextFieldDelegate {
             self.view.addSubview(versionNumber)
         }
         
+        // add NSNotificationCenter observers for keyboard events
         let notificationCenter = NSNotificationCenter.defaultCenter()
         notificationCenter.addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
         notificationCenter.addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
     }
     
+    // called by passwordField and logInButton
     func logInPressed() {
 
-        if (!emailField.text.isEmpty && isValidEmail(emailField.text) && !passwordField.text.isEmpty && !isAnimating) {
+        // Guards against invalid credentials and animation occuring
+        if (checkCredentials() && !isAnimating) {
             view.endEditing(true)
             makeTransition()
         }
     }
     
+    // pass through to notes scene
+    // *** DOES NOT HAVE GUARDS ***
+    // do not call from anywhere besides within logInPressed guards
     func makeTransition() {
         
         emailField.text = ""
@@ -229,35 +243,48 @@ class LogInViewController : UIViewController, UITextFieldDelegate {
         self.presentViewController(notesScene, animated: true, completion: nil)
     }
     
+    // toggle checkbox, set rememberMe values
     func checkboxPressed(sender: UIView!) {
         if (rememberMe) {
+            // currently rememberMe --> change to don't rememberMe
+            
             rememberMe = false
             let unchecked = UIImage(named: "unchecked") as UIImage!
             rememberMeCheckbox.setImage(unchecked, forState: .Normal)
         } else {
+            // currently don't rememberMe --> change to rememberMe
+            
             rememberMe = true
             let unchecked = UIImage(named: "checked") as UIImage!
             rememberMeCheckbox.setImage(unchecked, forState: .Normal)
         }
     }
     
+    // handle touch events
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
         if (!isAnimating) {
+            // if not currently animating, end editing
             view.endEditing(true)
             self.moveDownLogIn()
         }
         super.touchesBegan(touches, withEvent: event)
     }
 
+    // UIKeyboardWillShowNotification
     func keyboardWillShow(notification: NSNotification) {
+        // store the frame of the incoming keyboard
         keyboardFrame = (notification.userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue()
         self.moveUpLogIn()
     }
     
+    // UIKeyboardWillHideNotification
     func keyboardWillHide(notification: NSNotification) {
+        // move logIn elements to center position
         self.moveDownLogIn()
     }
     
+    // Move the login up for keyboard
+    // only will run if login is currently 'down'
     func moveUpLogIn() {
         let centerY = min(self.view.frame.height / 2, keyboardFrame.minY - (2 * labelSpacing + halfHeight))
         if (isLogoDisplayed) {
@@ -267,6 +294,8 @@ class LogInViewController : UIViewController, UITextFieldDelegate {
         }
     }
     
+    // Move the login down when editing has ended
+    // only will run if login is currently 'up'
     func moveDownLogIn() {
         let centerY = self.view.frame.height / 2
         if (!isLogoDisplayed) {
@@ -276,6 +305,8 @@ class LogInViewController : UIViewController, UITextFieldDelegate {
         }
     }
     
+    // Animate login UI elements to a centerY location
+    // used by moveUp/moveDownLogIn
     func animateLogIn(centerY: CGFloat, completion:() -> Void) {
         if (!isAnimating) {
             isAnimating = true
@@ -291,6 +322,8 @@ class LogInViewController : UIViewController, UITextFieldDelegate {
         }
     }
     
+    // Vertical UI Element location based upon centerY and halfHeight of all elements
+    // Tidepool logo and version number are fixed
     func uiElementLocationFromCenterY(centerY: CGFloat) {
         let bottomY = centerY + halfHeight
         
@@ -308,6 +341,7 @@ class LogInViewController : UIViewController, UITextFieldDelegate {
         }
     }
     
+    // Size logo appropriately based upon space in view
     func configureLogoFrame() {
         let topToEmailField = emailField.frame.minY
         var proposedLogoSize = topToEmailField - (73.5 + titleLabel.frame.height)
@@ -319,32 +353,51 @@ class LogInViewController : UIViewController, UITextFieldDelegate {
         logoView.frame = CGRect(x: imageX, y: 0, width: proposedLogoSize, height: proposedLogoSize)
     }
     
+    // Change the textField border to blue when textField is being edited
     func textFieldDidBeginEditing(textField: UITextField) {
         textField.layer.borderColor = UIColor(red: 0/255, green: 150/255, blue: 171/255, alpha: 1).CGColor
     }
     
+    // Change the textField border to gray when textField is done being edited
     func textFieldDidEndEditing(textField: UITextField) {
         textField.layer.borderColor = UIColor(red: 234/255, green: 234/255, blue: 234/255, alpha: 1).CGColor
     }
     
     func textFieldDidChange(textField: UITextField) {
-        if (!emailField.text.isEmpty && isValidEmail(emailField.text) && !passwordField.text.isEmpty) {
+        // Change the opacity of the login button based upon whether or not credentials are valid
+        // solid if credentials are good
+        // half weight otherwise
+        if (checkCredentials()) {
             logInButton.alpha = 1.0
         } else {
             logInButton.alpha = 0.5
         }
     }
     
+    // Check login credentials
+    func checkCredentials() -> Bool {
+        /* Guards against:
+            - empty emailField
+            - invalid email
+            - empty passwordField
+        */
+        return !emailField.text.isEmpty && isValidEmail(emailField.text) && !passwordField.text.isEmpty
+    }
+    
+    // Return actions for textFields
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         if (textField.isEqual(emailField)) {
+            // pass on to passwordField from email field
             passwordField.becomeFirstResponder()
         } else {
+            // attempt login from passwordField
             logInPressed()
         }
         
         return true
     }
     
+    // Check validity of email
     func isValidEmail(testStr:String) -> Bool {
         
         let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}"
@@ -354,6 +407,7 @@ class LogInViewController : UIViewController, UITextFieldDelegate {
         
     }
     
+    // Only vertical orientation supported
     override func shouldAutorotate() -> Bool {
         return false
     }
