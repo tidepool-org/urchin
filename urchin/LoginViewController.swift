@@ -78,7 +78,7 @@ class LogInViewController : UIViewController, UITextFieldDelegate {
         
         // configure title to "Blip notes" (urchin is still a great name)
         titleLabel.text = "Blip notes"
-        titleLabel.font = UIFont(name: "OpenSans", size: 25)!
+        titleLabel.font = UIFont(name: "OpenSans-Bold", size: 25)!
         titleLabel.textColor = UIColor(red: 61/255, green: 61/255, blue: 61/255, alpha: 1)
         titleLabel.sizeToFit()
         let titleX = self.view.frame.width / 2 - titleLabel.frame.width / 2
@@ -390,8 +390,10 @@ class LogInViewController : UIViewController, UITextFieldDelegate {
             // pass on to passwordField from email field
             passwordField.becomeFirstResponder()
         } else {
-            // attempt login from passwordField
-            logInPressed()
+            // hide keyboard and animate down from return in passwordField
+            if (!isAnimating) {
+                view.endEditing(true)
+            }
         }
         
         return true

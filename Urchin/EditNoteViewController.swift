@@ -393,11 +393,7 @@ class EditNoteViewController: UIViewController, UITextViewDelegate {
     
     func datePickerAction(sender: UIDatePicker) {
         let dateFormatter = NSDateFormatter()
-        dateFormatter.dateFormat = "EEEE M.d.yy h:mm a"
-        var dateString = dateFormatter.stringFromDate(datePicker.date)
-        dateString = dateString.stringByReplacingOccurrencesOfString("PM", withString: "pm", options: NSStringCompareOptions.LiteralSearch, range: nil)
-        dateString = dateString.stringByReplacingOccurrencesOfString("AM", withString: "am", options: NSStringCompareOptions.LiteralSearch, range: nil)
-        timedateLabel.text = dateString
+        timedateLabel.attributedText = dateFormatter.attributedStringFromDate(datePicker.date)
         timedateLabel.sizeToFit()
     }
     
