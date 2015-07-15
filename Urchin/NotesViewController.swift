@@ -43,7 +43,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         self.refreshControl = UIRefreshControl()
         
-        self.dropDownHeight = (3+2)*userCellHeight + (3-1)*userCellThinSeparator + 2*userCellThickSeparator
+        self.dropDownHeight = (3+2)*userCellHeight + (3)*userCellThinSeparator + 2*userCellThickSeparator
         
         self.overlayHeight = CGFloat(0)
         
@@ -54,8 +54,15 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func viewDidLoad() {
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
         
+        UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.LightContent
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+                
         self.view.backgroundColor = UIColor(red: 247/255, green: 247/255, blue: 248/255, alpha: 1)
         
         configureTitleView("All Notes")
@@ -143,7 +150,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
     func configureTitleView(text: String) {
         let titleView = UILabel()
         titleView.text = text
-        titleView.font = UIFont(name: "OpenSans", size: 25)!
+        titleView.font = UIFont(name: "OpenSans", size: 17.5)!
         titleView.textColor = UIColor.whiteColor()
         let width = titleView.sizeThatFits(CGSizeMake(CGFloat.max, CGFloat.max)).width
         titleView.frame = CGRect(origin:CGPointZero, size:CGSizeMake(width, 500))
@@ -271,7 +278,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
             }
             self.hideDropDownMenu()
         } else {
-            self.configureTitleView("")
+            self.configureTitleView("Blip notes")
             self.showDropDownMenu()
         }
     }
@@ -348,7 +355,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
             } else {
                 let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(UserDropDownCell), forIndexPath: indexPath) as! UserDropDownCell
                 
-                cell.configureWithGroup(groups[indexPath.row - 1], arrow: true)
+                cell.configureWithGroup(groups[indexPath.row - 1], arrow: true, bold: false)
                 
                 return cell
             }
@@ -394,7 +401,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
             
             let cellHeight: CGFloat
             if (filteredNotes[indexPath.row].user === user) {
-                cellHeight = noteCellInset + usernameLabel.frame.height + 2 * labelSpacing + messageLabel.frame.height + 2 * labelSpacing + 17.5 + noteCellInset
+                cellHeight = noteCellInset + usernameLabel.frame.height + 2 * labelSpacing + messageLabel.frame.height + 2 * labelSpacing + 12.5 + noteCellInset
             } else {
                 cellHeight = noteCellInset + usernameLabel.frame.height + 2 * labelSpacing + messageLabel.frame.height + noteCellInset
             }
@@ -411,7 +418,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
                 return cell.cellHeight
             } else {
                 let cell = UserDropDownCell(style: .Default, reuseIdentifier: nil)
-                cell.configureWithGroup(groups[indexPath.row - 1], arrow: true)
+                cell.configureWithGroup(groups[indexPath.row - 1], arrow: true, bold: false)
                 return cell.cellHeight
             }
         }

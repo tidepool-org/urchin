@@ -12,10 +12,6 @@ import CoreData
 
 class EditNoteViewController: UIViewController, UITextViewDelegate {
     
-    var hashtags = [NSManagedObject]()
-    var hashtagButtons: [[UIButton]] = []
-    
-    
     let timedateLabel: UILabel
     let changeDateLabel: UILabel
     
@@ -25,8 +21,7 @@ class EditNoteViewController: UIViewController, UITextViewDelegate {
     
     let separatorOne: UIView
     
-    let hashtagsView: UIView
-    var hashtagsCollapsed: Bool
+    let hashtagsView: HashtagsView
     
     let separatorTwo: UIView
     let coverUp: UIView
@@ -49,8 +44,7 @@ class EditNoteViewController: UIViewController, UITextViewDelegate {
         
         separatorOne = UIView(frame: CGRectZero)
         
-        hashtagsView = UIView(frame: CGRectZero)
-        hashtagsCollapsed = false
+        hashtagsView = HashtagsView(frame: CGRectZero)
         
         separatorTwo = UIView(frame: CGRectZero)
         coverUp = UIView(frame: CGRectZero)
@@ -72,33 +66,39 @@ class EditNoteViewController: UIViewController, UITextViewDelegate {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.LightContent
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+                
         self.view.backgroundColor = UIColor(red: 247/255, green: 247/255, blue: 248/255, alpha: 1)
         
         self.title = note.user!.fullName
-        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor(),NSFontAttributeName: UIFont(name: "OpenSans", size: 25)!]
+        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor(),NSFontAttributeName: UIFont(name: "OpenSans", size: 17.5)!]
         
         var closeButton: UIBarButtonItem = UIBarButtonItem(image: UIImage(named: "closex")!, style: .Plain, target: self, action: "closeVC:")
         self.navigationItem.setLeftBarButtonItem(closeButton, animated: true)
         
         // configure date label
         let dateFormatter = NSDateFormatter()
-        dateFormatter.dateFormat = "EEEE M.d.yy h:mm a"
+        dateFormatter.dateFormat = "EEEE M.d.yy h:mma"
         var dateString = dateFormatter.stringFromDate(note.timestamp)
         dateString = dateString.stringByReplacingOccurrencesOfString("PM", withString: "pm", options: NSStringCompareOptions.LiteralSearch, range: nil)
         dateString = dateString.stringByReplacingOccurrencesOfString("AM", withString: "am", options: NSStringCompareOptions.LiteralSearch, range: nil)
-        timedateLabel.text = dateString
-        timedateLabel.font = UIFont(name: "OpenSans", size: 17.5)!
-        timedateLabel.textColor = UIColor(red: 61/255, green: 61/255, blue: 61/255, alpha: 1)
+        let attrStr = NSMutableAttributedString(string: dateString, attributes: [NSForegroundColorAttributeName: UIColor.blackColor(), NSFontAttributeName: UIFont(name: "OpenSans", size: 12.5)!])
+        attrStr.addAttribute(NSFontAttributeName, value: UIFont(name: "OpenSans-Bold", size: 12.5)!, range: NSRange(location: attrStr.length - 7, length: 7))
+        timedateLabel.attributedText = attrStr
         timedateLabel.sizeToFit()
         timedateLabel.frame.origin.x = labelInset
         timedateLabel.frame.origin.y = labelInset
         
         // configure change button
         changeDateLabel.text = "change"
-        changeDateLabel.font = UIFont(name: "OpenSans", size: 17.5)
+        changeDateLabel.font = UIFont(name: "OpenSans", size: 12.5)
         changeDateLabel.textColor = UIColor(red: 0/255, green: 150/255, blue: 171/255, alpha: 1)
         changeDateLabel.sizeToFit()
         changeDateLabel.frame.origin.x = self.view.frame.width - (labelInset + changeDateLabel.frame.width)
@@ -134,12 +134,10 @@ class EditNoteViewController: UIViewController, UITextViewDelegate {
         
         // configure hashtags view
         hashtagsView.backgroundColor = UIColor.clearColor()
-        let hashtagsViewH = 3 * hashtagHeight + 4 * labelInset
-        hashtagsView.frame.size = CGSize(width: self.view.frame.width, height: hashtagsViewH)
+        hashtagsView.frame.size = CGSize(width: self.view.frame.width, height: expandedHashtagsViewH)
         hashtagsView.frame.origin.x = 0
         hashtagsView.frame.origin.y = separatorOne.frame.maxY
-        fetchHashtags()
-        configureHashtagButtons()
+        hashtagsView.configureHashtagsView()
         
         self.view.addSubview(hashtagsView)
         
@@ -201,7 +199,7 @@ class EditNoteViewController: UIViewController, UITextViewDelegate {
         let cameraY = postButton.frame.midY - cameraButton.frame.height / 2
         cameraButton.frame.origin = CGPoint(x: cameraX, y: cameraY)
         
-        self.view.addSubview(cameraButton)
+//        self.view.addSubview(cameraButton)
         
         // configure location button
         let location = UIImage(named: "location") as UIImage!
@@ -212,7 +210,7 @@ class EditNoteViewController: UIViewController, UITextViewDelegate {
         let locationY = postButton.frame.midY - locationButton.frame.height / 2
         locationButton.frame.origin = CGPoint(x: locationX, y: locationY)
         
-        self.view.addSubview(locationButton)
+//        self.view.addSubview(locationButton)
         
         let notificationCenter = NSNotificationCenter.defaultCenter()
         notificationCenter.addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
@@ -257,8 +255,7 @@ class EditNoteViewController: UIViewController, UITextViewDelegate {
             UIView.animateKeyframesWithDuration(0.3, delay: 0.0, options: nil, animations: { () -> Void in
                 
                 self.separatorOne.frame.origin.y = self.timedateLabel.frame.maxY + labelInset
-                let hashtagsViewH = 3 * hashtagHeight + 4 * labelInset
-                self.hashtagsView.frame.size = CGSize(width: self.hashtagsView.frame.width, height: hashtagsViewH)
+                self.hashtagsView.frame.size = CGSize(width: self.hashtagsView.frame.width, height: expandedHashtagsViewH)
                 self.hashtagsView.frame.origin.y = self.separatorOne.frame.maxY
                 self.separatorTwo.frame.origin.y = self.hashtagsView.frame.maxY
                 let coverUpH = self.view.frame.height - self.separatorTwo.frame.maxY
@@ -313,7 +310,7 @@ class EditNoteViewController: UIViewController, UITextViewDelegate {
     }
     
     func toggleHashtags() {
-        if (hashtagsCollapsed) {
+        if (hashtagsView.hashtagsCollapsed) {
             openHashtagsCompletely()
         } else {
             closeHashtagsPartially()
@@ -321,13 +318,13 @@ class EditNoteViewController: UIViewController, UITextViewDelegate {
     }
     
     func closeHashtagsPartially() {
-        if (!hashtagsCollapsed && !isAnimating) {
+        if (!hashtagsView.hashtagsCollapsed && !isAnimating) {
             isAnimating = true
             UIView.animateKeyframesWithDuration(0.3, delay: 0.0, options: nil, animations: { () -> Void in
                 
-                let hashtagsViewH = labelInset + hashtagHeight + labelInset
-                self.hashtagsView.frame.size = CGSize(width: self.hashtagsView.frame.width, height: hashtagsViewH)
+                self.hashtagsView.frame.size = CGSize(width: self.hashtagsView.frame.width, height: condensedHashtagsViewH)
                 self.hashtagsView.frame.origin.y = self.separatorOne.frame.maxY
+                self.hashtagsView.linearHashtagArrangement()
                 self.separatorTwo.frame.origin.y = self.hashtagsView.frame.maxY
                 let coverUpH = self.view.frame.height - self.separatorTwo.frame.maxY
                 self.coverUp.frame.size = CGSize(width: self.view.frame.width, height: coverUpH)
@@ -354,25 +351,25 @@ class EditNoteViewController: UIViewController, UITextViewDelegate {
                     if (completed) {
                         if (UIDevice.currentDevice().modelName == "iPhone 4S") {
                             self.changeDateLabel.text = "done"
-                            self.changeDateLabel.font = UIFont(name: "OpenSans-Bold", size: 17.5)!
+                            self.changeDateLabel.font = UIFont(name: "OpenSans-Bold", size: 12.5)!
                             self.changeDateLabel.sizeToFit()
                             self.changeDateLabel.frame.origin.x = self.view.frame.width - (labelInset + self.changeDateLabel.frame.width)
                         }
                         
-                        self.hashtagsCollapsed = true
+                        self.hashtagsView.hashtagsCollapsed = true
                     }
             })
         }
     }
     
     func openHashtagsCompletely() {
-        if (hashtagsCollapsed && !isAnimating) {
+        if (hashtagsView.hashtagsCollapsed && !isAnimating) {
             isAnimating = true
             UIView.animateKeyframesWithDuration(0.3, delay: 0.0, options: nil, animations: { () -> Void in
                 
-                let hashtagsViewH = 3 * hashtagHeight + 4 * labelInset
-                self.hashtagsView.frame.size = CGSize(width: self.hashtagsView.frame.width, height: hashtagsViewH)
+                self.hashtagsView.frame.size = CGSize(width: self.hashtagsView.frame.width, height: expandedHashtagsViewH)
                 self.hashtagsView.frame.origin.y = self.separatorOne.frame.maxY
+                self.hashtagsView.pageHashtagArrangement()
                 self.separatorTwo.frame.origin.y = self.hashtagsView.frame.maxY
                 let coverUpH = self.view.frame.height - self.separatorTwo.frame.maxY
                 self.coverUp.frame.size = CGSize(width: self.view.frame.width, height: coverUpH)
@@ -389,12 +386,12 @@ class EditNoteViewController: UIViewController, UITextViewDelegate {
                     if (completed) {
                         if (UIDevice.currentDevice().modelName == "iPhone 4S") {
                             self.changeDateLabel.text = "change"
-                            self.changeDateLabel.font = UIFont(name: "OpenSans", size: 17.5)!
+                            self.changeDateLabel.font = UIFont(name: "OpenSans", size: 12.5)!
                             self.changeDateLabel.sizeToFit()
                             self.changeDateLabel.frame.origin.x = self.view.frame.width - (labelInset + self.changeDateLabel.frame.width)
                         }
                         
-                        self.hashtagsCollapsed = false
+                        self.hashtagsView.hashtagsCollapsed = false
                     }
             })
         }
@@ -432,7 +429,7 @@ class EditNoteViewController: UIViewController, UITextViewDelegate {
             
             for word in words {
                 if (word.hasPrefix("#")) {
-                    self.handleHashtagCoreData(word)
+                    self.hashtagsView.handleHashtagCoreData(word)
                 }
             }
             
@@ -444,212 +441,16 @@ class EditNoteViewController: UIViewController, UITextViewDelegate {
         }
     }
     
-    func handleHashtagCoreData(text: String) {
-        
-        let appDelegate =
-        UIApplication.sharedApplication().delegate as! AppDelegate
-        
-        let managedContext = appDelegate.managedObjectContext!
-        
-        let fetchRequest = NSFetchRequest(entityName:"Hashtag")
-        
-        var error: NSError?
-        
-        let fetchedResults =
-        managedContext.executeFetchRequest(fetchRequest,
-            error: &error) as? [NSManagedObject]
-        
-        if let results = fetchedResults {
-            var found = false
-            
-            for result in results {
-                if (result.valueForKey("text") as! String == text) {
-                    found = true
-                    
-                    let usages = (result.valueForKey("usages") as! Int) + 1
-                    result.setValue(usages, forKey: "usages")
-                    
-                    var errorTwo: NSError?
-                    if !managedContext.save(&errorTwo) {
-                        println("Could not save \(errorTwo), \(errorTwo?.userInfo)")
-                    }
-                    
-                    break
-                }
-            }
-            
-            if (!found) {
-                let entity =  NSEntityDescription.entityForName("Hashtag",
-                    inManagedObjectContext:
-                    managedContext)
-                
-                let hashtag = NSManagedObject(entity: entity!,
-                    insertIntoManagedObjectContext:managedContext)
-                
-                hashtag.setValue(text, forKey: "text")
-                hashtag.setValue(1, forKey: "usages")
-                
-                var errorTwo: NSError?
-                if !managedContext.save(&errorTwo) {
-                    println("Could not save \(errorTwo), \(errorTwo?.userInfo)")
-                }
-            }
-            
-        } else {
-            println("Could not fetch \(error), \(error!.userInfo)")
-        }
-    }
-    
-    func fetchHashtags() {
-        
-        let appDelegate =
-        UIApplication.sharedApplication().delegate as! AppDelegate
-        
-        let managedContext = appDelegate.managedObjectContext!
-        
-        let fetchRequest = NSFetchRequest(entityName:"Hashtag")
-        
-        let sortDescriptor = NSSortDescriptor(key: "usages", ascending: false)
-        fetchRequest.sortDescriptors = [sortDescriptor]
-        
-        var error: NSError?
-        
-        let fetchedResults =
-        managedContext.executeFetchRequest(fetchRequest,
-            error: &error) as? [NSManagedObject]
-        
-        if let results = fetchedResults {
-            self.hashtags = results
-        } else {
-            println("Could not fetch \(error), \(error!.userInfo)")
-        }
-        
-        if (self.hashtags.count == 0) {
-            self.getAndSetDefaultHashtags()
-        }
-    }
-    
-    func getAndSetDefaultHashtags() {
-        let defaults = ["#exercise", "#low", "#high", "#meal", "#snack", "#stress", "#pumpfail", "#cgmfail", "#success", "#juicebox", "#pumpchange", "#cgmchange"]
-        
-        let appDelegate =
-        UIApplication.sharedApplication().delegate as! AppDelegate
-        
-        let managedContext = appDelegate.managedObjectContext!
-        
-        for text in defaults {
-            let entity =  NSEntityDescription.entityForName("Hashtag",
-                inManagedObjectContext:
-                managedContext)
-            
-            let hashtag = NSManagedObject(entity: entity!,
-                insertIntoManagedObjectContext:managedContext)
-            
-            hashtag.setValue(text, forKey: "text")
-            hashtag.setValue(1, forKey: "usages")
-            
-            var error: NSError?
-            if !managedContext.save(&error) {
-                println("Could not save \(error), \(error?.userInfo)")
-            }
-            
-            hashtags.append(hashtag)
-        }
-    }
-    
-    func configureHashtagButtons() {
-        
-        var index = 0
-        var row = 0
-        var col = 0
-        
-        var buttonRow: [UIButton] = []
-        
-        while (true) {
-            
-            if (index >= hashtags.count || row > 2) {
-                break
-            }
-            
-            let hashtagButton = configureHashtagButton(index)
-            
-            var buttonX: CGFloat
-            
-            if (col == 0) {
-                buttonX = labelInset
-            } else {
-                buttonX = buttonRow[col - 1].frame.maxX + 2 * labelSpacing
-            }
-            
-            if ((buttonX + hashtagButton.frame.width) > (self.view.frame.width - labelInset)) {
-                hashtagButtons.append(buttonRow)
-                buttonRow = []
-                row++
-                col = 0
-                continue
-            } else {
-                buttonRow.append(hashtagButton)
-            }
-            
-            buttonRow[col].frame.origin.x = buttonX
-            
-            index++
-            col++
-        }
-        hashtagButtons.append(buttonRow)
-        
-        row = 0
-        for bRow in hashtagButtons {
-            
-            let buttonY = CGFloat(row + 1) * labelInset + CGFloat(row) * hashtagHeight
-            
-            var totalButtonWidth: CGFloat = CGFloat(0)
-            var i = 0
-            for button in bRow {
-                totalButtonWidth += button.frame.width + 2 * labelSpacing
-                i++
-            }
-            
-            let totalWidth = totalButtonWidth - 2 * labelSpacing
-            let halfWidth = totalWidth / 2
-            
-            var buttonX = self.view.frame.width / 2 - halfWidth
-            for button in bRow {
-                button.frame.origin = CGPoint(x: buttonX, y: buttonY)
-                self.hashtagsView.addSubview(button)
-                buttonX = button.frame.maxX + 2 * labelSpacing
-            }
-            
-            row++
-        }
-    }
-    
-    func configureHashtagButton(index: Int) -> UIButton {
-        let hashtagButton = UIButton(frame: CGRectZero)
-        let hashtag = hashtags[index]
-        let hashtagText = hashtag.valueForKey("text") as! String
-        hashtagButton.setAttributedTitle(NSAttributedString(string: hashtagText,
-            attributes:[NSForegroundColorAttributeName: UIColor(red: 61/255, green: 61/255, blue: 61/255, alpha: 1), NSFontAttributeName: UIFont(name: "OpenSans", size: 17.5)!]), forState: .Normal)
-        hashtagButton.frame.size.height = hashtagHeight
-        hashtagButton.sizeToFit()
-        hashtagButton.frame.size.width = hashtagButton.frame.width + 4 * labelSpacing
-        hashtagButton.backgroundColor = UIColor.whiteColor()
-        hashtagButton.layer.cornerRadius = hashtagButton.frame.height / 2
-        hashtagButton.layer.borderWidth = 1
-        hashtagButton.layer.borderColor = UIColor(red: 167/255, green: 167/255, blue: 167/255, alpha: 1).CGColor
-        hashtagButton.addTarget(self, action: "hashtagPressed:", forControlEvents: .TouchUpInside)
-        
-        return hashtagButton
-    }
-    
-    func hashtagPressed(sender: UIButton!) {
-        if (messageBox.text == "Type a note...") {
-            messageBox.text = sender.titleLabel!.text!
+    func hashtagPressed(notification: NSNotification) {
+        let userInfo:Dictionary<String,String!> = notification.userInfo as! Dictionary<String,String!>
+        let hashtag = userInfo["hashtag"]!
+        if (messageBox.text == defaultMessage) {
+            messageBox.text = hashtag
         } else {
             if (self.messageBox.text.hasSuffix(" ")) {
-                messageBox.text = messageBox.text + sender.titleLabel!.text!
+                messageBox.text = messageBox.text + hashtag
             } else {
-                messageBox.text = messageBox.text + " " + sender.titleLabel!.text!
+                messageBox.text = messageBox.text + " " + hashtag
             }
         }
         textViewDidChange(messageBox)
@@ -672,7 +473,6 @@ class EditNoteViewController: UIViewController, UITextViewDelegate {
     }
     
     func textViewDidEndEditing(textView: UITextView) {
-        // shift things back down and stuff
         if textView.text.isEmpty {
             textView.text = "Type a note..."
             textView.textColor = UIColor(red: 167/255, green: 167/255, blue: 167/255, alpha: 1)
@@ -680,8 +480,15 @@ class EditNoteViewController: UIViewController, UITextViewDelegate {
     }
     
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
-        if (!isAnimating) {
-            view.endEditing(true)
+        if let touch = touches.first as? UITouch {
+            let touchLocation = touch.locationInView(self.view)
+            let viewFrame = self.view.convertRect(hashtagsView.frame, fromView: hashtagsView.superview)
+            
+            if !CGRectContainsPoint(viewFrame, touchLocation) {
+                if (!isAnimating) {
+                    view.endEditing(true)
+                }
+            }
         }
         super.touchesBegan(touches, withEvent: event)
     }

@@ -39,7 +39,7 @@ class HashtagsView: UIView {
             
             let numberPages = Int(totalLinearHashtagsWidth / (self.frame.width / 2))
             
-            if (linearHashtagsPage < numberPages - 1 && !isAnimating) {
+            if (linearHashtagsPage < numberPages && !isAnimating) {
                 isAnimating = true
                 UIView.animateKeyframesWithDuration(0.2, delay: 0.0, options: nil, animations: { () -> Void in
                     self.linearHashtagsPage += 1
@@ -266,7 +266,7 @@ class HashtagsView: UIView {
             var row = 0
             for bRow in bPage {
                 
-                let buttonY = labelInset + CGFloat(row) * (hashtagHeight + 2 * labelSpacing)
+                let buttonY = labelInset + CGFloat(row) * (hashtagHeight + 1.5 * labelSpacing)
                 
                 var totalButtonWidth: CGFloat = CGFloat(0)
                 var i = 0
@@ -278,11 +278,13 @@ class HashtagsView: UIView {
                 let totalWidth = totalButtonWidth - 2 * labelSpacing
                 let halfWidth = totalWidth / 2
                 
-                var buttonX = CGFloat(page - hashtagsPage) * self.frame.width + self.frame.width / 2 - halfWidth
+                var buttonX = CGFloat(page - hashtagsPage) * (self.frame.width - 3.5 * labelInset) + self.frame.width / 2 - halfWidth
+                var col = 0
                 for button in bRow {
                     button.frame.origin = CGPoint(x: buttonX, y: buttonY)
                     self.addSubview(button)
                     buttonX = button.frame.maxX + 2 * labelSpacing
+                    col++
                 }
                 
                 row++

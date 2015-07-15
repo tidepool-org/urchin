@@ -21,8 +21,25 @@ class HashtagBolder {
         
         for word in words {
             if (word.hasPrefix("#")) {
-                if (boldedWords[word as! String] != nil) {
-                    let previousOccurances = boldedWords[word as! String]!
+                var charsInHashtag: Int = 0
+                let symbols = NSCharacterSet.symbolCharacterSet()
+                let punctuation = NSCharacterSet.punctuationCharacterSet()
+                for char in (word as! String).unicodeScalars {
+                    if (char == "#" && charsInHashtag == 0) {
+                        charsInHashtag++
+                        continue
+                    }
+                    if (!punctuation.longCharacterIsMember(char.value) && !symbols.longCharacterIsMember(char.value)) {
+                        charsInHashtag++
+                    } else {
+                        break
+                    }
+                }
+                
+                let newword = (word as! NSString).substringToIndex(charsInHashtag)
+                
+                if (boldedWords[newword] != nil) {
+                    let previousOccurances = boldedWords[newword]!
                     var textHolder = text
                     
                     var i = 0
@@ -30,17 +47,18 @@ class HashtagBolder {
                         if (i == previousOccurances) {
                             break
                         }
-                        let range: NSRange = textHolder.rangeOfString(word as! String, options: NSStringCompareOptions.BackwardsSearch)
+                        let range: NSRange = textHolder.rangeOfString(newword, options: NSStringCompareOptions.BackwardsSearch)
                         textHolder = textHolder.substringToIndex(range.location + range.length - 1)
                         i++
                     }
-                    let range: NSRange = textHolder.rangeOfString(word as! String, options: NSStringCompareOptions.BackwardsSearch)
+                    let range: NSRange = textHolder.rangeOfString(newword, options: NSStringCompareOptions.BackwardsSearch)
                     attributedText.addAttributes([NSFontAttributeName: UIFont(name: "OpenSans-Bold", size: 17.5)!], range: range)
                     
-                    boldedWords[word as! String]! += 1
+                    boldedWords[newword]! += 1
                 } else {
-                    boldedWords[word as! String] = 1
-                    let range: NSRange = text.rangeOfString(word as! String, options: NSStringCompareOptions.BackwardsSearch)
+                    
+                    boldedWords[newword] = 1
+                    let range: NSRange = text.rangeOfString(newword, options: NSStringCompareOptions.BackwardsSearch)
                     attributedText.addAttributes([NSFontAttributeName: UIFont(name: "OpenSans-Bold", size: 17.5)!], range: range)
                 }
             }

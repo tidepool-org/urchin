@@ -10,7 +10,9 @@ import Foundation
 import UIKit
 import CoreData
 
-let hashtagHeight: CGFloat = 41
+let hashtagHeight: CGFloat = 36.0
+let expandedHashtagsViewH: CGFloat = 2 * labelInset + 3 * hashtagHeight + 3 * labelSpacing
+let condensedHashtagsViewH: CGFloat = 2 * labelInset + hashtagHeight
 let defaultMessage: String = "What's going on?"
 
 class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDataSource, UITableViewDelegate {
@@ -21,6 +23,8 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
     var dropDownHeight: CGFloat
     var opaqueOverlay: UIView!
     var overlayHeight: CGFloat
+    
+    let closeButton: UIBarButtonItem
     
     let timedateLabel: UILabel
     let changeDateLabel: UILabel
@@ -52,6 +56,8 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
         // UI Elements
         self.dropDownHeight = CGFloat(groups.count) * userCellHeight + CGFloat(groups.count-1)*userCellThinSeparator
         self.overlayHeight = CGFloat(0)
+        
+        closeButton = UIBarButtonItem()
         
         timedateLabel = UILabel(frame: CGRectZero)
         changeDateLabel = UILabel(frame: CGRectZero)
@@ -88,14 +94,23 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.LightContent
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+                
         self.view.backgroundColor = UIColor(red: 247/255, green: 247/255, blue: 248/255, alpha: 1)
         
         configureTitleView(group.name)
         
-        var closeButton: UIBarButtonItem = UIBarButtonItem(image: UIImage(named: "closex")!, style: .Plain, target: self, action: "closeVC:")
+        closeButton.image = UIImage(named: "closex")!
+        closeButton.style = .Plain
+        closeButton.target = self
+        closeButton.action = "closeVC:"
         self.navigationItem.setLeftBarButtonItem(closeButton, animated: true)
         
         var rightDropDownMenuButton: UIBarButtonItem = UIBarButtonItem(image: UIImage(named: "down"), style: .Plain, target: self, action: "dropDownMenuPressed")
@@ -103,20 +118,20 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
     
         // configure date label
         let dateFormatter = NSDateFormatter()
-        dateFormatter.dateFormat = "EEEE M.d.yy h:mm a"
+        dateFormatter.dateFormat = "EEEE M.d.yy h:mma"
         var dateString = dateFormatter.stringFromDate(note.timestamp)
         dateString = dateString.stringByReplacingOccurrencesOfString("PM", withString: "pm", options: NSStringCompareOptions.LiteralSearch, range: nil)
         dateString = dateString.stringByReplacingOccurrencesOfString("AM", withString: "am", options: NSStringCompareOptions.LiteralSearch, range: nil)
-        timedateLabel.text = dateString
-        timedateLabel.font = UIFont(name: "OpenSans", size: 17.5)!
-        timedateLabel.textColor = UIColor(red: 61/255, green: 61/255, blue: 61/255, alpha: 1)
+        let attrStr = NSMutableAttributedString(string: dateString, attributes: [NSForegroundColorAttributeName: UIColor.blackColor(), NSFontAttributeName: UIFont(name: "OpenSans", size: 12.5)!])
+        attrStr.addAttribute(NSFontAttributeName, value: UIFont(name: "OpenSans-Bold", size: 12.5)!, range: NSRange(location: attrStr.length - 7, length: 7))
+        timedateLabel.attributedText = attrStr
         timedateLabel.sizeToFit()
         timedateLabel.frame.origin.x = labelInset
         timedateLabel.frame.origin.y = labelInset
         
         // configure change button
         changeDateLabel.text = "change"
-        changeDateLabel.font = UIFont(name: "OpenSans", size: 17.5)
+        changeDateLabel.font = UIFont(name: "OpenSans", size: 12.5)
         changeDateLabel.textColor = UIColor(red: 0/255, green: 150/255, blue: 171/255, alpha: 1)
         changeDateLabel.sizeToFit()
         changeDateLabel.frame.origin.x = self.view.frame.width - (labelInset + changeDateLabel.frame.width)
@@ -151,8 +166,7 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
         
         // configure hashtags view
         hashtagsView.backgroundColor = UIColor.clearColor()
-        let hashtagsViewH = 3 * hashtagHeight + 2 * labelInset + 4 * labelSpacing
-        hashtagsView.frame.size = CGSize(width: self.view.frame.width, height: hashtagsViewH)
+        hashtagsView.frame.size = CGSize(width: self.view.frame.width, height: expandedHashtagsViewH)
         hashtagsView.frame.origin.x = 0
         hashtagsView.frame.origin.y = separatorOne.frame.maxY
         hashtagsView.configureHashtagsView()
@@ -216,7 +230,7 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
         let cameraY = postButton.frame.midY - cameraButton.frame.height / 2
         cameraButton.frame.origin = CGPoint(x: cameraX, y: cameraY)
         
-        self.view.addSubview(cameraButton)
+//        self.view.addSubview(cameraButton)
         
         // configure location button
         let location = UIImage(named: "location") as UIImage!
@@ -227,7 +241,7 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
         let locationY = postButton.frame.midY - locationButton.frame.height / 2
         locationButton.frame.origin = CGPoint(x: locationX, y: locationY)
         
-        self.view.addSubview(locationButton)
+//        self.view.addSubview(locationButton)
         
         overlayHeight = self.view.frame.height
         opaqueOverlay = UIView(frame: CGRectMake(0, -overlayHeight, self.view.frame.width, overlayHeight))
@@ -266,7 +280,7 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
     func configureTitleView(text: String) {
         let titleView = UILabel()
         titleView.text = text
-        titleView.font = UIFont(name: "OpenSans", size: 25)!
+        titleView.font = UIFont(name: "OpenSans", size: 17.5)!
         titleView.textColor = UIColor.whiteColor()
         let width = titleView.sizeThatFits(CGSizeMake(CGFloat.max, CGFloat.max)).width
         titleView.frame = CGRect(origin:CGPointZero, size:CGSizeMake(width, 500))
@@ -279,16 +293,16 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
     
     func closeVC(sender: UIBarButtonItem!) {
         if (!messageBox.text.isEmpty && messageBox.text != defaultMessage) {
-            let alert = UIAlertController(title: "Discard Changes?", message: "You have made changes to this note. Would you like to discard these changes?", preferredStyle: UIAlertControllerStyle.Alert)
-            alert.addAction(UIAlertAction(title: "Discard",
-                style: UIAlertActionStyle.Destructive,
+            let alert = UIAlertController(title: "Discard Note?", message: "If you close this note, your note will be lost.", preferredStyle: UIAlertControllerStyle.Alert)
+            alert.addAction(UIAlertAction(title: "Cancel",
+                style: .Default,
+                handler: nil))
+            alert.addAction(UIAlertAction(title: "Okay",
+                style: UIAlertActionStyle.Default,
                 handler: {(alert: UIAlertAction!) in
                     self.view.endEditing(true)
                     self.closeDatePicker(false)
                     self.dismissViewControllerAnimated(true, completion: nil)}))
-            alert.addAction(UIAlertAction(title: "Cancel",
-                style: UIAlertActionStyle.Default,
-                handler: nil))
             self.presentViewController(alert, animated: true, completion: nil)
         } else {
             self.view.endEditing(true)
@@ -314,8 +328,7 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
             UIView.animateKeyframesWithDuration(0.3, delay: 0.0, options: nil, animations: { () -> Void in
                 
                 self.separatorOne.frame.origin.y = self.timedateLabel.frame.maxY + labelInset
-                let hashtagsViewH = 3 * hashtagHeight + 2 * labelInset + 4 * labelSpacing
-                self.hashtagsView.frame.size = CGSize(width: self.hashtagsView.frame.width, height: hashtagsViewH)
+                self.hashtagsView.frame.size = CGSize(width: self.hashtagsView.frame.width, height: expandedHashtagsViewH)
                 self.hashtagsView.frame.origin.y = self.separatorOne.frame.maxY
                 self.separatorTwo.frame.origin.y = self.hashtagsView.frame.maxY
                 let coverUpH = self.view.frame.height - self.separatorTwo.frame.maxY
@@ -382,8 +395,7 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
             isAnimating = true
             UIView.animateKeyframesWithDuration(0.3, delay: 0.0, options: nil, animations: { () -> Void in
                 
-                let hashtagsViewH = labelInset + hashtagHeight + labelInset
-                self.hashtagsView.frame.size = CGSize(width: self.hashtagsView.frame.width, height: hashtagsViewH)
+                self.hashtagsView.frame.size = CGSize(width: self.hashtagsView.frame.width, height: condensedHashtagsViewH)
                 self.hashtagsView.frame.origin.y = self.separatorOne.frame.maxY
                 self.hashtagsView.linearHashtagArrangement()
                 self.separatorTwo.frame.origin.y = self.hashtagsView.frame.maxY
@@ -412,7 +424,7 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
                     if (completed) {
                         if (UIDevice.currentDevice().modelName == "iPhone 4S") {
                             self.changeDateLabel.text = "done"
-                            self.changeDateLabel.font = UIFont(name: "OpenSans-Bold", size: 17.5)!
+                            self.changeDateLabel.font = UIFont(name: "OpenSans-Bold", size: 12.5)!
                             self.changeDateLabel.sizeToFit()
                             self.changeDateLabel.frame.origin.x = self.view.frame.width - (labelInset + self.changeDateLabel.frame.width)
                         }
@@ -428,8 +440,7 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
             isAnimating = true
             UIView.animateKeyframesWithDuration(0.3, delay: 0.0, options: nil, animations: { () -> Void in
                 
-                let hashtagsViewH = 3 * hashtagHeight + 2 * labelInset + 4 * labelSpacing
-                self.hashtagsView.frame.size = CGSize(width: self.hashtagsView.frame.width, height: hashtagsViewH)
+                self.hashtagsView.frame.size = CGSize(width: self.hashtagsView.frame.width, height: expandedHashtagsViewH)
                 self.hashtagsView.pageHashtagArrangement()
                 self.hashtagsView.frame.origin.y = self.separatorOne.frame.maxY
                 self.separatorTwo.frame.origin.y = self.hashtagsView.frame.maxY
@@ -448,7 +459,7 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
                     if (completed) {
                         if (UIDevice.currentDevice().modelName == "iPhone 4S") {
                             self.changeDateLabel.text = "change"
-                            self.changeDateLabel.font = UIFont(name: "OpenSans", size: 17.5)!
+                            self.changeDateLabel.font = UIFont(name: "OpenSans", size: 12.5)!
                             self.changeDateLabel.sizeToFit()
                             self.changeDateLabel.frame.origin.x = self.view.frame.width - (labelInset + self.changeDateLabel.frame.width)
                         }
@@ -492,7 +503,24 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
             
             for word in words {
                 if (word.hasPrefix("#")) {
-                    self.hashtagsView.handleHashtagCoreData(word)
+                    var charsInHashtag: Int = 0
+                    let symbols = NSCharacterSet.symbolCharacterSet()
+                    let punctuation = NSCharacterSet.punctuationCharacterSet()
+                    for char in word.unicodeScalars {
+                        if (char == "#" && charsInHashtag == 0) {
+                            charsInHashtag++
+                            continue
+                        }
+                        if (!punctuation.longCharacterIsMember(char.value) && !symbols.longCharacterIsMember(char.value)) {
+                            charsInHashtag++
+                        } else {
+                            break
+                        }
+                    }
+                    
+                    let newword = (word as NSString).substringToIndex(charsInHashtag)
+                    
+                    self.hashtagsView.handleHashtagCoreData(newword)
                 }
             }
             
@@ -578,9 +606,11 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
         view.endEditing(true)
         if (isDropDownDisplayed) {
             configureTitleView(group.name)
+            self.navigationItem.leftBarButtonItem = closeButton
             self.hideDropDownMenu()
         } else {
-            configureTitleView("")
+            configureTitleView("Note for...")
+            self.navigationItem.leftBarButtonItem = nil
             self.showDropDownMenu()
         }
     }
@@ -592,6 +622,7 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
         obstructionFrame.origin.y = -overlayHeight
         self.animateDropDownToFrame(frame, obstructionFrame: obstructionFrame) {
             self.isDropDownDisplayed = false
+            self.dropDownMenu.reloadData()
         }
     }
     
@@ -627,14 +658,14 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(UserDropDownCell), forIndexPath: indexPath) as! UserDropDownCell
         
-        cell.configureWithGroup(groups[indexPath.row], arrow: false)
+        cell.configureWithGroup(groups[indexPath.row], arrow: false, bold: group === groups[indexPath.row])
         
         return cell
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         let cell = UserDropDownCell(style: .Default, reuseIdentifier: nil)
-        cell.configureWithGroup(groups[indexPath.row], arrow: false)
+        cell.configureWithGroup(groups[indexPath.row], arrow: false, bold: group === groups[indexPath.row])
         return cell.cellHeight
     }
     

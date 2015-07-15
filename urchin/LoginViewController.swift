@@ -11,7 +11,7 @@ import UIKit
 
 let labelInset: CGFloat = 16
 
-class LogInViewController : UIViewController {
+class LogInViewController : UIViewController, UITextFieldDelegate {
     
     // UI Elements
     let logoView: UIImageView
@@ -52,6 +52,12 @@ class LogInViewController : UIViewController {
         super.init(coder: aDecoder)
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.Default
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -65,16 +71,16 @@ class LogInViewController : UIViewController {
         logoView.frame = CGRect(x: imageX, y: 0, width: imageSize, height: imageSize)
         
         // configure title
-        titleLabel.text = "urchin"
-        titleLabel.font = UIFont(name: "OpenSans-Bold", size: 25)!
+        titleLabel.text = "Blip notes"
+        titleLabel.font = UIFont(name: "OpenSans", size: 25)!
         titleLabel.textColor = UIColor(red: 61/255, green: 61/255, blue: 61/255, alpha: 1)
         titleLabel.sizeToFit()
         let titleX = self.view.frame.width / 2 - titleLabel.frame.width / 2
         titleLabel.frame = CGRectMake(titleX, 0, titleLabel.frame.width, titleLabel.frame.height)
         
         // configure email entry field
-        let emailFieldWidth = self.view.frame.width - 2 * labelInset
-        let emailFieldHeight = CGFloat(48)
+        let emailFieldWidth = self.view.frame.width - 2 * 25.0
+        let emailFieldHeight = CGFloat(71)
         let emailFieldX = self.view.frame.width / 2 - emailFieldWidth / 2
         emailField.frame = CGRectMake(emailFieldX, 0, emailFieldWidth, emailFieldHeight)
         emailField.borderStyle = UITextBorderStyle.Line
@@ -96,10 +102,12 @@ class LogInViewController : UIViewController {
         emailField.keyboardType = UIKeyboardType.EmailAddress
         emailField.returnKeyType = UIReturnKeyType.Done
         emailField.secureTextEntry = false
+        emailField.delegate = self
+        emailField.addTarget(self, action: "textFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
         
         // configure password entry field
-        let passwordFieldWidth = self.view.frame.width - 2 * labelInset
-        let passwordFieldHeight = CGFloat(48)
+        let passwordFieldWidth = self.view.frame.width - 2 * 25.0
+        let passwordFieldHeight = CGFloat(71)
         let passwordFieldX = self.view.frame.width / 2 - passwordFieldWidth / 2
         passwordField.frame = CGRectMake(passwordFieldX, 0, passwordFieldWidth, passwordFieldHeight)
         passwordField.borderStyle = UITextBorderStyle.Line
@@ -121,9 +129,11 @@ class LogInViewController : UIViewController {
         passwordField.keyboardType = UIKeyboardType.Default
         passwordField.returnKeyType = UIReturnKeyType.Done
         passwordField.secureTextEntry = true
+        passwordField.delegate = self
+        passwordField.addTarget(self, action: "textFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
         
         // configure the remember me check box
-        let rememberX = labelInset
+        let rememberX = CGFloat(25)
         let unchecked = UIImage(named: "unchecked") as UIImage!
         rememberMeCheckbox.setImage(unchecked, forState: .Normal)
         rememberMeCheckbox.addTarget(self, action: "checkboxPressed:", forControlEvents: .TouchUpInside)
@@ -138,21 +148,22 @@ class LogInViewController : UIViewController {
         rememberMeLabel.addGestureRecognizer(tapGesture)
         rememberMeLabel.userInteractionEnabled = true
         rememberMeLabel.sizeToFit()
-        let rememberLabelX = rememberX + rememberMeCheckbox.frame.width + labelSpacing
+        let rememberLabelX = rememberX + rememberMeCheckbox.frame.width + 11.0
         rememberMeLabel.frame = CGRectMake(rememberLabelX, 0, rememberMeLabel.frame.width, rememberMeLabel.frame.height)
         
         // configure log in button
         let logInWidth = CGFloat(100)
         let logInHeight = CGFloat(50)
-        let logInX = self.view.frame.width - (labelInset + logInWidth)
+        let logInX = self.view.frame.width - (25.0 + logInWidth)
         logInButton.frame = CGRectMake(logInX, 0, logInWidth, logInHeight)
         logInButton.backgroundColor = UIColor(red: 0/255, green: 150/255, blue: 171/255, alpha: 1)
+        logInButton.alpha = 0.5
         logInButton.setAttributedTitle(NSAttributedString(string:"Log in",
             attributes:[NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont(name: "OpenSans", size: 17.5)!]), forState: UIControlState.Normal)
-        logInButton.addTarget(self, action: "logInPressed:", forControlEvents: .TouchUpInside)
+        logInButton.addTarget(self, action: "logInPressed", forControlEvents: .TouchUpInside)
         
         // determine halfHeight of all UI elements
-        halfHeight = (titleLabel.frame.height + labelSpacing + logoView.frame.height + 4*labelSpacing + emailField.frame.height + labelSpacing + passwordField.frame.height + 2*labelSpacing + logInButton.frame.height) / 2
+        halfHeight = (titleLabel.frame.height + 14.5 + logoView.frame.height + 26.5 + emailField.frame.height + 10.21 + passwordField.frame.height + 12.5 + logInButton.frame.height) / 2
         
         // configure y-position of UI elements relative to center of view
         let centerY = self.view.frame.height / 2
@@ -181,15 +192,22 @@ class LogInViewController : UIViewController {
         
         let notificationCenter = NSNotificationCenter.defaultCenter()
         notificationCenter.addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
-        notificationCenter.addObserver(self, selector: "keyboardDidShow:", name: UIKeyboardDidShowNotification, object: nil)
+        notificationCenter.addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
     }
     
-    func logInPressed(sender: UIButton!) {
+    func logInPressed() {
 
-        makeTransition()
+        if (!emailField.text.isEmpty && isValidEmail(emailField.text) && !passwordField.text.isEmpty && !isAnimating) {
+            view.endEditing(true)
+            makeTransition()
+        }
     }
     
     func makeTransition() {
+        
+        emailField.text = ""
+        passwordField.text = ""
+        
         let sarapatient = Patient(birthday: NSDate(), diagnosisDate: NSDate(), aboutMe: "Designer guru.")
         let notesScene = UINavigationController(rootViewController: NotesViewController(user: User(firstName: "Sara", lastName: "Krugman", patient: sarapatient)))
         self.presentViewController(notesScene, animated: true, completion: nil)
@@ -220,8 +238,8 @@ class LogInViewController : UIViewController {
         self.moveUpLogIn()
     }
     
-    func keyboardDidShow(notification: NSNotification) {
-
+    func keyboardWillHide(notification: NSNotification) {
+        self.moveDownLogIn()
     }
     
     func moveUpLogIn() {
@@ -263,23 +281,56 @@ class LogInViewController : UIViewController {
         logInButton.frame.origin.y = bottomY - logInButton.frame.height
         rememberMeCheckbox.frame.origin.y = logInButton.frame.midY - rememberMeCheckbox.frame.height / 2
         rememberMeLabel.frame.origin.y = logInButton.frame.midY - rememberMeLabel.frame.height / 2
-        passwordField.frame.origin.y = logInButton.frame.origin.y - (2*labelSpacing + passwordField.frame.height)
-        emailField.frame.origin.y = passwordField.frame.origin.y - (labelSpacing + emailField.frame.height)
+        passwordField.frame.origin.y = logInButton.frame.origin.y - (12.5 + passwordField.frame.height)
+        emailField.frame.origin.y = passwordField.frame.origin.y - (10.21 + emailField.frame.height)
         configureLogoFrame()
-        logoView.frame.origin.y = emailField.frame.origin.y - (4*labelSpacing + logoView.frame.height)
+        logoView.frame.origin.y = emailField.frame.origin.y - (26.5 + logoView.frame.height)
         if (logoView.frame.height >= 50) {
-            titleLabel.frame.origin.y = logoView.frame.origin.y - (labelSpacing + titleLabel.frame.height)
+            titleLabel.frame.origin.y = logoView.frame.origin.y - (14.5 + titleLabel.frame.height)
         } else {
-            titleLabel.frame.origin.y = emailField.frame.origin.y - (2*labelSpacing + titleLabel.frame.height)
+            titleLabel.frame.origin.y = emailField.frame.origin.y - (26.5 + titleLabel.frame.height)
         }
     }
     
     func configureLogoFrame() {
         let topToEmailField = emailField.frame.minY
-        var proposedLogoSize = topToEmailField - (9 * labelSpacing + titleLabel.frame.height)
+        var proposedLogoSize = topToEmailField - (73.5 + titleLabel.frame.height)
         proposedLogoSize = min(proposedLogoSize, logoView.image!.size.height)
         let imageX = self.view.frame.width / 2 - CGFloat(proposedLogoSize / 2)
         logoView.frame = CGRect(x: imageX, y: 0, width: proposedLogoSize, height: proposedLogoSize)
+    }
+    
+    func textFieldDidBeginEditing(textField: UITextField) {
+        textField.layer.borderColor = UIColor(red: 0/255, green: 150/255, blue: 171/255, alpha: 1).CGColor
+    }
+    
+    func textFieldDidEndEditing(textField: UITextField) {
+        textField.layer.borderColor = UIColor(red: 234/255, green: 234/255, blue: 234/255, alpha: 1).CGColor
+    }
+    
+    func textFieldDidChange(textField: UITextField) {
+        if (!emailField.text.isEmpty && isValidEmail(emailField.text) && !passwordField.text.isEmpty) {
+            logInButton.alpha = 1.0
+        } else {
+            logInButton.alpha = 0.5
+        }
+    }
+    
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        if (textField.isEqual(emailField)) {
+            passwordField.becomeFirstResponder()
+        } else {
+            logInPressed()
+        }
+        
+        return true
+    }
+    
+    func isValidEmail(testStr:String) -> Bool {
+        let emailRegEx = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
+        
+        let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
+        return emailTest.evaluateWithObject(testStr)
     }
     
     override func shouldAutorotate() -> Bool {

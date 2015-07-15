@@ -42,16 +42,16 @@ class NoteCell: UITableViewCell {
         usernameLabel.frame.origin = CGPoint(x: usernameX, y: usernameY)
         
         let dateFormatter = NSDateFormatter()
-        dateFormatter.dateFormat = "EEEE M.d.yy h:mm a"
+        dateFormatter.dateFormat = "EEEE M.d.yy h:mma"
         var dateString = dateFormatter.stringFromDate(note.timestamp)
         dateString = dateString.stringByReplacingOccurrencesOfString("PM", withString: "pm", options: NSStringCompareOptions.LiteralSearch, range: nil)
         dateString = dateString.stringByReplacingOccurrencesOfString("AM", withString: "am", options: NSStringCompareOptions.LiteralSearch, range: nil)
-        timedateLabel.text = dateString
-        timedateLabel.font = UIFont(name: "OpenSans", size: 12.5)!
-        timedateLabel.textColor = UIColor.blackColor()
+        let attrStr = NSMutableAttributedString(string: dateString, attributes: [NSForegroundColorAttributeName: UIColor.blackColor(), NSFontAttributeName: UIFont(name: "OpenSans", size: 12.5)!])
+        attrStr.addAttribute(NSFontAttributeName, value: UIFont(name: "OpenSans-Bold", size: 12.5)!, range: NSRange(location: attrStr.length - 7, length: 7))
+        timedateLabel.attributedText = attrStr
         timedateLabel.sizeToFit()
         let helperLabel = UILabel(frame: CGRectZero)
-        helperLabel.text = "Helper"
+        helperLabel.text = "Howard"
         helperLabel.font = UIFont(name: "OpenSans-Bold", size: 17.5)!
         helperLabel.sizeToFit()
         helperLabel.frame.origin = usernameLabel.frame.origin
@@ -76,17 +76,18 @@ class NoteCell: UITableViewCell {
         contentView.addSubview(messageLabel)
         
         if (note.user === user) {
-            println("adding the edit button")
             editButton.frame = CGRectZero
-            let editTitle = NSAttributedString(string: "edit", attributes: [NSForegroundColorAttributeName: UIColor(red: 0/255, green: 150/255, blue: 171/255, alpha: 1), NSFontAttributeName: UIFont(name: "OpenSans", size: 17.5)!])
+            let editTitle = NSAttributedString(string: "edit", attributes: [NSForegroundColorAttributeName: UIColor(red: 0/255, green: 150/255, blue: 171/255, alpha: 1), NSFontAttributeName: UIFont(name: "OpenSans", size: 12.5)!])
             editButton.setAttributedTitle(editTitle, forState: .Normal)
             editButton.sizeToFit()
-            editButton.frame.size.height = 17.5
+            editButton.frame.size.height = 12.5
             let editX = contentView.frame.width - (noteCellInset + editButton.frame.width)
             let editY = messageLabel.frame.maxY + 2 * labelSpacing
             editButton.frame.origin = CGPoint(x: editX, y: editY)
             
             contentView.addSubview(editButton)
+        } else {
+            editButton.removeFromSuperview()
         }
         
         if (borders) {

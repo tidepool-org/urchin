@@ -67,11 +67,16 @@ class UserDropDownCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configureWithGroup(group: Group, arrow: Bool) {
+    func configureWithGroup(group: Group, arrow: Bool, bold: Bool) {
         self.group = group
         
         nameLabel.frame = CGRectMake(6*userCellInset, userCellInset, contentView.frame.width + userCellInset, 20.0)
         self.nameLabel.text = group.name
+        if (bold) {
+            nameLabel.font = UIFont(name: "OpenSans-Bold", size: 17.5)!
+        } else {
+            nameLabel.font = UIFont(name: "OpenSans", size: 17.5)!
+        }
         nameLabel.sizeToFit()
         rightView.frame.origin.y = nameLabel.frame.midY - rightView.frame.height / 2
         
@@ -83,6 +88,8 @@ class UserDropDownCell: UITableViewCell {
         
         if (!arrow) {
             self.rightView.hidden = true
+            
+            nameLabel.frame.origin.x = self.frame.width / 2 - nameLabel.frame.width / 2
         }
     }
     
@@ -90,13 +97,18 @@ class UserDropDownCell: UITableViewCell {
         nameLabel.text = "All"
         nameLabel.font = UIFont(name: "OpenSans-Bold", size: 17.5)!
         nameLabel.sizeToFit()
+        nameLabel.frame.origin.y = userCellThickSeparator + userCellInset
         rightView.frame.origin.y = nameLabel.frame.midY - rightView.frame.height / 2
         
-        let separator = UIView(frame: CGRectMake(0, self.frame.height - userCellThickSeparator, self.frame.width, userCellThickSeparator))
+        let separator = UIView(frame: CGRectMake(0, 0, self.frame.width, userCellThickSeparator))
         separator.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.25)
         self.addSubview(separator)
         
-        self.cellHeight = userCellInset + nameLabel.frame.height + userCellInset + separator.frame.height
+        let separatorTwo = UIView(frame: CGRectMake(0, self.frame.height - userCellThinSeparator, self.frame.width, userCellThinSeparator))
+        separatorTwo.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.25)
+        self.addSubview(separatorTwo)
+        
+        self.cellHeight = userCellThickSeparator + userCellInset + nameLabel.frame.height + userCellInset + userCellThinSeparator
     }
     
     func configureLogout() {
