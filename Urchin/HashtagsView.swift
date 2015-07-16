@@ -357,40 +357,36 @@ class HashtagsView: UIView {
         for bPage in pagedHashtagButtons {
             var row = 0
             for bRow in bPage {
-                
-                // y origin is based upon which row the hashtag is in
-                let buttonY = labelInset + CGFloat(row) * (hashtagHeight + 1.5 * labelSpacing)
-                
-                // Find the total width of the row
-                var totalButtonWidth: CGFloat = CGFloat(0)
-                var i = 0
-                for button in bRow {
-                    totalButtonWidth += button.frame.width + 2 * labelSpacing
-                    i++
-                }
-                
-                // Determine the width between the outer margins
-                let totalWidth = totalButtonWidth - 2 * labelSpacing
-                // Take the halfWidth
-                let halfWidth = totalWidth / 2
-                
-                // x origin of the left most button in the row
-                // (page - hashtagsPage) for paging
-                var buttonX = CGFloat(page - hashtagsPage) * (self.frame.width - 3.0 * labelInset) + self.frame.width / 2 - halfWidth
                 var col = 0
                 for button in bRow {
-                    // Add the button at the proper origin
+                    // y origin is based upon which row the hashtag is in
+                    let buttonY = labelInset + CGFloat(row) * (hashtagHeight + 1.5 * labelSpacing)
+                    
+                    // buttonX is dependant on the first button on the first page for each row
+                    var buttonX: CGFloat
+                    if (page == 0 && col == 0) {
+                        // First button on first page for each row
+                        // labelInset with a variant for the current page
+                        buttonX = labelInset - CGFloat(hashtagsPage) * self.frame.width / 2
+                    } else if (col == 0) {
+                        // First button on any other page, in any row
+                        // Based upon the maxX of the last button on the previous page in the same row
+                        buttonX = pagedHashtagButtons[page - 1][row][pagedHashtagButtons[page - 1][row].count - 1].frame.maxX + 2 * labelSpacing
+                    } else {
+                        // Any other button
+                        // Based upon the previous button in the row (same page)
+                        buttonX = bRow[col - 1].frame.maxX + 2 * labelSpacing
+                    }
+                    
                     button.frame.origin = CGPoint(x: buttonX, y: buttonY)
                     self.addSubview(button)
-                    // increase the buttonX for the next button
-                    buttonX = button.frame.maxX + 2 * labelSpacing
+                    
                     col++
                 }
-                
                 row++
             }
             page++
-        }
+        }               
     }
     
     // For when the HashtagsView is condensed
