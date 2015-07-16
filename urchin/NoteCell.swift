@@ -15,8 +15,6 @@ let labelSpacing: CGFloat = 6
 
 class NoteCell: UITableViewCell {
     
-    let borders = false
-    
     var note: Note?
     
     let usernameLabel: UILabel = UILabel()
@@ -24,10 +22,12 @@ class NoteCell: UITableViewCell {
     let editButton: UIButton = UIButton()
     var messageLabel: UILabel = UILabel()
     
+    // Configure the note cell to contain... the note!
     func configureWithNote(note: Note, user: User) {
         
         self.note = note
         
+        // Configure the username label, with the full name
         let usernameWidth = (contentView.frame.width - 2*noteCellInset) / 2
         usernameLabel.frame.size = CGSize(width: usernameWidth, height: CGFloat.max)
         usernameLabel.text = note.user!.fullName
@@ -41,9 +41,12 @@ class NoteCell: UITableViewCell {
         let usernameY = noteCellInset
         usernameLabel.frame.origin = CGPoint(x: usernameX, y: usernameY)
         
+        // Configure the date label using extended dateFormatter
         let dateFormatter = NSDateFormatter()
         timedateLabel.attributedText = dateFormatter.attributedStringFromDate(note.timestamp)
         timedateLabel.sizeToFit()
+        // use a one line helper label to determine 
+        // where the bottom of the first line of the name label is
         let helperLabel = UILabel(frame: CGRectZero)
         helperLabel.text = "Howard"
         helperLabel.font = UIFont(name: "OpenSans-Bold", size: 17.5)!
@@ -53,6 +56,7 @@ class NoteCell: UITableViewCell {
         let timedateY = helperLabel.frame.maxY - (timedateLabel.frame.height + 2)
         timedateLabel.frame.origin = CGPoint(x: timedateX, y: timedateY)
         
+        // Configure the message label, leverage the hashtag bolder
         messageLabel.frame.size = CGSize(width: contentView.frame.width - 2 * noteCellInset, height: CGFloat.max)
         let hashtagBolder = HashtagBolder()
         let attributedText = hashtagBolder.boldHashtags(note.messagetext)
@@ -69,6 +73,8 @@ class NoteCell: UITableViewCell {
         contentView.addSubview(timedateLabel)
         contentView.addSubview(messageLabel)
         
+        // If the note was made by the current user, be able to edit it
+        // otherwise, don't put the edit button in
         if (note.user === user) {
             editButton.frame = CGRectZero
             let editTitle = NSAttributedString(string: "edit", attributes: [NSForegroundColorAttributeName: UIColor(red: 0/255, green: 150/255, blue: 171/255, alpha: 1), NSFontAttributeName: UIFont(name: "OpenSans", size: 12.5)!])
@@ -82,23 +88,6 @@ class NoteCell: UITableViewCell {
             contentView.addSubview(editButton)
         } else {
             editButton.removeFromSuperview()
-        }
-        
-        if (borders) {
-            usernameLabel.layer.borderWidth = 1
-            usernameLabel.layer.borderColor = UIColor.redColor().CGColor
-            
-            timedateLabel.layer.borderWidth = 1
-            timedateLabel.layer.borderColor = UIColor.redColor().CGColor
-            
-            editButton.layer.borderWidth = 1
-            editButton.layer.borderColor = UIColor.redColor().CGColor
-            
-            messageLabel.layer.borderWidth = 1
-            messageLabel.layer.borderColor = UIColor.redColor().CGColor
-            
-            self.contentView.layer.borderWidth = 1
-            self.contentView.layer.borderColor = UIColor.blueColor().CGColor
         }
     }
     

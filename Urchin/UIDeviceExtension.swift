@@ -5,6 +5,9 @@
 //  Created by Ethan Look on 7/13/15.
 //  Copyright (c) 2015 Tidepool. All rights reserved.
 //
+//  UIDevice extension to identify the exact device being used.
+//  More than just 'iPhone' or 'Simulator'
+//
 
 import UIKit
 
