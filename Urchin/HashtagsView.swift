@@ -25,6 +25,7 @@ class HashtagsView: UIView {
     
     // Keep track of the total widths
     var totalLinearHashtagsWidth: CGFloat = 0
+    var totalPagedHashtagsWidth: CGFloat = 0
     
     // Helpers for animations
     var hashtagsCollapsed: Bool = false
@@ -51,7 +52,7 @@ class HashtagsView: UIView {
             // hashtags are collapsed, swipe in linear arrangement
             
             // Number of pages that can be swiped
-            let numberPages = Int(totalLinearHashtagsWidth / (self.frame.width / 2))
+            let numberPages = Int(2 * totalLinearHashtagsWidth / self.frame.width - 1)
             
             // If it's not all the way to the right, or already animating --> do animation
             if (linearHashtagsPage < numberPages && !isAnimating) {
@@ -67,8 +68,11 @@ class HashtagsView: UIView {
         } else {
             // hashtags are expanded, swipe in page arrangement
             
+            // Number of pages that can be swiped
+            let numberPages = Int(2 * totalPagedHashtagsWidth / self.frame.width - 1)
+            
             // If it's not all the way to the right, or already animating --> do animation
-            if (hashtagsPage < pagedHashtagButtons.count - 1 && !isAnimating) {
+            if (hashtagsPage < numberPages && !isAnimating) {
                 isAnimating = true
                 UIView.animateKeyframesWithDuration(0.2, delay: 0.0, options: nil, animations: { () -> Void in
                     // Increase the current page and reposition
@@ -353,6 +357,14 @@ class HashtagsView: UIView {
     
     // For when the HashtagsView is expanded
     func pageHashtagArrangement() {
+        
+        // For determining the total width of paged hashtags
+        // Keep track of the total width of each row
+        // Longest row will determine total width of paged hashtags
+        var rowZeroWidth: CGFloat = 0.0
+        var rowOneWidth: CGFloat = 0.0
+        var rowTwoWidth: CGFloat = 0.0
+        
         var page = 0
         for bPage in pagedHashtagButtons {
             var row = 0
@@ -381,12 +393,29 @@ class HashtagsView: UIView {
                     button.frame.origin = CGPoint(x: buttonX, y: buttonY)
                     self.addSubview(button)
                     
+                    // Keep track of row width
+                    if (row == 0) {
+                        rowZeroWidth += button.frame.width + 2 * labelSpacing
+                    } else if (row == 1) {
+                        rowOneWidth += button.frame.width + 2 * labelSpacing
+                    } else if (row == 2) {
+                        rowTwoWidth += button.frame.width + 2 * labelSpacing
+                    }
+                    
                     col++
                 }
                 row++
             }
             page++
-        }               
+        }
+        
+        // Compensate for extra spacing added for last label
+        rowZeroWidth -= 2 * labelSpacing
+        rowOneWidth -= 2 * labelSpacing
+        rowTwoWidth -= 2 * labelSpacing
+        
+        // Set the total paged width to the maximum of the three
+        totalPagedHashtagsWidth = max(rowZeroWidth, rowOneWidth, rowTwoWidth)
     }
     
     // For when the HashtagsView is condensed
