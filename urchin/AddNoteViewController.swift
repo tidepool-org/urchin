@@ -47,6 +47,7 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
     
     // Separator between hashtags and messageBox
     let separatorTwo: UIView
+    
     // Cover so hashtags are partially hidden when condensed
     //      might not be necessary now that hashtags jump to linear arrangement
     let coverUp: UIView
@@ -325,7 +326,7 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
         titleView.addGestureRecognizer(recognizer)
     }
     
-    // close the VC on button press from leftBar
+    // close the VC on button press from leftBarButtonItem
     func closeVC(sender: UIBarButtonItem!) {
         if (!messageBox.text.isEmpty && messageBox.text != defaultMessage) {
             // If the note has been edited, show an alert
