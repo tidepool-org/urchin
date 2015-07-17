@@ -60,14 +60,14 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
     
     // Data
     let note: Note
-    var group: Group
-    var groups: [Group]
+    var group: User
+    var groups: [User]
     let user: User
     
     // Keyboard frame for positioning UI Elements
     var keyboardFrame: CGRect
     
-    init(user: User, group: Group, groups: [Group]) {
+    init(user: User, group: User, groups: [User]) {
         
         // UI Elements
         self.dropDownHeight = CGFloat(groups.count) * userCellHeight + CGFloat(groups.count-1)*userCellThinSeparator
@@ -95,7 +95,7 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
         // data
         note = Note()
         note.user = user
-        note.groupid = group.groupid
+        note.groupid = group.userid
         note.messagetext = ""
         self.group = group
         self.groups = groups
@@ -125,7 +125,7 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
         self.view.backgroundColor = UIColor(red: 247/255, green: 247/255, blue: 248/255, alpha: 1)
         
         // Configure title to initial group (may be changed later with dropDown)
-        configureTitleView(group.name)
+        configureTitleView(group.fullName)
         
         // Configure 'x' to close VC
         closeButton.image = UIImage(named: "closex")!
@@ -565,7 +565,7 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
         if (messageBox.text != defaultMessage && !messageBox.text.isEmpty) {
             // if messageBox has text (not default message or empty) --> set the note to have values
             self.note.messagetext = self.messageBox.text
-            self.note.groupid = self.group.groupid
+            self.note.groupid = self.group.userid
             self.note.timestamp = self.datePicker.date
             
             // Identify hashtags
@@ -711,7 +711,7 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
         // toggle the dropDownMenu open or closed
         if (isDropDownDisplayed) {
             // Configure title with the current group name
-            configureTitleView(group.name)
+            configureTitleView(group.fullName)
             // Put the closeButton back as the leftBarButtonItem
             self.navigationItem.leftBarButtonItem = closeButton
             // Finally, close the dropDownMenu
@@ -803,9 +803,9 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
         // cell will dequeue later, possible location for error
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
         let cell = dropDownMenu.cellForRowAtIndexPath(indexPath) as! UserDropDownCell
-        configureTitleView(cell.group.name)
+        configureTitleView(cell.group.fullName)
         self.group = cell.group
-        self.note.groupid = self.group.groupid
+        self.note.groupid = self.group.userid
         self.dropDownMenuPressed()
     }
     

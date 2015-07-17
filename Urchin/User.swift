@@ -10,17 +10,36 @@ import Foundation
 
 class User {
     
-    let firstName: String
-    let lastName: String
     let fullName: String
-    let shortName: String
+    let userid: String
     let patient: Patient
     
-    init(firstName: String, lastName: String, patient: Patient) {
-        self.firstName = firstName
-        self.lastName = lastName
-        self.fullName = firstName + " " + lastName
-        self.shortName = firstName
-        self.patient = patient
+    init(userid: String, apiConnector: APIConnector) {
+        self.userid = userid
+        
+        let userDict = apiConnector.findProfile(userid)
+        if (userDict.count != 0) {
+            self.fullName = userDict["fullName"] as! String
+            
+            let dateFormatter = NSDateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd"
+            
+            self.patient = Patient()
+            
+            if let patientDict = userDict["patient"] as? NSDictionary {
+                if let birthdayString = patientDict["birthday"] as? String {
+                    self.patient.birthday = dateFormatter.dateFromString(birthdayString)!
+                }
+                if let diagnosisString = patientDict["diagnosisDate"] as? String {
+                    self.patient.diagnosisDate = dateFormatter.dateFromString(diagnosisString)!
+                }
+                if let aboutMe = patientDict["about"] as? String {
+                    self.patient.aboutMe = aboutMe
+                }
+            }
+        } else {
+            self.fullName = ""
+            self.patient = Patient()
+        }
     }
 }

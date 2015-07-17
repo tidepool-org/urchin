@@ -235,12 +235,18 @@ class LogInViewController : UIViewController, UITextFieldDelegate {
     // do not call from anywhere besides within logInPressed guards
     func makeTransition() {
         
-        emailField.text = ""
-        passwordField.text = ""
+        let apiConnector = APIConnector()
+        apiConnector.login(emailField.text, password: passwordField.text)
         
-        let sarapatient = Patient(birthday: NSDate(), diagnosisDate: NSDate(), aboutMe: "Designer guru.")
-        let notesScene = UINavigationController(rootViewController: NotesViewController(user: User(firstName: "Sara", lastName: "Krugman", patient: sarapatient)))
-        self.presentViewController(notesScene, animated: true, completion: nil)
+        if (!apiConnector.x_tidepool_session_token.isEmpty && apiConnector.user != nil) {
+            emailField.text = ""
+            passwordField.text = ""
+            
+            let notesScene = UINavigationController(rootViewController: NotesViewController(apiConnector: apiConnector))
+            self.presentViewController(notesScene, animated: true, completion: nil)
+        } else {
+            println("*** DISPLAY ERROR MESSAGES TO USER ***")
+        }
     }
     
     // toggle checkbox, set rememberMe values

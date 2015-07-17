@@ -18,12 +18,15 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
     // Only filtered notes
     var filteredNotes: [Note] = []
     // All groups
-    var groups: [Group] = []
+    var groups: [User] = []
     
     // Current user
     let user: User!
+    // API Connection
+    let apiConnector: APIConnector
+    
     // Current filter (nil if #nofilter)
-    var filter: Group!
+    var filter: User!
     // Table that contains all notes
     var notesTable: UITableView!
     
@@ -43,23 +46,21 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
     // Animation helpers
     var isDropDownDisplayed: Bool = false
     var isDropDownAnimating: Bool = false
-    var dropDownHeight: CGFloat
+    var dropDownHeight: CGFloat = 0
     var overlayHeight: CGFloat
     
     // Possible VCs to push to (sometimes nil)
     var addNoteViewController: AddNoteViewController?
     var editNoteViewController: EditNoteViewController?
     
-    init(user: User) {
-        // Initialize with user (from loginVC)
-        self.user = user
+    init(apiConnector: APIConnector) {
+        // Initialize with API connection and user (from loginVC)
+        self.apiConnector = apiConnector
+        self.user = apiConnector.user!
         
         self.newNoteButton = UIButton.buttonWithType(UIButtonType.System) as! UIButton
         
         self.refreshControl = UIRefreshControl()
-        
-        // dropDownMenu height. Maximum three users.
-        self.dropDownHeight = (3+2)*userCellHeight + (3)*userCellThinSeparator + 2*userCellThickSeparator
         
         // Overlay begins with height 0.0 (animates to larger height)
         self.overlayHeight = CGFloat(0)
@@ -95,6 +96,9 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         notesTable.registerClass(NoteCell.self, forCellReuseIdentifier: NSStringFromClass(NoteCell))
         notesTable.dataSource = self
         notesTable.delegate = self
+        
+        // Fetch the groups for notes and (eventually) dropDownMenu
+        self.loadGroups()
         
         // Fetch all notes
         self.loadNotes()
@@ -143,6 +147,12 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         self.view.addSubview(opaqueOverlay)
         
         // Configure dropDownMenu, same width as view
+        let numGroups = min(groups.count, 3)
+        if (numGroups == groups.count) {
+            self.dropDownHeight = CGFloat(numGroups+2)*userCellHeight + CGFloat(numGroups)*userCellThinSeparator + 2*userCellThickSeparator
+        } else {
+            self.dropDownHeight = (CGFloat(numGroups)+2.5)*userCellHeight + CGFloat(numGroups)*userCellThinSeparator + 2*userCellThickSeparator
+        }
         let dropDownWidth = self.view.frame.width
         self.dropDownMenu = UITableView(frame: CGRect(x: CGFloat(0), y: -dropDownHeight, width: dropDownWidth, height: dropDownHeight))
         dropDownMenu.backgroundColor = UIColor(red: 0/255, green: 54/255, blue: 62/255, alpha: 1)
@@ -154,15 +164,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         dropDownMenu.separatorStyle = UITableViewCellSeparatorStyle.None
         
         // Drop down menu is only scrollable if the content fits
-        if (dropDownMenu.contentSize.height <= dropDownMenu.frame.size.height) {
-            dropDownMenu.scrollEnabled = false;
-        }
-        else {
-            dropDownMenu.scrollEnabled = true;
-        }
-        
-        // Fetch the groups for the dropDownMenu
-        self.loadGroups()
+        dropDownMenu.scrollEnabled = groups.count > 3
         
         self.view.addSubview(dropDownMenu)
         
@@ -198,34 +200,13 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         titleView.addGestureRecognizer(recognizer)
     }
     
-    // Fetch notes (eventually from REST API)
+    // Fetch notes
     func loadNotes() {
-        // for now, set notes myself (ugh)
+        for group in groups {
+            notes = notes + apiConnector.getAllMessagesForUser(group.userid)
+        }
         
-        let dateFormatter = NSDateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        
-        let howardbirthday = dateFormatter.dateFromString("1966-05-21")
-        let howarddiagnosis = dateFormatter.dateFromString("2011-01-01")
-        
-        let howardpatient = Patient(birthday: howardbirthday!, diagnosisDate: howarddiagnosis!, aboutMe: "Fakabetic.")
-        let howard = User(firstName: "Howard", lastName: "Look", patient: howardpatient)
-        let newnote = Note(id: "someid", userid: "howardlook", groupid: "katielook", timestamp: NSDate(), createdtime: NSDate(), messagetext: "This is a new note. I am making the note longer to see if wrapping occurs or not.", user: howard)
-        notes.append(newnote)
-        
-        let anothernote = Note(id: "someid", userid: "howardlook", groupid: "katielook", timestamp: NSDate(), createdtime: NSDate(), messagetext: "This is a another note. I am making the note longer to see if how this looks with multiple notes of different heights. If it goes well, I will be thrilled.", user: howard)
-        notes.append(anothernote)
-        
-        let more = Note(id: "someid", userid: "howardlook", groupid: "sarakrugman", timestamp: NSDate(), createdtime: NSDate(), messagetext: "The 2005 United States Grand Prix was the ninth race and only American race of the 2005 Formula One season. Held at the Indianapolis Motor Speedway, it was won by Ferrari's Michael Schumacher (pictured).", user: howard)
-        notes.append(more)
-        
-        let another = Note(id: "someid", userid: "howardlook", groupid: "katielook", timestamp: NSDate(), createdtime: NSDate(), messagetext: "In basketball, the Golden State Warriors defeat the Cleveland Cavaliers to win the NBA Finals.", user: howard)
-        notes.append(another)
-        
-        let lastone = Note(id: "someid", userid: "howardlook", groupid: "shellysurabouti", timestamp: NSDate(), createdtime: NSDate(), messagetext: "On this day, the royal wedding between Victoria, Crown Princess of Sweden, and Daniel Westling (both pictured) took place in Stockholm Cathedral.", user: howard)
-        notes.append(lastone)
-        
-        // After notes have been fetched, filter the notes
+        notes.sort({$0.timestamp.timeIntervalSinceNow > $1.timestamp.timeIntervalSinceNow})
         
         filterNotes()
     }
@@ -233,7 +214,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
     // Called on newNoteButton press
     func newNote(sender: UIButton!) {
         // determine default option for note's group
-        let groupForVC: Group
+        let groupForVC: User
         if (filter == nil) {
             // if #nofilter, let note's group be first group
             groupForVC = groups[0]
@@ -263,7 +244,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         // instantiate new AddNoteViewController
         // if #nofilter, let the group for AddNoteVC be first group
-        let groupForVC: Group
+        let groupForVC: User
         if (filter == nil) {
             groupForVC = groups[0]
         } else {
@@ -277,7 +258,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         filteredNotes = []
         if (filter != nil) {
             for note in notes {
-                if (note.groupid == filter.groupid) {
+                if (note.groupid == filter.userid) {
                     filteredNotes.append(note)
                 }
             }
@@ -298,15 +279,12 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     // Fetch and load the groups that user is involved in
     func loadGroups() {
-        let sara = Group(name: "Sara Krugman", groupid: "sarakrugman")
-        let katie = Group(name: "Katie Look", groupid: "katielook")
-        let shelly = Group(name: "Shelly Surabouti", groupid: "shellysurabouti")
+        let viewables = apiConnector.getAllViewableUsers()
         
-        groups.append(sara)
-        groups.append(katie)
-        groups.append(shelly)
-        
-        dropDownMenu.reloadData()
+        for viewable in viewables {
+            let group = User(userid: viewable, apiConnector: apiConnector)
+            groups.insert(group, atIndex: 0)
+        }
     }
     
     // For refresh control
@@ -332,7 +310,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
             if (filter == nil) {
                 self.configureTitleView("All Notes")
             } else {
-                self.configureTitleView(filter.name)
+                self.configureTitleView(filter.fullName)
             }
             // Hide the dropDownMenu
             self.hideDropDownMenu()
@@ -533,7 +511,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
                     // Individual group / filter selected
                     let cell = dropDownMenu.cellForRowAtIndexPath(indexPath) as! UserDropDownCell
                     self.filter = cell.group
-                    self.configureTitleView(filter.name)
+                    self.configureTitleView(filter.fullName)
                 }
                 // filter the notes based upon new filter
                 filterNotes()
@@ -542,6 +520,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
             } else {
                 // Logout selected
                 // Unwind VC
+                apiConnector.logout()
                 self.dismissViewControllerAnimated(true, completion: nil)
             }
         }

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AA03FB8A1B5848FD001B9435 /* APIConnect.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA03FB891B5848FD001B9435 /* APIConnect.swift */; };
 		AA3484F01B559EA10028C49B /* HashtagsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3484EF1B559EA10028C49B /* HashtagsView.swift */; };
 		AA3484F41B56AED20028C49B /* UIDateFormatterExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3484F31B56AED20028C49B /* UIDateFormatterExtension.swift */; };
 		AA3652C21B33847A001F514D /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3652C11B33847A001F514D /* User.swift */; };
@@ -61,6 +62,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		AA03FB891B5848FD001B9435 /* APIConnect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIConnect.swift; sourceTree = "<group>"; };
 		AA3484EF1B559EA10028C49B /* HashtagsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HashtagsView.swift; sourceTree = "<group>"; };
 		AA3484F31B56AED20028C49B /* UIDateFormatterExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIDateFormatterExtension.swift; sourceTree = "<group>"; };
 		AA3652C11B33847A001F514D /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -126,6 +128,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AA03FB881B5848CD001B9435 /* API */ = {
+			isa = PBXGroup;
+			children = (
+				AA03FB891B5848FD001B9435 /* APIConnect.swift */,
+			);
+			name = API;
+			sourceTree = "<group>";
+		};
 		AA3484F11B559EAB0028C49B /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -199,6 +209,7 @@
 		AABCEF861B3231910064FE49 /* urchin */ = {
 			isa = PBXGroup;
 			children = (
+				AA03FB881B5848CD001B9435 /* API */,
 				AABCEF891B3231910064FE49 /* AppDelegate.swift */,
 				AAEFB16B1B5062CE000EF8B4 /* Hashtags.xcdatamodeld */,
 				AABCEF8D1B3231910064FE49 /* Main.storyboard */,
@@ -428,6 +439,7 @@
 				AA3484F41B56AED20028C49B /* UIDateFormatterExtension.swift in Sources */,
 				AA3652CC1B34A163001F514D /* Patient.swift in Sources */,
 				AA3652CE1B34A8E4001F514D /* UserDropDownCell.swift in Sources */,
+				AA03FB8A1B5848FD001B9435 /* APIConnect.swift in Sources */,
 				AA698EF01B546B7B004154E0 /* Group.swift in Sources */,
 				AABCEF8A1B3231910064FE49 /* AppDelegate.swift in Sources */,
 				AA3652C41B338525001F514D /* NotesViewController.swift in Sources */,

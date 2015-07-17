@@ -10,14 +10,8 @@ import Foundation
 
 class Patient {
     
-    var birthday: NSDate
-    var diagnosisDate: NSDate
-    var aboutMe: String
-    
-    init(birthday: NSDate, diagnosisDate: NSDate, aboutMe: String) {
-        self.birthday = birthday
-        self.diagnosisDate = diagnosisDate
-        self.aboutMe = aboutMe
-    }
+    var birthday: NSDate?
+    var diagnosisDate: NSDate?
+    var aboutMe: String?
     
 }

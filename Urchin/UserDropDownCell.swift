@@ -25,7 +25,7 @@ class UserDropDownCell: UITableViewCell {
     let rightView: UIImageView
 
     // Group for the cell
-    var group: Group!
+    var group: User!
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         // Configure nameLabel
@@ -71,12 +71,12 @@ class UserDropDownCell: UITableViewCell {
     // Configure the cell to hold a group
     // if arrow, place the right arrow
     // if bold, bold the name
-    func configureWithGroup(group: Group, arrow: Bool, bold: Bool) {
+    func configureWithGroup(group: User, arrow: Bool, bold: Bool) {
         self.group = group
         
         // configure the name label with the group name
         nameLabel.frame = CGRectMake(6*userCellInset, userCellInset, contentView.frame.width + userCellInset, 20.0)
-        self.nameLabel.text = group.name
+        self.nameLabel.text = group.fullName
         if (bold) {
             nameLabel.font = UIFont(name: "OpenSans-Bold", size: 17.5)!
         } else {
