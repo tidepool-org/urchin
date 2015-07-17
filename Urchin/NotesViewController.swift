@@ -30,6 +30,11 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
     // Table that contains all notes
     var notesTable: UITableView!
     
+    // Last date fetched to -- starts at current date
+    var lastDateFetchTo: NSDate = NSDate()
+    // True if currently loading more notes
+    var loadingNotes: Bool = false
+    
     // Overlay for when dropDownMenu is visible
     //      so the user does not play with
     //      notesTable while dropDown is visible
@@ -202,13 +207,33 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     // Fetch notes
     func loadNotes() {
-        for group in groups {
-            notes = notes + apiConnector.getAllMessagesForUser(group.userid)
+        if (!loadingNotes) {
+            loadingNotes = true
+            
+            // Shift back one month to fetch until
+            let dateShift = NSDateComponents()
+            dateShift.month = -3
+            let calendar = NSCalendar.currentCalendar()
+            let startDate = calendar.dateByAddingComponents(dateShift, toDate: lastDateFetchTo, options: nil)!
+            
+            var addedNotes: Int = 0
+            
+            for group in groups {
+                let notesToAdd = apiConnector.getNotesForUserInDateRange(group.userid, start: startDate, end: lastDateFetchTo)
+                notes = notes + notesToAdd
+                addedNotes += notesToAdd.count
+            }
+            
+            if (addedNotes > 0) {
+                lastDateFetchTo = startDate
+            }
+            
+            notes.sort({$0.timestamp.timeIntervalSinceNow > $1.timestamp.timeIntervalSinceNow})
+            
+            filterNotes()
+            
+            loadingNotes = false
         }
-        
-        notes.sort({$0.timestamp.timeIntervalSinceNow > $1.timestamp.timeIntervalSinceNow})
-        
-        filterNotes()
     }
     
     // Called on newNoteButton press
@@ -466,7 +491,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
             
             let cellHeight: CGFloat
             // if the user who created the note is the same as the current user, allow space for edit button
-            if (filteredNotes[indexPath.row].user === user) {
+            if (filteredNotes[indexPath.row].user!.userid == user.userid) {
                 cellHeight = noteCellInset + usernameLabel.frame.height + 2 * labelSpacing + messageLabel.frame.height + 2 * labelSpacing + 12.5 + noteCellInset
             } else {
                 cellHeight = noteCellInset + usernameLabel.frame.height + 2 * labelSpacing + messageLabel.frame.height + noteCellInset
@@ -515,6 +540,8 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
                 }
                 // filter the notes based upon new filter
                 filterNotes()
+                // Scroll notes to top
+                self.notesTable.setContentOffset(CGPointMake(0, 0 - self.notesTable.contentInset.top), animated: true)
                 // toggle the dropDownMenu (hides the dropDownMenu)
                 self.dropDownMenuPressed()
             } else {
@@ -523,6 +550,16 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
                 apiConnector.logout()
                 self.dismissViewControllerAnimated(true, completion: nil)
             }
+        }
+    }
+    
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        let height = scrollView.frame.height
+        let contentYOffset = scrollView.contentOffset.y
+        let distanceFromBottom = scrollView.contentSize.height - contentYOffset
+        
+        if (distanceFromBottom < height && !loadingNotes) {
+            loadNotes()
         }
     }
     

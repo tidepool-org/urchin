@@ -75,7 +75,7 @@ class NoteCell: UITableViewCell {
         
         // If the note was made by the current user, be able to edit it
         // otherwise, don't put the edit button in
-        if (note.user === user) {
+        if (note.user!.userid == user.userid) {
             editButton.frame = CGRectZero
             let editTitle = NSAttributedString(string: "edit", attributes: [NSForegroundColorAttributeName: UIColor(red: 0/255, green: 150/255, blue: 171/255, alpha: 1), NSFontAttributeName: UIFont(name: "OpenSans", size: 12.5)!])
             editButton.setAttributedTitle(editTitle, forState: .Normal)

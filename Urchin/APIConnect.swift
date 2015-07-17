@@ -104,11 +104,15 @@ class APIConnector {
         }
     }
     
-    func getAllMessagesForUser(userid: String) -> [Note] {
-        // '/message/all/' + userId + '?starttime=' + start + '&endtime=' + end
+    func getNotesForUserInDateRange(userid: String, start: NSDate, end: NSDate) -> [Note] {
+        // '/message/notes/' + userId + '?starttime=' + start + '&endtime=' + end
+        // Only top level notes
+        
+        println(isoStringFromDate(start))
+        println(isoStringFromDate(end))
         
         // create the request
-        let url = NSURL(string: "https://api.tidepool.io/message/all/\(userid)?starttime=&endtime=")
+        let url = NSURL(string: "https://api.tidepool.io/message/notes/\(userid)?starttime=\(isoStringFromDate(start))&endtime=\(isoStringFromDate(end))")
         let request = NSMutableURLRequest(URL: url!)
         request.HTTPMethod = "GET"
         request.setValue("\(x_tidepool_session_token)", forHTTPHeaderField: "x-tidepool-session-token")
@@ -158,6 +162,14 @@ class APIConnector {
             dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
             return dateFormatter.dateFromString(string)!
         }
+    }
+    
+    func isoStringFromDate(date: NSDate) -> String {
+        var dateFormatter = NSDateFormatter()
+        dateFormatter.locale = NSLocale(localeIdentifier: "en_US_POSIX")
+        dateFormatter.timeZone = NSTimeZone.localTimeZone()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
+        return dateFormatter.stringFromDate(date)
     }
     
 }
