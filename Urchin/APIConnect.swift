@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 class APIConnector {
     
@@ -104,12 +105,9 @@ class APIConnector {
         }
     }
     
-    func getNotesForUserInDateRange(userid: String, start: NSDate, end: NSDate) -> [Note] {
+    func getNotesForUserInDateRange(notesVC: NotesViewController, userid: String, start: NSDate, end: NSDate) {
         // '/message/notes/' + userId + '?starttime=' + start + '&endtime=' + end
         // Only top level notes
-        
-        println(isoStringFromDate(start))
-        println(isoStringFromDate(end))
         
         // create the request
         let url = NSURL(string: "https://api.tidepool.io/message/notes/\(userid)?starttime=\(isoStringFromDate(start))&endtime=\(isoStringFromDate(end))")
@@ -117,37 +115,46 @@ class APIConnector {
         request.HTTPMethod = "GET"
         request.setValue("\(x_tidepool_session_token)", forHTTPHeaderField: "x-tidepool-session-token")
         
-        var response: NSURLResponse?
-        var error: NSError?
-        let urlData = NSURLConnection.sendSynchronousRequest(request, returningResponse: &response, error: &error)
-        var jsonResult: NSDictionary = (NSJSONSerialization.JSONObjectWithData(urlData!, options: NSJSONReadingOptions.MutableContainers, error: &error) as? NSDictionary)!
-        if (error == nil) {
+        notesVC.loadingNotes = true
+        
+        let loading = LoadingView(text: "Loading notes...")
+        let loadingX = notesVC.notesTable.frame.width / 2 - loading.frame.width / 2
+        let loadingY = notesVC.notesTable.frame.height / 2 - loading.frame.height / 2
+        loading.frame.origin = CGPoint(x: loadingX, y: loadingY)
+        notesVC.view.addSubview(loading)
+        notesVC.view.bringSubviewToFront(loading)
+        
+        NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) {(response, data, error) in
             
             var notes: [Note] = []
+            
+            var jsonResult: NSDictionary = (NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: nil) as? NSDictionary)!
+            
             var messages: NSArray = jsonResult.valueForKey("messages") as! NSArray
             for message in messages {
-                println(message)
-                
                 let id = message.valueForKey("id") as! String
                 let otheruserid = message.valueForKey("userid") as! String
                 let groupid = message.valueForKey("groupid") as! String
-                let timestamp = dateFromISOString(message.valueForKey("timestamp") as! String)
+                let timestamp = self.dateFromISOString(message.valueForKey("timestamp") as! String)
                 var createdtime: NSDate
                 if let created = message.valueForKey("createdtime") as? String {
-                    createdtime = dateFromISOString(created)
+                    createdtime = self.dateFromISOString(created)
                 } else {
                     createdtime = timestamp
                 }
                 let messagetext = message.valueForKey("messagetext") as! String
                 let otheruser = User(userid: otheruserid, apiConnector: self)
-                
+
                 let note = Note(id: id, userid: otheruserid, groupid: groupid, timestamp: timestamp, createdtime: createdtime, messagetext: messagetext, user: otheruser)
                 notes.append(note)
             }
             
-            return notes
-        } else {
-            return []
+            notesVC.notes = notesVC.notes + notes
+            notesVC.notes.sort({$0.timestamp.timeIntervalSinceNow > $1.timestamp.timeIntervalSinceNow})
+            notesVC.filterNotes()
+            notesVC.notesTable.reloadData()
+            notesVC.loadingNotes = false
+            loading.removeFromSuperview()
         }
     }
     

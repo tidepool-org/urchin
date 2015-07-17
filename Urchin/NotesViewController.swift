@@ -102,13 +102,13 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         notesTable.dataSource = self
         notesTable.delegate = self
         
+        self.view.addSubview(notesTable)
+        
         // Fetch the groups for notes and (eventually) dropDownMenu
         self.loadGroups()
         
         // Fetch all notes
         self.loadNotes()
-        
-        self.view.addSubview(notesTable)
         
         // Configure the newNoteButton at bottom of view
         let buttonWidth = self.view.frame.width
@@ -208,31 +208,17 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
     // Fetch notes
     func loadNotes() {
         if (!loadingNotes) {
-            loadingNotes = true
-            
             // Shift back one month to fetch until
             let dateShift = NSDateComponents()
             dateShift.month = -3
             let calendar = NSCalendar.currentCalendar()
             let startDate = calendar.dateByAddingComponents(dateShift, toDate: lastDateFetchTo, options: nil)!
             
-            var addedNotes: Int = 0
-            
             for group in groups {
-                let notesToAdd = apiConnector.getNotesForUserInDateRange(group.userid, start: startDate, end: lastDateFetchTo)
-                notes = notes + notesToAdd
-                addedNotes += notesToAdd.count
+                apiConnector.getNotesForUserInDateRange(self, userid: group.userid, start: startDate, end: lastDateFetchTo)
             }
             
-            if (addedNotes > 0) {
-                lastDateFetchTo = startDate
-            }
-            
-            notes.sort({$0.timestamp.timeIntervalSinceNow > $1.timestamp.timeIntervalSinceNow})
-            
-            filterNotes()
-            
-            loadingNotes = false
+            self.lastDateFetchTo = startDate
         }
     }
     

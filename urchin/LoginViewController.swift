@@ -235,6 +235,12 @@ class LogInViewController : UIViewController, UITextFieldDelegate {
     // do not call from anywhere besides within logInPressed guards
     func makeTransition() {
         
+        let loading = LoadingView(text: "Logging in...")
+        let loadingX = self.view.frame.width / 2 - loading.frame.width / 2
+        let loadingY = self.view.frame.height / 2 - loading.frame.height / 2
+        loading.frame.origin = CGPoint(x: loadingX, y: loadingY)
+        self.view.addSubview(loading)
+        
         let apiConnector = APIConnector()
         apiConnector.login(emailField.text, password: passwordField.text)
         
@@ -243,8 +249,11 @@ class LogInViewController : UIViewController, UITextFieldDelegate {
             passwordField.text = ""
             
             let notesScene = UINavigationController(rootViewController: NotesViewController(apiConnector: apiConnector))
-            self.presentViewController(notesScene, animated: true, completion: nil)
+            self.presentViewController(notesScene, animated: true, completion: {
+                loading.removeFromSuperview()
+            })
         } else {
+            loading.removeFromSuperview()
             println("*** DISPLAY ERROR MESSAGES TO USER ***")
         }
     }
