@@ -24,9 +24,7 @@ class LoadingView: UIView {
     
     init(text: String) {
         super.init(frame: CGRectZero)
-        
-        println("i am awesome")
-        
+                
         self.layer.cornerRadius = 10
         self.backgroundColor = UIColor(red: 61/255, green: 61/255, blue: 61/255, alpha: 1)
         

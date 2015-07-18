@@ -226,34 +226,24 @@ class LogInViewController : UIViewController, UITextFieldDelegate {
         // Guards against invalid credentials and animation occuring
         if (checkCredentials() && !isAnimating) {
             view.endEditing(true)
-            makeTransition()
+            
+            let apiConnector = APIConnector()
+            apiConnector.login(self, username: emailField.text, password: passwordField.text)
         }
     }
     
     // pass through to notes scene
     // *** DOES NOT HAVE GUARDS ***
     // do not call from anywhere besides within logInPressed guards
-    func makeTransition() {
-        
-        let loading = LoadingView(text: "Logging in...")
-        let loadingX = self.view.frame.width / 2 - loading.frame.width / 2
-        let loadingY = self.view.frame.height / 2 - loading.frame.height / 2
-        loading.frame.origin = CGPoint(x: loadingX, y: loadingY)
-        self.view.addSubview(loading)
-        
-        let apiConnector = APIConnector()
-        apiConnector.login(emailField.text, password: passwordField.text)
+    func makeTransition(apiConnector: APIConnector) {
         
         if (!apiConnector.x_tidepool_session_token.isEmpty && apiConnector.user != nil) {
             emailField.text = ""
             passwordField.text = ""
             
             let notesScene = UINavigationController(rootViewController: NotesViewController(apiConnector: apiConnector))
-            self.presentViewController(notesScene, animated: true, completion: {
-                loading.removeFromSuperview()
-            })
+            self.presentViewController(notesScene, animated: true, completion: nil)
         } else {
-            loading.removeFromSuperview()
             println("*** DISPLAY ERROR MESSAGES TO USER ***")
         }
     }

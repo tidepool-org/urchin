@@ -125,7 +125,7 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
         self.view.backgroundColor = UIColor(red: 247/255, green: 247/255, blue: 248/255, alpha: 1)
         
         // Configure title to initial group (may be changed later with dropDown)
-        configureTitleView(group.fullName)
+        configureTitleView(group.fullName!)
         
         // Configure 'x' to close VC
         closeButton.image = UIImage(named: "closex")!
@@ -711,7 +711,7 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
         // toggle the dropDownMenu open or closed
         if (isDropDownDisplayed) {
             // Configure title with the current group name
-            configureTitleView(group.fullName)
+            configureTitleView(group.fullName!)
             // Put the closeButton back as the leftBarButtonItem
             self.navigationItem.leftBarButtonItem = closeButton
             // Finally, close the dropDownMenu
@@ -803,7 +803,7 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
         // cell will dequeue later, possible location for error
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
         let cell = dropDownMenu.cellForRowAtIndexPath(indexPath) as! UserDropDownCell
-        configureTitleView(cell.group.fullName)
+        configureTitleView(cell.group.fullName!)
         self.group = cell.group
         self.note.groupid = self.group.userid
         self.dropDownMenuPressed()

@@ -19,11 +19,15 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
     var filteredNotes: [Note] = []
     // All groups
     var groups: [User] = []
+    // Count how many groups have metadata
+    var groupsWMetadata: Int = 0
     
     // Current user
     let user: User!
     // API Connection
     let apiConnector: APIConnector
+    // Number of ongoing message fetches
+    var numberFetches: Int = 0
     
     // Current filter (nil if #nofilter)
     var filter: User!
@@ -104,12 +108,6 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         self.view.addSubview(notesTable)
         
-        // Fetch the groups for notes and (eventually) dropDownMenu
-        self.loadGroups()
-        
-        // Fetch all notes
-        self.loadNotes()
-        
         // Configure the newNoteButton at bottom of view
         let buttonWidth = self.view.frame.width
         let buttonX = CGFloat(0)
@@ -141,37 +139,9 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         self.view.addSubview(newNoteButton)
         
-        // Configure and add the overlay, has same height as view
-        overlayHeight = self.view.frame.height
-        opaqueOverlay = UIView(frame: CGRectMake(0, -overlayHeight, self.view.frame.width, overlayHeight))
-        opaqueOverlay.backgroundColor = UIColor(red: 61/255, green: 61/255, blue: 61/255, alpha: 0.75)
-        // tapGesture closes the dropDownMenu (and overlay)
-        let tapGesture = UITapGestureRecognizer(target: self, action: "dropDownMenuPressed")
-        tapGesture.numberOfTapsRequired = 1
-        opaqueOverlay.addGestureRecognizer(tapGesture)
-        self.view.addSubview(opaqueOverlay)
-        
-        // Configure dropDownMenu, same width as view
-        let numGroups = min(groups.count, 3)
-        if (numGroups == groups.count) {
-            self.dropDownHeight = CGFloat(numGroups+2)*userCellHeight + CGFloat(numGroups)*userCellThinSeparator + 2*userCellThickSeparator
-        } else {
-            self.dropDownHeight = (CGFloat(numGroups)+2.5)*userCellHeight + CGFloat(numGroups)*userCellThinSeparator + 2*userCellThickSeparator
-        }
-        let dropDownWidth = self.view.frame.width
-        self.dropDownMenu = UITableView(frame: CGRect(x: CGFloat(0), y: -dropDownHeight, width: dropDownWidth, height: dropDownHeight))
-        dropDownMenu.backgroundColor = UIColor(red: 0/255, green: 54/255, blue: 62/255, alpha: 1)
-        dropDownMenu.rowHeight = userCellHeight
-        dropDownMenu.separatorInset.left = userCellInset
-        dropDownMenu.registerClass(UserDropDownCell.self, forCellReuseIdentifier: NSStringFromClass(UserDropDownCell))
-        dropDownMenu.dataSource = self
-        dropDownMenu.delegate = self
-        dropDownMenu.separatorStyle = UITableViewCellSeparatorStyle.None
-        
-        // Drop down menu is only scrollable if the content fits
-        dropDownMenu.scrollEnabled = groups.count > 3
-        
-        self.view.addSubview(dropDownMenu)
+        // Fetch the groups for notes and (eventually) dropDownMenu
+        // Successful completion of fetch will configure dropDownMenu and then load notes
+        self.loadGroups()
         
         // Add refresh control to the notesTable
         self.refreshControl.addTarget(self, action: "refreshNotesTable:", forControlEvents: UIControlEvents.ValueChanged)
@@ -186,6 +156,16 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         let notificationCenter = NSNotificationCenter.defaultCenter()
         notificationCenter.addObserver(self, selector: "addNote:", name: "addNote", object: nil)
         notificationCenter.addObserver(self, selector: "saveNote:", name: "saveNote", object: nil)
+        // Listen for when group metadata has been fetched
+        notificationCenter.addObserver(self, selector: "anotherGroup:", name: "anotherGroup", object: nil)
+    }
+    
+    func anotherGroup(notification: NSNotification) {
+        groupsWMetadata++
+        if (groups.count != 0 && groupsWMetadata == groups.count + 1) {
+            configureDropDownMenu()
+            self.loadNotes()
+        }
     }
     
     // Configure title of navigationBar to given string
@@ -208,7 +188,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
     // Fetch notes
     func loadNotes() {
         if (!loadingNotes) {
-            // Shift back one month to fetch until
+            // Shift back three months for fetching
             let dateShift = NSDateComponents()
             dateShift.month = -3
             let calendar = NSCalendar.currentCalendar()
@@ -288,14 +268,9 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         notesTable.reloadData()
     }
     
-    // Fetch and load the groups that user is involved in
+    // Fetch and load the groups/teams that user is involved in
     func loadGroups() {
-        let viewables = apiConnector.getAllViewableUsers()
-        
-        for viewable in viewables {
-            let group = User(userid: viewable, apiConnector: apiConnector)
-            groups.insert(group, atIndex: 0)
-        }
+        apiConnector.getAllViewableUsers(self)
     }
     
     // For refresh control
@@ -314,6 +289,40 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         self.presentViewController(editNoteScene, animated: true, completion: nil)
     }
     
+    func configureDropDownMenu() {
+        // Configure and add the overlay, has same height as view
+        overlayHeight = self.view.frame.height
+        opaqueOverlay = UIView(frame: CGRectMake(0, -overlayHeight, self.view.frame.width, overlayHeight))
+        opaqueOverlay.backgroundColor = UIColor(red: 61/255, green: 61/255, blue: 61/255, alpha: 0.75)
+        // tapGesture closes the dropDownMenu (and overlay)
+        let tapGesture = UITapGestureRecognizer(target: self, action: "dropDownMenuPressed")
+        tapGesture.numberOfTapsRequired = 1
+        opaqueOverlay.addGestureRecognizer(tapGesture)
+        self.view.addSubview(opaqueOverlay)
+        
+        // Configure dropDownMenu, same width as view
+        let numGroups = min(groups.count, 3)
+        if (numGroups == groups.count) {
+            self.dropDownHeight = CGFloat(numGroups+2)*userCellHeight + CGFloat(numGroups)*userCellThinSeparator + 2*userCellThickSeparator
+        } else {
+            self.dropDownHeight = (CGFloat(numGroups)+2.5)*userCellHeight + CGFloat(numGroups)*userCellThinSeparator + 2*userCellThickSeparator
+        }
+        let dropDownWidth = self.view.frame.width
+        self.dropDownMenu = UITableView(frame: CGRect(x: CGFloat(0), y: -dropDownHeight, width: dropDownWidth, height: dropDownHeight))
+        dropDownMenu.backgroundColor = UIColor(red: 0/255, green: 54/255, blue: 62/255, alpha: 1)
+        dropDownMenu.rowHeight = userCellHeight
+        dropDownMenu.separatorInset.left = userCellInset
+        dropDownMenu.registerClass(UserDropDownCell.self, forCellReuseIdentifier: NSStringFromClass(UserDropDownCell))
+        dropDownMenu.dataSource = self
+        dropDownMenu.delegate = self
+        dropDownMenu.separatorStyle = UITableViewCellSeparatorStyle.None
+        
+        // Drop down menu is only scrollable if the content fits
+        dropDownMenu.scrollEnabled = groups.count > 3
+        
+        self.view.addSubview(dropDownMenu)
+    }
+    
     // Toggle dropDownMenu
     func dropDownMenuPressed() {
         if (isDropDownDisplayed) {
@@ -321,7 +330,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
             if (filter == nil) {
                 self.configureTitleView("All Notes")
             } else {
-                self.configureTitleView(filter.fullName)
+                self.configureTitleView(filter.fullName!)
             }
             // Hide the dropDownMenu
             self.hideDropDownMenu()
@@ -522,7 +531,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
                     // Individual group / filter selected
                     let cell = dropDownMenu.cellForRowAtIndexPath(indexPath) as! UserDropDownCell
                     self.filter = cell.group
-                    self.configureTitleView(filter.fullName)
+                    self.configureTitleView(filter.fullName!)
                 }
                 // filter the notes based upon new filter
                 filterNotes()
@@ -533,8 +542,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
             } else {
                 // Logout selected
                 // Unwind VC
-                apiConnector.logout()
-                self.dismissViewControllerAnimated(true, completion: nil)
+                apiConnector.logout(self)
             }
         }
     }

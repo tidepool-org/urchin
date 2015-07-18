@@ -10,36 +10,38 @@ import Foundation
 
 class User {
     
-    let fullName: String
+    var fullName: String?
     let userid: String
-    let patient: Patient
+    var patient: Patient?
     
     init(userid: String, apiConnector: APIConnector) {
         self.userid = userid
         
-        let userDict = apiConnector.findProfile(userid)
-        if (userDict.count != 0) {
-            self.fullName = userDict["fullName"] as! String
-            
-            let dateFormatter = NSDateFormatter()
-            dateFormatter.dateFormat = "yyyy-MM-dd"
-            
-            self.patient = Patient()
-            
-            if let patientDict = userDict["patient"] as? NSDictionary {
-                if let birthdayString = patientDict["birthday"] as? String {
-                    self.patient.birthday = dateFormatter.dateFromString(birthdayString)!
-                }
-                if let diagnosisString = patientDict["diagnosisDate"] as? String {
-                    self.patient.diagnosisDate = dateFormatter.dateFromString(diagnosisString)!
-                }
-                if let aboutMe = patientDict["about"] as? String {
-                    self.patient.aboutMe = aboutMe
-                }
+        apiConnector.findProfile(self)
+    }
+    
+    init(userid: String) {
+        self.userid = userid
+    }
+    
+    func processUserDict(userDict: NSDictionary) {
+        self.fullName = (userDict["fullName"] as! String)
+        
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        
+        self.patient = Patient()
+        
+        if let patientDict = userDict["patient"] as? NSDictionary {
+            if let birthdayString = patientDict["birthday"] as? String {
+                self.patient!.birthday = dateFormatter.dateFromString(birthdayString)!
             }
-        } else {
-            self.fullName = ""
-            self.patient = Patient()
+            if let diagnosisString = patientDict["diagnosisDate"] as? String {
+                self.patient!.diagnosisDate = dateFormatter.dateFromString(diagnosisString)!
+            }
+            if let aboutMe = patientDict["about"] as? String {
+                self.patient!.aboutMe = aboutMe
+            }
         }
     }
 }
