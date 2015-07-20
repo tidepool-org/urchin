@@ -44,11 +44,12 @@ class EditNoteViewController: UIViewController, UITextViewDelegate {
     
     // Data, only the note being edited
     let note: Note
+    let groupFullName: String
     
     // Keyboard frame for positioning UI Elements
     var keyboardFrame: CGRect
     
-    init(note: Note) {
+    init(note: Note, groupFullName: String) {
         // UI Elements
         timedateLabel = UILabel(frame: CGRectZero)
         changeDateLabel = UILabel(frame: CGRectZero)
@@ -69,6 +70,7 @@ class EditNoteViewController: UIViewController, UITextViewDelegate {
         
         // data
         self.note = note
+        self.groupFullName = groupFullName
         
         // Initialize keyboard frame of size Zero
         keyboardFrame = CGRectZero
@@ -95,8 +97,8 @@ class EditNoteViewController: UIViewController, UITextViewDelegate {
         
         // Configure title with groupid
         // Title does not need tapGesture actions --> group is fixed
-        // ### TODO: SHOULD BE NAME ASSOCIATED WITH GROUP ###
-        self.title = note.groupid
+        
+        self.title = groupFullName
         self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor(),NSFontAttributeName: UIFont(name: "OpenSans", size: 17.5)!]
         
         // Configure close button (always present)
@@ -239,6 +241,8 @@ class EditNoteViewController: UIViewController, UITextViewDelegate {
         notificationCenter.addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
         notificationCenter.addObserver(self, selector: "keyboardDidShow:", name: UIKeyboardDidShowNotification, object: nil)
         notificationCenter.addObserver(self, selector: Selector("keyboardWillHide:"), name:UIKeyboardWillHideNotification, object: nil)
+        // Add an observer to notificationCenter to handle hashtagPress events from HashtagsView
+        notificationCenter.addObserver(self, selector: "hashtagPressed:", name: "hashtagPressed", object: nil)
     }
     
     // close the VC on button press from leftBarButtonItem
@@ -249,6 +253,9 @@ class EditNoteViewController: UIViewController, UITextViewDelegate {
             alert.addAction(UIAlertAction(title: "Discard",
                 style: UIAlertActionStyle.Destructive,
                 handler: {(alert: UIAlertAction!) in
+                    let notification = NSNotification(name: "doneEditing", object: nil)
+                    NSNotificationCenter.defaultCenter().postNotification(notification)
+                    
                     self.view.endEditing(true)
                     self.closeDatePicker(false)
                     self.dismissViewControllerAnimated(true, completion: nil)}))
@@ -258,6 +265,9 @@ class EditNoteViewController: UIViewController, UITextViewDelegate {
             self.presentViewController(alert, animated: true, completion: nil)
         } else {
             // Note has not been edited, dismiss the VC
+            let notification = NSNotification(name: "doneEditing", object: nil)
+            NSNotificationCenter.defaultCenter().postNotification(notification)
+            
             self.view.endEditing(true)
             self.closeDatePicker(false)
             self.dismissViewControllerAnimated(true, completion: nil)
@@ -475,7 +485,7 @@ class EditNoteViewController: UIViewController, UITextViewDelegate {
     
     // saveNote action from saveNoteButton
     func saveNote() {
-        if (messageBox.text != "Type a note..." && !messageBox.text.isEmpty) {
+        if ((note.messagetext != messageBox.text || note.timestamp != datePicker.date) && messageBox.text != defaultMessage && !messageBox.text.isEmpty) {
             // if messageBox has text (not default message or empty) --> set the note to have values
             // groupid does not change
             self.note.messagetext = self.messageBox.text
@@ -514,9 +524,12 @@ class EditNoteViewController: UIViewController, UITextViewDelegate {
             self.view.endEditing(true)
             self.closeDatePicker(false)
             
-            // Send notification to NotesVC to handle edited note
-            let notification = NSNotification(name: "saveNote", object: nil)
+            let notification = NSNotification(name: "doneEditing", object: nil)
             NSNotificationCenter.defaultCenter().postNotification(notification)
+            
+            // Send notification to NotesVC to handle edited note
+            let notificationTwo = NSNotification(name: "saveNote", object: nil)
+            NSNotificationCenter.defaultCenter().postNotification(notificationTwo)
             
             // close the VC
             self.dismissViewControllerAnimated(true, completion: nil)
@@ -548,7 +561,7 @@ class EditNoteViewController: UIViewController, UITextViewDelegate {
     }
     
     func textViewDidChange(textView: UITextView) {
-        if (textView.text != "Type a note...") {
+        if (textView.text != defaultMessage) {
             // use hashtagBolder extension to bold the hashtags
             let hashtagBolder = HashtagBolder()
             let attributedText = hashtagBolder.boldHashtags(textView.text)
@@ -556,11 +569,16 @@ class EditNoteViewController: UIViewController, UITextViewDelegate {
             // set textView (messageBox) text to new attributed text
             textView.attributedText = attributedText
         }
+        if ((note.messagetext != textView.text || note.timestamp != datePicker.date) && textView.text != defaultMessage && !textView.text.isEmpty) {
+            postButton.alpha = 1.0
+        } else {
+            postButton.alpha = 0.5
+        }
     }
     
     // textViewDidBeginEditing, clear the messageBox if default message
     func textViewDidBeginEditing(textView: UITextView) {
-        if (textView.text == "Type a note...") {
+        if (textView.text == defaultMessage) {
             textView.text = nil
         }
     }
@@ -568,7 +586,7 @@ class EditNoteViewController: UIViewController, UITextViewDelegate {
     // textViewDidEndEditing, if empty set back to default message
     func textViewDidEndEditing(textView: UITextView) {
         if textView.text.isEmpty {
-            textView.text = "Type a note..."
+            textView.text = defaultMessage
             textView.textColor = UIColor(red: 167/255, green: 167/255, blue: 167/255, alpha: 1)
         }
     }

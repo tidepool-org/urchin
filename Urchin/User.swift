@@ -25,7 +25,9 @@ class User {
     }
     
     func processUserDict(userDict: NSDictionary) {
-        self.fullName = (userDict["fullName"] as! String)
+        if let name = userDict["fullName"] as? String {
+            self.fullName = name
+        }
         
         let dateFormatter = NSDateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
@@ -38,6 +40,9 @@ class User {
             }
             if let diagnosisString = patientDict["diagnosisDate"] as? String {
                 self.patient!.diagnosisDate = dateFormatter.dateFromString(diagnosisString)!
+            }
+            if let aboutMe = patientDict["aboutMe"] as? String {
+                self.patient!.aboutMe = aboutMe
             }
             if let aboutMe = patientDict["about"] as? String {
                 self.patient!.aboutMe = aboutMe

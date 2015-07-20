@@ -216,6 +216,7 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
         postButton.setAttributedTitle(NSAttributedString(string:"Post",
             attributes:[NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont(name: "OpenSans", size: 17.5)!]), forState: UIControlState.Normal)
         postButton.backgroundColor = UIColor(red: 0/255, green: 150/255, blue: 171/255, alpha: 1)
+        postButton.alpha = 0.5
         postButton.addTarget(self, action: "postNote:", forControlEvents: .TouchUpInside)
         postButton.frame.size = CGSize(width: 112, height: 41)
         postButton.frame.origin.x = self.view.frame.size.width - (labelInset + postButton.frame.width)
@@ -338,12 +339,18 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
             alert.addAction(UIAlertAction(title: "Okay",
                 style: UIAlertActionStyle.Default,
                 handler: {(alert: UIAlertAction!) in
+                    let notification = NSNotification(name: "doneAdding", object: nil)
+                    NSNotificationCenter.defaultCenter().postNotification(notification)
+                    
                     self.view.endEditing(true)
                     self.closeDatePicker(false)
                     self.dismissViewControllerAnimated(true, completion: nil)}))
             self.presentViewController(alert, animated: true, completion: nil)
         } else {
             // Note has not been edited, dismiss the VC
+            let notification = NSNotification(name: "doneAdding", object: nil)
+            NSNotificationCenter.defaultCenter().postNotification(notification)
+            
             self.view.endEditing(true)
             self.closeDatePicker(false)
             self.dismissViewControllerAnimated(true, completion: nil)
@@ -601,9 +608,12 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
             self.view.endEditing(true)
             self.closeDatePicker(false)
             
-            // Send notification to NotesVC to handle new note that was just created
-            let notification = NSNotification(name: "addNote", object: nil)
+            let notification = NSNotification(name: "doneAdding", object: nil)
             NSNotificationCenter.defaultCenter().postNotification(notification)
+            
+            // Send notification to NotesVC to handle new note that was just created
+            let notificationTwo = NSNotification(name: "addNote", object: nil)
+            NSNotificationCenter.defaultCenter().postNotification(notificationTwo)
             
             // close the VC
             self.dismissViewControllerAnimated(true, completion: nil)
@@ -642,6 +652,11 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
             
             // set textView (messageBox) text to new attributed text
             textView.attributedText = attributedText
+        }
+        if (textView.text != defaultMessage && !textView.text.isEmpty) {
+            postButton.alpha = 1.0
+        } else {
+            postButton.alpha = 0.5
         }
     }
     

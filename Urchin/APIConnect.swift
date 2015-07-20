@@ -89,6 +89,8 @@ class APIConnector {
             
             var userDict: NSDictionary = (NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: nil) as? NSDictionary)!
             
+//            println(userDict)
+            
             otherUser.processUserDict(userDict)
             
             // Send notification to NotesVC to handle new note that was just created
@@ -161,7 +163,7 @@ class APIConnector {
             
             var messages: NSArray = jsonResult.valueForKey("messages") as! NSArray
             for message in messages {
-                println(message)
+//                println(message)
                 let id = message.valueForKey("id") as! String
                 let otheruserid = message.valueForKey("userid") as! String
                 let groupid = message.valueForKey("groupid") as! String
@@ -203,24 +205,30 @@ class APIConnector {
         request.HTTPMethod = "POST"
         request.setValue("\(x_tidepool_session_token)", forHTTPHeaderField: "x-tidepool-session-token")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-//        let jsonObject: [String: AnyObject] = [
-//            "message": [
-//                "createdtime":isoStringFromDate(note.createdtime),
-//                "groupid":note.groupid,
-//                "messagetext":note.messagetext,
-//                "parentmessage":nil,
-//                "timestamp":isoStringFromDate(note.timestamp),
-//                "user": [
-//                    "fullName":note.user!.fullName,
-//                    "patient": [
-//                        "aboutMe":note.user!.patient?.aboutMe,
-//                        "birthday":stringFromRegDate(note.user!.patient?.birthday),
-//                        "diagnosisDate":stringFromRegDate(note.user!.patient?.diagnosisDate)
-//                    ]
-//                ],
-//                "userid":note.userid
-//            ]
-//        ]
+        
+        let patient: [String: AnyObject] = [
+            "aboutMe": note.user!.patient!.aboutMe!,
+            "birthday": stringFromRegDate(note.user!.patient!.birthday!),
+            "diagnosisDate": stringFromRegDate(note.user!.patient!.diagnosisDate!)
+        ]
+        let userDict: [String: AnyObject] = [
+            "fullName": note.user!.fullName!,
+            "patient": patient
+        ]
+        let jsonObject: [String: AnyObject] = [
+            "message": [
+                "createdtime": isoStringFromDate(note.createdtime),
+                "groupid": note.groupid,
+                "messagetext": note.messagetext,
+                "parentmessage": NSNull(),
+                "timestamp": isoStringFromDate(note.timestamp),
+                "user": userDict,
+                "userid":note.userid
+            ]
+        ]
+        
+        println(NSJSONSerialization.isValidJSONObject(jsonObject))
+        println(NSJSONSerialization.JSONObjectWithData(NSJSONSerialization.dataWithJSONObject(jsonObject, options: nil, error: nil)!, options: nil, error: nil)!)
         
 //        NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) {(response, data, error) in
 //            

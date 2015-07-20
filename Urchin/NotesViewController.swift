@@ -61,6 +61,10 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
     // Possible VCs to push to (sometimes nil)
     var addNoteViewController: AddNoteViewController?
     var editNoteViewController: EditNoteViewController?
+    // Keep track of when add or edit VCs are showing
+    var addOrEditShowing = false
+    
+    var justLoggedIn = true
     
     init(apiConnector: APIConnector) {
         // Initialize with API connection and user (from loginVC)
@@ -86,6 +90,16 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         // Set status bar color to light for dark navigationBar
         UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.LightContent
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        if (justLoggedIn) {
+            justLoggedIn = false
+            
+            self.newNote(self)
+        }
     }
     
     override func viewDidLoad() {
@@ -156,8 +170,13 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         let notificationCenter = NSNotificationCenter.defaultCenter()
         notificationCenter.addObserver(self, selector: "addNote:", name: "addNote", object: nil)
         notificationCenter.addObserver(self, selector: "saveNote:", name: "saveNote", object: nil)
+        // Listen for when addNoteVC or editNoteVC has been closed without saving or posting
+        notificationCenter.addObserver(self, selector: "doneAdding:", name: "doneAdding", object: nil)
+        notificationCenter.addObserver(self, selector: "doneEditing:", name: "doneEditing", object: nil)
         // Listen for when group metadata has been fetched
         notificationCenter.addObserver(self, selector: "anotherGroup:", name: "anotherGroup", object: nil)
+        // Listen for when to open an NewNoteVC
+        notificationCenter.addObserver(self, selector: "newNote:", name: "newNote", object: nil)
     }
     
     func anotherGroup(notification: NSNotification) {
@@ -202,33 +221,41 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         }
     }
     
-    // Called on newNoteButton press
-    func newNote(sender: UIButton!) {
-        // determine default option for note's group
-        let groupForVC: User
-        if (filter == nil) {
-            // if #nofilter, let note's group be first group
-            groupForVC = groups[0]
-        } else {
-            groupForVC = filter
+    // Called on newNoteButton press or when 
+    func newNote(sender: AnyObject) {
+        if (!addOrEditShowing) {
+            addOrEditShowing = true
+            
+            // determine default option for note's group
+            let groupForVC: User
+            if (filter == nil) {
+                // if #nofilter, let note's group be first group
+                groupForVC = groups[0]
+            } else {
+                groupForVC = filter
+            }
+            
+            // Initialize new AddNoteViewController
+            addNoteViewController = AddNoteViewController(user: user, group: groupForVC, groups: groups)
+            addNoteViewController!.note.createdtime = NSDate()
+            addNoteViewController!.note.timestamp = NSDate()
+            
+            // present addNoteScene
+            let addNoteScene = UINavigationController(rootViewController: addNoteViewController!)
+            self.presentViewController(addNoteScene, animated: true, completion: nil)
         }
-        
-        // Initialize new AddNoteViewController
-        addNoteViewController = AddNoteViewController(user: user, group: groupForVC, groups: groups)
-        addNoteViewController!.note.createdtime = NSDate()
-        addNoteViewController!.note.timestamp = NSDate()
-        
-        // present addNoteScene
-        let addNoteScene = UINavigationController(rootViewController: addNoteViewController!)
-        self.presentViewController(addNoteScene, animated: true, completion: nil)
     }
     
     // Handle addNote notification
     // *** ONLY CALL FROM ADDNOTEVC ***
     func addNote(sender: AnyObject) {
+        addOrEditShowing = false
+        
         // pull the note from the addNoteViewController
         let newnote = addNoteViewController!.note
         notes.insert(newnote, atIndex: 0)
+        
+        apiConnector.doPostWithToken(newnote)
         
         // filter the notes
         filterNotes()
@@ -242,6 +269,14 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
             groupForVC = filter
         }
         addNoteViewController = AddNoteViewController(user: user, group: groupForVC, groups: groups)
+    }
+    
+    func doneAdding(notification: NSNotification) {
+        self.addOrEditShowing = false
+    }
+    
+    func doneEditing(notification: NSNotification) {
+        self.addOrEditShowing = false
     }
     
     // Filter notes based upon current filter
@@ -265,6 +300,8 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
     // Only called from EditNoteVC
     // Note is modified in EditNoteVC, only need to reload notesTable
     func saveNote(sender: AnyObject) {
+        addOrEditShowing = false
+        
         notesTable.reloadData()
     }
     
@@ -282,11 +319,24 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
     // Handle editPressed notification
     //      from editButton in NoteCell
     func editPressed(sender: UIButton!) {
-        
-        // Instantiate new EditNoteVC and present editNoteScene
-        editNoteViewController = EditNoteViewController(note: filteredNotes[sender.tag])
-        let editNoteScene = UINavigationController(rootViewController: editNoteViewController!)
-        self.presentViewController(editNoteScene, animated: true, completion: nil)
+        if (!addOrEditShowing) {
+            addOrEditShowing = true
+            
+            let thenote = filteredNotes[sender.tag]
+            
+            var groupFullName: String = ""
+            for group in groups {
+                if (group.userid == thenote.groupid) {
+                    groupFullName = group.fullName!
+                    break
+                }
+            }
+            
+            // Instantiate new EditNoteVC and present editNoteScene
+            editNoteViewController = EditNoteViewController(note: thenote, groupFullName: groupFullName)
+            let editNoteScene = UINavigationController(rootViewController: editNoteViewController!)
+            self.presentViewController(editNoteScene, animated: true, completion: nil)
+        }
     }
     
     func configureDropDownMenu() {
