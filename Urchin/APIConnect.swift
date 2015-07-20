@@ -43,19 +43,22 @@ class APIConnector {
         NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) {(response, data, error) in
             
             if let httpResponse = response as? NSHTTPURLResponse {
-                println(httpResponse.statusCode)
-            }
-            
-            var jsonResult: NSDictionary = (NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: nil) as? NSDictionary)!
-            
-            if let httpResponse = response as? NSHTTPURLResponse {
-                if let sessionToken = httpResponse.allHeaderFields["x-tidepool-session-token"] as? String {
-                    self.x_tidepool_session_token = sessionToken
-                    self.user = User(userid: jsonResult.valueForKey("userid") as! String, apiConnector: self)
-                    loading.removeFromSuperview()
-                    loginVC.makeTransition(self)
+                println("login \(httpResponse.statusCode)")
+                
+                if (httpResponse.statusCode == 200) {
+                    var jsonResult: NSDictionary = (NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: nil) as? NSDictionary)!
+                    
+                    if let sessionToken = httpResponse.allHeaderFields["x-tidepool-session-token"] as? String {
+                        self.x_tidepool_session_token = sessionToken
+                        self.user = User(userid: jsonResult.valueForKey("userid") as! String, apiConnector: self)
+                        loginVC.makeTransition(self)
+                    }
                 }
+            } else {
+                println(error)
+                println(response)
             }
+            loading.removeFromSuperview()
         }
     }
     
@@ -105,7 +108,7 @@ class APIConnector {
                 }
 
             }
-        }   else {
+        } else {
             println("Could not fetch \(error), \(error!.userInfo)")
         }
     }
@@ -252,7 +255,8 @@ class APIConnector {
         // Only top level notes
         
         // create the request
-        let url = NSURL(string: "https://api.tidepool.io/message/notes/\(userid)?starttime=\(isoStringFromDate(start))&endtime=\(isoStringFromDate(end))")
+        let dateFormatter = NSDateFormatter()
+        let url = NSURL(string: "https://api.tidepool.io/message/notes/\(userid)?starttime=\(dateFormatter.isoStringFromDate(start))&endtime=\(dateFormatter.isoStringFromDate(end))")
         let request = NSMutableURLRequest(URL: url!)
         request.HTTPMethod = "GET"
         request.setValue("\(x_tidepool_session_token)", forHTTPHeaderField: "x-tidepool-session-token")
@@ -278,15 +282,18 @@ class APIConnector {
             var jsonResult: NSDictionary = (NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: nil) as? NSDictionary)!
             
             var messages: NSArray = jsonResult.valueForKey("messages") as! NSArray
+            
+            let dateFormatter = NSDateFormatter()
+            
             for message in messages {
 //                println(message)
                 let id = message.valueForKey("id") as! String
                 let otheruserid = message.valueForKey("userid") as! String
                 let groupid = message.valueForKey("groupid") as! String
-                let timestamp = self.dateFromISOString(message.valueForKey("timestamp") as! String)
+                let timestamp = dateFormatter.dateFromISOString(message.valueForKey("timestamp") as! String)
                 var createdtime: NSDate
                 if let created = message.valueForKey("createdtime") as? String {
-                    createdtime = self.dateFromISOString(created)
+                    createdtime = dateFormatter.dateFromISOString(created)
                 } else {
                     createdtime = timestamp
                 }
@@ -322,26 +329,7 @@ class APIConnector {
         request.setValue("\(x_tidepool_session_token)", forHTTPHeaderField: "x-tidepool-session-token")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
-        let patient: [String: AnyObject] = [
-            "aboutMe": note.user!.patient!.aboutMe!,
-            "birthday": stringFromRegDate(note.user!.patient!.birthday!),
-            "diagnosisDate": stringFromRegDate(note.user!.patient!.diagnosisDate!)
-        ]
-        let userDict: [String: AnyObject] = [
-            "fullName": note.user!.fullName!,
-            "patient": patient
-        ]
-        let jsonObject: [String: AnyObject] = [
-            "message": [
-                "createdtime": isoStringFromDate(note.createdtime),
-                "groupid": note.groupid,
-                "messagetext": note.messagetext,
-                "parentmessage": NSNull(),
-                "timestamp": isoStringFromDate(note.timestamp),
-                "user": userDict,
-                "userid":note.userid
-            ]
-        ]
+        let jsonObject = note.dictionaryFromNote()
         
         println(NSJSONSerialization.isValidJSONObject(jsonObject))
         println(NSJSONSerialization.JSONObjectWithData(NSJSONSerialization.dataWithJSONObject(jsonObject, options: nil, error: nil)!, options: nil, error: nil)!)
@@ -355,32 +343,4 @@ class APIConnector {
 //            var jsonResult: NSDictionary = (NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: nil) as? NSDictionary)!
 //        }
     }
-    
-    func dateFromISOString(string: String) -> NSDate {
-        var dateFormatter = NSDateFormatter()
-        dateFormatter.locale = NSLocale(localeIdentifier: "en_US_POSIX")
-        dateFormatter.timeZone = NSTimeZone.localTimeZone()
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
-        if let date = dateFormatter.dateFromString(string) {
-            return date
-        } else {
-            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-            return dateFormatter.dateFromString(string)!
-        }
-    }
-    
-    func isoStringFromDate(date: NSDate) -> String {
-        var dateFormatter = NSDateFormatter()
-        dateFormatter.locale = NSLocale(localeIdentifier: "en_US_POSIX")
-        dateFormatter.timeZone = NSTimeZone.localTimeZone()
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
-        return dateFormatter.stringFromDate(date)
-    }
-    
-    func stringFromRegDate(date:NSDate) -> String {
-        var dateFormatter = NSDateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        return dateFormatter.stringFromDate(date)
-    }
-    
 }

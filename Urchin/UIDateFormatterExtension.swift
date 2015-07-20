@@ -38,4 +38,30 @@ public extension NSDateFormatter {
         return attrStr
     }
     
+    func dateFromISOString(string: String) -> NSDate {
+        var dateFormatter = NSDateFormatter()
+        dateFormatter.locale = NSLocale(localeIdentifier: "en_US_POSIX")
+        dateFormatter.timeZone = NSTimeZone.localTimeZone()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
+        if let date = dateFormatter.dateFromString(string) {
+            return date
+        } else {
+            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+            return dateFormatter.dateFromString(string)!
+        }
+    }
+    
+    func isoStringFromDate(date: NSDate) -> String {
+        var dateFormatter = NSDateFormatter()
+        dateFormatter.locale = NSLocale(localeIdentifier: "en_US_POSIX")
+        dateFormatter.timeZone = NSTimeZone.localTimeZone()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
+        return dateFormatter.stringFromDate(date)
+    }
+    
+    func stringFromRegDate(date:NSDate) -> String {
+        self.dateFormat = "yyyy-MM-dd"
+        return stringFromDate(date)
+    }
+    
 }

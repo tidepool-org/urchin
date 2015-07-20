@@ -92,16 +92,6 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.LightContent
     }
     
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        if (justLoggedIn) {
-            justLoggedIn = false
-            
-            self.newNote(self)
-        }
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -182,6 +172,12 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
     func anotherGroup(notification: NSNotification) {
         groupsWMetadata++
         if (groups.count != 0 && groupsWMetadata == groups.count + 1) {
+            if (justLoggedIn) {
+                justLoggedIn = false
+                
+                self.newNote(self)
+            }
+            
             configureDropDownMenu()
             self.loadNotes()
         }

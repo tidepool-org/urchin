@@ -574,6 +574,7 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
             self.note.messagetext = self.messageBox.text
             self.note.groupid = self.group.userid
             self.note.timestamp = self.datePicker.date
+            self.note.userid = self.note.user!.userid
             
             // Identify hashtags
             let words = self.note.messagetext.componentsSeparatedByString(" ")
