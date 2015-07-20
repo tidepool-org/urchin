@@ -822,13 +822,11 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
     // didSelectRowAtIndexPath
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         // Immediately deselect row
-        // ### TODO: REDO THIS BAD BOY ###
-        // cell will dequeue later, possible location for error
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        let cell = dropDownMenu.cellForRowAtIndexPath(indexPath) as! UserDropDownCell
-        configureTitleView(cell.group.fullName!)
-        self.group = cell.group
+        // Set the current group and note's groupid to the selected group
+        self.group = groups[indexPath.row]
         self.note.groupid = self.group.userid
+        // Toggle the dropDownMenu (closed)
         self.dropDownMenuPressed()
     }
     
