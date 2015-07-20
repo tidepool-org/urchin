@@ -255,6 +255,9 @@ class LogInViewController : UIViewController, UITextFieldDelegate {
         if (!apiConnector.x_tidepool_session_token.isEmpty && apiConnector.user != nil) {
             emailField.text = ""
             passwordField.text = ""
+            if (rememberMe) {
+                self.checkboxPressed(self)
+            }
             
             let notesScene = UINavigationController(rootViewController: NotesViewController(apiConnector: apiConnector))
             self.presentViewController(notesScene, animated: true, completion: nil)
@@ -264,7 +267,7 @@ class LogInViewController : UIViewController, UITextFieldDelegate {
     }
     
     // toggle checkbox, set rememberMe values
-    func checkboxPressed(sender: UIView!) {
+    func checkboxPressed(sender: AnyObject) {
         if (rememberMe) {
             // currently rememberMe --> change to don't rememberMe
             

@@ -130,9 +130,6 @@ class APIConnector {
             error: &error) as? [NSManagedObject]
         
         if let results = fetchedResults {
-            for result in results {
-                println(result.valueForKey("login"))
-            }
             if (results.count == 0) {
                 // Create a new login for remembering
                 
