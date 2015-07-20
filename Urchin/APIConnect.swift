@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import CoreData
 
 class APIConnector {
     
@@ -15,9 +16,16 @@ class APIConnector {
     var user: User?
     
     func login(loginVC: LogInViewController, username: String, password: String) {
+        
         let loginString = NSString(format: "%@:%@", username, password)
         let loginData: NSData = loginString.dataUsingEncoding(NSUTF8StringEncoding)!
         let base64LoginString = loginData.base64EncodedStringWithOptions(nil)
+        
+        if (loginVC.rememberMe) {
+            self.saveLogin(base64LoginString)
+        } else {
+            self.saveLogin("")
+        }
         
         // create the request
         let url = NSURL(string: "https://api.tidepool.io/auth/login")
@@ -51,7 +59,118 @@ class APIConnector {
         }
     }
     
+    func login(loginVC: LogInViewController) {
+        
+        // Store the appDelegate
+        let appDelegate =
+        UIApplication.sharedApplication().delegate as! AppDelegate
+        
+        // Store the managedContext
+        let managedContext = appDelegate.managedObjectContext!
+        
+        // Open a new fetch request
+        let fetchRequest = NSFetchRequest(entityName:"Login")
+        
+        var error: NSError?
+        
+        // Execute the fetch
+        let fetchedResults =
+        managedContext.executeFetchRequest(fetchRequest,
+            error: &error) as? [NSManagedObject]
+        
+        if let results = fetchedResults {
+            let login = results[0].valueForKey("login") as! String
+            if (results.count != 0 && login != "") {
+                // create the request
+                let url = NSURL(string: "https://api.tidepool.io/auth/login")
+                let request = NSMutableURLRequest(URL: url!)
+                request.HTTPMethod = "POST"
+                request.setValue("Basic \(login)", forHTTPHeaderField: "Authorization")
+                
+                NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) {(response, data, error) in
+                    
+                    if let httpResponse = response as? NSHTTPURLResponse {
+                        println(httpResponse.statusCode)
+                    }
+                    
+                    var jsonResult: NSDictionary = (NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: nil) as? NSDictionary)!
+                    
+                    if let httpResponse = response as? NSHTTPURLResponse {
+                        if let sessionToken = httpResponse.allHeaderFields["x-tidepool-session-token"] as? String {
+                            self.x_tidepool_session_token = sessionToken
+                            self.user = User(userid: jsonResult.valueForKey("userid") as! String, apiConnector: self)
+                            loginVC.makeTransition(self)
+                        }
+                    }
+                }
+
+            }
+        }   else {
+            println("Could not fetch \(error), \(error!.userInfo)")
+        }
+    }
+
+    
+    func saveLogin(login: String) {
+        // Store the appDelegate
+        let appDelegate =
+        UIApplication.sharedApplication().delegate as! AppDelegate
+        
+        // Store the managedContext
+        let managedContext = appDelegate.managedObjectContext!
+        
+        // Open a new fetch request
+        let fetchRequest = NSFetchRequest(entityName:"Login")
+        
+        var error: NSError?
+        
+        // Execute the fetch
+        let fetchedResults =
+        managedContext.executeFetchRequest(fetchRequest,
+            error: &error) as? [NSManagedObject]
+        
+        if let results = fetchedResults {
+            for result in results {
+                println(result.valueForKey("login"))
+            }
+            if (results.count == 0) {
+                // Create a new login for remembering
+                
+                // Initialize the new entity
+                let entity =  NSEntityDescription.entityForName("Login",
+                    inManagedObjectContext:
+                    managedContext)
+                
+                // Let it be a hashtag in the managedContext
+                let loginObj = NSManagedObject(entity: entity!,
+                    insertIntoManagedObjectContext:managedContext)
+                
+                loginObj.setValue(login, forKey: "login")
+                
+                // Save the hashtag
+                var errorTwo: NSError?
+                if !managedContext.save(&errorTwo) {
+                    println("Could not save \(errorTwo), \(errorTwo?.userInfo)")
+                }
+            } else if (results.count == 1) {
+                // Set the value to the new saved login
+                results[0].setValue(login, forKey: "login")
+                
+                // Attempt to save the hashtag
+                var errorTwo: NSError?
+                if !managedContext.save(&errorTwo) {
+                    println("Could not save \(errorTwo), \(errorTwo?.userInfo)")
+                }
+            }
+        }  else {
+            println("Could not fetch \(error), \(error!.userInfo)")
+        }
+    }
+    
     func logout(notesVC: NotesViewController) {
+        
+        self.saveLogin("")
+        
         // /auth/logout
         
         // create the request

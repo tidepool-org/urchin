@@ -18,6 +18,7 @@ class LogInViewController : UIViewController, UITextFieldDelegate {
     let titleLabel: UILabel
     let emailField: UITextField
     let passwordField: UITextField
+    let rememberMeView: UIView
     let rememberMeCheckbox: UIButton
     var rememberMe: Bool
     let rememberMeLabel: UILabel
@@ -39,6 +40,7 @@ class LogInViewController : UIViewController, UITextFieldDelegate {
         titleLabel = UILabel(frame: CGRectMake(0, 0, CGFloat.max, CGFloat.max))
         emailField = UITextField(frame: CGRectZero)
         passwordField = UITextField(frame: CGRectZero)
+        rememberMeView = UIView(frame: CGRectZero)
         rememberMeCheckbox = UIButton(frame: CGRectZero)
         rememberMe = false
         rememberMeLabel = UILabel(frame: CGRectZero)
@@ -68,6 +70,9 @@ class LogInViewController : UIViewController, UITextFieldDelegate {
         
         // Set background color (light grey)
         self.view.backgroundColor = UIColor(red: 247/255, green: 247/255, blue: 248/255, alpha: 1)
+        
+        let apiConnector = APIConnector()
+        apiConnector.login(self)
         
         // configure logo with notes icon
         let image = UIImage(named: "notesicon") as UIImage!
@@ -147,20 +152,31 @@ class LogInViewController : UIViewController, UITextFieldDelegate {
         let rememberX = CGFloat(25)
         let unchecked = UIImage(named: "unchecked") as UIImage!
         rememberMeCheckbox.setImage(unchecked, forState: .Normal)
-        rememberMeCheckbox.addTarget(self, action: "checkboxPressed:", forControlEvents: .TouchUpInside)
         rememberMeCheckbox.frame = CGRectMake(rememberX, 0, unchecked.size.width, unchecked.size.height)
         
         // configure remember me label
         rememberMeLabel.text = "Remember me"
         rememberMeLabel.font = UIFont(name: "OpenSans", size: 17.5)!
         rememberMeLabel.textColor = UIColor(red: 152/255, green: 152/255, blue: 151/255, alpha: 1)
-        let tapGesture = UITapGestureRecognizer(target: self, action: "checkboxPressed:")
-        tapGesture.numberOfTapsRequired = 1
-        rememberMeLabel.addGestureRecognizer(tapGesture)
-        rememberMeLabel.userInteractionEnabled = true
         rememberMeLabel.sizeToFit()
         let rememberLabelX = rememberX + rememberMeCheckbox.frame.width + 11.0
         rememberMeLabel.frame = CGRectMake(rememberLabelX, 0, rememberMeLabel.frame.width, rememberMeLabel.frame.height)
+        
+        // Create a whole view to add the remember me label and checkbox to
+        //      --> user can click anywhere in view to trigger a checkbox press
+        let rememberMeW = rememberMeLabel.frame.maxX + rememberX
+        let rememberMeH = labelInset + rememberMeCheckbox.frame.height + labelInset
+        rememberMeView.frame.size = CGSize(width: rememberMeW, height: rememberMeH)
+        let rememberMeX = CGFloat(0)
+        let rememberMeY = rememberMeCheckbox.frame.minY - labelInset
+        rememberMeView.frame.origin = CGPoint(x: rememberMeX, y: rememberMeY)
+        rememberMeView.backgroundColor = UIColor.clearColor()
+        // tapGesture in view triggers animation
+        let tap = UITapGestureRecognizer(target: self, action: "checkboxPressed:")
+        rememberMeView.addGestureRecognizer(tap)
+        // add labels to view
+        rememberMeView.addSubview(rememberMeCheckbox)
+        rememberMeView.addSubview(rememberMeLabel)
         
         // configure log in button
         let logInWidth = CGFloat(100)
@@ -186,8 +202,7 @@ class LogInViewController : UIViewController, UITextFieldDelegate {
         self.view.addSubview(logoView)
         self.view.addSubview(emailField)
         self.view.addSubview(passwordField)
-        self.view.addSubview(rememberMeCheckbox)
-        self.view.addSubview(rememberMeLabel)
+        self.view.addSubview(rememberMeView)
         self.view.addSubview(logInButton)
         
         // configure and add Tidepool logo to view
@@ -263,6 +278,7 @@ class LogInViewController : UIViewController, UITextFieldDelegate {
             let unchecked = UIImage(named: "checked") as UIImage!
             rememberMeCheckbox.setImage(unchecked, forState: .Normal)
         }
+        println(rememberMe)
     }
     
     // handle touch events
@@ -333,8 +349,9 @@ class LogInViewController : UIViewController, UITextFieldDelegate {
         let bottomY = centerY + halfHeight
         
         logInButton.frame.origin.y = bottomY - logInButton.frame.height
-        rememberMeCheckbox.frame.origin.y = logInButton.frame.midY - rememberMeCheckbox.frame.height / 2
-        rememberMeLabel.frame.origin.y = logInButton.frame.midY - rememberMeLabel.frame.height / 2
+        rememberMeCheckbox.frame.origin.y = labelInset
+        rememberMeLabel.frame.origin.y = rememberMeCheckbox.frame.midY - rememberMeLabel.frame.height / 2
+        rememberMeView.frame.origin.y = logInButton.frame.midY - (rememberMeCheckbox.frame.height / 2 + labelInset)
         passwordField.frame.origin.y = logInButton.frame.origin.y - (12.5 + passwordField.frame.height)
         emailField.frame.origin.y = passwordField.frame.origin.y - (10.21 + emailField.frame.height)
         configureLogoFrame()

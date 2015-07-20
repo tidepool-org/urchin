@@ -49,7 +49,7 @@
 		AADECC7D1B4F34AA0043E888 /* camera@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AADECC791B4F34AA0043E888 /* camera@2x.png */; };
 		AAE778A41B4B408F00949CEE /* note.png in Resources */ = {isa = PBXBuildFile; fileRef = AAE778A21B4B408F00949CEE /* note.png */; };
 		AAE778A51B4B408F00949CEE /* note@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AAE778A31B4B408F00949CEE /* note@2x.png */; };
-		AAEFB16D1B5062CE000EF8B4 /* Hashtags.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = AAEFB16B1B5062CE000EF8B4 /* Hashtags.xcdatamodeld */; };
+		AAEFB16D1B5062CE000EF8B4 /* UrchinData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = AAEFB16B1B5062CE000EF8B4 /* UrchinData.xcdatamodeld */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -109,7 +109,7 @@
 		AADECC791B4F34AA0043E888 /* camera@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera@2x.png"; sourceTree = "<group>"; };
 		AAE778A21B4B408F00949CEE /* note.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = note.png; sourceTree = "<group>"; };
 		AAE778A31B4B408F00949CEE /* note@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "note@2x.png"; sourceTree = "<group>"; };
-		AAEFB16C1B5062CE000EF8B4 /* Hashtags.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Hashtags.xcdatamodel; sourceTree = "<group>"; };
+		AAEFB16C1B5062CE000EF8B4 /* UrchinData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = UrchinData.xcdatamodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -136,6 +136,14 @@
 				AA03FB891B5848FD001B9435 /* APIConnect.swift */,
 			);
 			name = API;
+			sourceTree = "<group>";
+		};
+		AA08280B1B5D7AC80016A7A3 /* Core Data */ = {
+			isa = PBXGroup;
+			children = (
+				AAEFB16B1B5062CE000EF8B4 /* UrchinData.xcdatamodeld */,
+			);
+			name = "Core Data";
 			sourceTree = "<group>";
 		};
 		AA3484F11B559EAB0028C49B /* Views */ = {
@@ -214,7 +222,7 @@
 			children = (
 				AA03FB881B5848CD001B9435 /* API */,
 				AABCEF891B3231910064FE49 /* AppDelegate.swift */,
-				AAEFB16B1B5062CE000EF8B4 /* Hashtags.xcdatamodeld */,
+				AA08280B1B5D7AC80016A7A3 /* Core Data */,
 				AABCEF8D1B3231910064FE49 /* Main.storyboard */,
 				AABCEF901B3231910064FE49 /* Images.xcassets */,
 				AABCEF921B3231910064FE49 /* LaunchScreen.xib */,
@@ -434,7 +442,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AA698EED1B545A07004154E0 /* EditNoteViewController.swift in Sources */,
-				AAEFB16D1B5062CE000EF8B4 /* Hashtags.xcdatamodeld in Sources */,
+				AAEFB16D1B5062CE000EF8B4 /* UrchinData.xcdatamodeld in Sources */,
 				AAA3F3131B508384000EB344 /* HashtagBolder.swift in Sources */,
 				AA3484F01B559EA10028C49B /* HashtagsView.swift in Sources */,
 				AA993E301B3316C10027804C /* LoginViewController.swift in Sources */,
@@ -662,13 +670,13 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		AAEFB16B1B5062CE000EF8B4 /* Hashtags.xcdatamodeld */ = {
+		AAEFB16B1B5062CE000EF8B4 /* UrchinData.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				AAEFB16C1B5062CE000EF8B4 /* Hashtags.xcdatamodel */,
+				AAEFB16C1B5062CE000EF8B4 /* UrchinData.xcdatamodel */,
 			);
-			currentVersion = AAEFB16C1B5062CE000EF8B4 /* Hashtags.xcdatamodel */;
-			path = Hashtags.xcdatamodeld;
+			currentVersion = AAEFB16C1B5062CE000EF8B4 /* UrchinData.xcdatamodel */;
+			path = UrchinData.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};
