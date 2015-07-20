@@ -797,18 +797,26 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
         let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(UserDropDownCell), forIndexPath: indexPath) as! UserDropDownCell
         
         // Configure with the given group, no arrow, and only bolded if the current group selected is this group
-        cell.configureWithGroup(groups[indexPath.row], arrow: false, bold: group === groups[indexPath.row])
+        cell.configure(groups[indexPath.row], arrow: false, bold: group === groups[indexPath.row])
         
         return cell
     }
     
     // heightForRowAtIndexPath
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        // ### TODO: REDO THIS BAD BOY ###
-        // cell will dequeue later, possible location for error
-        let cell = UserDropDownCell(style: .Default, reuseIdentifier: nil)
-        cell.configureWithGroup(groups[indexPath.row], arrow: false, bold: group === groups[indexPath.row])
-        return cell.cellHeight
+        // Some group / team / filter
+        
+        let nameLabel = UILabel()
+        nameLabel.frame.size = CGSize(width: self.view.frame.width - 2 * labelInset, height: 20.0)
+        nameLabel.text = groups[indexPath.row].fullName
+        if (group === groups[indexPath.row]) {
+            nameLabel.font = UIFont(name: "OpenSans-Bold", size: 17.5)!
+        } else {
+            nameLabel.font = UIFont(name: "OpenSans", size: 17.5)!
+        }
+        nameLabel.sizeToFit()
+        
+        return userCellInset + nameLabel.frame.height + userCellInset + userCellThinSeparator
     }
     
     // didSelectRowAtIndexPath

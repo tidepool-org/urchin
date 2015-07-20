@@ -467,21 +467,21 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
                 // All Users / #nofilter cell
                 let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(UserDropDownCell), forIndexPath: indexPath) as! UserDropDownCell
                 
-                cell.configureAllUsers()
+                cell.configure("all")
                 
                 return cell
             } else if (indexPath.section == 1 && indexPath.row == 0) {
                 // Logout cell
                 let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(UserDropDownCell), forIndexPath: indexPath) as! UserDropDownCell
                 
-                cell.configureLogout()
+                cell.configure("logout")
                 
                 return cell
             } else {
                 // Individual group / filter cell
                 let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(UserDropDownCell), forIndexPath: indexPath) as! UserDropDownCell
                 
-                cell.configureWithGroup(groups[indexPath.row - 1], arrow: true, bold: false)
+                cell.configure(groups[indexPath.row - 1], arrow: true, bold: false)
                 
                 return cell
             }
@@ -546,20 +546,38 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         } else {
             // DropDownMenu
             
-            // ### TODO: REDO WITHOUT CREATING CELLS ###
-            //          cells get dequeued later --> causes formatting issues
             if (indexPath.section == 0 && indexPath.row == 0) {
-                let cell = UserDropDownCell(style: .Default, reuseIdentifier: nil)
-                cell.configureAllUsers()
-                return cell.cellHeight
+                // All / #nofilter
+                
+                let nameLabel = UILabel()
+                nameLabel.text = "All"
+                nameLabel.font = UIFont(name: "OpenSans-Bold", size: 17.5)
+                nameLabel.sizeToFit()
+                
+                return userCellThickSeparator + userCellInset + nameLabel.frame.height + userCellInset + userCellThinSeparator
             } else if (indexPath.section == 1 && indexPath.row == 0) {
-                let cell = UserDropDownCell(style: .Default, reuseIdentifier: nil)
-                cell.configureLogout()
-                return cell.cellHeight
+                // Logout
+                
+                let nameLabel = UILabel()
+                nameLabel.text = "Logout"
+                nameLabel.font = UIFont(name: "OpenSans-Bold", size: 17.5)
+                nameLabel.sizeToFit()
+                
+                return userCellInset + nameLabel.frame.height + userCellInset + (userCellThickSeparator - userCellThinSeparator)
             } else {
-                let cell = UserDropDownCell(style: .Default, reuseIdentifier: nil)
-                cell.configureWithGroup(groups[indexPath.row - 1], arrow: true, bold: false)
-                return cell.cellHeight
+                // Some group / team / filter
+                
+                let nameLabel = UILabel()
+                nameLabel.frame.size = CGSize(width: self.view.frame.width - 2 * labelInset, height: 20.0)
+                nameLabel.text = groups[indexPath.row - 1].fullName
+                if (filter === groups[indexPath.row - 1]) {
+                    nameLabel.font = UIFont(name: "OpenSans-Bold", size: 17.5)!
+                } else {
+                    nameLabel.font = UIFont(name: "OpenSans", size: 17.5)!
+                }
+                nameLabel.sizeToFit()
+                                
+                return userCellInset + nameLabel.frame.height + userCellInset + userCellThinSeparator
             }
         }
     }
