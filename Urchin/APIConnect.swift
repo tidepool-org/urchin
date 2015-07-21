@@ -83,7 +83,29 @@ class APIConnector {
         
         if let results = fetchedResults {
             if (results.count != 0) {
+                let expiration = results[0].valueForKey("expiration") as! NSDate
+                let dateFormatter = NSDateFormatter()
+                println(dateFormatter.stringFromRegDate(expiration))
+                if (expiration.timeIntervalSinceNow < 0) {
+                    println("past expiration!")
+                    // Set the value to the new saved login
+                    results[0].setValue("", forKey: "login")
+                    
+                    // Save the expiration date (6 mo.s in advance)
+                    let dateShift = NSDateComponents()
+                    dateShift.month = 6
+                    let calendar = NSCalendar.currentCalendar()
+                    let date = calendar.dateByAddingComponents(dateShift, toDate: NSDate(), options: nil)!
+                    results[0].setValue(date, forKey: "expiration")
+                    
+                    // Attempt to save the login
+                    var error: NSError?
+                    if !managedContext.save(&error) {
+                        println("Could not save \(error), \(error?.userInfo)")
+                    }
+                }
                 let login = results[0].valueForKey("login") as! String
+                println(login)
                 if (login != "") {
                     // create the request
                     let url = NSURL(string: "https://api.tidepool.io/auth/login")
@@ -146,9 +168,17 @@ class APIConnector {
                 let loginObj = NSManagedObject(entity: entity!,
                     insertIntoManagedObjectContext:managedContext)
                 
+                // Save the encrypted login information
                 loginObj.setValue(login, forKey: "login")
                 
-                // Save the hashtag
+                // Save the expiration date (6 mo.s in advance)
+                let dateShift = NSDateComponents()
+                dateShift.month = 6
+                let calendar = NSCalendar.currentCalendar()
+                let date = calendar.dateByAddingComponents(dateShift, toDate: NSDate(), options: nil)!
+                loginObj.setValue(date, forKey: "expiration")
+                
+                // Save the login
                 var errorTwo: NSError?
                 if !managedContext.save(&errorTwo) {
                     println("Could not save \(errorTwo), \(errorTwo?.userInfo)")
@@ -157,7 +187,14 @@ class APIConnector {
                 // Set the value to the new saved login
                 results[0].setValue(login, forKey: "login")
                 
-                // Attempt to save the hashtag
+                // Save the expiration date (6 mo.s in advance)
+                let dateShift = NSDateComponents()
+                dateShift.month = 6
+                let calendar = NSCalendar.currentCalendar()
+                let date = calendar.dateByAddingComponents(dateShift, toDate: NSDate(), options: nil)!
+                results[0].setValue(date, forKey: "expiration")
+                
+                // Attempt to save the login
                 var errorTwo: NSError?
                 if !managedContext.save(&errorTwo) {
                     println("Could not save \(errorTwo), \(errorTwo?.userInfo)")
