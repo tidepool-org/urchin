@@ -85,9 +85,10 @@ class APIConnector {
             if (results.count != 0) {
                 let expiration = results[0].valueForKey("expiration") as! NSDate
                 let dateFormatter = NSDateFormatter()
-                println(dateFormatter.stringFromRegDate(expiration))
                 if (expiration.timeIntervalSinceNow < 0) {
-                    println("past expiration!")
+
+                    // Login has expired!
+                    
                     // Set the value to the new saved login
                     results[0].setValue("", forKey: "login")
                     
@@ -105,8 +106,10 @@ class APIConnector {
                     }
                 }
                 let login = results[0].valueForKey("login") as! String
-                println(login)
+                
                 if (login != "") {
+                    // Login information exists
+                    
                     // create the request
                     let url = NSURL(string: "https://api.tidepool.io/auth/login")
                     let request = NSMutableURLRequest(URL: url!)
@@ -324,7 +327,6 @@ class APIConnector {
             let dateFormatter = NSDateFormatter()
             
             for message in messages {
-//                println(message)
                 let id = message.valueForKey("id") as! String
                 let otheruserid = message.valueForKey("userid") as! String
                 let groupid = message.valueForKey("groupid") as! String
