@@ -47,9 +47,6 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
     // Massive button to add a new note
     let newNoteButton: UIButton
     
-    // Refresh control for the notesTable
-    let refreshControl: UIRefreshControl!
-    
     // Drop Down Menu -- for selecting filter, #nofilter, or logging out
     var dropDownMenu: UITableView!
     // Animation helpers
@@ -72,9 +69,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         self.user = apiConnector.user!
         
         self.newNoteButton = UIButton.buttonWithType(UIButtonType.System) as! UIButton
-        
-        self.refreshControl = UIRefreshControl()
-        
+                
         // Overlay begins with height 0.0 (animates to larger height)
         self.overlayHeight = CGFloat(0)
         
@@ -146,10 +141,6 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         // Fetch the groups for notes and (eventually) dropDownMenu
         // Successful completion of fetch will configure dropDownMenu and then load notes
         self.loadGroups()
-        
-        // Add refresh control to the notesTable
-        self.refreshControl.addTarget(self, action: "refreshNotesTable:", forControlEvents: UIControlEvents.ValueChanged)
-        self.notesTable.addSubview(refreshControl)
         
         // Add rightBarButtonItem to down arrow for showing dropdown
         var rightDropDownMenuButton: UIBarButtonItem = UIBarButtonItem(image: UIImage(named: "down"), style: .Plain, target: self, action: "dropDownMenuPressed")
@@ -304,12 +295,6 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
     // Fetch and load the groups/teams that user is involved in
     func loadGroups() {
         apiConnector.getAllViewableUsers(self)
-    }
-    
-    // For refresh control
-    func refreshNotesTable(sender: AnyObject) {
-        notesTable.reloadData()
-        self.refreshControl.endRefreshing()
     }
     
     // Handle editPressed notification
