@@ -252,12 +252,8 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         // pull the note from the addNoteViewController
         let newnote = addNoteViewController!.note
-        notes.insert(newnote, atIndex: 0)
         
-        apiConnector.doPostWithNote(newnote)
-        
-        // filter the notes
-        filterNotes()
+        apiConnector.doPostWithNote(self, note: newnote)
         
         // instantiate new AddNoteViewController
         // if #nofilter, let the group for AddNoteVC be first group
@@ -280,6 +276,8 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     // Filter notes based upon current filter
     func filterNotes() {
+        notes.sort({$0.timestamp.timeIntervalSinceNow > $1.timestamp.timeIntervalSinceNow})
+        
         filteredNotes = []
         if (filter != nil) {
             for note in notes {

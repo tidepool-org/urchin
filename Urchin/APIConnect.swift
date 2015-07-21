@@ -370,7 +370,6 @@ class APIConnector {
                     }
                     
                     notesVC.notes = notesVC.notes + notes
-                    notesVC.notes.sort({$0.timestamp.timeIntervalSinceNow > $1.timestamp.timeIntervalSinceNow})
                     notesVC.filterNotes()
                     notesVC.notesTable.reloadData()
                 } else if (httpResponse.statusCode == 404) {
@@ -393,7 +392,7 @@ class APIConnector {
         }
     }
     
-    func doPostWithNote(note: Note) {
+    func doPostWithNote(notesVC: NotesViewController, note: Note) {
         // '/message/send/' + message.groupid
         
         // create the request
@@ -416,8 +415,23 @@ class APIConnector {
             if let httpResponse = response as? NSHTTPURLResponse {
                 println(httpResponse.statusCode)
                 
-                var jsonResult: NSDictionary = (NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: nil) as? NSDictionary)!
-                println(jsonResult)
+                if (httpResponse.statusCode == 201) {
+                    var jsonResult: NSDictionary = (NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: nil) as? NSDictionary)!
+                    
+                    note.id = jsonResult.valueForKey("id") as! String
+                    
+                    notesVC.notes.insert(note, atIndex: 0)
+                    // filter the notes, sort the notes, reload notes table
+                    notesVC.filterNotes()
+                    notesVC.notesTable.reloadData()
+                    
+                } else {
+                    println("an unknown error occurred")
+                    self.alertWithOkayButton("Unknown Error Occurred", message: "An unknown error occurred while posting the note. We are working hard to resolve this issue.")
+                }
+            } else {
+                println("an unknown error occurred")
+                self.alertWithOkayButton("Unknown Error Occurred", message: "An unknown error occurred while posting the note. We are working hard to resolve this issue.")
             }
         }
     }
