@@ -373,6 +373,9 @@ class APIConnector {
                     notesVC.notes.sort({$0.timestamp.timeIntervalSinceNow > $1.timestamp.timeIntervalSinceNow})
                     notesVC.filterNotes()
                     notesVC.notesTable.reloadData()
+                } else if (httpResponse.statusCode == 404) {
+                    println("no notes in range \(httpResponse.statusCode), userid: \(userid)")
+                    self.alertWithOkayButton("No notes in range", message: "No more notes in this 3-month date range for user with userid: \(userid). There may be more notes for this user in the next 3 months.")
                 } else {
                     println("an unknown error occurred \(httpResponse.statusCode)")
                     self.alertWithOkayButton("Unknown Error Occurred", message: "An unknown error occurred while fetching notes. We are working hard to resolve this issue.")
