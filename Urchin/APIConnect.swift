@@ -407,9 +407,6 @@ class APIConnector {
         var err: NSError?
         request.HTTPBody = NSJSONSerialization.dataWithJSONObject(jsonObject, options: nil, error: &err)
         
-        println(NSJSONSerialization.isValidJSONObject(jsonObject))
-        println(NSJSONSerialization.JSONObjectWithData(NSJSONSerialization.dataWithJSONObject(jsonObject, options: nil, error: nil)!, options: nil, error: nil)!)
-        
         NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) {(response, data, error) in
             
             if let httpResponse = response as? NSHTTPURLResponse {
@@ -436,11 +433,11 @@ class APIConnector {
         }
     }
     
-    func editNote(note: Note) {
+    func editNote(notesVC: NotesViewController, editedNote: Note, originalNote: Note) {
         // '/message/edit/' + note.id
         
         // create the request
-        let urlString = baseURL + "/message/edit/" + note.id
+        let urlString = baseURL + "/message/edit/" + originalNote.id
         println(urlString)
         let url = NSURL(string: urlString)
         let request = NSMutableURLRequest(URL: url!)
@@ -448,19 +445,30 @@ class APIConnector {
         request.setValue("\(x_tidepool_session_token)", forHTTPHeaderField: "x-tidepool-session-token")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
-        let jsonObject = note.updatesFromNote()
+        let jsonObject = editedNote.updatesFromNote()
         var err: NSError?
         request.HTTPBody = NSJSONSerialization.dataWithJSONObject(jsonObject, options: nil, error: &err)
-        
-        println(NSJSONSerialization.isValidJSONObject(jsonObject))
-        println(NSJSONSerialization.JSONObjectWithData(NSJSONSerialization.dataWithJSONObject(jsonObject, options: nil, error: nil)!, options: nil, error: nil)!)
-        
-        println(note.id)
         
         NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) {(response, data, error) in
             
             if let httpResponse = response as? NSHTTPURLResponse {
                 println(httpResponse.statusCode)
+                if (httpResponse.statusCode == 200) {
+                    println("success! edit the note locally and reload the notesTable")
+                    
+                    originalNote.messagetext = editedNote.messagetext
+                    originalNote.timestamp = editedNote.timestamp
+                    
+                    // filter the notes, sort the notes, reload notes table
+                    notesVC.filterNotes()
+                    notesVC.notesTable.reloadData()
+                } else {
+                    println("an unknown error occurred")
+                    self.alertWithOkayButton("Unknown Error Occurred", message: "An unknown error occurred while editing the note. We are working hard to resolve this issue.")
+                }
+            } else {
+                println("an unknown error occurred")
+                self.alertWithOkayButton("Unknown Error Occurred", message: "An unknown error occurred while editing the note. We are working hard to resolve this issue.")
             }
         }
     }

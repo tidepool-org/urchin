@@ -15,7 +15,7 @@ let expandedHashtagsViewH: CGFloat = 2 * labelInset + 3 * hashtagHeight + 3 * la
 let condensedHashtagsViewH: CGFloat = 2 * labelInset + hashtagHeight
 let defaultMessage: String = "What's going on?"
 
-class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDataSource, UITableViewDelegate {
+class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate {
     
     // DropDownMenu
     var dropDownMenu: UITableView!
@@ -337,20 +337,13 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
         if (!messageBox.text.isEmpty && messageBox.text != defaultMessage) {
             // If the note has been edited, show an alert
             // DOES NOT show alert if date or group has been changed
-            let alert = UIAlertController(title: "Discard Note?", message: "If you close this note, your note will be lost.", preferredStyle: UIAlertControllerStyle.Alert)
-            alert.addAction(UIAlertAction(title: "Cancel",
-                style: .Default,
-                handler: nil))
-            alert.addAction(UIAlertAction(title: "Okay",
-                style: UIAlertActionStyle.Default,
-                handler: {(alert: UIAlertAction!) in
-                    let notification = NSNotification(name: "doneAdding", object: nil)
-                    NSNotificationCenter.defaultCenter().postNotification(notification)
-                    
-                    self.view.endEditing(true)
-                    self.closeDatePicker(false)
-                    self.dismissViewControllerAnimated(true, completion: nil)}))
-            self.presentViewController(alert, animated: true, completion: nil)
+            var alert = UIAlertView()
+            alert.delegate = self
+            alert.title = "Discard Note?"
+            alert.message = "If you close this note, your note will be lost."
+            alert.addButtonWithTitle("Cancel")
+            alert.addButtonWithTitle("Okay")
+            alert.show()
         } else {
             // Note has not been edited, dismiss the VC
             let notification = NSNotification(name: "doneAdding", object: nil)
@@ -359,6 +352,28 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
             self.view.endEditing(true)
             self.closeDatePicker(false)
             self.dismissViewControllerAnimated(true, completion: nil)
+        }
+    }
+    
+    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
+        switch buttonIndex {
+        case 0:
+            println("Cancel")
+            break
+        case 1:
+            println("Okay")
+            
+            let notification = NSNotification(name: "doneAdding", object: nil)
+            NSNotificationCenter.defaultCenter().postNotification(notification)
+            
+            self.view.endEditing(true)
+            self.closeDatePicker(false)
+            self.dismissViewControllerAnimated(true, completion: nil)
+            
+            break
+        default:
+            println("uh oh")
+            break
         }
     }
     

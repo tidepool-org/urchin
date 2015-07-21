@@ -299,9 +299,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
     func saveNote(sender: AnyObject) {
         addOrEditShowing = false
         
-        apiConnector.editNote(editNoteViewController!.note)
-        
-        notesTable.reloadData()
+        apiConnector.editNote(self, editedNote: editNoteViewController!.editedNote, originalNote: editNoteViewController!.note)
     }
     
     // Fetch and load the groups/teams that user is involved in

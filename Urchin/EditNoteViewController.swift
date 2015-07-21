@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import CoreData
 
-class EditNoteViewController: UIViewController, UITextViewDelegate {
+class EditNoteViewController: UIViewController, UITextViewDelegate, UIAlertViewDelegate {
     
     // UI Elements
     
@@ -42,8 +42,9 @@ class EditNoteViewController: UIViewController, UITextViewDelegate {
     let cameraButton: UIButton
     let locationButton: UIButton
     
-    // Data, only the note being edited
+    // Original note, edited note, and the full name for the group
     let note: Note
+    let editedNote: Note
     let groupFullName: String
     
     // Keyboard frame for positioning UI Elements
@@ -70,6 +71,9 @@ class EditNoteViewController: UIViewController, UITextViewDelegate {
         
         // data
         self.note = note
+        self.editedNote = Note()
+        editedNote.createdtime = note.createdtime
+        editedNote.messagetext = note.messagetext
         self.groupFullName = groupFullName
         
         // Initialize keyboard frame of size Zero
@@ -253,20 +257,13 @@ class EditNoteViewController: UIViewController, UITextViewDelegate {
     func closeVC(sender: UIBarButtonItem!) {
         if (note.messagetext != messageBox.text || note.timestamp != datePicker.date) {
             // If the note has been changed, show an alert
-            let alert = UIAlertController(title: "Save Changes?", message: "You have made changes to this note. Would you like to save these changes?", preferredStyle: UIAlertControllerStyle.Alert)
-            alert.addAction(UIAlertAction(title: "Discard",
-                style: UIAlertActionStyle.Destructive,
-                handler: {(alert: UIAlertAction!) in
-                    let notification = NSNotification(name: "doneEditing", object: nil)
-                    NSNotificationCenter.defaultCenter().postNotification(notification)
-                    
-                    self.view.endEditing(true)
-                    self.closeDatePicker(false)
-                    self.dismissViewControllerAnimated(true, completion: nil)}))
-            alert.addAction(UIAlertAction(title: "Save",
-                style: UIAlertActionStyle.Default,
-                handler: {(alert: UIAlertAction!) in self.saveNote()}))
-            self.presentViewController(alert, animated: true, completion: nil)
+            let alert = UIAlertView()
+            alert.delegate = self
+            alert.title = "Save Changes?"
+            alert.message = "You have made changes to this note. Would you like to save these changes?"
+            alert.addButtonWithTitle("Discard")
+            alert.addButtonWithTitle("Save")
+            alert.show()
         } else {
             // Note has not been edited, dismiss the VC
             let notification = NSNotification(name: "doneEditing", object: nil)
@@ -275,6 +272,32 @@ class EditNoteViewController: UIViewController, UITextViewDelegate {
             self.view.endEditing(true)
             self.closeDatePicker(false)
             self.dismissViewControllerAnimated(true, completion: nil)
+        }
+    }
+    
+    // Handle alert view events
+    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
+        switch buttonIndex {
+        case 0:
+            println("Discard")
+            
+            let notification = NSNotification(name: "doneEditing", object: nil)
+            NSNotificationCenter.defaultCenter().postNotification(notification)
+            
+            self.view.endEditing(true)
+            self.closeDatePicker(false)
+            self.dismissViewControllerAnimated(true, completion: nil)
+            
+            break
+        case 1:
+            println("Save")
+            
+            self.saveNote()
+            
+            break
+        default:
+            println("uh oh")
+            break
         }
     }
     
@@ -492,11 +515,11 @@ class EditNoteViewController: UIViewController, UITextViewDelegate {
         if ((note.messagetext != messageBox.text || note.timestamp != datePicker.date) && messageBox.text != defaultMessage && !messageBox.text.isEmpty) {
             // if messageBox has text (not default message or empty) --> set the note to have values
             // groupid does not change
-            self.note.messagetext = self.messageBox.text
-            self.note.timestamp = self.datePicker.date
+            self.editedNote.messagetext = self.messageBox.text
+            self.editedNote.timestamp = self.datePicker.date
             
             // Identify hashtags
-            let words = self.note.messagetext.componentsSeparatedByString(" ")
+            let words = self.editedNote.messagetext.componentsSeparatedByString(" ")
             
             for word in words {
                 if (word.hasPrefix("#")) {
