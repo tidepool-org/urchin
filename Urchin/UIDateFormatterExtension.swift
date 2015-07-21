@@ -39,24 +39,22 @@ public extension NSDateFormatter {
     }
     
     func dateFromISOString(string: String) -> NSDate {
-        var dateFormatter = NSDateFormatter()
-        dateFormatter.locale = NSLocale(localeIdentifier: "en_US_POSIX")
-        dateFormatter.timeZone = NSTimeZone.localTimeZone()
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
-        if let date = dateFormatter.dateFromString(string) {
+        self.locale = NSLocale(localeIdentifier: "en_US_POSIX")
+        self.timeZone = NSTimeZone.localTimeZone()
+        self.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
+        if let date = self.dateFromString(string) {
             return date
         } else {
-            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-            return dateFormatter.dateFromString(string)!
+            self.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+            return self.dateFromString(string)!
         }
     }
     
     func isoStringFromDate(date: NSDate) -> String {
-        var dateFormatter = NSDateFormatter()
-        dateFormatter.locale = NSLocale(localeIdentifier: "en_US_POSIX")
-        dateFormatter.timeZone = NSTimeZone.localTimeZone()
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
-        return dateFormatter.stringFromDate(date)
+        self.locale = NSLocale(localeIdentifier: "en_US_POSIX")
+        self.timeZone = NSTimeZone.localTimeZone()
+        self.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
+        return self.stringFromDate(date)
     }
     
     func stringFromRegDate(date:NSDate) -> String {
