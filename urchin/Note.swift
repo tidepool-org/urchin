@@ -40,25 +40,27 @@ class Note {
     func dictionaryFromNote() -> [String: AnyObject] {
         let dateFormatter = NSDateFormatter()
         let dateFormatterTwo = NSDateFormatter()
-        let patient: [String: AnyObject] = [
-            "aboutMe": self.user!.patient!.aboutMe!,
-            "birthday": dateFormatter.stringFromRegDate(self.user!.patient!.birthday!),
-            "diagnosisDate": dateFormatter.stringFromRegDate(self.user!.patient!.diagnosisDate!)
-        ]
-        let userDict: [String: AnyObject] = [
-            "fullName": self.user!.fullName!,
-            "patient": patient
-        ]
         let jsonObject: [String: AnyObject] = [
             "message": [
-                "createdtime": dateFormatterTwo.isoStringFromDate(self.createdtime),
-                "groupid": self.groupid,
                 "guid": NSUUID().UUIDString,
-                "messagetext": self.messagetext,
+                "userid": self.userid,
+                "groupid": self.groupid,
                 "parentmessage": NSNull(),
                 "timestamp": dateFormatterTwo.isoStringFromDate(self.timestamp),
-                "user": userDict,
-                "userid": self.userid
+                "messagetext": self.messagetext
+            ]
+        ]
+        return jsonObject
+    }
+    
+    func updatesFromNote() -> [String: AnyObject] {
+
+        let dateFormatter = NSDateFormatter()
+        let dateFormatterTwo = NSDateFormatter()
+        let jsonObject: [String: AnyObject] = [
+            "message": [
+                "timestamp": dateFormatterTwo.isoStringFromDate(self.timestamp),
+                "messagetext": self.messagetext
             ]
         ]
         return jsonObject

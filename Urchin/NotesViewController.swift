@@ -254,7 +254,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         let newnote = addNoteViewController!.note
         notes.insert(newnote, atIndex: 0)
         
-        apiConnector.doPostWithToken(newnote)
+        apiConnector.doPostWithNote(newnote)
         
         // filter the notes
         filterNotes()
@@ -300,6 +300,8 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
     // Note is modified in EditNoteVC, only need to reload notesTable
     func saveNote(sender: AnyObject) {
         addOrEditShowing = false
+        
+        apiConnector.editNote(editNoteViewController!.note)
         
         notesTable.reloadData()
     }

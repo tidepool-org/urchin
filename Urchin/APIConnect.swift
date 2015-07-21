@@ -12,6 +12,7 @@ import CoreData
 
 class APIConnector {
     
+    var baseURL: String = "https://devel-api.tidepool.io"
     var x_tidepool_session_token: String = ""
     var user: User?
     
@@ -27,8 +28,13 @@ class APIConnector {
             self.saveLogin("")
         }
         
+        loginRequest(loginVC, base64LoginString: base64LoginString)
+    }
+    
+    func loginRequest(loginVC: LogInViewController, base64LoginString: String) {
         // create the request
-        let url = NSURL(string: "https://api.tidepool.io/auth/login")
+        let urlString = baseURL + "/auth/login"
+        let url = NSURL(string: urlString)
         let request = NSMutableURLRequest(URL: url!)
         request.HTTPMethod = "POST"
         request.setValue("Basic \(base64LoginString)", forHTTPHeaderField: "Authorization")
@@ -42,21 +48,36 @@ class APIConnector {
         
         NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) {(response, data, error) in
             
-            if let httpResponse = response as? NSHTTPURLResponse {
-                println("login \(httpResponse.statusCode)")
-                
-                if (httpResponse.statusCode == 200) {
-                    var jsonResult: NSDictionary = (NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: nil) as? NSDictionary)!
-                    
-                    if let sessionToken = httpResponse.allHeaderFields["x-tidepool-session-token"] as? String {
-                        self.x_tidepool_session_token = sessionToken
-                        self.user = User(userid: jsonResult.valueForKey("userid") as! String, apiConnector: self)
-                        loginVC.makeTransition(self)
-                    }
+            var jsonResult: NSDictionary = (NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: nil) as? NSDictionary)!
+            
+            if let code = jsonResult.valueForKey("code") as? Int {
+                if (code == 401) {
+                    println("incorrect login information")
+                    self.alertWithOkayButton("Invalid Login", message: "Wrong username or password.")
+                } else {
+                    println("an unknown error occurred")
+                    self.alertWithOkayButton("Unknown Error Occurred", message: "An unknown error occurred while logging in. We are working hard to resolve this issue.")
                 }
             } else {
-                println(error)
-                println(response)
+                if let httpResponse = response as? NSHTTPURLResponse {
+                    println("login \(httpResponse.statusCode)")
+                    
+                    if (httpResponse.statusCode == 200) {
+                        var jsonResult: NSDictionary = (NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: nil) as? NSDictionary)!
+                        
+                        if let sessionToken = httpResponse.allHeaderFields["x-tidepool-session-token"] as? String {
+                            self.x_tidepool_session_token = sessionToken
+                            self.user = User(userid: jsonResult.valueForKey("userid") as! String, apiConnector: self)
+                            loginVC.makeTransition(self)
+                        }
+                    } else {
+                        println("an unknown error occurred")
+                        self.alertWithOkayButton("Unknown Error Occurred", message: "An unknown error occurred while logging in. We are working hard to resolve this issue.")
+                    }
+                } else {
+                    println("an unknown error occurred")
+                    self.alertWithOkayButton("Unknown Error Occurred", message: "An unknown error occurred while logging in. We are working hard to resolve this issue.")
+                }
             }
             loading.removeFromSuperview()
         }
@@ -105,33 +126,12 @@ class APIConnector {
                         println("Could not save \(error), \(error?.userInfo)")
                     }
                 }
-                let login = results[0].valueForKey("login") as! String
+                let base64LoginString = results[0].valueForKey("login") as! String
                 
-                if (login != "") {
+                if (base64LoginString != "") {
                     // Login information exists
                     
-                    // create the request
-                    let url = NSURL(string: "https://api.tidepool.io/auth/login")
-                    let request = NSMutableURLRequest(URL: url!)
-                    request.HTTPMethod = "POST"
-                    request.setValue("Basic \(login)", forHTTPHeaderField: "Authorization")
-                    
-                    NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) {(response, data, error) in
-                        
-                        if let httpResponse = response as? NSHTTPURLResponse {
-                            println(httpResponse.statusCode)
-                        }
-                        
-                        var jsonResult: NSDictionary = (NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: nil) as? NSDictionary)!
-                        
-                        if let httpResponse = response as? NSHTTPURLResponse {
-                            if let sessionToken = httpResponse.allHeaderFields["x-tidepool-session-token"] as? String {
-                                self.x_tidepool_session_token = sessionToken
-                                self.user = User(userid: jsonResult.valueForKey("userid") as! String, apiConnector: self)
-                                loginVC.makeTransition(self)
-                            }
-                        }
-                    }
+                    self.loginRequest(loginVC, base64LoginString: base64LoginString)
                 }
             }
         } else {
@@ -215,7 +215,8 @@ class APIConnector {
         // /auth/logout
         
         // create the request
-        let url = NSURL(string: "https://api.tidepool.io/auth/logout")
+        let urlString = baseURL + "/auth/logout"
+        let url = NSURL(string: urlString)
         let request = NSMutableURLRequest(URL: url!)
         request.HTTPMethod = "POST"
         request.setValue("\(x_tidepool_session_token)", forHTTPHeaderField: "x-tidepool-session-token")
@@ -224,19 +225,27 @@ class APIConnector {
             
             if let httpResponse = response as? NSHTTPURLResponse {
                 println(httpResponse.statusCode)
+                if (httpResponse.statusCode == 200) {
+                    notesVC.dismissViewControllerAnimated(true, completion: {
+                        self.user = nil
+                        self.x_tidepool_session_token = ""
+                    })
+                } else {
+                    println("an unknown error occurred")
+                    self.alertWithOkayButton("Unknown Error Occurred", message: "An unknown error occurred while logging in. We are working hard to resolve this issue.")
+                }
+            } else {
+                println("an unknown error occurred")
+                self.alertWithOkayButton("Unknown Error Occurred", message: "An unknown error occurred while logging in. We are working hard to resolve this issue.")
             }
-            
-            notesVC.dismissViewControllerAnimated(true, completion: {
-                self.user = nil
-                self.x_tidepool_session_token = ""
-            })
         }
     }
     
     func findProfile(otherUser: User) {
         // '/metadata/' + userId + '/profile'
         
-        let url = NSURL(string: "https://api.tidepool.io/metadata/\(otherUser.userid)/profile")
+        let urlString = baseURL + "/metadata/" + otherUser.userid + "/profile"
+        let url = NSURL(string: urlString)
         let request = NSMutableURLRequest(URL: url!)
         request.HTTPMethod = "GET"
         request.setValue("\(x_tidepool_session_token)", forHTTPHeaderField: "x-tidepool-session-token")
@@ -245,24 +254,23 @@ class APIConnector {
             
             if let httpResponse = response as? NSHTTPURLResponse {
                 println(httpResponse.statusCode)
+                
+                var userDict: NSDictionary = (NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: nil) as? NSDictionary)!
+                
+                otherUser.processUserDict(userDict)
+                
+                // Send notification to NotesVC to handle new note that was just created
+                let notification = NSNotification(name: "anotherGroup", object: nil)
+                NSNotificationCenter.defaultCenter().postNotification(notification)
             }
-            
-            var userDict: NSDictionary = (NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: nil) as? NSDictionary)!
-            
-//            println(userDict)
-            
-            otherUser.processUserDict(userDict)
-            
-            // Send notification to NotesVC to handle new note that was just created
-            let notification = NSNotification(name: "anotherGroup", object: nil)
-            NSNotificationCenter.defaultCenter().postNotification(notification)
         }
     }
     
     func getAllViewableUsers(notesVC: NotesViewController) {
         // '/access/groups/' + userId
         
-        let url = NSURL(string: "https://api.tidepool.io/access/groups/\(user!.userid)")
+        let urlString = baseURL + "/access/groups/" + user!.userid
+        let url = NSURL(string: urlString)
         let request = NSMutableURLRequest(URL: url!)
         request.HTTPMethod = "GET"
         request.setValue("\(x_tidepool_session_token)", forHTTPHeaderField: "x-tidepool-session-token")
@@ -278,13 +286,13 @@ class APIConnector {
             
             if let httpResponse = response as? NSHTTPURLResponse {
                 println(httpResponse.statusCode)
-            }
-            
-            var jsonResult: NSDictionary = (NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: nil) as? NSDictionary)!
-            
-            for key in jsonResult.keyEnumerator() {
-                let group = User(userid: key as! String, apiConnector: self)
-                notesVC.groups.insert(group, atIndex: 0)
+                
+                var jsonResult: NSDictionary = (NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: nil) as? NSDictionary)!
+                
+                for key in jsonResult.keyEnumerator() {
+                    let group = User(userid: key as! String, apiConnector: self)
+                    notesVC.groups.insert(group, atIndex: 0)
+                }
             }
             
             loading.removeFromSuperview()
@@ -297,7 +305,8 @@ class APIConnector {
         
         // create the request
         let dateFormatter = NSDateFormatter()
-        let url = NSURL(string: "https://api.tidepool.io/message/notes/\(userid)?starttime=\(dateFormatter.isoStringFromDate(start))&endtime=\(dateFormatter.isoStringFromDate(end))")
+        let urlString = baseURL + "/message/notes/" + userid + "?starttime=" + dateFormatter.isoStringFromDate(start) + "&endtime="  + dateFormatter.isoStringFromDate(end)
+        let url = NSURL(string: urlString)
         let request = NSMutableURLRequest(URL: url!)
         request.HTTPMethod = "GET"
         request.setValue("\(x_tidepool_session_token)", forHTTPHeaderField: "x-tidepool-session-token")
@@ -316,71 +325,112 @@ class APIConnector {
             
             if let httpResponse = response as? NSHTTPURLResponse {
                 println(httpResponse.statusCode)
-            }
-            
-            var notes: [Note] = []
-            
-            var jsonResult: NSDictionary = (NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: nil) as? NSDictionary)!
-            
-            var messages: NSArray = jsonResult.valueForKey("messages") as! NSArray
-            
-            let dateFormatter = NSDateFormatter()
-            
-            for message in messages {
-                let id = message.valueForKey("id") as! String
-                let otheruserid = message.valueForKey("userid") as! String
-                let groupid = message.valueForKey("groupid") as! String
-                let timestamp = dateFormatter.dateFromISOString(message.valueForKey("timestamp") as! String)
-                var createdtime: NSDate
-                if let created = message.valueForKey("createdtime") as? String {
-                    createdtime = dateFormatter.dateFromISOString(created)
-                } else {
-                    createdtime = timestamp
-                }
-                let messagetext = message.valueForKey("messagetext") as! String
                 
-                let otheruser = User(userid: otheruserid)
-                let userDict = message.valueForKey("user") as! NSDictionary
-                otheruser.processUserDict(userDict)
-
-                let note = Note(id: id, userid: otheruserid, groupid: groupid, timestamp: timestamp, createdtime: createdtime, messagetext: messagetext, user: otheruser)
-                notes.append(note)
-            }
-            
-            notesVC.notes = notesVC.notes + notes
-            notesVC.notes.sort({$0.timestamp.timeIntervalSinceNow > $1.timestamp.timeIntervalSinceNow})
-            notesVC.filterNotes()
-            notesVC.notesTable.reloadData()
-            notesVC.numberFetches--
-            if (notesVC.numberFetches == 0) {
-                notesVC.loadingNotes = false
+                var notes: [Note] = []
+                
+                var jsonResult: NSDictionary = (NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: nil) as? NSDictionary)!
+                
+                var messages: NSArray = jsonResult.valueForKey("messages") as! NSArray
+                
+                let dateFormatter = NSDateFormatter()
+                
+                for message in messages {
+                    let id = message.valueForKey("id") as! String
+                    let otheruserid = message.valueForKey("userid") as! String
+                    let groupid = message.valueForKey("groupid") as! String
+                    let timestamp = dateFormatter.dateFromISOString(message.valueForKey("timestamp") as! String)
+                    var createdtime: NSDate
+                    if let created = message.valueForKey("createdtime") as? String {
+                        createdtime = dateFormatter.dateFromISOString(created)
+                    } else {
+                        createdtime = timestamp
+                    }
+                    let messagetext = message.valueForKey("messagetext") as! String
+                    
+                    let otheruser = User(userid: otheruserid)
+                    let userDict = message.valueForKey("user") as! NSDictionary
+                    otheruser.processUserDict(userDict)
+                    
+                    let note = Note(id: id, userid: otheruserid, groupid: groupid, timestamp: timestamp, createdtime: createdtime, messagetext: messagetext, user: otheruser)
+                    notes.append(note)
+                }
+                
+                notesVC.notes = notesVC.notes + notes
+                notesVC.notes.sort({$0.timestamp.timeIntervalSinceNow > $1.timestamp.timeIntervalSinceNow})
+                notesVC.filterNotes()
+                notesVC.notesTable.reloadData()
+                notesVC.numberFetches--
+                if (notesVC.numberFetches == 0) {
+                    notesVC.loadingNotes = false
+                }
             }
             loading.removeFromSuperview()
         }
     }
     
-    func doPostWithToken(note: Note) {
+    func doPostWithNote(note: Note) {
         // '/message/send/' + message.groupid
         
         // create the request
-        let url = NSURL(string: "https://api.tidepool.io/message/send/\(note.groupid)")
+        let urlString = baseURL + "/message/send/" + note.groupid
+        let url = NSURL(string: urlString)
         let request = NSMutableURLRequest(URL: url!)
         request.HTTPMethod = "POST"
         request.setValue("\(x_tidepool_session_token)", forHTTPHeaderField: "x-tidepool-session-token")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
         let jsonObject = note.dictionaryFromNote()
+        var err: NSError?
+        request.HTTPBody = NSJSONSerialization.dataWithJSONObject(jsonObject, options: nil, error: &err)
         
         println(NSJSONSerialization.isValidJSONObject(jsonObject))
         println(NSJSONSerialization.JSONObjectWithData(NSJSONSerialization.dataWithJSONObject(jsonObject, options: nil, error: nil)!, options: nil, error: nil)!)
         
-//        NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) {(response, data, error) in
-//            
-//            if let httpResponse = response as? NSHTTPURLResponse {
-//                println(httpResponse.statusCode)
-//            }
-//            
-//            var jsonResult: NSDictionary = (NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: nil) as? NSDictionary)!
-//        }
+        NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) {(response, data, error) in
+            
+            if let httpResponse = response as? NSHTTPURLResponse {
+                println(httpResponse.statusCode)
+                
+                var jsonResult: NSDictionary = (NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: nil) as? NSDictionary)!
+                println(jsonResult)
+            }
+        }
+    }
+    
+    func editNote(note: Note) {
+        // '/message/edit/' + note.id
+        
+        // create the request
+        let urlString = baseURL + "/message/edit/" + note.id
+        println(urlString)
+        let url = NSURL(string: urlString)
+        let request = NSMutableURLRequest(URL: url!)
+        request.HTTPMethod = "PUT"
+        request.setValue("\(x_tidepool_session_token)", forHTTPHeaderField: "x-tidepool-session-token")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let jsonObject = note.updatesFromNote()
+        var err: NSError?
+        request.HTTPBody = NSJSONSerialization.dataWithJSONObject(jsonObject, options: nil, error: &err)
+        
+        println(NSJSONSerialization.isValidJSONObject(jsonObject))
+        println(NSJSONSerialization.JSONObjectWithData(NSJSONSerialization.dataWithJSONObject(jsonObject, options: nil, error: nil)!, options: nil, error: nil)!)
+        
+        println(note.id)
+        
+        NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) {(response, data, error) in
+            
+            if let httpResponse = response as? NSHTTPURLResponse {
+                println(httpResponse.statusCode)
+            }
+        }
+    }
+    
+    func alertWithOkayButton(title: String, message: String) {
+        var unknownErrorAlert: UIAlertView = UIAlertView()
+        unknownErrorAlert.title = title
+        unknownErrorAlert.message = message
+        unknownErrorAlert.addButtonWithTitle("Okay")
+        unknownErrorAlert.show()
     }
 }
