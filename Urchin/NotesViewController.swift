@@ -510,8 +510,17 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
             // NotesTable
             
             // Create labels that 'determine' height of cell
-            let usernameLabel = UILabel(frame: CGRectZero)
-            let usernameWidth = (self.view.frame.width - 2*noteCellInset) / 2
+            
+            // Configure the date label size first using extended dateFormatter
+            // used for sizing usernameLabel
+            let timedateLabel = UILabel()
+            let dateFormatter = NSDateFormatter()
+            timedateLabel.attributedText = dateFormatter.attributedStringFromDate(filteredNotes[indexPath.row].timestamp)
+            timedateLabel.sizeToFit()
+            
+            // Configure the username label, with the full name
+            let usernameLabel = UILabel()
+            let usernameWidth = self.view.frame.width - (2 * noteCellInset + timedateLabel.frame.width + 2 * labelSpacing)
             usernameLabel.frame.size = CGSize(width: usernameWidth, height: CGFloat.max)
             usernameLabel.text = filteredNotes[indexPath.row].user!.fullName
             usernameLabel.font = UIFont(name: "OpenSans-Bold", size: 17.5)!

@@ -82,31 +82,32 @@ class APIConnector {
             error: &error) as? [NSManagedObject]
         
         if let results = fetchedResults {
-            let login = results[0].valueForKey("login") as! String
-            if (results.count != 0 && login != "") {
-                // create the request
-                let url = NSURL(string: "https://api.tidepool.io/auth/login")
-                let request = NSMutableURLRequest(URL: url!)
-                request.HTTPMethod = "POST"
-                request.setValue("Basic \(login)", forHTTPHeaderField: "Authorization")
-                
-                NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) {(response, data, error) in
+            if (results.count != 0) {
+                let login = results[0].valueForKey("login") as! String
+                if (login != "") {
+                    // create the request
+                    let url = NSURL(string: "https://api.tidepool.io/auth/login")
+                    let request = NSMutableURLRequest(URL: url!)
+                    request.HTTPMethod = "POST"
+                    request.setValue("Basic \(login)", forHTTPHeaderField: "Authorization")
                     
-                    if let httpResponse = response as? NSHTTPURLResponse {
-                        println(httpResponse.statusCode)
-                    }
-                    
-                    var jsonResult: NSDictionary = (NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: nil) as? NSDictionary)!
-                    
-                    if let httpResponse = response as? NSHTTPURLResponse {
-                        if let sessionToken = httpResponse.allHeaderFields["x-tidepool-session-token"] as? String {
-                            self.x_tidepool_session_token = sessionToken
-                            self.user = User(userid: jsonResult.valueForKey("userid") as! String, apiConnector: self)
-                            loginVC.makeTransition(self)
+                    NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) {(response, data, error) in
+                        
+                        if let httpResponse = response as? NSHTTPURLResponse {
+                            println(httpResponse.statusCode)
+                        }
+                        
+                        var jsonResult: NSDictionary = (NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: nil) as? NSDictionary)!
+                        
+                        if let httpResponse = response as? NSHTTPURLResponse {
+                            if let sessionToken = httpResponse.allHeaderFields["x-tidepool-session-token"] as? String {
+                                self.x_tidepool_session_token = sessionToken
+                                self.user = User(userid: jsonResult.valueForKey("userid") as! String, apiConnector: self)
+                                loginVC.makeTransition(self)
+                            }
                         }
                     }
                 }
-
             }
         } else {
             println("Could not fetch \(error), \(error!.userInfo)")

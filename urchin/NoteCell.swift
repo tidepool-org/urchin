@@ -27,8 +27,14 @@ class NoteCell: UITableViewCell {
         
         self.note = note
         
+        // Configure the date label size first using extended dateFormatter
+        // Later will position, but need size to properly size the usernameLabel
+        let dateFormatter = NSDateFormatter()
+        timedateLabel.attributedText = dateFormatter.attributedStringFromDate(note.timestamp)
+        timedateLabel.sizeToFit()
+        
         // Configure the username label, with the full name
-        let usernameWidth = (contentView.frame.width - 2*noteCellInset) / 2
+        let usernameWidth = contentView.frame.width - (2 * noteCellInset + timedateLabel.frame.width + 2 * labelSpacing)
         usernameLabel.frame.size = CGSize(width: usernameWidth, height: CGFloat.max)
         usernameLabel.text = note.user!.fullName
         usernameLabel.font = UIFont(name: "OpenSans-Bold", size: 17.5)!
@@ -41,10 +47,7 @@ class NoteCell: UITableViewCell {
         let usernameY = noteCellInset
         usernameLabel.frame.origin = CGPoint(x: usernameX, y: usernameY)
         
-        // Configure the date label using extended dateFormatter
-        let dateFormatter = NSDateFormatter()
-        timedateLabel.attributedText = dateFormatter.attributedStringFromDate(note.timestamp)
-        timedateLabel.sizeToFit()
+        // Position timedateLabel
         // use a one line helper label to determine 
         // where the bottom of the first line of the name label is
         let helperLabel = UILabel(frame: CGRectZero)
@@ -80,9 +83,10 @@ class NoteCell: UITableViewCell {
             let editTitle = NSAttributedString(string: "edit", attributes: [NSForegroundColorAttributeName: UIColor(red: 0/255, green: 150/255, blue: 171/255, alpha: 1), NSFontAttributeName: UIFont(name: "OpenSans", size: 12.5)!])
             editButton.setAttributedTitle(editTitle, forState: .Normal)
             editButton.sizeToFit()
-            editButton.frame.size.height = 12.5
-            let editX = contentView.frame.width - (noteCellInset + editButton.frame.width)
-            let editY = messageLabel.frame.maxY + 2 * labelSpacing
+            editButton.frame.size.height = 2 * labelSpacing + 12.5 + noteCellInset
+            editButton.frame.size.width = editButton.frame.width + 2 * noteCellInset
+            let editX = contentView.frame.width - (editButton.frame.width)
+            let editY = messageLabel.frame.maxY
             editButton.frame.origin = CGPoint(x: editX, y: editY)
             
             contentView.addSubview(editButton)
