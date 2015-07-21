@@ -232,11 +232,11 @@ class APIConnector {
                     })
                 } else {
                     println("an unknown error occurred")
-                    self.alertWithOkayButton("Unknown Error Occurred", message: "An unknown error occurred while logging in. We are working hard to resolve this issue.")
+                    self.alertWithOkayButton("Unknown Error Occurred", message: "An unknown error occurred while logging out. We are working hard to resolve this issue.")
                 }
             } else {
                 println("an unknown error occurred")
-                self.alertWithOkayButton("Unknown Error Occurred", message: "An unknown error occurred while logging in. We are working hard to resolve this issue.")
+                self.alertWithOkayButton("Unknown Error Occurred", message: "An unknown error occurred while logging out. We are working hard to resolve this issue.")
             }
         }
     }
@@ -254,14 +254,21 @@ class APIConnector {
             
             if let httpResponse = response as? NSHTTPURLResponse {
                 println(httpResponse.statusCode)
-                
-                var userDict: NSDictionary = (NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: nil) as? NSDictionary)!
-                
-                otherUser.processUserDict(userDict)
-                
-                // Send notification to NotesVC to handle new note that was just created
-                let notification = NSNotification(name: "anotherGroup", object: nil)
-                NSNotificationCenter.defaultCenter().postNotification(notification)
+                if (httpResponse.statusCode == 200) {
+                    var userDict: NSDictionary = (NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: nil) as? NSDictionary)!
+                    
+                    otherUser.processUserDict(userDict)
+                    
+                    // Send notification to NotesVC to handle new note that was just created
+                    let notification = NSNotification(name: "anotherGroup", object: nil)
+                    NSNotificationCenter.defaultCenter().postNotification(notification)
+                } else {
+                    println("an unknown error occurred")
+                    self.alertWithOkayButton("Unknown Error Occurred", message: "An unknown error occurred while fetching profile info. We are working hard to resolve this issue.")
+                }
+            } else {
+                println("an unknown error occurred")
+                self.alertWithOkayButton("Unknown Error Occurred", message: "An unknown error occurred while fetching profile info. We are working hard to resolve this issue.")
             }
         }
     }
@@ -286,15 +293,21 @@ class APIConnector {
             
             if let httpResponse = response as? NSHTTPURLResponse {
                 println(httpResponse.statusCode)
-                
-                var jsonResult: NSDictionary = (NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: nil) as? NSDictionary)!
-                
-                for key in jsonResult.keyEnumerator() {
-                    let group = User(userid: key as! String, apiConnector: self)
-                    notesVC.groups.insert(group, atIndex: 0)
+                if (httpResponse.statusCode == 200) {
+                    var jsonResult: NSDictionary = (NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: nil) as? NSDictionary)!
+                    
+                    for key in jsonResult.keyEnumerator() {
+                        let group = User(userid: key as! String, apiConnector: self)
+                        notesVC.groups.insert(group, atIndex: 0)
+                    }
+                } else {
+                    println("an unknown error occurred")
+                    self.alertWithOkayButton("Unknown Error Occurred", message: "An unknown error occurred while fetching teams. We are working hard to resolve this issue.")
                 }
+            } else {
+                println("an unknown error occurred")
+                self.alertWithOkayButton("Unknown Error Occurred", message: "An unknown error occurred while fetching teams. We are working hard to resolve this issue.")
             }
-            
             loading.removeFromSuperview()
         }
     }
@@ -326,43 +339,52 @@ class APIConnector {
             if let httpResponse = response as? NSHTTPURLResponse {
                 println(httpResponse.statusCode)
                 
-                var notes: [Note] = []
-                
-                var jsonResult: NSDictionary = (NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: nil) as? NSDictionary)!
-                
-                var messages: NSArray = jsonResult.valueForKey("messages") as! NSArray
-                
-                let dateFormatter = NSDateFormatter()
-                
-                for message in messages {
-                    let id = message.valueForKey("id") as! String
-                    let otheruserid = message.valueForKey("userid") as! String
-                    let groupid = message.valueForKey("groupid") as! String
-                    let timestamp = dateFormatter.dateFromISOString(message.valueForKey("timestamp") as! String)
-                    var createdtime: NSDate
-                    if let created = message.valueForKey("createdtime") as? String {
-                        createdtime = dateFormatter.dateFromISOString(created)
-                    } else {
-                        createdtime = timestamp
+                if (httpResponse.statusCode == 200) {
+                    var notes: [Note] = []
+                    
+                    var jsonResult: NSDictionary = (NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: nil) as? NSDictionary)!
+                    
+                    var messages: NSArray = jsonResult.valueForKey("messages") as! NSArray
+                    
+                    let dateFormatter = NSDateFormatter()
+                    
+                    for message in messages {
+                        let id = message.valueForKey("id") as! String
+                        let otheruserid = message.valueForKey("userid") as! String
+                        let groupid = message.valueForKey("groupid") as! String
+                        let timestamp = dateFormatter.dateFromISOString(message.valueForKey("timestamp") as! String)
+                        var createdtime: NSDate
+                        if let created = message.valueForKey("createdtime") as? String {
+                            createdtime = dateFormatter.dateFromISOString(created)
+                        } else {
+                            createdtime = timestamp
+                        }
+                        let messagetext = message.valueForKey("messagetext") as! String
+                        
+                        let otheruser = User(userid: otheruserid)
+                        let userDict = message.valueForKey("user") as! NSDictionary
+                        otheruser.processUserDict(userDict)
+                        
+                        let note = Note(id: id, userid: otheruserid, groupid: groupid, timestamp: timestamp, createdtime: createdtime, messagetext: messagetext, user: otheruser)
+                        notes.append(note)
                     }
-                    let messagetext = message.valueForKey("messagetext") as! String
                     
-                    let otheruser = User(userid: otheruserid)
-                    let userDict = message.valueForKey("user") as! NSDictionary
-                    otheruser.processUserDict(userDict)
-                    
-                    let note = Note(id: id, userid: otheruserid, groupid: groupid, timestamp: timestamp, createdtime: createdtime, messagetext: messagetext, user: otheruser)
-                    notes.append(note)
+                    notesVC.notes = notesVC.notes + notes
+                    notesVC.notes.sort({$0.timestamp.timeIntervalSinceNow > $1.timestamp.timeIntervalSinceNow})
+                    notesVC.filterNotes()
+                    notesVC.notesTable.reloadData()
+                } else {
+                    println("an unknown error occurred \(httpResponse.statusCode)")
+                    self.alertWithOkayButton("Unknown Error Occurred", message: "An unknown error occurred while fetching notes. We are working hard to resolve this issue.")
                 }
                 
-                notesVC.notes = notesVC.notes + notes
-                notesVC.notes.sort({$0.timestamp.timeIntervalSinceNow > $1.timestamp.timeIntervalSinceNow})
-                notesVC.filterNotes()
-                notesVC.notesTable.reloadData()
                 notesVC.numberFetches--
                 if (notesVC.numberFetches == 0) {
                     notesVC.loadingNotes = false
                 }
+            } else {
+                println("an unknown error occurred")
+                self.alertWithOkayButton("Unknown Error Occurred", message: "An unknown error occurred while fetching notes. We are working hard to resolve this issue.")
             }
             loading.removeFromSuperview()
         }
