@@ -9,10 +9,26 @@
         <view contentMode="scaleToFill" id="iN0-l3-epB">
             <rect key="frame" x="0.0" y="0.0" width="480" height="480"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="tidepoollogo.png" translatesAutoresizingMaskIntoConstraints="NO" id="E74-k1-S5k">
+                    <rect key="frame" x="162" y="431" width="156" height="17"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="156" id="YM0-Y0-Dzo"/>
+                        <constraint firstAttribute="height" constant="17.030000000000001" id="axz-5W-qet"/>
+                    </constraints>
+                </imageView>
+            </subviews>
             <color key="backgroundColor" red="0.96862745098039216" green="0.96862745098039216" blue="0.97254901960784312" alpha="1" colorSpace="calibratedRGB"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="E74-k1-S5k" secondAttribute="bottom" constant="32" id="RGQ-aC-upd"/>
+                <constraint firstAttribute="centerX" secondItem="E74-k1-S5k" secondAttribute="centerX" id="ahw-Op-StK"/>
+            </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <point key="canvasLocation" x="548" y="455"/>
         </view>
     </objects>
+    <resources>
+        <image name="tidepoollogo.png" width="197" height="22"/>
+    </resources>
 </document>

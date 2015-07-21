@@ -95,9 +95,13 @@ class EditNoteViewController: UIViewController, UITextViewDelegate {
         // Set background color to light grey color for dark navigationBar
         self.view.backgroundColor = UIColor(red: 247/255, green: 247/255, blue: 248/255, alpha: 1)
         
-        // Configure title with groupid
-        // Title does not need tapGesture actions --> group is fixed
+        // If device is running < iOS 8.0, make navigationBar NOT translucent
+        if (UIDevice.currentDevice().systemVersion as NSString).floatValue < 8.0 {
+            self.navigationController?.navigationBar.translucent = false
+        }
         
+        // Configure title with group / team name
+        // Title does not need tapGesture actions --> group is fixed
         self.title = groupFullName
         self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor(),NSFontAttributeName: UIFont(name: "OpenSans", size: 17.5)!]
         

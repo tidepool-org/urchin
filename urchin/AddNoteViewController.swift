@@ -124,6 +124,11 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
         // Set background color to light grey color
         self.view.backgroundColor = UIColor(red: 247/255, green: 247/255, blue: 248/255, alpha: 1)
         
+        // If device is running < iOS 8.0, make navigationBar NOT translucent
+        if (UIDevice.currentDevice().systemVersion as NSString).floatValue < 8.0 {
+            self.navigationController?.navigationBar.translucent = false
+        }
+        
         // Configure title to initial group (may be changed later with dropDown)
         configureTitleView(group.fullName!)
         

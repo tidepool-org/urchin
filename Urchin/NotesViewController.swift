@@ -62,6 +62,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
     var addOrEditShowing = false
     
     var justLoggedIn = true
+    var readyForTransition = false
     
     init(apiConnector: APIConnector) {
         // Initialize with API connection and user (from loginVC)
@@ -92,6 +93,11 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         // Set background color to light gray
         self.view.backgroundColor = UIColor(red: 247/255, green: 247/255, blue: 248/255, alpha: 1)
+        
+        // If device is running < iOS 8.0, make navigationBar NOT translucent
+        if (UIDevice.currentDevice().systemVersion as NSString).floatValue < 8.0 {
+            self.navigationController?.navigationBar.translucent = false
+        }
         
         // navigationBar title begins with "All Notes" to match #nofilter to start
         configureTitleView("All Notes")
@@ -160,14 +166,20 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         notificationCenter.addObserver(self, selector: "newNote:", name: "newNote", object: nil)
     }
     
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        if (justLoggedIn && readyForTransition) {
+            justLoggedIn = false
+            
+            self.newNote(self)
+        }
+    }
+    
     func anotherGroup(notification: NSNotification) {
         groupsWMetadata++
         if (groups.count != 0 && groupsWMetadata == groups.count + 1) {
-            if (justLoggedIn) {
-                justLoggedIn = false
-                
-                self.newNote(self)
-            }
+            readyForTransition = true
             
             configureDropDownMenu()
             self.loadNotes()
