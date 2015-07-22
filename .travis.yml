@@ -3,3 +3,6 @@ osx_image: xcode6.4
 
 script: 
 - xctool test -project urchin.xcodeproj -scheme Urchin
+
+notifications:
+  email: false
