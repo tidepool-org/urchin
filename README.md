@@ -9,3 +9,9 @@ Requirements:
 - [Swift 1.2](https://developer.apple.com/swift/blog/?id=22)
 
 Clone this repo to run in the iOS Simulator.
+
+### To change environment:
+
+In 'APIConnect.swift', change the global state variable 'baseURL' to your preferred environment.
+
+For development, use the dev environment: 'https://devel-api.tidepool.io'. You may need to create an account at [Blip-devel](blip-devel.tidepool.io).
