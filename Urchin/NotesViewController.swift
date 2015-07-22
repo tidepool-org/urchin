@@ -616,12 +616,14 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
-        let height = scrollView.frame.height
-        let contentYOffset = scrollView.contentOffset.y
-        let distanceFromBottom = scrollView.contentSize.height - contentYOffset
-        
-        if (distanceFromBottom < height && !loadingNotes) {
-            loadNotes()
+        if (scrollView.isEqual(notesTable)) {
+            let height = scrollView.frame.height
+            let contentYOffset = scrollView.contentOffset.y
+            let distanceFromBottom = scrollView.contentSize.height - contentYOffset
+            
+            if (distanceFromBottom < height && !loadingNotes) {
+                loadNotes()
+            }
         }
     }
     

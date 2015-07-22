@@ -19,11 +19,16 @@ class UserDropDownCell: UITableViewCell {
     // UI elements
     let nameLabel: UILabel = UILabel()
     let rightView: UIImageView = UIImageView()
+    let separator: UIView = UIView()
+    let separatorTwo: UIView = UIView()
 
     // Group for the cell
     var group: User!
     
     func configure(key: String) {
+        separator.removeFromSuperview()
+        separatorTwo.removeFromSuperview()
+        
         // Set background color to dark green
         self.backgroundColor = UIColor(red: 0/255, green: 54/255, blue: 62/255, alpha: 1)
         
@@ -44,12 +49,12 @@ class UserDropDownCell: UITableViewCell {
             nameLabel.frame.origin.y = userCellThickSeparator + userCellInset
             
             // configure thick separator at the top
-            let separator = UIView(frame: CGRectMake(0, 0, self.frame.width, userCellThickSeparator))
+            separator.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: userCellThickSeparator)
             separator.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.25)
             self.addSubview(separator)
             
             // configure thin separator at the bottom
-            let separatorTwo = UIView(frame: CGRectMake(0, self.frame.height - userCellThinSeparator, self.frame.width, userCellThinSeparator))
+            separatorTwo.frame = CGRect(x: 0, y: self.frame.height - userCellThinSeparator, width: self.frame.width, height: userCellThinSeparator)
             separatorTwo.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.25)
             self.addSubview(separatorTwo)
             
@@ -62,7 +67,7 @@ class UserDropDownCell: UITableViewCell {
             
             // Configure the thick separator at the top
             // take out the height of the thin separator because the cell above has a thin separator at the bottom
-            let separator = UIView(frame: CGRectMake(0, 0, self.frame.width, userCellThickSeparator - userCellThinSeparator))
+            separator.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: userCellThickSeparator - userCellThinSeparator)
             separator.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.25)
             self.addSubview(separator)
             
@@ -72,7 +77,7 @@ class UserDropDownCell: UITableViewCell {
             self.nameLabel.frame.origin = CGPoint(x: 6*userCellInset, y: userCellInset)
             
             // configure the thin separator at the bottom of the cell
-            let separator = UIView(frame: CGRectMake(0, self.frame.height - userCellThinSeparator, self.frame.width, userCellThinSeparator))
+            separator.frame = CGRect(x: 0, y: self.frame.height - userCellThinSeparator, width: self.frame.width, height: userCellThinSeparator)
             separator.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.25)
             self.addSubview(separator)
             
