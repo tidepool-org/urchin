@@ -31,7 +31,7 @@ class APIConnector {
         loginRequest(loginVC, base64LoginString: base64LoginString)
     }
     
-    func loginRequest(loginVC: LogInViewController, base64LoginString: String) {
+    func loginRequest(loginVC: LogInViewController?, base64LoginString: String) {
         // create the request
         let urlString = baseURL + "/auth/login"
         let url = NSURL(string: urlString)
@@ -40,11 +40,13 @@ class APIConnector {
         request.setValue("Basic \(base64LoginString)", forHTTPHeaderField: "Authorization")
         
         let loading = LoadingView(text: "Logging in...")
-        let loadingX = loginVC.view.frame.width / 2 - loading.frame.width / 2
-        let loadingY = loginVC.view.frame.height / 2 - loading.frame.height / 2
-        loading.frame.origin = CGPoint(x: loadingX, y: loadingY)
-        loginVC.view.addSubview(loading)
-        loginVC.view.bringSubviewToFront(loading)
+        if (loginVC != nil) {
+            let loadingX = loginVC!.view.frame.width / 2 - loading.frame.width / 2
+            let loadingY = loginVC!.view.frame.height / 2 - loading.frame.height / 2
+            loading.frame.origin = CGPoint(x: loadingX, y: loadingY)
+            loginVC!.view.addSubview(loading)
+            loginVC!.view.bringSubviewToFront(loading)
+        }
         
         NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) {(response, data, error) in
             
@@ -53,9 +55,17 @@ class APIConnector {
             if let code = jsonResult.valueForKey("code") as? Int {
                 if (code == 401) {
                     println("incorrect login information")
+                    
+                    let notification = NSNotification(name: "prepareLogin", object: nil)
+                    NSNotificationCenter.defaultCenter().postNotification(notification)
+                    
                     self.alertWithOkayButton("Invalid Login", message: "Wrong username or password.")
                 } else {
                     println("an unknown error occurred")
+                    
+                    let notification = NSNotification(name: "prepareLogin", object: nil)
+                    NSNotificationCenter.defaultCenter().postNotification(notification)
+                    
                     self.alertWithOkayButton("Unknown Error Occurred", message: "An unknown error occurred while logging in. We are working hard to resolve this issue.")
                 }
             } else {
@@ -68,22 +78,41 @@ class APIConnector {
                         if let sessionToken = httpResponse.allHeaderFields["x-tidepool-session-token"] as? String {
                             self.x_tidepool_session_token = sessionToken
                             self.user = User(userid: jsonResult.valueForKey("userid") as! String, apiConnector: self)
-                            loginVC.makeTransition(self)
+                            
+                            let notification = NSNotification(name: "makeTransitionToNotes", object: nil)
+                            NSNotificationCenter.defaultCenter().postNotification(notification)
+                            
+                            let notificationTwo = NSNotification(name: "directLogin", object: nil)
+                            NSNotificationCenter.defaultCenter().postNotification(notificationTwo)
+                        } else {
+                            let notification = NSNotification(name: "prepareLogin", object: nil)
+                            NSNotificationCenter.defaultCenter().postNotification(notification)
                         }
                     } else {
                         println("an unknown error occurred")
+                        
+                        let notification = NSNotification(name: "prepareLogin", object: nil)
+                        NSNotificationCenter.defaultCenter().postNotification(notification)
+                        
                         self.alertWithOkayButton("Unknown Error Occurred", message: "An unknown error occurred while logging in. We are working hard to resolve this issue.")
                     }
                 } else {
                     println("an unknown error occurred")
+                    
+                    let notification = NSNotification(name: "prepareLogin", object: nil)
+                    NSNotificationCenter.defaultCenter().postNotification(notification)
+                    
                     self.alertWithOkayButton("Unknown Error Occurred", message: "An unknown error occurred while logging in. We are working hard to resolve this issue.")
                 }
             }
-            loading.removeFromSuperview()
+            // If there is a loginVC, remove the loading view from it
+            if (loginVC != nil) {
+                loading.removeFromSuperview()
+            }
         }
     }
     
-    func login(loginVC: LogInViewController) {
+    func login() {
         
         // Store the appDelegate
         let appDelegate =
@@ -131,7 +160,12 @@ class APIConnector {
                 if (base64LoginString != "") {
                     // Login information exists
                     
-                    self.loginRequest(loginVC, base64LoginString: base64LoginString)
+                    self.loginRequest(nil, base64LoginString: base64LoginString)
+                } else {
+                    // Login information does not exist
+                    
+                    let notification = NSNotification(name: "prepareLogin", object: nil)
+                    NSNotificationCenter.defaultCenter().postNotification(notification)
                 }
             }
         } else {
@@ -224,8 +258,11 @@ class APIConnector {
         NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) {(response, data, error) in
             
             if let httpResponse = response as? NSHTTPURLResponse {
-                println(httpResponse.statusCode)
+                println("logout \(httpResponse.statusCode)")
                 if (httpResponse.statusCode == 200) {
+                    let notification = NSNotification(name: "prepareLogin", object: nil)
+                    NSNotificationCenter.defaultCenter().postNotification(notification)
+                    
                     notesVC.dismissViewControllerAnimated(true, completion: {
                         self.user = nil
                         self.x_tidepool_session_token = ""
@@ -253,7 +290,7 @@ class APIConnector {
         NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) {(response, data, error) in
             
             if let httpResponse = response as? NSHTTPURLResponse {
-                println(httpResponse.statusCode)
+                println("findProfile \(httpResponse.statusCode)")
                 if (httpResponse.statusCode == 200) {
                     var userDict: NSDictionary = (NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: nil) as? NSDictionary)!
                     
@@ -292,7 +329,7 @@ class APIConnector {
         NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) {(response, data, error) in
             
             if let httpResponse = response as? NSHTTPURLResponse {
-                println(httpResponse.statusCode)
+                println("getAllViewableUsers \(httpResponse.statusCode)")
                 if (httpResponse.statusCode == 200) {
                     var jsonResult: NSDictionary = (NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: nil) as? NSDictionary)!
                     
@@ -337,7 +374,7 @@ class APIConnector {
         NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) {(response, data, error) in
             
             if let httpResponse = response as? NSHTTPURLResponse {
-                println(httpResponse.statusCode)
+                println("getNotesForUserInDateRange \(httpResponse.statusCode)")
                 
                 if (httpResponse.statusCode == 200) {
                     var notes: [Note] = []
@@ -374,7 +411,7 @@ class APIConnector {
                     notesVC.notesTable.reloadData()
                 } else if (httpResponse.statusCode == 404) {
                     println("no notes in range \(httpResponse.statusCode), userid: \(userid)")
-                    self.alertWithOkayButton("No notes in range", message: "No notes in this 3-month date range for user with userid: \(userid). There may be more notes for this user in the next 3 months.")
+//                    self.alertWithOkayButton("No notes in range", message: "No notes in this 3-month date range for user with userid: \(userid). There may be more notes for this user in the next 3 months.")
                 } else {
                     println("an unknown error occurred \(httpResponse.statusCode)")
                     self.alertWithOkayButton("Unknown Error Occurred", message: "An unknown error occurred while fetching notes. We are working hard to resolve this issue.")
@@ -410,7 +447,7 @@ class APIConnector {
         NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) {(response, data, error) in
             
             if let httpResponse = response as? NSHTTPURLResponse {
-                println(httpResponse.statusCode)
+                println("doPostWithNote \(httpResponse.statusCode)")
                 
                 if (httpResponse.statusCode == 201) {
                     var jsonResult: NSDictionary = (NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: nil) as? NSDictionary)!
@@ -438,7 +475,6 @@ class APIConnector {
         
         // create the request
         let urlString = baseURL + "/message/edit/" + originalNote.id
-        println(urlString)
         let url = NSURL(string: urlString)
         let request = NSMutableURLRequest(URL: url!)
         request.HTTPMethod = "PUT"
@@ -452,9 +488,8 @@ class APIConnector {
         NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) {(response, data, error) in
             
             if let httpResponse = response as? NSHTTPURLResponse {
-                println(httpResponse.statusCode)
+                println("editNote \(httpResponse.statusCode)")
                 if (httpResponse.statusCode == 200) {
-                    println("success! edit the note locally and reload the notesTable")
                     
                     originalNote.messagetext = editedNote.messagetext
                     originalNote.timestamp = editedNote.timestamp
