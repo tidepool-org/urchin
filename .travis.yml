@@ -1,8 +1,10 @@
 language: objective-c
 osx_image: xcode6.4
+xcode_project: Urchin.xcodeproj
+xcode_scheme: Urchin
 
 script: 
-- xcodebuild test -scheme Urchin
+- xctool test
 
 notifications:
   email: false
