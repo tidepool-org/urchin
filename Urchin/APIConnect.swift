@@ -16,14 +16,14 @@ class APIConnector {
     var x_tidepool_session_token: String = ""
     var user: User?
     
-    func post(urlExtension: String, headerDict: [String: String], preRequest: () -> Void, completion: (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void) {
+    func request(method: String, urlExtension: String, headerDict: [String: String], preRequest: () -> Void, completion: (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void) {
         
         preRequest()
         
         let urlString = baseURL + urlExtension
         let url = NSURL(string: urlString)
         let request = NSMutableURLRequest(URL: url!)
-        request.HTTPMethod = "POST"
+        request.HTTPMethod = method
         for (field, value) in headerDict {
             request.setValue(value, forHTTPHeaderField: field)
         }
@@ -50,6 +50,8 @@ class APIConnector {
     
     func loginRequest(loginVC: LogInViewController?, base64LoginString: String) {
 
+        let headerDict = ["Authorization":"Basic \(base64LoginString)"]
+        
         let loading = LoadingView(text: "Logging in...")
         
         let preRequest = { () -> Void in
@@ -124,7 +126,7 @@ class APIConnector {
             }
         }
         
-        post("/auth/login", headerDict: ["Authorization":"Basic \(base64LoginString)"], preRequest: preRequest, completion: completion)
+        request("POST", urlExtension: "/auth/login", headerDict: headerDict, preRequest: preRequest, completion: completion)
     }
     
     func login() {
@@ -259,6 +261,8 @@ class APIConnector {
     
     func logout(notesVC: NotesViewController) {
         
+        let headerDict = ["x-tidepool-session-token":"\(x_tidepool_session_token)"]
+        
         let preRequest = { () -> Void in
             self.saveLogin("")
         }
@@ -284,20 +288,20 @@ class APIConnector {
             }
         }
         
-        post("/auth/logout", headerDict: ["x-tidepool-session-token":"\(x_tidepool_session_token)"], preRequest: preRequest, completion: completion)
+        request("POST", urlExtension: "/auth/logout", headerDict: headerDict, preRequest: preRequest, completion: completion)
     }
     
     func findProfile(otherUser: User) {
-        // '/metadata/' + userId + '/profile'
         
-        let urlString = baseURL + "/metadata/" + otherUser.userid + "/profile"
-        let url = NSURL(string: urlString)
-        let request = NSMutableURLRequest(URL: url!)
-        request.HTTPMethod = "GET"
-        request.setValue("\(x_tidepool_session_token)", forHTTPHeaderField: "x-tidepool-session-token")
+        let urlExtension = "/metadata/" + otherUser.userid + "/profile"
         
-        NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) {(response, data, error) in
-            
+        let headerDict = ["x-tidepool-session-token":"\(x_tidepool_session_token)"]
+        
+        let preRequest = { () -> Void in
+            // nothing to prepare
+        }
+        
+        let completion = { (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
             if let httpResponse = response as? NSHTTPURLResponse {
                 println("findProfile \(httpResponse.statusCode)")
                 if (httpResponse.statusCode == 200) {
@@ -317,6 +321,8 @@ class APIConnector {
                 self.alertWithOkayButton("Unknown Error Occurred", message: "An unknown error occurred while fetching profile info. We are working hard to resolve this issue.")
             }
         }
+        
+        request("GET", urlExtension: urlExtension, headerDict: headerDict, preRequest: preRequest, completion: completion)
     }
     
     func getAllViewableUsers(notesVC: NotesViewController) {
