@@ -61,8 +61,9 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
     // Keep track of when add or edit VCs are showing
     var addOrEditShowing = false
     
+    var groupsReadyForTransition = false
+    var viewReadyForTransition = false
     var justLoggedIn = true
-    var readyForTransition = false
     
     init(apiConnector: APIConnector) {
         // Initialize with API connection and user (from loginVC)
@@ -169,20 +170,26 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
-        if (justLoggedIn && readyForTransition) {
-            justLoggedIn = false
-            
-            self.newNote(self)
-        }
+        viewReadyForTransition = true
+        initialAddNote()
     }
     
     func anotherGroup(notification: NSNotification) {
         groupsWMetadata++
         if (groups.count != 0 && groupsWMetadata == groups.count + 1) {
-            readyForTransition = true
+            groupsReadyForTransition = true
+            initialAddNote()
             
             configureDropDownMenu()
             self.loadNotes()
+        }
+    }
+    
+    func initialAddNote() {
+        if (justLoggedIn && viewReadyForTransition && groupsReadyForTransition) {
+            justLoggedIn = false
+            
+            self.newNote(self)
         }
     }
     
@@ -357,6 +364,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         dropDownMenu.dataSource = self
         dropDownMenu.delegate = self
         dropDownMenu.separatorStyle = UITableViewCellSeparatorStyle.None
+        dropDownMenu.scrollsToTop = false
         
         // Drop down menu is only scrollable if the content fits
         dropDownMenu.scrollEnabled = groups.count > 3
