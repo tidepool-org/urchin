@@ -326,23 +326,22 @@ class APIConnector {
     }
     
     func getAllViewableUsers(notesVC: NotesViewController) {
-        // '/access/groups/' + userId
         
-        let urlString = baseURL + "/access/groups/" + user!.userid
-        let url = NSURL(string: urlString)
-        let request = NSMutableURLRequest(URL: url!)
-        request.HTTPMethod = "GET"
-        request.setValue("\(x_tidepool_session_token)", forHTTPHeaderField: "x-tidepool-session-token")
+        let urlExtension = "/access/groups/" + user!.userid
+        
+        let headerDict = ["x-tidepool-session-token":"\(x_tidepool_session_token)"]
         
         let loading = LoadingView(text: "Loading teams...")
-        let loadingX = notesVC.notesTable.frame.width / 2 - loading.frame.width / 2
-        let loadingY = notesVC.notesTable.frame.height / 2 - loading.frame.height / 2
-        loading.frame.origin = CGPoint(x: loadingX, y: loadingY)
-        notesVC.view.addSubview(loading)
-        notesVC.view.bringSubviewToFront(loading)
         
-        NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) {(response, data, error) in
-            
+        let preRequest = { () -> Void in
+            let loadingX = notesVC.notesTable.frame.width / 2 - loading.frame.width / 2
+            let loadingY = notesVC.notesTable.frame.height / 2 - loading.frame.height / 2
+            loading.frame.origin = CGPoint(x: loadingX, y: loadingY)
+            notesVC.view.addSubview(loading)
+            notesVC.view.bringSubviewToFront(loading)
+        }
+        
+        let completion = { (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
             if let httpResponse = response as? NSHTTPURLResponse {
                 println("getAllViewableUsers \(httpResponse.statusCode)")
                 if (httpResponse.statusCode == 200) {
@@ -362,6 +361,8 @@ class APIConnector {
             }
             loading.removeFromSuperview()
         }
+        
+        request("GET", urlExtension: urlExtension, headerDict: headerDict, preRequest: preRequest, completion: completion)
     }
     
     func getNotesForUserInDateRange(notesVC: NotesViewController, userid: String, start: NSDate, end: NSDate) {
