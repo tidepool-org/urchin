@@ -2,7 +2,7 @@ language: objective-c
 osx_image: xcode6.4
 
 script: 
-- xctool test -project urchin.xcodeproj -scheme Urchin
+- xcodebuild test -scheme Urchin -destination 'platform=iOS Simulator,name=iPhone Retina (4-inch 64-bit),OS=7.1'
 
 notifications:
   email: false
