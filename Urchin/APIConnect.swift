@@ -16,7 +16,7 @@ class APIConnector {
     var x_tidepool_session_token: String = ""
     var user: User?
     
-    func request(method: String, urlExtension: String, headerDict: [String: String], preRequest: () -> Void, completion: (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void) {
+    func request(method: String, urlExtension: String, headerDict: [String: String], body: NSData?, preRequest: () -> Void, completion: (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void) {
         
         preRequest()
         
@@ -27,6 +27,7 @@ class APIConnector {
         for (field, value) in headerDict {
             request.setValue(value, forHTTPHeaderField: field)
         }
+        request.HTTPBody = body
         
         NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) { (response, data, error) -> Void in
             completion(response: response, data: data, error: error)
@@ -126,7 +127,7 @@ class APIConnector {
             }
         }
         
-        request("POST", urlExtension: "/auth/login", headerDict: headerDict, preRequest: preRequest, completion: completion)
+        request("POST", urlExtension: "/auth/login", headerDict: headerDict, body: nil, preRequest: preRequest, completion: completion)
     }
     
     func login() {
@@ -288,7 +289,7 @@ class APIConnector {
             }
         }
         
-        request("POST", urlExtension: "/auth/logout", headerDict: headerDict, preRequest: preRequest, completion: completion)
+        request("POST", urlExtension: "/auth/logout", headerDict: headerDict, body: nil, preRequest: preRequest, completion: completion)
     }
     
     func findProfile(otherUser: User) {
@@ -322,7 +323,7 @@ class APIConnector {
             }
         }
         
-        request("GET", urlExtension: urlExtension, headerDict: headerDict, preRequest: preRequest, completion: completion)
+        request("GET", urlExtension: urlExtension, headerDict: headerDict, body: nil, preRequest: preRequest, completion: completion)
     }
     
     func getAllViewableUsers(notesVC: NotesViewController) {
@@ -362,7 +363,7 @@ class APIConnector {
             loading.removeFromSuperview()
         }
         
-        request("GET", urlExtension: urlExtension, headerDict: headerDict, preRequest: preRequest, completion: completion)
+        request("GET", urlExtension: urlExtension, headerDict: headerDict, body: nil, preRequest: preRequest, completion: completion)
     }
     
     func getNotesForUserInDateRange(notesVC: NotesViewController, userid: String, start: NSDate, end: NSDate) {
@@ -441,26 +442,24 @@ class APIConnector {
             loading.removeFromSuperview()
         }
         
-        request("GET", urlExtension: urlExtension, headerDict: headerDict, preRequest: preRequest, completion: completion)
+        request("GET", urlExtension: urlExtension, headerDict: headerDict, body: nil, preRequest: preRequest, completion: completion)
     }
     
     func doPostWithNote(notesVC: NotesViewController, note: Note) {
-        // '/message/send/' + message.groupid
         
-        // create the request
-        let urlString = baseURL + "/message/send/" + note.groupid
-        let url = NSURL(string: urlString)
-        let request = NSMutableURLRequest(URL: url!)
-        request.HTTPMethod = "POST"
-        request.setValue("\(x_tidepool_session_token)", forHTTPHeaderField: "x-tidepool-session-token")
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        let urlExtension = "/message/send/" + note.groupid
+        
+        let headerDict = ["x-tidepool-session-token":"\(x_tidepool_session_token)", "Content-Type":"application/json"]
         
         let jsonObject = note.dictionaryFromNote()
         var err: NSError?
-        request.HTTPBody = NSJSONSerialization.dataWithJSONObject(jsonObject, options: nil, error: &err)
+        let body = NSJSONSerialization.dataWithJSONObject(jsonObject, options: nil, error: &err)
         
-        NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) {(response, data, error) in
-            
+        let preRequest = { () -> Void in
+            // nothing to do in prerequest
+        }
+        
+        let completion = { (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
             if let httpResponse = response as? NSHTTPURLResponse {
                 println("doPostWithNote \(httpResponse.statusCode)")
                 
@@ -483,25 +482,25 @@ class APIConnector {
                 self.alertWithOkayButton("Unknown Error Occurred", message: "An unknown error occurred while posting the note. We are working hard to resolve this issue.")
             }
         }
+        
+        request("POST", urlExtension: urlExtension, headerDict: headerDict, body: body, preRequest: preRequest, completion: completion)
     }
     
     func editNote(notesVC: NotesViewController, editedNote: Note, originalNote: Note) {
-        // '/message/edit/' + note.id
         
-        // create the request
-        let urlString = baseURL + "/message/edit/" + originalNote.id
-        let url = NSURL(string: urlString)
-        let request = NSMutableURLRequest(URL: url!)
-        request.HTTPMethod = "PUT"
-        request.setValue("\(x_tidepool_session_token)", forHTTPHeaderField: "x-tidepool-session-token")
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        let urlExtension = "/message/edit/" + originalNote.id
+        
+        let headerDict = ["x-tidepool-session-token":"\(x_tidepool_session_token)", "Content-Type":"application/json"]
         
         let jsonObject = editedNote.updatesFromNote()
         var err: NSError?
-        request.HTTPBody = NSJSONSerialization.dataWithJSONObject(jsonObject, options: nil, error: &err)
+        let body = NSJSONSerialization.dataWithJSONObject(jsonObject, options: nil, error: &err)
         
-        NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) {(response, data, error) in
-            
+        let preRequest = { () -> Void in
+            // nothing to do in the preRequest
+        }
+        
+        let completion = { (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
             if let httpResponse = response as? NSHTTPURLResponse {
                 println("editNote \(httpResponse.statusCode)")
                 if (httpResponse.statusCode == 200) {
@@ -521,6 +520,8 @@ class APIConnector {
                 self.alertWithOkayButton("Unknown Error Occurred", message: "An unknown error occurred while editing the note. We are working hard to resolve this issue.")
             }
         }
+        
+        request("PUT", urlExtension: urlExtension, headerDict: headerDict, body: body, preRequest: preRequest, completion: completion)
     }
     
     func alertWithOkayButton(title: String, message: String) {
