@@ -366,29 +366,26 @@ class APIConnector {
     }
     
     func getNotesForUserInDateRange(notesVC: NotesViewController, userid: String, start: NSDate, end: NSDate) {
-        // '/message/notes/' + userId + '?starttime=' + start + '&endtime=' + end
-        // Only top level notes
         
-        // create the request
         let dateFormatter = NSDateFormatter()
-        let urlString = baseURL + "/message/notes/" + userid + "?starttime=" + dateFormatter.isoStringFromDate(start) + "&endtime="  + dateFormatter.isoStringFromDate(end)
-        let url = NSURL(string: urlString)
-        let request = NSMutableURLRequest(URL: url!)
-        request.HTTPMethod = "GET"
-        request.setValue("\(x_tidepool_session_token)", forHTTPHeaderField: "x-tidepool-session-token")
+        let urlExtension = "/message/notes/" + userid + "?starttime=" + dateFormatter.isoStringFromDate(start) + "&endtime="  + dateFormatter.isoStringFromDate(end)
         
-        notesVC.loadingNotes = true
-        notesVC.numberFetches++
+        let headerDict = ["x-tidepool-session-token":"\(x_tidepool_session_token)"]
         
         let loading = LoadingView(text: "Loading notes...")
-        let loadingX = notesVC.notesTable.frame.width / 2 - loading.frame.width / 2
-        let loadingY = notesVC.notesTable.frame.height / 2 - loading.frame.height / 2
-        loading.frame.origin = CGPoint(x: loadingX, y: loadingY)
-        notesVC.view.addSubview(loading)
-        notesVC.view.bringSubviewToFront(loading)
         
-        NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) {(response, data, error) in
+        let preRequest = { () -> Void in
+            notesVC.loadingNotes = true
+            notesVC.numberFetches++
             
+            let loadingX = notesVC.notesTable.frame.width / 2 - loading.frame.width / 2
+            let loadingY = notesVC.notesTable.frame.height / 2 - loading.frame.height / 2
+            loading.frame.origin = CGPoint(x: loadingX, y: loadingY)
+            notesVC.view.addSubview(loading)
+            notesVC.view.bringSubviewToFront(loading)
+        }
+        
+        let completion = { (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
             if let httpResponse = response as? NSHTTPURLResponse {
                 println("getNotesForUserInDateRange \(httpResponse.statusCode)")
                 
@@ -427,7 +424,7 @@ class APIConnector {
                     notesVC.notesTable.reloadData()
                 } else if (httpResponse.statusCode == 404) {
                     println("no notes in range \(httpResponse.statusCode), userid: \(userid)")
-//                    self.alertWithOkayButton("No notes in range", message: "No notes in this 3-month date range for user with userid: \(userid). There may be more notes for this user in the next 3 months.")
+                    //                    self.alertWithOkayButton("No notes in range", message: "No notes in this 3-month date range for user with userid: \(userid). There may be more notes for this user in the next 3 months.")
                 } else {
                     println("an unknown error occurred \(httpResponse.statusCode)")
                     self.alertWithOkayButton("Unknown Error Occurred", message: "An unknown error occurred while fetching notes. We are working hard to resolve this issue.")
@@ -443,6 +440,8 @@ class APIConnector {
             }
             loading.removeFromSuperview()
         }
+        
+        request("GET", urlExtension: urlExtension, headerDict: headerDict, preRequest: preRequest, completion: completion)
     }
     
     func doPostWithNote(notesVC: NotesViewController, note: Note) {
