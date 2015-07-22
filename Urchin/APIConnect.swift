@@ -16,6 +16,23 @@ class APIConnector {
     var x_tidepool_session_token: String = ""
     var user: User?
     
+    func post(urlExtension: String, headerDict: [String: String], preRequest: () -> Void, completion: (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void) {
+        
+        preRequest()
+        
+        let urlString = baseURL + urlExtension
+        let url = NSURL(string: urlString)
+        let request = NSMutableURLRequest(URL: url!)
+        request.HTTPMethod = "POST"
+        for (field, value) in headerDict {
+            request.setValue(value, forHTTPHeaderField: field)
+        }
+        
+        NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) { (response, data, error) -> Void in
+            completion(response: response, data: data, error: error)
+        }
+    }
+    
     func login(loginVC: LogInViewController, username: String, password: String) {
         
         let loginString = NSString(format: "%@:%@", username, password)
@@ -32,24 +49,20 @@ class APIConnector {
     }
     
     func loginRequest(loginVC: LogInViewController?, base64LoginString: String) {
-        // create the request
-        let urlString = baseURL + "/auth/login"
-        let url = NSURL(string: urlString)
-        let request = NSMutableURLRequest(URL: url!)
-        request.HTTPMethod = "POST"
-        request.setValue("Basic \(base64LoginString)", forHTTPHeaderField: "Authorization")
-        
+
         let loading = LoadingView(text: "Logging in...")
-        if (loginVC != nil) {
-            let loadingX = loginVC!.view.frame.width / 2 - loading.frame.width / 2
-            let loadingY = loginVC!.view.frame.height / 2 - loading.frame.height / 2
-            loading.frame.origin = CGPoint(x: loadingX, y: loadingY)
-            loginVC!.view.addSubview(loading)
-            loginVC!.view.bringSubviewToFront(loading)
+        
+        let preRequest = { () -> Void in
+            if (loginVC != nil) {
+                let loadingX = loginVC!.view.frame.width / 2 - loading.frame.width / 2
+                let loadingY = loginVC!.view.frame.height / 2 - loading.frame.height / 2
+                loading.frame.origin = CGPoint(x: loadingX, y: loadingY)
+                loginVC!.view.addSubview(loading)
+                loginVC!.view.bringSubviewToFront(loading)
+            }
         }
         
-        NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) {(response, data, error) in
-            
+        let completion = { (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
             var jsonResult: NSDictionary = (NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: nil) as? NSDictionary)!
             
             if let code = jsonResult.valueForKey("code") as? Int {
@@ -110,6 +123,8 @@ class APIConnector {
                 loading.removeFromSuperview()
             }
         }
+        
+        post("/auth/login", headerDict: ["Authorization":"Basic \(base64LoginString)"], preRequest: preRequest, completion: completion)
     }
     
     func login() {
@@ -126,7 +141,7 @@ class APIConnector {
         
         var error: NSError?
         
-        // Execute the fetch
+        // Execute the fetch from CoreData
         let fetchedResults =
         managedContext.executeFetchRequest(fetchRequest,
             error: &error) as? [NSManagedObject]
@@ -244,19 +259,11 @@ class APIConnector {
     
     func logout(notesVC: NotesViewController) {
         
-        self.saveLogin("")
+        let preRequest = { () -> Void in
+            self.saveLogin("")
+        }
         
-        // /auth/logout
-        
-        // create the request
-        let urlString = baseURL + "/auth/logout"
-        let url = NSURL(string: urlString)
-        let request = NSMutableURLRequest(URL: url!)
-        request.HTTPMethod = "POST"
-        request.setValue("\(x_tidepool_session_token)", forHTTPHeaderField: "x-tidepool-session-token")
-        
-        NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) {(response, data, error) in
-            
+        let completion = { (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
             if let httpResponse = response as? NSHTTPURLResponse {
                 println("logout \(httpResponse.statusCode)")
                 if (httpResponse.statusCode == 200) {
@@ -276,6 +283,8 @@ class APIConnector {
                 self.alertWithOkayButton("Unknown Error Occurred", message: "An unknown error occurred while logging out. We are working hard to resolve this issue.")
             }
         }
+        
+        post("/auth/logout", headerDict: ["x-tidepool-session-token":"\(x_tidepool_session_token)"], preRequest: preRequest, completion: completion)
     }
     
     func findProfile(otherUser: User) {
