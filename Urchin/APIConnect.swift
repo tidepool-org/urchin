@@ -335,11 +335,11 @@ class APIConnector {
         let loading = LoadingView(text: "Loading teams...")
         
         let preRequest = { () -> Void in
-            let loadingX = notesVC.notesTable.frame.width / 2 - loading.frame.width / 2
-            let loadingY = notesVC.notesTable.frame.height / 2 - loading.frame.height / 2
-            loading.frame.origin = CGPoint(x: loadingX, y: loadingY)
-            notesVC.view.addSubview(loading)
-            notesVC.view.bringSubviewToFront(loading)
+//            let loadingX = notesVC.notesTable.frame.width / 2 - loading.frame.width / 2
+//            let loadingY = notesVC.notesTable.frame.height / 2 - loading.frame.height / 2
+//            loading.frame.origin = CGPoint(x: loadingX, y: loadingY)
+//            notesVC.view.addSubview(loading)
+//            notesVC.view.bringSubviewToFront(loading)
         }
         
         let completion = { (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
@@ -360,7 +360,7 @@ class APIConnector {
                 println("an unknown error occurred")
                 self.alertWithOkayButton("Unknown Error Occurred", message: "An unknown error occurred while fetching teams. We are working hard to resolve this issue.")
             }
-            loading.removeFromSuperview()
+//            loading.removeFromSuperview()
         }
         
         request("GET", urlExtension: urlExtension, headerDict: headerDict, body: nil, preRequest: preRequest, completion: completion)
@@ -379,11 +379,11 @@ class APIConnector {
             notesVC.loadingNotes = true
             notesVC.numberFetches++
             
-            let loadingX = notesVC.notesTable.frame.width / 2 - loading.frame.width / 2
-            let loadingY = notesVC.notesTable.frame.height / 2 - loading.frame.height / 2
-            loading.frame.origin = CGPoint(x: loadingX, y: loadingY)
-            notesVC.view.addSubview(loading)
-            notesVC.view.bringSubviewToFront(loading)
+//            let loadingX = notesVC.notesTable.frame.width / 2 - loading.frame.width / 2
+//            let loadingY = notesVC.notesTable.frame.height / 2 - loading.frame.height / 2
+//            loading.frame.origin = CGPoint(x: loadingX, y: loadingY)
+//            notesVC.view.addSubview(loading)
+//            notesVC.view.bringSubviewToFront(loading)
         }
         
         let completion = { (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
@@ -439,7 +439,7 @@ class APIConnector {
                 println("an unknown error occurred")
                 self.alertWithOkayButton("Unknown Error Occurred", message: "An unknown error occurred while fetching notes. We are working hard to resolve this issue.")
             }
-            loading.removeFromSuperview()
+//            loading.removeFromSuperview()
         }
         
         request("GET", urlExtension: urlExtension, headerDict: headerDict, body: nil, preRequest: preRequest, completion: completion)
