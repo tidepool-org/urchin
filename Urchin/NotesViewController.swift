@@ -651,8 +651,4 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
     override func shouldAutorotate() -> Bool {
         return false
     }
-    
-    override func supportedInterfaceOrientations() -> Int {
-        return UIInterfaceOrientation.Portrait.rawValue
-    }
 }

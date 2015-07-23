@@ -37,6 +37,7 @@
 		AA8301041B4DB4A400F8ADE6 /* closex@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AA8301021B4DB4A400F8ADE6 /* closex@2x.png */; };
 		AA993E301B3316C10027804C /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA993E2F1B3316C10027804C /* LoginViewController.swift */; };
 		AAA3F3131B508384000EB344 /* HashtagBolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA3F3121B508384000EB344 /* HashtagBolder.swift */; };
+		AAB6B0531B605C440051472C /* FadeAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB6B0521B605C440051472C /* FadeAnimator.swift */; };
 		AABCEF8A1B3231910064FE49 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABCEF891B3231910064FE49 /* AppDelegate.swift */; };
 		AABCEF8F1B3231910064FE49 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AABCEF8D1B3231910064FE49 /* Main.storyboard */; };
 		AABCEF911B3231910064FE49 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AABCEF901B3231910064FE49 /* Images.xcassets */; };
@@ -93,6 +94,7 @@
 		AA8301021B4DB4A400F8ADE6 /* closex@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "closex@2x.png"; sourceTree = "<group>"; };
 		AA993E2F1B3316C10027804C /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		AAA3F3121B508384000EB344 /* HashtagBolder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HashtagBolder.swift; sourceTree = "<group>"; };
+		AAB6B0521B605C440051472C /* FadeAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FadeAnimator.swift; sourceTree = "<group>"; };
 		AABCEF841B3231910064FE49 /* urchin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = urchin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AABCEF881B3231910064FE49 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AABCEF891B3231910064FE49 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -236,6 +238,7 @@
 				AACE31961B4AE15D00F90E1D /* Resources */,
 				AAA3F3121B508384000EB344 /* HashtagBolder.swift */,
 				AA3484F21B56AEBE0028C49B /* Extensions */,
+				AAB6B0521B605C440051472C /* FadeAnimator.swift */,
 			);
 			path = urchin;
 			sourceTree = "<group>";
@@ -445,6 +448,7 @@
 			files = (
 				AA698EED1B545A07004154E0 /* EditNoteViewController.swift in Sources */,
 				AAEFB16D1B5062CE000EF8B4 /* UrchinData.xcdatamodeld in Sources */,
+				AAB6B0531B605C440051472C /* FadeAnimator.swift in Sources */,
 				AAA3F3131B508384000EB344 /* HashtagBolder.swift in Sources */,
 				AA3484F01B559EA10028C49B /* HashtagsView.swift in Sources */,
 				AA993E301B3316C10027804C /* LoginViewController.swift in Sources */,

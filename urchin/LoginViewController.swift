@@ -43,6 +43,9 @@ class LogInViewController : UIViewController, UITextFieldDelegate {
     // True once login has been prepared, false until then
     var loginPrepared = false
     
+    // Instantiate the fade animation for transitioning VCs
+    let transition = FadeAnimator()
+    
     required init(coder aDecoder: NSCoder) {
         
         // UI Elements
@@ -122,6 +125,7 @@ class LogInViewController : UIViewController, UITextFieldDelegate {
         if (!apiConnector.x_tidepool_session_token.isEmpty && apiConnector.user != nil) {
             
             let notesScene = UINavigationController(rootViewController: NotesViewController(apiConnector: apiConnector))
+            notesScene.transitioningDelegate = self
             self.presentViewController(notesScene, animated: true, completion: nil)
         } else {
             prepareLogin()
@@ -298,6 +302,9 @@ class LogInViewController : UIViewController, UITextFieldDelegate {
             }
             
             let notesScene = UINavigationController(rootViewController: NotesViewController(apiConnector: apiConnector))
+            
+            notesScene.transitioningDelegate = self
+            
             self.presentViewController(notesScene, animated: true, completion: nil)
         } else {
             println("*** DISPLAY ERROR MESSAGES TO USER ***")
@@ -476,8 +483,16 @@ class LogInViewController : UIViewController, UITextFieldDelegate {
     override func shouldAutorotate() -> Bool {
         return false
     }
+}
+
+extension LogInViewController: UIViewControllerTransitioningDelegate {
+    func animationControllerForPresentedController(presented: UIViewController, presentingController presenting: UIViewController, sourceController source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        transition.presenting = true
+        return transition
+    }
     
-    override func supportedInterfaceOrientations() -> Int {
-        return UIInterfaceOrientation.Portrait.rawValue
+    func animationControllerForDismissedController(dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        transition.presenting = false
+        return transition
     }
 }
