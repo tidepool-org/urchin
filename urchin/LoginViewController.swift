@@ -19,7 +19,7 @@ class LogInViewController : UIViewController, UITextFieldDelegate {
     let emailField: UITextField
     let passwordField: UITextField
     let rememberMeView: UIView
-    let rememberMeCheckbox: UIButton
+    let rememberMeCheckbox: UIImageView
     var rememberMe: Bool
     let rememberMeLabel: UILabel
     let logInButton: UIButton
@@ -54,7 +54,7 @@ class LogInViewController : UIViewController, UITextFieldDelegate {
         emailField = UITextField(frame: CGRectZero)
         passwordField = UITextField(frame: CGRectZero)
         rememberMeView = UIView(frame: CGRectZero)
-        rememberMeCheckbox = UIButton(frame: CGRectZero)
+        rememberMeCheckbox = UIImageView(frame: CGRectZero)
         rememberMe = false
         rememberMeLabel = UILabel(frame: CGRectZero)
         logInButton = UIButton(frame: CGRectZero)
@@ -223,7 +223,7 @@ class LogInViewController : UIViewController, UITextFieldDelegate {
             // configure the remember me check box
             let rememberX = CGFloat(25)
             let unchecked = UIImage(named: "unchecked") as UIImage!
-            rememberMeCheckbox.setImage(unchecked, forState: .Normal)
+            rememberMeCheckbox.image = unchecked
             rememberMeCheckbox.frame = CGRectMake(rememberX, 0, unchecked.size.width, unchecked.size.height)
             
             // configure remember me label
@@ -231,7 +231,7 @@ class LogInViewController : UIViewController, UITextFieldDelegate {
             rememberMeLabel.font = UIFont(name: "OpenSans", size: 17.5)!
             rememberMeLabel.textColor = UIColor(red: 152/255, green: 152/255, blue: 151/255, alpha: 1)
             rememberMeLabel.sizeToFit()
-            let rememberLabelX = rememberX + rememberMeCheckbox.frame.width + 11.0
+            let rememberLabelX = rememberX + rememberMeCheckbox.frame.width + 8.0
             rememberMeLabel.frame = CGRectMake(rememberLabelX, 0, rememberMeLabel.frame.width, rememberMeLabel.frame.height)
             
             // Create a whole view to add the remember me label and checkbox to
@@ -297,6 +297,7 @@ class LogInViewController : UIViewController, UITextFieldDelegate {
         if (!apiConnector.x_tidepool_session_token.isEmpty && apiConnector.user != nil) {
             emailField.text = ""
             passwordField.text = ""
+            self.textFieldDidChange(emailField)
             if (rememberMe) {
                 self.checkboxPressed(self)
             }
@@ -318,13 +319,13 @@ class LogInViewController : UIViewController, UITextFieldDelegate {
             
             rememberMe = false
             let unchecked = UIImage(named: "unchecked") as UIImage!
-            rememberMeCheckbox.setImage(unchecked, forState: .Normal)
+            rememberMeCheckbox.image = unchecked
         } else {
             // currently don't rememberMe --> change to rememberMe
             
             rememberMe = true
-            let unchecked = UIImage(named: "checked") as UIImage!
-            rememberMeCheckbox.setImage(unchecked, forState: .Normal)
+            let checked = UIImage(named: "checked") as UIImage!
+            rememberMeCheckbox.image = checked
         }
         println(rememberMe)
     }
