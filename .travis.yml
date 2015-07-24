@@ -1,9 +1,16 @@
 language: objective-c
 
-language: objective-c
-script:
-  - xctool -project Urchin.xcodeproj -scheme Urchin -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO
-  - xctool test -project Urchin.xcodeproj -scheme Urchin -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO
-
+branches:
+ only:
+ - master
+ 
 notifications:
-  email: false
+ email: false
+
+xcode_project: Urchin.xcodeproj
+xcode_scheme: Urchin
+osx_image: xcode6.4
+xcode_sdk: iphonesimulator8.3 
+
+script:
+- xcodebuild clean build test -project Urchin.xcodeproj -scheme Urchin
