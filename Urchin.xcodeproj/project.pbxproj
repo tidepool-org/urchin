@@ -32,6 +32,22 @@
 		AA6AF8EF1B5EA2AC0011F246 /* HashtagBolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA3F3121B508384000EB344 /* HashtagBolder.swift */; };
 		AA6AF8F11B5EA81F0011F246 /* dateFormatterExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6AF8F01B5EA81F0011F246 /* dateFormatterExtensionTests.swift */; };
 		AA6AF8F21B5EA8920011F246 /* UIDateFormatterExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3484F31B56AED20028C49B /* UIDateFormatterExtension.swift */; };
+		AA7920181B62A8F50046038B /* apiConnectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7920171B62A8F50046038B /* apiConnectorTests.swift */; };
+		AA79201A1B62A9070046038B /* APIConnect.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA03FB891B5848FD001B9435 /* APIConnect.swift */; };
+		AA79201B1B62AB2B0046038B /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABCEFAD1B3234360064FE49 /* Note.swift */; };
+		AA79201C1B62AB2F0046038B /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3652C11B33847A001F514D /* User.swift */; };
+		AA79201D1B62AB330046038B /* Patient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3652CB1B34A163001F514D /* Patient.swift */; };
+		AA79201E1B62AB430046038B /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA993E2F1B3316C10027804C /* LoginViewController.swift */; };
+		AA79201F1B62AB470046038B /* NotesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3652C31B338525001F514D /* NotesViewController.swift */; };
+		AA7920201B62AB560046038B /* AddNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA8300FF1B4D986300F8ADE6 /* AddNoteViewController.swift */; };
+		AA7920211B62AB5A0046038B /* EditNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA698EEC1B545A07004154E0 /* EditNoteViewController.swift */; };
+		AA7920221B62AB5F0046038B /* HashtagsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3484EF1B559EA10028C49B /* HashtagsView.swift */; };
+		AA7920231B62AB630046038B /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA54DBBE1B596DE7005F8448 /* LoadingView.swift */; };
+		AA7920241B62AB760046038B /* UserDropDownCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3652CD1B34A8E4001F514D /* UserDropDownCell.swift */; };
+		AA7920251B62AB790046038B /* NoteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABCEFAB1B3232C60064FE49 /* NoteCell.swift */; };
+		AA7920261B62AB8E0046038B /* UIDeviceExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA698EEA1B541C0B004154E0 /* UIDeviceExtension.swift */; };
+		AA7920271B62AB920046038B /* FadeAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB6B0521B605C440051472C /* FadeAnimator.swift */; };
+		AA7920281B62AB9D0046038B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABCEF891B3231910064FE49 /* AppDelegate.swift */; };
 		AA8301001B4D986300F8ADE6 /* AddNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA8300FF1B4D986300F8ADE6 /* AddNoteViewController.swift */; };
 		AA8301031B4DB4A400F8ADE6 /* closex.png in Resources */ = {isa = PBXBuildFile; fileRef = AA8301011B4DB4A400F8ADE6 /* closex.png */; };
 		AA8301041B4DB4A400F8ADE6 /* closex@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AA8301021B4DB4A400F8ADE6 /* closex@2x.png */; };
@@ -89,6 +105,7 @@
 		AA698EEA1B541C0B004154E0 /* UIDeviceExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIDeviceExtension.swift; sourceTree = "<group>"; };
 		AA698EEC1B545A07004154E0 /* EditNoteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditNoteViewController.swift; sourceTree = "<group>"; };
 		AA6AF8F01B5EA81F0011F246 /* dateFormatterExtensionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = dateFormatterExtensionTests.swift; sourceTree = "<group>"; };
+		AA7920171B62A8F50046038B /* apiConnectorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = apiConnectorTests.swift; sourceTree = "<group>"; };
 		AA8300FF1B4D986300F8ADE6 /* AddNoteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddNoteViewController.swift; sourceTree = "<group>"; };
 		AA8301011B4DB4A400F8ADE6 /* closex.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = closex.png; sourceTree = "<group>"; };
 		AA8301021B4DB4A400F8ADE6 /* closex@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "closex@2x.png"; sourceTree = "<group>"; };
@@ -254,6 +271,7 @@
 		AABCEF9C1B3231910064FE49 /* urchinTests */ = {
 			isa = PBXGroup;
 			children = (
+				AA7920171B62A8F50046038B /* apiConnectorTests.swift */,
 				AA6AF8F01B5EA81F0011F246 /* dateFormatterExtensionTests.swift */,
 				AABCEF9F1B3231910064FE49 /* hashtagBolderTests.swift */,
 				AABCEF9D1B3231910064FE49 /* Supporting Files */,
@@ -353,7 +371,7 @@
 		AABCEF7C1B3231910064FE49 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0630;
+				LastUpgradeCheck = 0640;
 				ORGANIZATIONNAME = Tidepool;
 				TargetAttributes = {
 					AABCEF831B3231910064FE49 = {
@@ -472,10 +490,26 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA7920211B62AB5A0046038B /* EditNoteViewController.swift in Sources */,
+				AA7920181B62A8F50046038B /* apiConnectorTests.swift in Sources */,
+				AA7920271B62AB920046038B /* FadeAnimator.swift in Sources */,
 				AA6AF8F11B5EA81F0011F246 /* dateFormatterExtensionTests.swift in Sources */,
+				AA7920261B62AB8E0046038B /* UIDeviceExtension.swift in Sources */,
+				AA7920251B62AB790046038B /* NoteCell.swift in Sources */,
+				AA79201F1B62AB470046038B /* NotesViewController.swift in Sources */,
+				AA79201D1B62AB330046038B /* Patient.swift in Sources */,
+				AA7920281B62AB9D0046038B /* AppDelegate.swift in Sources */,
+				AA79201B1B62AB2B0046038B /* Note.swift in Sources */,
 				AA6AF8EF1B5EA2AC0011F246 /* HashtagBolder.swift in Sources */,
+				AA79201C1B62AB2F0046038B /* User.swift in Sources */,
+				AA7920231B62AB630046038B /* LoadingView.swift in Sources */,
 				AA6AF8F21B5EA8920011F246 /* UIDateFormatterExtension.swift in Sources */,
+				AA7920201B62AB560046038B /* AddNoteViewController.swift in Sources */,
 				AABCEFA01B3231910064FE49 /* hashtagBolderTests.swift in Sources */,
+				AA79201E1B62AB430046038B /* LoginViewController.swift in Sources */,
+				AA7920241B62AB760046038B /* UserDropDownCell.swift in Sources */,
+				AA79201A1B62A9070046038B /* APIConnect.swift in Sources */,
+				AA7920221B62AB5F0046038B /* HashtagsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -602,6 +636,7 @@
 				INFOPLIST_FILE = urchin/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MACH_O_TYPE = mh_execute;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -618,6 +653,7 @@
 				INFOPLIST_FILE = urchin/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MACH_O_TYPE = mh_execute;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
