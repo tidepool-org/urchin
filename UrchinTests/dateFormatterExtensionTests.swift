@@ -41,7 +41,7 @@ class dateFormatterExtensionTests: XCTestCase {
     func testISOStringFromDate() {
         let dateFormatter = NSDateFormatter()
         let date = NSDate(timeIntervalSince1970: 1433425536)
-        let expected = "2015-06-04T06:45:36-07:00"
+        let expected = "2015-06-04T13:45:36+00:00"
         
         XCTAssertEqual(dateFormatter.isoStringFromDate(date), expected, "Assert that date formatter converts NSDate to ISO 8601 properly.")
     }
