@@ -13,4 +13,4 @@ osx_image: xcode6.4
 xcode_sdk: iphonesimulator8.3 
 
 script:
-- xctool test -project Urchin.xcodeproj -scheme Urchin clean build CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
+- xctool test -project Urchin.xcodeproj -scheme Urchin -sdk iphonesimulator clean build CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
