@@ -185,6 +185,11 @@ class APIConnector {
                     let notification = NSNotification(name: "prepareLogin", object: nil)
                     NSNotificationCenter.defaultCenter().postNotification(notification)
                 }
+            } else {
+                // Login information does not exist
+                
+                let notification = NSNotification(name: "prepareLogin", object: nil)
+                NSNotificationCenter.defaultCenter().postNotification(notification)
             }
         } else {
             println("Could not fetch \(error), \(error!.userInfo)")
