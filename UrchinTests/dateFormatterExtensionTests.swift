@@ -23,6 +23,7 @@ class dateFormatterExtensionTests: XCTestCase {
 
     func testAttributedStringFromDate() {
         let dateFormatter = NSDateFormatter()
+        dateFormatter.timeZone = NSTimeZone(name: "GMT")
         let date = NSDate(timeIntervalSince1970: 946729800)
         let expected = NSMutableAttributedString(string: "Saturday 1.1.00 12:30pm", attributes: [NSForegroundColorAttributeName: UIColor.blackColor(), NSFontAttributeName: UIFont(name: "OpenSans", size: 12.5)!])
         expected.addAttribute(NSFontAttributeName, value: UIFont(name: "OpenSans-Bold", size: 12.5)!, range: NSRange(location: 16, length: 7))
@@ -42,7 +43,7 @@ class dateFormatterExtensionTests: XCTestCase {
         let date = NSDate(timeIntervalSince1970: 1433425536)
         let expected = "2015-06-04T13:45:36Z"
         
-        XCTAssertEqual(dateFormatter.isoStringFromDate(date), expected, "Assert that date formatter converts NSDate to ISO 8601 properly.")
+        XCTAssertEqual(dateFormatter.isoStringFromDate(date, zone: NSTimeZone(name: "GMT")), expected, "Assert that date formatter converts NSDate to ISO 8601 properly.")
     }
 
     func testStringFromRegDate() {

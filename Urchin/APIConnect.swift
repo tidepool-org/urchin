@@ -374,7 +374,7 @@ class APIConnector {
     func getNotesForUserInDateRange(notesVC: NotesViewController, userid: String, start: NSDate, end: NSDate) {
         
         let dateFormatter = NSDateFormatter()
-        let urlExtension = "/message/notes/" + userid + "?starttime=" + dateFormatter.isoStringFromDate(start) + "&endtime="  + dateFormatter.isoStringFromDate(end)
+        let urlExtension = "/message/notes/" + userid + "?starttime=" + dateFormatter.isoStringFromDate(start, zone: nil) + "&endtime="  + dateFormatter.isoStringFromDate(end, zone: nil)
         
         let headerDict = ["x-tidepool-session-token":"\(x_tidepool_session_token)"]
         

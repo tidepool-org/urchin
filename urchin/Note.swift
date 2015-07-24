@@ -46,7 +46,7 @@ class Note {
                 "userid": self.userid,
                 "groupid": self.groupid,
                 "parentmessage": NSNull(),
-                "timestamp": dateFormatterTwo.isoStringFromDate(self.timestamp),
+                "timestamp": dateFormatterTwo.isoStringFromDate(self.timestamp, zone: nil),
                 "messagetext": self.messagetext
             ]
         ]
@@ -59,7 +59,7 @@ class Note {
         let dateFormatterTwo = NSDateFormatter()
         let jsonObject: [String: AnyObject] = [
             "message": [
-                "timestamp": dateFormatterTwo.isoStringFromDate(self.timestamp),
+                "timestamp": dateFormatterTwo.isoStringFromDate(self.timestamp, zone: nil),
                 "messagetext": self.messagetext
             ]
         ]

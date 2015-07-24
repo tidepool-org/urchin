@@ -50,9 +50,13 @@ public extension NSDateFormatter {
         }
     }
     
-    func isoStringFromDate(date: NSDate) -> String {
+    func isoStringFromDate(date: NSDate, zone: NSTimeZone?) -> String {
         self.locale = NSLocale(localeIdentifier: "en_US_POSIX")
-        self.timeZone = NSTimeZone.localTimeZone()
+        if (zone != nil) {
+            self.timeZone = zone
+        } else {
+            self.timeZone = NSTimeZone.localTimeZone()
+        }
         self.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
         return self.stringFromDate(date)
     }
