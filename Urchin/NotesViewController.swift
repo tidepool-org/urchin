@@ -11,7 +11,7 @@ import UIKit
 
 let addNoteButtonHeight = CGFloat(105)
 
-class NotesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class NotesViewController: UIViewController {
     
     // All notes
     var notes: [Note] = []
@@ -45,7 +45,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
     var opaqueOverlay: UIView!
     
     // Massive button to add a new note
-    let newNoteButton: UIButton
+    let newNoteButton: UIButton = UIButton()
     
     // Drop Down Menu -- for selecting filter, #nofilter, or logging out
     var dropDownMenu: UITableView!
@@ -53,7 +53,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
     var isDropDownDisplayed: Bool = false
     var isDropDownAnimating: Bool = false
     var dropDownHeight: CGFloat = 0
-    var overlayHeight: CGFloat
+    var overlayHeight: CGFloat = 0
     
     // Possible VCs to push to (sometimes nil)
     var addNoteViewController: AddNoteViewController?
@@ -69,11 +69,6 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         // Initialize with API connection and user (from loginVC)
         self.apiConnector = apiConnector
         self.user = apiConnector.user!
-        
-        self.newNoteButton = UIButton.buttonWithType(UIButtonType.System) as! UIButton
-                
-        // Overlay begins with height 0.0 (animates to larger height)
-        self.overlayHeight = CGFloat(0)
         
         super.init(nibName: nil, bundle: nil)
     }
@@ -430,220 +425,6 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
                         completion()
                     }
             })
-        }
-    }
-    
-    // cellForRowAtIndexPath
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        if (tableView.isEqual(notesTable)) {
-            
-            // Configure NoteCell
-            
-            let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(NoteCell), forIndexPath: indexPath) as! NoteCell
-            
-            cell.configureWithNote(filteredNotes[indexPath.row], user: user)
-            
-            // Background color based upon odd or even row
-            if (indexPath.row % 2 == 0) {
-                // even cell
-                cell.backgroundColor = UIColor(red: 247/255, green: 247/255, blue: 248/255, alpha: 1)
-            } else {
-                // odd cell
-                cell.backgroundColor = UIColor(red: 152/255, green: 152/255, blue: 151/255, alpha: 0.23)
-            }
-            
-            cell.userInteractionEnabled = true
-            
-            // editButton tag to be indexPath.row so can be used in editPressed notification handling
-            cell.editButton.tag = indexPath.row
-            cell.editButton.addTarget(self, action: "editPressed:", forControlEvents: .TouchUpInside)
-            
-            return cell
-        } else {
-            // Configure UserDropDownCell
-            
-            if (indexPath.section == 0 && indexPath.row == 0) {
-                // All Users / #nofilter cell
-                let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(UserDropDownCell), forIndexPath: indexPath) as! UserDropDownCell
-                
-                cell.configure("all")
-                
-                return cell
-            } else if (indexPath.section == 1 && indexPath.row == 0) {
-                // Logout cell
-                let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(UserDropDownCell), forIndexPath: indexPath) as! UserDropDownCell
-                
-                cell.configure("logout")
-                
-                return cell
-            } else {
-                // Individual group / filter cell
-                let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(UserDropDownCell), forIndexPath: indexPath) as! UserDropDownCell
-                
-                cell.configure(groups[indexPath.row - 1], arrow: true, bold: false)
-                
-                return cell
-            }
-        }
-    }
-    
-    // numberOfRowsInSection
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if (tableView.isEqual(notesTable)) {
-            // NotesTable --> as many cells as filteredNotes
-            return filteredNotes.count
-        } else if (tableView.isEqual(dropDownMenu)){
-            // DropDownMenu
-            if (section == 0) {
-                // Number of groups + 1 for 'All' / #nofilter
-                return groups.count + 1
-            } else {
-                // Only 1 for 'Logout'
-                return 1
-            }
-        } else {
-            // Why not?
-            return 0
-        }
-    }
-    
-    // heightForRowAtIndexPath
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if (tableView.isEqual(notesTable)) {
-            // NotesTable
-            
-            // Create labels that 'determine' height of cell
-            
-            // Configure the date label size first using extended dateFormatter
-            // used for sizing usernameLabel
-            let timedateLabel = UILabel()
-            let dateFormatter = NSDateFormatter()
-            timedateLabel.attributedText = dateFormatter.attributedStringFromDate(filteredNotes[indexPath.row].timestamp)
-            timedateLabel.sizeToFit()
-            
-            // Configure the username label, with the full name
-            let usernameLabel = UILabel()
-            let usernameWidth = self.view.frame.width - (2 * noteCellInset + timedateLabel.frame.width + 2 * labelSpacing)
-            usernameLabel.frame.size = CGSize(width: usernameWidth, height: CGFloat.max)
-            usernameLabel.text = filteredNotes[indexPath.row].user!.fullName
-            usernameLabel.font = UIFont(name: "OpenSans-Bold", size: 17.5)!
-            usernameLabel.textColor = UIColor.blackColor()
-            usernameLabel.adjustsFontSizeToFitWidth = false
-            usernameLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
-            usernameLabel.numberOfLines = 0
-            usernameLabel.sizeToFit()
-            
-            let messageLabel = UILabel(frame: CGRect(x: 0, y: 0, width: self.view.frame.width - 2*noteCellInset, height: CGFloat.max))
-            let hashtagBolder = HashtagBolder()
-            let attributedText = hashtagBolder.boldHashtags(filteredNotes[indexPath.row].messagetext)
-            messageLabel.attributedText = attributedText
-            messageLabel.adjustsFontSizeToFitWidth = false
-            messageLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
-            messageLabel.numberOfLines = 0
-            messageLabel.sizeToFit()
-            
-            let cellHeight: CGFloat
-            // if the user who created the note is the same as the current user, allow space for edit button
-            if (filteredNotes[indexPath.row].user!.userid == user.userid) {
-                cellHeight = noteCellInset + usernameLabel.frame.height + 2 * labelSpacing + messageLabel.frame.height + 2 * labelSpacing + 12.5 + noteCellInset
-            } else {
-                cellHeight = noteCellInset + usernameLabel.frame.height + 2 * labelSpacing + messageLabel.frame.height + noteCellInset
-            }
-            
-            return cellHeight
-        } else {
-            // DropDownMenu
-            
-            if (indexPath.section == 0 && indexPath.row == 0) {
-                // All / #nofilter
-                
-                let nameLabel = UILabel()
-                nameLabel.text = "All"
-                nameLabel.font = UIFont(name: "OpenSans-Bold", size: 17.5)
-                nameLabel.sizeToFit()
-                
-                return userCellThickSeparator + userCellInset + nameLabel.frame.height + userCellInset + userCellThinSeparator
-            } else if (indexPath.section == 1 && indexPath.row == 0) {
-                // Logout
-                
-                let nameLabel = UILabel()
-                nameLabel.text = "Logout"
-                nameLabel.font = UIFont(name: "OpenSans-Bold", size: 17.5)
-                nameLabel.sizeToFit()
-                
-                return userCellInset + nameLabel.frame.height + userCellInset + (userCellThickSeparator - userCellThinSeparator)
-            } else {
-                // Some group / team / filter
-                
-                let nameLabel = UILabel()
-                nameLabel.frame.size = CGSize(width: self.view.frame.width - 2 * labelInset, height: 20.0)
-                nameLabel.text = groups[indexPath.row - 1].fullName
-                if (filter === groups[indexPath.row - 1]) {
-                    nameLabel.font = UIFont(name: "OpenSans-Bold", size: 17.5)!
-                } else {
-                    nameLabel.font = UIFont(name: "OpenSans", size: 17.5)!
-                }
-                nameLabel.sizeToFit()
-                                
-                return userCellInset + nameLabel.frame.height + userCellInset + userCellThinSeparator
-            }
-        }
-    }
-    
-    // didSelectRowAtIndexPath
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        // Immediately deselect the row
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        if (tableView.isEqual(dropDownMenu)) {
-            // dropDownMenu
-            
-            if (indexPath.section == 0) {
-                // A group or all seleceted
-                if (indexPath.row == 0) {
-                    // 'All' / #nofilter selected
-                    self.configureTitleView("All Notes")
-                    self.filter = nil
-                } else {
-                    // Individual group / filter selected
-                    let cell = dropDownMenu.cellForRowAtIndexPath(indexPath) as! UserDropDownCell
-                    self.filter = cell.group
-                    self.configureTitleView(filter.fullName!)
-                }
-                // filter the notes based upon new filter
-                filterNotes()
-                // Scroll notes to top
-                self.notesTable.setContentOffset(CGPointMake(0, 0 - self.notesTable.contentInset.top), animated: true)
-                // toggle the dropDownMenu (hides the dropDownMenu)
-                self.dropDownMenuPressed()
-            } else {
-                // Logout selected
-                // Unwind VC
-                apiConnector.logout(self)
-            }
-        }
-    }
-    
-    func scrollViewDidScroll(scrollView: UIScrollView) {
-        if (scrollView.isEqual(notesTable)) {
-            let height = scrollView.frame.height
-            let contentYOffset = scrollView.contentOffset.y
-            let distanceFromBottom = scrollView.contentSize.height - contentYOffset
-            
-            if (distanceFromBottom < height && !loadingNotes) {
-                loadNotes()
-            }
-        }
-    }
-    
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        if (tableView.isEqual(dropDownMenu)) {
-            // DropDownMenu
-            // Filters and Logout = 2
-            return 2
-        } else {
-            // Just a list of notes
-            // Possibly change if conversations are shown in feed?
-            return 1
         }
     }
     

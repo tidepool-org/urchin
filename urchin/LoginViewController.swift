@@ -11,27 +11,27 @@ import UIKit
 
 let labelInset: CGFloat = 16
 
-class LogInViewController : UIViewController, UITextFieldDelegate {
+class LogInViewController : UIViewController {
     
     // UI Elements
-    let logoView: UIImageView
-    let titleLabel: UILabel
-    let emailField: UITextField
-    let passwordField: UITextField
-    let rememberMeView: UIView
-    let rememberMeCheckbox: UIImageView
-    var rememberMe: Bool
-    let rememberMeLabel: UILabel
-    let logInButton: UIButton
-    let tidepoolLogoView: UIImageView
+    let logoView: UIImageView = UIImageView()
+    let titleLabel: UILabel = UILabel()
+    let emailField: UITextField = UITextField()
+    let passwordField: UITextField = UITextField()
+    let rememberMeView: UIView = UIView()
+    let rememberMeCheckbox: UIImageView = UIImageView()
+    var rememberMe: Bool = false
+    let rememberMeLabel: UILabel = UILabel()
+    let logInButton: UIButton = UIButton()
+    let tidepoolLogoView: UIImageView = UIImageView()
     
     // Helper values
-    var isLogoDisplayed: Bool
-    var isAnimating: Bool
-    var halfHeight: CGFloat
+    var isLogoDisplayed: Bool = true
+    var isAnimating: Bool = false
+    var halfHeight: CGFloat = 0
     
     // Keyboard frame, used for positioning
-    var keyboardFrame: CGRect
+    var keyboardFrame: CGRect = CGRectZero
     
     // API connection for login actions
     // passed on to NotesVC
@@ -45,31 +45,6 @@ class LogInViewController : UIViewController, UITextFieldDelegate {
     
     // Instantiate the fade animation for transitioning VCs
     let transition = FadeAnimator()
-    
-    required init(coder aDecoder: NSCoder) {
-        
-        // UI Elements
-        logoView = UIImageView(frame: CGRectZero)
-        titleLabel = UILabel(frame: CGRectMake(0, 0, CGFloat.max, CGFloat.max))
-        emailField = UITextField(frame: CGRectZero)
-        passwordField = UITextField(frame: CGRectZero)
-        rememberMeView = UIView(frame: CGRectZero)
-        rememberMeCheckbox = UIImageView(frame: CGRectZero)
-        rememberMe = false
-        rememberMeLabel = UILabel(frame: CGRectZero)
-        logInButton = UIButton(frame: CGRectZero)
-        tidepoolLogoView = UIImageView(frame: CGRectZero)
-        
-        // Helper values, used for animations of UI Elements
-        isLogoDisplayed = true
-        isAnimating = false
-        halfHeight = 0
-        
-        // Initialize with no keyboard, frame Zero
-        keyboardFrame = CGRectZero
-        
-        super.init(coder: aDecoder)
-    }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
@@ -424,27 +399,6 @@ class LogInViewController : UIViewController, UITextFieldDelegate {
         logoView.frame = CGRect(x: imageX, y: 0, width: proposedLogoSize, height: proposedLogoSize)
     }
     
-    // Change the textField border to blue when textField is being edited
-    func textFieldDidBeginEditing(textField: UITextField) {
-        textField.layer.borderColor = UIColor(red: 0/255, green: 150/255, blue: 171/255, alpha: 1).CGColor
-    }
-    
-    // Change the textField border to gray when textField is done being edited
-    func textFieldDidEndEditing(textField: UITextField) {
-        textField.layer.borderColor = UIColor(red: 234/255, green: 234/255, blue: 234/255, alpha: 1).CGColor
-    }
-    
-    func textFieldDidChange(textField: UITextField) {
-        // Change the opacity of the login button based upon whether or not credentials are valid
-        // solid if credentials are good
-        // half weight otherwise
-        if (checkCredentials()) {
-            logInButton.alpha = 1.0
-        } else {
-            logInButton.alpha = 0.5
-        }
-    }
-    
     // Check login credentials
     func checkCredentials() -> Bool {
         /* Guards against:
@@ -455,45 +409,23 @@ class LogInViewController : UIViewController, UITextFieldDelegate {
         return !emailField.text.isEmpty && isValidEmail(emailField.text) && !passwordField.text.isEmpty
     }
     
-    // Return actions for textFields
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
-        if (textField.isEqual(emailField)) {
-            // pass on to passwordField from email field
-            passwordField.becomeFirstResponder()
-        } else {
-            // hide keyboard and animate down from return in passwordField
-            if (!isAnimating) {
-                view.endEditing(true)
-            }
-        }
-        
-        return true
-    }
-    
     // Check validity of email
     func isValidEmail(testStr:String) -> Bool {
         
-        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}"
-        let range = testStr.rangeOfString(emailRegEx, options:.RegularExpressionSearch)
-        let result = range != nil ? true : false
+        var emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}"
+        var range = testStr.rangeOfString(emailRegEx, options:.RegularExpressionSearch)
+        var result = range != nil ? true : false
+        if (result) {
+            return result
+        }
+        emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}+\\.[A-Za-z]{2,4}"
+        range = testStr.rangeOfString(emailRegEx, options:.RegularExpressionSearch)
+        result = range != nil ? true : false
         return result
-        
     }
     
     // Only vertical orientation supported
     override func shouldAutorotate() -> Bool {
         return false
-    }
-}
-
-extension LogInViewController: UIViewControllerTransitioningDelegate {
-    func animationControllerForPresentedController(presented: UIViewController, presentingController presenting: UIViewController, sourceController source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        transition.presenting = true
-        return transition
-    }
-    
-    func animationControllerForDismissedController(dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        transition.presenting = false
-        return transition
     }
 }
