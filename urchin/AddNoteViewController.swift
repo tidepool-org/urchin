@@ -15,7 +15,7 @@ let expandedHashtagsViewH: CGFloat = 2 * labelInset + 3 * hashtagHeight + 3 * la
 let condensedHashtagsViewH: CGFloat = 2 * labelInset + hashtagHeight
 let defaultMessage: String = "What's going on?"
 
-class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate {
+class AddNoteViewController: UIViewController {
     
     // DropDownMenu
     var dropDownMenu: UITableView!
@@ -25,38 +25,34 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
     var dropDownHeight: CGFloat
     // Overlay to go with dropDownMenu
     var opaqueOverlay: UIView!
-    var overlayHeight: CGFloat
+    var overlayHeight: CGFloat = 0
     
     // Global so it can be removed and added back at will
-    let closeButton: UIBarButtonItem
+    let closeButton: UIBarButtonItem = UIBarButtonItem()
     
     // Current time and 'button' to change time
-    let timedateLabel: UILabel
-    let changeDateLabel: UILabel
+    let timedateLabel: UILabel = UILabel()
+    let changeDateLabel: UILabel = UILabel()
     
     // datePicker and helpers for animation
     var datePickerShown: Bool = false
     var isAnimating: Bool = false
-    let datePicker: UIDatePicker
+    let datePicker: UIDatePicker = UIDatePicker()
     
     // Separator between date/time and hashtags
-    let separatorOne: UIView
+    let separatorOne: UIView = UIView()
     
     // hashtagsView for putting hashtags in your messages
-    let hashtagsScrollView: HashtagsScrollView
+    let hashtagsScrollView: HashtagsScrollView = HashtagsScrollView()
     
     // Separator between hashtags and messageBox
-    let separatorTwo: UIView
-    
-    // Cover so hashtags are partially hidden when condensed
-    //      might not be necessary now that hashtags jump to linear arrangement
-    let coverUp: UIView
+    let separatorTwo: UIView = UIView()
     
     // UI Elements
-    let messageBox: UITextView
-    let postButton: UIButton
-    let cameraButton: UIButton
-    let locationButton: UIButton
+    let messageBox: UITextView = UITextView()
+    let postButton: UIButton = UIButton()
+    let cameraButton: UIButton = UIButton()
+    let locationButton: UIButton = UIButton()
     
     // Data
     let note: Note
@@ -64,33 +60,13 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
     var groups: [User]
     let user: User
     
-    // Keyboard frame for positioning UI Elements
-    var keyboardFrame: CGRect
+    // Keyboard frame for positioning UI Elements, initially zero
+    var keyboardFrame: CGRect = CGRectZero
     
     init(user: User, group: User, groups: [User]) {
         
         // UI Elements
         self.dropDownHeight = CGFloat(groups.count) * userCellHeight + CGFloat(groups.count-1)*userCellThinSeparator
-        self.overlayHeight = CGFloat(0)
-        
-        closeButton = UIBarButtonItem()
-        
-        timedateLabel = UILabel(frame: CGRectZero)
-        changeDateLabel = UILabel(frame: CGRectZero)
-        
-        datePicker = UIDatePicker(frame: CGRectZero)
-        
-        separatorOne = UIView(frame: CGRectZero)
-        
-        hashtagsScrollView = HashtagsScrollView(frame: CGRectZero)
-        
-        separatorTwo = UIView(frame: CGRectZero)
-        coverUp = UIView(frame: CGRectZero)
-        
-        messageBox = UITextView(frame: CGRectZero)
-        postButton = UIButton(frame: CGRectZero)
-        cameraButton = UIButton(frame: CGRectZero)
-        locationButton = UIButton(frame: CGRectZero)
         
         // data
         note = Note()
@@ -100,9 +76,6 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
         self.group = group
         self.groups = groups
         self.user = user
-        
-        // Initialize keyboard frame of size Zero
-        keyboardFrame = CGRectZero
         
         super.init(nibName: nil, bundle: nil)
     }
@@ -205,15 +178,6 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
         separatorTwo.frame.origin.y = hashtagsScrollView.frame.maxY
         
         self.view.addSubview(separatorTwo)
-
-        // configure backround view to cover things
-        //      behind message box, so hashtags don't show in that section
-        coverUp.backgroundColor = UIColor(red: 247/255, green: 247/255, blue: 248/255, alpha: 1)
-        let coverUpH = self.view.frame.height - separatorTwo.frame.maxY
-        coverUp.frame.size = CGSize(width: self.view.frame.width, height: coverUpH)
-        coverUp.frame.origin = CGPoint(x: 0, y: separatorTwo.frame.maxY)
-        
-        self.view.addSubview(coverUp)
         
         // configure post button
         postButton.setAttributedTitle(NSAttributedString(string:"Post",
@@ -295,10 +259,10 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
         dropDownMenu.separatorStyle = UITableViewCellSeparatorStyle.None
         // If content fits, scroll disabled for dropDownMenu
         if (dropDownMenu.contentSize.height <= dropDownMenu.frame.size.height) {
-            dropDownMenu.scrollEnabled = false;
+            dropDownMenu.scrollEnabled = false
         }
         else {
-            dropDownMenu.scrollEnabled = true;
+            dropDownMenu.scrollEnabled = true
         }
         
         self.view.addSubview(dropDownMenu)
@@ -353,28 +317,6 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
         }
     }
     
-    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
-        switch buttonIndex {
-        case 0:
-            println("Cancel")
-            break
-        case 1:
-            println("Okay")
-            
-            let notification = NSNotification(name: "doneAdding", object: nil)
-            NSNotificationCenter.defaultCenter().postNotification(notification)
-            
-            self.view.endEditing(true)
-            self.closeDatePicker(false)
-            self.dismissViewControllerAnimated(true, completion: nil)
-            
-            break
-        default:
-            println("uh oh")
-            break
-        }
-    }
-    
     // Toggle the datepicker open or closed depending on if it is currently showing
     // Called by the changeDateView
     func changeDatePressed(sender: UIView!) {
@@ -403,9 +345,6 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
                 self.hashtagsScrollView.pagedHashtagsView()
                 self.hashtagsScrollView.frame.origin.y = self.separatorOne.frame.maxY
                 self.separatorTwo.frame.origin.y = self.hashtagsScrollView.frame.maxY
-                let coverUpH = self.view.frame.height - self.separatorTwo.frame.maxY
-                self.coverUp.frame.size = CGSize(width: self.view.frame.width, height: coverUpH)
-                self.coverUp.frame.origin = CGPoint(x: 0, y: self.separatorTwo.frame.maxY)
                 let messageBoxH = (self.postButton.frame.minY - self.separatorTwo.frame.maxY) - 2 * labelInset
                 self.messageBox.frame.size = CGSize(width: self.messageBox.frame.width, height: messageBoxH)
                 self.messageBox.frame.origin.y = self.separatorTwo.frame.maxY + labelInset
@@ -437,9 +376,6 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
                 self.hashtagsScrollView.sizeZeroHashtagsView()
                 self.hashtagsScrollView.frame.origin.y = self.separatorOne.frame.maxY
                 self.separatorTwo.frame.origin.y = self.separatorOne.frame.minY
-                let coverUpH = self.view.frame.height - self.separatorTwo.frame.maxY
-                self.coverUp.frame.size = CGSize(width: self.view.frame.width, height: coverUpH)
-                self.coverUp.frame.origin = CGPoint(x: 0, y: self.separatorTwo.frame.maxY)
                 let messageBoxH = (self.postButton.frame.minY - self.separatorTwo.frame.maxY) - 2 * labelInset
                 self.messageBox.frame.size = CGSize(width: self.messageBox.frame.width, height: messageBoxH)
                 self.messageBox.frame.origin.y = self.separatorTwo.frame.maxY + labelInset
@@ -482,9 +418,6 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
                 self.hashtagsScrollView.frame.origin.y = self.separatorOne.frame.maxY
                 // position affected UI elements
                 self.separatorTwo.frame.origin.y = self.hashtagsScrollView.frame.maxY
-                let coverUpH = self.view.frame.height - self.separatorTwo.frame.maxY
-                self.coverUp.frame.size = CGSize(width: self.view.frame.width, height: coverUpH)
-                self.coverUp.frame.origin = CGPoint(x: 0, y: self.separatorTwo.frame.maxY)
                 if (UIDevice.currentDevice().modelName != "iPhone 4S") {
                     // Not an iPhone 4s
                     
@@ -534,9 +467,6 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
                 self.hashtagsScrollView.frame.origin.y = self.separatorOne.frame.maxY
                 // position affected UI elements
                 self.separatorTwo.frame.origin.y = self.hashtagsScrollView.frame.maxY
-                let coverUpH = self.view.frame.height - self.separatorTwo.frame.maxY
-                self.coverUp.frame.size = CGSize(width: self.view.frame.width, height: coverUpH)
-                self.coverUp.frame.origin = CGPoint(x: 0, y: self.separatorTwo.frame.maxY)
                 self.postButton.frame.origin.y = self.view.frame.height - (labelInset + self.postButton.frame.height)
                 self.cameraButton.frame.origin.y = self.postButton.frame.midY - self.cameraButton.frame.height / 2
                 self.locationButton.frame.origin.y = self.postButton.frame.midY - self.locationButton.frame.height / 2
@@ -661,38 +591,6 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
         textViewDidChange(messageBox)
     }
     
-    func textViewDidChange(textView: UITextView) {
-        if (textView.text != defaultMessage) {
-            // use hashtagBolder extension to bold the hashtags
-            let hashtagBolder = HashtagBolder()
-            let attributedText = hashtagBolder.boldHashtags(textView.text)
-            
-            // set textView (messageBox) text to new attributed text
-            textView.attributedText = attributedText
-        }
-        if (textView.text != defaultMessage && !textView.text.isEmpty) {
-            postButton.alpha = 1.0
-        } else {
-            postButton.alpha = 0.5
-        }
-    }
-    
-    // textViewDidBeginEditing, clear the messageBox if default message
-    func textViewDidBeginEditing(textView: UITextView) {
-        if (textView.text == defaultMessage) {
-            textView.text = nil
-        }
-    }
-    
-    // textViewDidEndEditing, if empty set back to default message
-    func textViewDidEndEditing(textView: UITextView) {
-        if textView.text.isEmpty {
-            textView.text = defaultMessage
-            textView.font = UIFont(name: "OpenSans", size: 17.5)!
-            textView.textColor = UIColor(red: 167/255, green: 167/255, blue: 167/255, alpha: 1)
-        }
-    }
-    
     // Handle touches in the view
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
         if let touch = touches.first as? UITouch {
@@ -800,57 +698,6 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
                     }
             })
         }
-    }
-    
-    // numberOfRowsInSection
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // number of groups (as simple as that)
-        return groups.count
-    }
-    
-    // cellForRowAtIndexPath
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        // Make the cell! UserDropDownCell
-        let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(UserDropDownCell), forIndexPath: indexPath) as! UserDropDownCell
-        
-        // Configure with the given group, no arrow, and only bolded if the current group selected is this group
-        cell.configure(groups[indexPath.row], arrow: false, bold: group === groups[indexPath.row])
-        
-        return cell
-    }
-    
-    // heightForRowAtIndexPath
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        // Some group / team / filter
-        
-        let nameLabel = UILabel()
-        nameLabel.frame.size = CGSize(width: self.view.frame.width - 2 * labelInset, height: 20.0)
-        nameLabel.text = groups[indexPath.row].fullName
-        if (group === groups[indexPath.row]) {
-            nameLabel.font = UIFont(name: "OpenSans-Bold", size: 17.5)!
-        } else {
-            nameLabel.font = UIFont(name: "OpenSans", size: 17.5)!
-        }
-        nameLabel.sizeToFit()
-        
-        return userCellInset + nameLabel.frame.height + userCellInset + userCellThinSeparator
-    }
-    
-    // didSelectRowAtIndexPath
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        // Immediately deselect row
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        // Set the current group and note's groupid to the selected group
-        self.group = groups[indexPath.row]
-        self.note.groupid = self.group.userid
-        // Toggle the dropDownMenu (closed)
-        self.dropDownMenuPressed()
-    }
-    
-    // numberOfSectionsInTableView
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        // Only one :) the groups!
-        return 1
     }
     
     // Lock in portrait orientation

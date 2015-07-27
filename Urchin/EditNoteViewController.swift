@@ -10,37 +10,33 @@ import Foundation
 import UIKit
 import CoreData
 
-class EditNoteViewController: UIViewController, UITextViewDelegate, UIAlertViewDelegate {
+class EditNoteViewController: UIViewController {
     
     // UI Elements
     
     // date & time, change label
-    let timedateLabel: UILabel
-    let changeDateLabel: UILabel
+    let timedateLabel: UILabel = UILabel()
+    let changeDateLabel: UILabel = UILabel()
     
     // datePicker helpers, and datePicker
     var datePickerShown: Bool = false
     var isAnimating: Bool = false
-    let datePicker: UIDatePicker
+    let datePicker: UIDatePicker = UIDatePicker()
     
     // Separator between date and hashtagsView
-    let separatorOne: UIView
+    let separatorOne: UIView = UIView()
     
     //hashtagsView for appending hashtags to messages
-    let hashtagsScrollView: HashtagsScrollView
+    let hashtagsScrollView: HashtagsScrollView = HashtagsScrollView()
     
     // Separator between hashtags and messageBox
-    let separatorTwo: UIView
-    
-    // Cover so hashtags are partially hidden when condensed
-    //      might not be necessary now that hashtags jump to linear arrangement
-    let coverUp: UIView
+    let separatorTwo: UIView = UIView()
     
     // More UI Elements
-    let messageBox: UITextView
-    let postButton: UIButton
-    let cameraButton: UIButton
-    let locationButton: UIButton
+    let messageBox: UITextView = UITextView()
+    let postButton: UIButton = UIButton()
+    let cameraButton: UIButton = UIButton()
+    let locationButton: UIButton = UIButton()
     
     // Original note, edited note, and the full name for the group
     let note: Note
@@ -48,26 +44,9 @@ class EditNoteViewController: UIViewController, UITextViewDelegate, UIAlertViewD
     let groupFullName: String
     
     // Keyboard frame for positioning UI Elements
-    var keyboardFrame: CGRect
+    var keyboardFrame: CGRect = CGRectZero
     
     init(note: Note, groupFullName: String) {
-        // UI Elements
-        timedateLabel = UILabel(frame: CGRectZero)
-        changeDateLabel = UILabel(frame: CGRectZero)
-        
-        datePicker = UIDatePicker(frame: CGRectZero)
-        
-        separatorOne = UIView(frame: CGRectZero)
-        
-        hashtagsScrollView = HashtagsScrollView(frame: CGRectZero)
-        
-        separatorTwo = UIView(frame: CGRectZero)
-        coverUp = UIView(frame: CGRectZero)
-        
-        messageBox = UITextView(frame: CGRectZero)
-        postButton = UIButton(frame: CGRectZero)
-        cameraButton = UIButton(frame: CGRectZero)
-        locationButton = UIButton(frame: CGRectZero)
         
         // data
         self.note = note
@@ -176,15 +155,6 @@ class EditNoteViewController: UIViewController, UITextViewDelegate, UIAlertViewD
         
         self.view.addSubview(separatorTwo)
         
-        // configure backround view to cover things
-        //      behind message box, so hashtags don't show in that section
-        coverUp.backgroundColor = UIColor(red: 247/255, green: 247/255, blue: 248/255, alpha: 1)
-        let coverUpH = self.view.frame.height - separatorTwo.frame.maxY
-        coverUp.frame.size = CGSize(width: self.view.frame.width, height: coverUpH)
-        coverUp.frame.origin = CGPoint(x: 0, y: separatorTwo.frame.maxY)
-        
-        self.view.addSubview(coverUp)
-        
         // configure post button
         postButton.setAttributedTitle(NSAttributedString(string:"Save",
             attributes:[NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont(name: "OpenSans", size: 17.5)!]), forState: UIControlState.Normal)
@@ -274,32 +244,6 @@ class EditNoteViewController: UIViewController, UITextViewDelegate, UIAlertViewD
         }
     }
     
-    // Handle alert view events
-    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
-        switch buttonIndex {
-        case 0:
-            println("Discard")
-            
-            let notification = NSNotification(name: "doneEditing", object: nil)
-            NSNotificationCenter.defaultCenter().postNotification(notification)
-            
-            self.view.endEditing(true)
-            self.closeDatePicker(false)
-            self.dismissViewControllerAnimated(true, completion: nil)
-            
-            break
-        case 1:
-            println("Save")
-            
-            self.saveNote()
-            
-            break
-        default:
-            println("uh oh")
-            break
-        }
-    }
-    
     // Toggle the datepicker open or closed depending on if it is currently showing
     // Called by the changeDateView
     func changeDatePressed(sender: UIView!) {
@@ -327,9 +271,6 @@ class EditNoteViewController: UIViewController, UITextViewDelegate, UIAlertViewD
                 self.hashtagsScrollView.pagedHashtagsView()
                 self.hashtagsScrollView.frame.origin.y = self.separatorOne.frame.maxY
                 self.separatorTwo.frame.origin.y = self.hashtagsScrollView.frame.maxY
-                let coverUpH = self.view.frame.height - self.separatorTwo.frame.maxY
-                self.coverUp.frame.size = CGSize(width: self.view.frame.width, height: coverUpH)
-                self.coverUp.frame.origin = CGPoint(x: 0, y: self.separatorTwo.frame.maxY)
                 let messageBoxH = (self.postButton.frame.minY - self.separatorTwo.frame.maxY) - 2 * labelInset
                 self.messageBox.frame.size = CGSize(width: self.messageBox.frame.width, height: messageBoxH)
                 self.messageBox.frame.origin.y = self.separatorTwo.frame.maxY + labelInset
@@ -361,9 +302,6 @@ class EditNoteViewController: UIViewController, UITextViewDelegate, UIAlertViewD
                 self.hashtagsScrollView.sizeZeroHashtagsView()
                 self.hashtagsScrollView.frame.origin.y = self.separatorOne.frame.maxY
                 self.separatorTwo.frame.origin.y = self.separatorOne.frame.minY
-                let coverUpH = self.view.frame.height - self.separatorTwo.frame.maxY
-                self.coverUp.frame.size = CGSize(width: self.view.frame.width, height: coverUpH)
-                self.coverUp.frame.origin = CGPoint(x: 0, y: self.separatorTwo.frame.maxY)
                 let messageBoxH = (self.postButton.frame.minY - self.separatorTwo.frame.maxY) - 2 * labelInset
                 self.messageBox.frame.size = CGSize(width: self.messageBox.frame.width, height: messageBoxH)
                 self.messageBox.frame.origin.y = self.separatorTwo.frame.maxY + labelInset
@@ -406,9 +344,6 @@ class EditNoteViewController: UIViewController, UITextViewDelegate, UIAlertViewD
                 self.hashtagsScrollView.frame.origin.y = self.separatorOne.frame.maxY
                 // position affected UI elements
                 self.separatorTwo.frame.origin.y = self.hashtagsScrollView.frame.maxY
-                let coverUpH = self.view.frame.height - self.separatorTwo.frame.maxY
-                self.coverUp.frame.size = CGSize(width: self.view.frame.width, height: coverUpH)
-                self.coverUp.frame.origin = CGPoint(x: 0, y: self.separatorTwo.frame.maxY)
                 if (UIDevice.currentDevice().modelName != "iPhone 4S") {
                     // Not an iPhone 4s
                     
@@ -458,9 +393,6 @@ class EditNoteViewController: UIViewController, UITextViewDelegate, UIAlertViewD
                 self.hashtagsScrollView.frame.origin.y = self.separatorOne.frame.maxY
                 // position affected UI elements
                 self.separatorTwo.frame.origin.y = self.hashtagsScrollView.frame.maxY
-                let coverUpH = self.view.frame.height - self.separatorTwo.frame.maxY
-                self.coverUp.frame.size = CGSize(width: self.view.frame.width, height: coverUpH)
-                self.coverUp.frame.origin = CGPoint(x: 0, y: self.separatorTwo.frame.maxY)
                 self.postButton.frame.origin.y = self.view.frame.height - (labelInset + self.postButton.frame.height)
                 self.cameraButton.frame.origin.y = self.postButton.frame.midY - self.cameraButton.frame.height / 2
                 self.locationButton.frame.origin.y = self.postButton.frame.midY - self.locationButton.frame.height / 2
@@ -582,37 +514,6 @@ class EditNoteViewController: UIViewController, UITextViewDelegate, UIAlertViewD
         }
         // call textViewDidChange to format hashtags with bolding
         textViewDidChange(messageBox)
-    }
-    
-    func textViewDidChange(textView: UITextView) {
-        if (textView.text != defaultMessage) {
-            // use hashtagBolder extension to bold the hashtags
-            let hashtagBolder = HashtagBolder()
-            let attributedText = hashtagBolder.boldHashtags(textView.text)
-            
-            // set textView (messageBox) text to new attributed text
-            textView.attributedText = attributedText
-        }
-        if ((note.messagetext != textView.text || note.timestamp != datePicker.date) && textView.text != defaultMessage && !textView.text.isEmpty) {
-            postButton.alpha = 1.0
-        } else {
-            postButton.alpha = 0.5
-        }
-    }
-    
-    // textViewDidBeginEditing, clear the messageBox if default message
-    func textViewDidBeginEditing(textView: UITextView) {
-        if (textView.text == defaultMessage) {
-            textView.text = nil
-        }
-    }
-    
-    // textViewDidEndEditing, if empty set back to default message
-    func textViewDidEndEditing(textView: UITextView) {
-        if textView.text.isEmpty {
-            textView.text = defaultMessage
-            textView.textColor = UIColor(red: 167/255, green: 167/255, blue: 167/255, alpha: 1)
-        }
     }
     
     // Handle touches in the view

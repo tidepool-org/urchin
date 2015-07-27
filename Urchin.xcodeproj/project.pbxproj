@@ -37,6 +37,18 @@
 		AA6931FA1B66E0100057F0A0 /* NotesVCTableViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6931F91B66E0100057F0A0 /* NotesVCTableViewDelegate.swift */; };
 		AA6931FB1B66E12A0057F0A0 /* NotesVCTableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6931F71B66DE4E0057F0A0 /* NotesVCTableViewDataSource.swift */; };
 		AA6931FC1B66E12D0057F0A0 /* NotesVCTableViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6931F91B66E0100057F0A0 /* NotesVCTableViewDelegate.swift */; };
+		AA6932001B66E5450057F0A0 /* AddNoteVCTextViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6931FF1B66E5450057F0A0 /* AddNoteVCTextViewDelegate.swift */; };
+		AA6932011B66E5910057F0A0 /* AddNoteVCTextViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6931FF1B66E5450057F0A0 /* AddNoteVCTextViewDelegate.swift */; };
+		AA6932031B66E5FB0057F0A0 /* AddNoteVCTableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6932021B66E5FB0057F0A0 /* AddNoteVCTableViewDataSource.swift */; };
+		AA6932041B66E6210057F0A0 /* AddNoteVCTableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6932021B66E5FB0057F0A0 /* AddNoteVCTableViewDataSource.swift */; };
+		AA6932061B66E6B60057F0A0 /* AddNoteVCTableViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6932051B66E6B60057F0A0 /* AddNoteVCTableViewDelegate.swift */; };
+		AA6932071B66E6D30057F0A0 /* AddNoteVCTableViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6932051B66E6B60057F0A0 /* AddNoteVCTableViewDelegate.swift */; };
+		AA6932091B66E8260057F0A0 /* AddNoteVCAlertViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6932081B66E8260057F0A0 /* AddNoteVCAlertViewDelegate.swift */; };
+		AA69320A1B66E8440057F0A0 /* AddNoteVCAlertViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6932081B66E8260057F0A0 /* AddNoteVCAlertViewDelegate.swift */; };
+		AA69320E1B66E99B0057F0A0 /* EditNoteVCAlertViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA69320D1B66E99B0057F0A0 /* EditNoteVCAlertViewDelegate.swift */; };
+		AA69320F1B66E9B20057F0A0 /* EditNoteVCAlertViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA69320D1B66E99B0057F0A0 /* EditNoteVCAlertViewDelegate.swift */; };
+		AA6932111B66EB910057F0A0 /* EditNoteVCTextViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6932101B66EB910057F0A0 /* EditNoteVCTextViewDelegate.swift */; };
+		AA6932121B66EC0E0057F0A0 /* EditNoteVCTextViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6932101B66EB910057F0A0 /* EditNoteVCTextViewDelegate.swift */; };
 		AA698EEB1B541C0B004154E0 /* UIDeviceExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA698EEA1B541C0B004154E0 /* UIDeviceExtension.swift */; };
 		AA698EED1B545A07004154E0 /* EditNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA698EEC1B545A07004154E0 /* EditNoteViewController.swift */; };
 		AA6A7D7A1B62B1A4008215D8 /* apiConnectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6A7D791B62B1A4008215D8 /* apiConnectorTests.swift */; };
@@ -117,6 +129,12 @@
 		AA6931F21B66DD6F0057F0A0 /* LoginVCTransitionDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginVCTransitionDelegate.swift; sourceTree = "<group>"; };
 		AA6931F71B66DE4E0057F0A0 /* NotesVCTableViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotesVCTableViewDataSource.swift; sourceTree = "<group>"; };
 		AA6931F91B66E0100057F0A0 /* NotesVCTableViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotesVCTableViewDelegate.swift; sourceTree = "<group>"; };
+		AA6931FF1B66E5450057F0A0 /* AddNoteVCTextViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddNoteVCTextViewDelegate.swift; sourceTree = "<group>"; };
+		AA6932021B66E5FB0057F0A0 /* AddNoteVCTableViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddNoteVCTableViewDataSource.swift; sourceTree = "<group>"; };
+		AA6932051B66E6B60057F0A0 /* AddNoteVCTableViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddNoteVCTableViewDelegate.swift; sourceTree = "<group>"; };
+		AA6932081B66E8260057F0A0 /* AddNoteVCAlertViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddNoteVCAlertViewDelegate.swift; sourceTree = "<group>"; };
+		AA69320D1B66E99B0057F0A0 /* EditNoteVCAlertViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditNoteVCAlertViewDelegate.swift; sourceTree = "<group>"; };
+		AA6932101B66EB910057F0A0 /* EditNoteVCTextViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditNoteVCTextViewDelegate.swift; sourceTree = "<group>"; };
 		AA698EEA1B541C0B004154E0 /* UIDeviceExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIDeviceExtension.swift; sourceTree = "<group>"; };
 		AA698EEC1B545A07004154E0 /* EditNoteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditNoteViewController.swift; sourceTree = "<group>"; };
 		AA6A7D791B62B1A4008215D8 /* apiConnectorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = apiConnectorTests.swift; sourceTree = "<group>"; };
@@ -280,6 +298,44 @@
 			name = Extensions;
 			sourceTree = "<group>";
 		};
+		AA6931FD1B66E5280057F0A0 /* AddNoteVC */ = {
+			isa = PBXGroup;
+			children = (
+				AA8300FF1B4D986300F8ADE6 /* AddNoteViewController.swift */,
+				AA6931FE1B66E5300057F0A0 /* Extensions */,
+			);
+			name = AddNoteVC;
+			sourceTree = "<group>";
+		};
+		AA6931FE1B66E5300057F0A0 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				AA6931FF1B66E5450057F0A0 /* AddNoteVCTextViewDelegate.swift */,
+				AA6932081B66E8260057F0A0 /* AddNoteVCAlertViewDelegate.swift */,
+				AA6932051B66E6B60057F0A0 /* AddNoteVCTableViewDelegate.swift */,
+				AA6932021B66E5FB0057F0A0 /* AddNoteVCTableViewDataSource.swift */,
+			);
+			name = Extensions;
+			sourceTree = "<group>";
+		};
+		AA69320B1B66E9810057F0A0 /* EditNoteVC */ = {
+			isa = PBXGroup;
+			children = (
+				AA698EEC1B545A07004154E0 /* EditNoteViewController.swift */,
+				AA69320C1B66E9880057F0A0 /* Extensions */,
+			);
+			name = EditNoteVC;
+			sourceTree = "<group>";
+		};
+		AA69320C1B66E9880057F0A0 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				AA69320D1B66E99B0057F0A0 /* EditNoteVCAlertViewDelegate.swift */,
+				AA6932101B66EB910057F0A0 /* EditNoteVCTextViewDelegate.swift */,
+			);
+			name = Extensions;
+			sourceTree = "<group>";
+		};
 		AABCEF7B1B3231910064FE49 = {
 			isa = PBXGroup;
 			children = (
@@ -378,10 +434,10 @@
 		AAEFB1671B504A15000EF8B4 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				AA8300FF1B4D986300F8ADE6 /* AddNoteViewController.swift */,
+				AA6931FD1B66E5280057F0A0 /* AddNoteVC */,
 				AA6931ED1B66DAD30057F0A0 /* LoginVC */,
 				AA6931F51B66DE200057F0A0 /* NotesVC */,
-				AA698EEC1B545A07004154E0 /* EditNoteViewController.swift */,
+				AA69320B1B66E9810057F0A0 /* EditNoteVC */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -526,6 +582,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AA698EED1B545A07004154E0 /* EditNoteViewController.swift in Sources */,
+				AA6932091B66E8260057F0A0 /* AddNoteVCAlertViewDelegate.swift in Sources */,
 				AAEFB16D1B5062CE000EF8B4 /* UrchinData.xcdatamodeld in Sources */,
 				AA6931F31B66DD6F0057F0A0 /* LoginVCTransitionDelegate.swift in Sources */,
 				AAB6B0531B605C440051472C /* FadeAnimator.swift in Sources */,
@@ -533,11 +590,15 @@
 				AA3484F01B559EA10028C49B /* HashtagsView.swift in Sources */,
 				AA993E301B3316C10027804C /* LoginViewController.swift in Sources */,
 				AABCEFAE1B3234360064FE49 /* Note.swift in Sources */,
+				AA6932061B66E6B60057F0A0 /* AddNoteVCTableViewDelegate.swift in Sources */,
 				AA6931F01B66DB270057F0A0 /* LoginVCTextFieldDelegate.swift in Sources */,
 				AA3484F41B56AED20028C49B /* UIDateFormatterExtension.swift in Sources */,
+				AA6932031B66E5FB0057F0A0 /* AddNoteVCTableViewDataSource.swift in Sources */,
 				AA6931FA1B66E0100057F0A0 /* NotesVCTableViewDelegate.swift in Sources */,
 				AA6931F81B66DE4E0057F0A0 /* NotesVCTableViewDataSource.swift in Sources */,
 				AA3652CC1B34A163001F514D /* Patient.swift in Sources */,
+				AA6932001B66E5450057F0A0 /* AddNoteVCTextViewDelegate.swift in Sources */,
+				AA69320E1B66E99B0057F0A0 /* EditNoteVCAlertViewDelegate.swift in Sources */,
 				AA3652CE1B34A8E4001F514D /* UserDropDownCell.swift in Sources */,
 				AA03FB8A1B5848FD001B9435 /* APIConnect.swift in Sources */,
 				AABCEF8A1B3231910064FE49 /* AppDelegate.swift in Sources */,
@@ -548,6 +609,7 @@
 				AA3652C21B33847A001F514D /* User.swift in Sources */,
 				AA54DBBF1B596DE7005F8448 /* LoadingView.swift in Sources */,
 				AA6931EB1B66CBDA0057F0A0 /* HashtagsScrollView.swift in Sources */,
+				AA6932111B66EB910057F0A0 /* EditNoteVCTextViewDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -557,10 +619,14 @@
 			files = (
 				AA7920211B62AB5A0046038B /* EditNoteViewController.swift in Sources */,
 				AA7920271B62AB920046038B /* FadeAnimator.swift in Sources */,
+				AA6932041B66E6210057F0A0 /* AddNoteVCTableViewDataSource.swift in Sources */,
 				AA6AF8F11B5EA81F0011F246 /* dateFormatterExtensionTests.swift in Sources */,
 				AA7920261B62AB8E0046038B /* UIDeviceExtension.swift in Sources */,
 				AA7920251B62AB790046038B /* NoteCell.swift in Sources */,
+				AA6932071B66E6D30057F0A0 /* AddNoteVCTableViewDelegate.swift in Sources */,
+				AA6932011B66E5910057F0A0 /* AddNoteVCTextViewDelegate.swift in Sources */,
 				AA6931F11B66DCDD0057F0A0 /* LoginVCTextFieldDelegate.swift in Sources */,
+				AA69320A1B66E8440057F0A0 /* AddNoteVCAlertViewDelegate.swift in Sources */,
 				AA79201F1B62AB470046038B /* NotesViewController.swift in Sources */,
 				AA79201D1B62AB330046038B /* Patient.swift in Sources */,
 				AA7920281B62AB9D0046038B /* AppDelegate.swift in Sources */,
@@ -576,10 +642,12 @@
 				AA79201E1B62AB430046038B /* LoginViewController.swift in Sources */,
 				AA7920241B62AB760046038B /* UserDropDownCell.swift in Sources */,
 				AA79201A1B62A9070046038B /* APIConnect.swift in Sources */,
+				AA69320F1B66E9B20057F0A0 /* EditNoteVCAlertViewDelegate.swift in Sources */,
 				AA6A7D7A1B62B1A4008215D8 /* apiConnectorTests.swift in Sources */,
 				AA6931F41B66DD8E0057F0A0 /* LoginVCTransitionDelegate.swift in Sources */,
 				AA6931FB1B66E12A0057F0A0 /* NotesVCTableViewDataSource.swift in Sources */,
 				AA7920221B62AB5F0046038B /* HashtagsView.swift in Sources */,
+				AA6932121B66EC0E0057F0A0 /* EditNoteVCTextViewDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
