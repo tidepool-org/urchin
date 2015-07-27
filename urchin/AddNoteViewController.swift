@@ -43,7 +43,7 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
     let separatorOne: UIView
     
     // hashtagsView for putting hashtags in your messages
-    let hashtagsView: HashtagsView
+    let hashtagsScrollView: HashtagsScrollView
     
     // Separator between hashtags and messageBox
     let separatorTwo: UIView
@@ -82,7 +82,7 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
         
         separatorOne = UIView(frame: CGRectZero)
         
-        hashtagsView = HashtagsView(frame: CGRectZero)
+        hashtagsScrollView = HashtagsScrollView(frame: CGRectZero)
         
         separatorTwo = UIView(frame: CGRectZero)
         coverUp = UIView(frame: CGRectZero)
@@ -191,20 +191,18 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
         self.view.addSubview(separatorOne)
         
         // configure hashtags view --> begins with expanded height
-        hashtagsView.backgroundColor = UIColor.clearColor()
-        hashtagsView.frame.size = CGSize(width: self.view.frame.width, height: expandedHashtagsViewH)
-        hashtagsView.frame.origin.x = 0
-        hashtagsView.frame.origin.y = separatorOne.frame.maxY
-        // see HashtagsView.swift for detailed configuration
-        hashtagsView.configureHashtagsView()
+        hashtagsScrollView.frame.size = CGSize(width: self.view.frame.width, height: expandedHashtagsViewH)
+        hashtagsScrollView.frame.origin.x = 0
+        hashtagsScrollView.frame.origin.y = separatorOne.frame.maxY
+        hashtagsScrollView.configureHashtagsScrollView()
         
-        self.view.addSubview(hashtagsView)
+        view.addSubview(hashtagsScrollView)
         
         // configure second separator between hashtags and messageBox
         separatorTwo.backgroundColor = UIColor(red: 151/255, green: 151/255, blue: 151/255, alpha: 1)
         separatorTwo.frame.size = CGSize(width: self.view.frame.size.width, height: 1)
         separatorTwo.frame.origin.x = 0
-        separatorTwo.frame.origin.y = hashtagsView.frame.maxY
+        separatorTwo.frame.origin.y = hashtagsScrollView.frame.maxY
         
         self.view.addSubview(separatorTwo)
 
@@ -402,9 +400,9 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
                 // UI element location (and some sizing)
                 self.separatorOne.frame.origin.y = self.timedateLabel.frame.maxY + labelInset
                 //          note: hashtagsView completely expanded
-                self.hashtagsView.frame.size = CGSize(width: self.hashtagsView.frame.width, height: expandedHashtagsViewH)
-                self.hashtagsView.frame.origin.y = self.separatorOne.frame.maxY
-                self.separatorTwo.frame.origin.y = self.hashtagsView.frame.maxY
+                self.hashtagsScrollView.pagedHashtagsView()
+                self.hashtagsScrollView.frame.origin.y = self.separatorOne.frame.maxY
+                self.separatorTwo.frame.origin.y = self.hashtagsScrollView.frame.maxY
                 let coverUpH = self.view.frame.height - self.separatorTwo.frame.maxY
                 self.coverUp.frame.size = CGSize(width: self.view.frame.width, height: coverUpH)
                 self.coverUp.frame.origin = CGPoint(x: 0, y: self.separatorTwo.frame.maxY)
@@ -436,8 +434,8 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
                 // UI element location (and some sizing)
                 self.separatorOne.frame.origin.y = self.datePicker.frame.maxY + labelInset / 2
                 //          note: hashtags view completely closed, with height 0.0
-                self.hashtagsView.frame.size = CGSize(width: self.hashtagsView.frame.width, height: 0.0)
-                self.hashtagsView.frame.origin.y = self.separatorOne.frame.maxY
+                self.hashtagsScrollView.sizeZeroHashtagsView()
+                self.hashtagsScrollView.frame.origin.y = self.separatorOne.frame.maxY
                 self.separatorTwo.frame.origin.y = self.separatorOne.frame.minY
                 let coverUpH = self.view.frame.height - self.separatorTwo.frame.maxY
                 self.coverUp.frame.size = CGSize(width: self.view.frame.width, height: coverUpH)
@@ -466,7 +464,7 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
     
     // Toggle the hashtags view between open completely and condensed
     func toggleHashtags() {
-        if (hashtagsView.hashtagsCollapsed) {
+        if (hashtagsScrollView.hashtagsCollapsed) {
             openHashtagsCompletely()
         } else {
             closeHashtagsPartially()
@@ -475,16 +473,15 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
     
     // Animations for resizing the hashtags view to be condensed
     func closeHashtagsPartially() {
-        if (!hashtagsView.hashtagsCollapsed && !isAnimating) {
+        if (!hashtagsScrollView.hashtagsCollapsed && !isAnimating) {
             isAnimating = true
             UIView.animateKeyframesWithDuration(0.3, delay: 0.0, options: nil, animations: { () -> Void in
                 
                 // size hashtags view to condensed size
-                self.hashtagsView.frame.size = CGSize(width: self.hashtagsView.frame.width, height: condensedHashtagsViewH)
-                self.hashtagsView.frame.origin.y = self.separatorOne.frame.maxY
-                self.hashtagsView.linearHashtagArrangement()
+                self.hashtagsScrollView.linearHashtagsView()
+                self.hashtagsScrollView.frame.origin.y = self.separatorOne.frame.maxY
                 // position affected UI elements
-                self.separatorTwo.frame.origin.y = self.hashtagsView.frame.maxY
+                self.separatorTwo.frame.origin.y = self.hashtagsScrollView.frame.maxY
                 let coverUpH = self.view.frame.height - self.separatorTwo.frame.maxY
                 self.coverUp.frame.size = CGSize(width: self.view.frame.width, height: coverUpH)
                 self.coverUp.frame.origin = CGPoint(x: 0, y: self.separatorTwo.frame.maxY)
@@ -520,7 +517,7 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
                         }
                         
                         // hashtags now collapsed
-                        self.hashtagsView.hashtagsCollapsed = true
+                        self.hashtagsScrollView.hashtagsCollapsed = true
                     }
             })
         }
@@ -528,16 +525,15 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
     
     // Open hashtagsView completely to full view
     func openHashtagsCompletely() {
-        if (hashtagsView.hashtagsCollapsed && !isAnimating) {
+        if (hashtagsScrollView.hashtagsCollapsed && !isAnimating) {
             isAnimating = true
             UIView.animateKeyframesWithDuration(0.3, delay: 0.0, options: nil, animations: { () -> Void in
                 
                 // hashtagsView has expanded size
-                self.hashtagsView.frame.size = CGSize(width: self.hashtagsView.frame.width, height: expandedHashtagsViewH)
-                self.hashtagsView.pageHashtagArrangement()
-                self.hashtagsView.frame.origin.y = self.separatorOne.frame.maxY
+                self.hashtagsScrollView.pagedHashtagsView()
+                self.hashtagsScrollView.frame.origin.y = self.separatorOne.frame.maxY
                 // position affected UI elements
-                self.separatorTwo.frame.origin.y = self.hashtagsView.frame.maxY
+                self.separatorTwo.frame.origin.y = self.hashtagsScrollView.frame.maxY
                 let coverUpH = self.view.frame.height - self.separatorTwo.frame.maxY
                 self.coverUp.frame.size = CGSize(width: self.view.frame.width, height: coverUpH)
                 self.coverUp.frame.origin = CGPoint(x: 0, y: self.separatorTwo.frame.maxY)
@@ -560,7 +556,7 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
                         }
                         
                         // hashtagsView no longer collapsed
-                        self.hashtagsView.hashtagsCollapsed = false
+                        self.hashtagsScrollView.hashtagsCollapsed = false
                     }
             })
         }
@@ -621,7 +617,7 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
                     let newword = (word as NSString).substringToIndex(charsInHashtag)
                     
                     // Save the hashtag in CoreData
-                    self.hashtagsView.handleHashtagCoreData(newword)
+                    self.hashtagsScrollView.hashtagsView.handleHashtagCoreData(newword)
                 }
             }
             
@@ -703,7 +699,7 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITableViewDa
             
             // determine if the touch (first touch) is in the hashtagsView
             let touchLocation = touch.locationInView(self.view)
-            let viewFrame = self.view.convertRect(hashtagsView.frame, fromView: hashtagsView.superview)
+            let viewFrame = self.view.convertRect(hashtagsScrollView.frame, fromView: hashtagsScrollView.superview)
             
             if !CGRectContainsPoint(viewFrame, touchLocation) {
                 // if outside hashtagsView, endEditing, close keyboard, animate, etc.

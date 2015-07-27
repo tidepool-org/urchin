@@ -19,17 +19,9 @@ class HashtagsView: UIView {
     var pagedHashtagButtons: [[[UIButton]]] = []
     var hashtagButtons: [UIButton] = []
     
-    // Keep track of the current page
-    var hashtagsPage: Int = 0
-    var linearHashtagsPage: Int = 0
-    
     // Keep track of the total widths
     var totalLinearHashtagsWidth: CGFloat = 0
     var totalPagedHashtagsWidth: CGFloat = 0
-    
-    // Helpers for animations
-    var hashtagsCollapsed: Bool = false
-    var isAnimating: Bool = false
     
     // Called to set up the view
     func configureHashtagsView() {
@@ -37,86 +29,7 @@ class HashtagsView: UIView {
         self.fetchHashtags()
         self.configureHashtagButtons()
         
-        // Add gesture recognizers for moving hashtags left and right
-        let swipeGestureRight = UISwipeGestureRecognizer(target: self, action: "swipeHashtagViewRight:")
-        self.addGestureRecognizer(swipeGestureRight)
-        let swipeGestureLeft = UISwipeGestureRecognizer(target: self, action: "swipeHashtagViewLeft:")
-        swipeGestureLeft.direction = UISwipeGestureRecognizerDirection.Left
-        self.addGestureRecognizer(swipeGestureLeft)
         self.userInteractionEnabled = true
-    }
-    
-    func swipeHashtagViewLeft(sender: UISwipeGestureRecognizer!) {
-        // The hashtags were swiped to the left!
-        if (hashtagsCollapsed) {
-            // hashtags are collapsed, swipe in linear arrangement
-            
-            // Number of pages that can be swiped
-            let numberPages = Int(2 * totalLinearHashtagsWidth / self.frame.width - 1)
-            
-            // If it's not all the way to the right, or already animating --> do animation
-            if (linearHashtagsPage < numberPages && !isAnimating) {
-                isAnimating = true
-                UIView.animateKeyframesWithDuration(0.2, delay: 0.0, options: nil, animations: { () -> Void in
-                    // Increase the current page and reposition
-                    self.linearHashtagsPage += 1
-                    self.linearHashtagArrangement()
-                    }, completion: { (completed: Bool) -> Void in
-                        self.isAnimating = false
-                })
-            }
-        } else {
-            // hashtags are expanded, swipe in page arrangement
-            
-            // Number of pages that can be swiped
-            let numberPages = Int(2 * totalPagedHashtagsWidth / self.frame.width - 1)
-            
-            // If it's not all the way to the right, or already animating --> do animation
-            if (hashtagsPage < numberPages && !isAnimating) {
-                isAnimating = true
-                UIView.animateKeyframesWithDuration(0.2, delay: 0.0, options: nil, animations: { () -> Void in
-                    // Increase the current page and reposition
-                    self.hashtagsPage += 1
-                    self.pageHashtagArrangement()
-                    }, completion: { (completed: Bool) -> Void in
-                        self.isAnimating = false
-                })
-            }
-        }
-    }
-
-    func swipeHashtagViewRight(sender: UISwipeGestureRecognizer!) {
-        // The hashtags were swiped to the left!
-        if (hashtagsCollapsed) {
-            // hashtags are collapsed, swipe in linear arrangement
-            
-            // If it's not all the way to the left, or already animating --> do animation
-            if (linearHashtagsPage > 0 && !isAnimating) {
-                isAnimating = true
-                UIView.animateKeyframesWithDuration(0.2, delay: 0.0, options: nil, animations: { () -> Void in
-                    // Decrease the current page and reposition
-                    self.linearHashtagsPage -= 1
-                    self.linearHashtagArrangement()
-                    }, completion: { (completed: Bool) -> Void in
-                        self.isAnimating = false
-                })
-            }
-            
-        } else {
-            // hashtags are expanded, swipe in page arrangement
-            
-            // If it's not all the way to the left, or already animating --> do animation
-            if (hashtagsPage > 0 && !isAnimating) {
-                isAnimating = true
-                UIView.animateKeyframesWithDuration(0.2, delay: 0.0, options: nil, animations: { () -> Void in
-                    // Decrease the current page and reposition
-                    self.hashtagsPage -= 1
-                    self.pageHashtagArrangement()
-                    }, completion: { (completed: Bool) -> Void in
-                        self.isAnimating = false
-                })
-            }
-        }
     }
     
     // Save a hashtag in CoreDate
@@ -318,13 +231,13 @@ class HashtagsView: UIView {
             // If it's the first one in a row, it's a label inset in
             // All other's in the row are based upon the previous hashtag in the row
             if (col == 0) {
-                buttonX = CGFloat(page) * self.frame.width + labelInset
+                buttonX = CGFloat(page) * UIScreen.mainScreen().bounds.width + labelInset
             } else {
                 buttonX = buttonRow[col - 1].frame.maxX + 2 * labelSpacing
             }
             
             // If the hashtag spills over to the next page, start a new row
-            if ((buttonX + hashtagButton.frame.width) > (CGFloat(page + 1) * self.frame.width - labelInset)) {
+            if ((buttonX + hashtagButton.frame.width) > (CGFloat(page + 1) * UIScreen.mainScreen().bounds.width - labelInset)) {
                 // Append the row current row and reset/increment values
                 buttonPage.append(buttonRow)
                 buttonRow = []
@@ -379,7 +292,7 @@ class HashtagsView: UIView {
                     if (page == 0 && col == 0) {
                         // First button on first page for each row
                         // labelInset with a variant for the current page
-                        buttonX = labelInset - CGFloat(hashtagsPage) * self.frame.width / 2
+                        buttonX = labelInset
                     } else if (col == 0) {
                         // First button on any other page, in any row
                         // Based upon the maxX of the last button on the previous page in the same row
@@ -427,7 +340,7 @@ class HashtagsView: UIView {
             // If it is the first button, it's x origin is based upon which linearHashtagsPage the user is on
             // Else, it's x origin is based upon the previous button
             if (index == 0) {
-                button.frame.origin.x = labelInset - CGFloat(linearHashtagsPage) * self.frame.width / 2
+                button.frame.origin.x = labelInset
             } else {
                 button.frame.origin.x = hashtagButtons[index - 1].frame.maxX + 2 * labelSpacing
             }
