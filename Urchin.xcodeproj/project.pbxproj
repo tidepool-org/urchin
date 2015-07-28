@@ -215,6 +215,7 @@
 		AA3484F21B56AEBE0028C49B /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				AAA3F3121B508384000EB344 /* HashtagBolder.swift */,
 				AAB6B0521B605C440051472C /* FadeAnimator.swift */,
 				AA698EEA1B541C0B004154E0 /* UIDeviceExtension.swift */,
 				AA3484F31B56AED20028C49B /* UIDateFormatterExtension.swift */,
@@ -373,7 +374,6 @@
 				AA3484F11B559EAB0028C49B /* Views */,
 				AAEFB1671B504A15000EF8B4 /* View Controllers */,
 				AACE31961B4AE15D00F90E1D /* Resources */,
-				AAA3F3121B508384000EB344 /* HashtagBolder.swift */,
 				AA3484F21B56AEBE0028C49B /* Extensions */,
 			);
 			path = urchin;

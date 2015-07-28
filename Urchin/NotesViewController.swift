@@ -335,7 +335,7 @@ class NotesViewController: UIViewController {
         // Configure and add the overlay, has same height as view
         overlayHeight = self.view.frame.height
         opaqueOverlay = UIView(frame: CGRectMake(0, -overlayHeight, self.view.frame.width, overlayHeight))
-        opaqueOverlay.backgroundColor = blackishColor
+        opaqueOverlay.backgroundColor = blackishLowAlpha
         // tapGesture closes the dropDownMenu (and overlay)
         let tapGesture = UITapGestureRecognizer(target: self, action: "dropDownMenuPressed")
         tapGesture.numberOfTapsRequired = 1
@@ -343,7 +343,7 @@ class NotesViewController: UIViewController {
         self.view.addSubview(opaqueOverlay)
         
         // Configure dropDownMenu, same width as view
-        let numGroups = min(groups.count, 3)
+        let numGroups = min(groups.count, maxGroupsShownInDropdown)
         if (numGroups == groups.count) {
             self.dropDownHeight = CGFloat(numGroups+2)*userCellHeight + CGFloat(numGroups)*userCellThinSeparator + 2*userCellThickSeparator
         } else {

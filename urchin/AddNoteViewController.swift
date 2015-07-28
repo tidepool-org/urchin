@@ -17,7 +17,7 @@ class AddNoteViewController: UIViewController {
     // Helpers for dropDownMenu and Animations
     var isDropDownDisplayed: Bool = false
     var isDropDownAnimating: Bool = false
-    var dropDownHeight: CGFloat
+    var dropDownHeight: CGFloat = 0
     // Overlay to go with dropDownMenu
     var opaqueOverlay: UIView!
     var overlayHeight: CGFloat = 0
@@ -59,9 +59,6 @@ class AddNoteViewController: UIViewController {
     var keyboardFrame: CGRect = CGRectZero
     
     init(user: User, group: User, groups: [User]) {
-        
-        // UI Elements
-        self.dropDownHeight = CGFloat(groups.count) * userCellHeight + CGFloat(groups.count-1)*userCellThinSeparator
         
         // data
         note = Note()
@@ -243,6 +240,12 @@ class AddNoteViewController: UIViewController {
         
         // Configure dropDownMenu, width same as view width
         //          No need to fetch groups --> VC is initialized with user's groups
+        let numGroups = min(groups.count, maxGroupsShownInDropdown + 2)
+        if (numGroups == groups.count) {
+            self.dropDownHeight = CGFloat(numGroups) * userCellHeight + CGFloat(numGroups-1)*userCellThinSeparator
+        } else {
+            self.dropDownHeight = (CGFloat(numGroups)+0.5)*userCellHeight + CGFloat(numGroups-1)*userCellThinSeparator
+        }
         let dropDownWidth = self.view.frame.width
         self.dropDownMenu = UITableView(frame: CGRect(x: CGFloat(0), y: -dropDownHeight, width: dropDownWidth, height: dropDownHeight))
         dropDownMenu.backgroundColor = darkGreenColor
@@ -252,13 +255,9 @@ class AddNoteViewController: UIViewController {
         dropDownMenu.dataSource = self
         dropDownMenu.delegate = self
         dropDownMenu.separatorStyle = UITableViewCellSeparatorStyle.None
-        // If content fits, scroll disabled for dropDownMenu
-        if (dropDownMenu.contentSize.height <= dropDownMenu.frame.size.height) {
-            dropDownMenu.scrollEnabled = false
-        }
-        else {
-            dropDownMenu.scrollEnabled = true
-        }
+        
+        // Drop down menu is only scrollable if the content fits
+        dropDownMenu.scrollEnabled = groups.count > (maxGroupsShownInDropdown + 2)
         
         self.view.addSubview(dropDownMenu)
         
