@@ -14,6 +14,18 @@ Clone this repo to run in the iOS Simulator.
 
 ### To change environment:
 
-In 'APIConnect.swift', change the global state variable 'baseURL' to your preferred environment.
+In `APIConnect.swift`, change the global state variable 'baseURL' to your preferred environment.
 
-For development, use the dev environment: 'https://devel-api.tidepool.io'. You may need to create an account at [Blip-devel](blip-devel.tidepool.io).
+For development, use the dev environment: 'https://devel-api.tidepool.io'. You may need to create an account at [Blip-devel](blip-devel.tidepool.io) to test.
+
+## Style and Formatting
+
+For editing design related portions of application, see `ConstantsAndStyle.swift`.
+
+Common design changes that can be made:
+- Colors
+- Fonts
+- Label text
+- Date formats
+- UI element sizes
+- and more!
