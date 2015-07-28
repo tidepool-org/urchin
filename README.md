@@ -4,13 +4,21 @@
 
 Urchin is an iOS notes client for Type-1 Diabetes (T1D) built on top of the [Tidepool](http://tidepool.org/) platform. It allows patients and their "care team" (family, doctors) to add context to their data in the form of notes.
 
-## Install
+## Requirements:
 
-Requirements:
+- XCode 6.0 or higher
+- Xcode's Command Line Tools. From Xcode, install via *Xcode → Preferences → Downloads*.
+- xctool. Install using the following command:
+		`brew install xctool`
 
-- [Swift 1.2](https://developer.apple.com/swift/blog/?id=22)
+## Running the project
 
 Clone this repo to run in the iOS Simulator.
+
+### To run tests:
+
+Run the command:
+`xctool test -project Urchin.xcodeproj -scheme Urchin -sdk iphonesimulator clean build CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO`
 
 ### To change environment:
 
