@@ -9,11 +9,6 @@
 import Foundation
 import UIKit
 
-let userCellHeight: CGFloat = 56.0
-let userCellInset: CGFloat = 16
-let userCellThickSeparator: CGFloat = 4
-let userCellThinSeparator: CGFloat = 1
-
 class UserDropDownCell: UITableViewCell {
     
     // UI elements

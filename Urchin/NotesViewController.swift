@@ -9,8 +9,6 @@
 import Foundation
 import UIKit
 
-let addNoteButtonHeight = CGFloat(105)
-
 class NotesViewController: UIViewController {
     
     // All notes
@@ -88,7 +86,7 @@ class NotesViewController: UIViewController {
         super.viewDidLoad()
         
         // Set background color to light gray
-        self.view.backgroundColor = UIColor(red: 247/255, green: 247/255, blue: 248/255, alpha: 1)
+        self.view.backgroundColor = lightGreyColor
         
         // If device is running < iOS 8.0, make navigationBar NOT translucent
         if (UIDevice.currentDevice().systemVersion as NSString).floatValue < 8.0 {
@@ -96,12 +94,15 @@ class NotesViewController: UIViewController {
         }
         
         // navigationBar title begins with "All Notes" to match #nofilter to start
-        configureTitleView("All Notes")
+        configureTitleView(allNotesTitle)
         
         // Initialize the notesTable to fill whole view, besides addNoteButton
         // Configure the notesTable
-        self.notesTable = UITableView(frame: CGRectMake(0, 0, self.view.frame.width, self.view.frame.height - (CGFloat(64) + addNoteButtonHeight)))
-        notesTable.backgroundColor = UIColor(red: 247/255, green: 247/255, blue: 248/255, alpha: 1)
+        let navBarH = self.navigationController!.navigationBar.frame.size.height
+        let statusBarH = UIApplication.sharedApplication().statusBarFrame.size.height
+        let notesTableH = self.view.frame.height - (navBarH + statusBarH + addNoteButtonHeight)
+        self.notesTable = UITableView(frame: CGRectMake(0, 0, self.view.frame.width, notesTableH))
+        notesTable.backgroundColor = lightGreyColor
         notesTable.separatorStyle = UITableViewCellSeparatorStyle.None
         notesTable.registerClass(NoteCell.self, forCellReuseIdentifier: NSStringFromClass(NoteCell))
         notesTable.dataSource = self
@@ -111,21 +112,19 @@ class NotesViewController: UIViewController {
         
         // Configure the newNoteButton at bottom of view
         let buttonWidth = self.view.frame.width
-        let buttonX = CGFloat(0)
         let buttonY = self.view.frame.height - (addNoteButtonHeight + CGFloat(64))
-        newNoteButton.frame = CGRect(x: buttonX, y: buttonY, width: buttonWidth, height: addNoteButtonHeight)
-        newNoteButton.backgroundColor = UIColor(red: 0/255, green: 150/255, blue: 171/255, alpha: 1)
+        newNoteButton.frame = CGRect(x: 0, y: buttonY, width: buttonWidth, height: addNoteButtonHeight)
+        newNoteButton.backgroundColor = tealColor
         newNoteButton.addTarget(self, action: "newNote:", forControlEvents: .TouchUpInside)
         
         // Configure graphics and title for newNoteButton
-        let addNoteImage = UIImage(named: "note") as UIImage!
-        let addNoteImageView = UIImageView(image: addNoteImage)
-        addNoteImageView.frame = CGRectMake(0, 0, addNoteImage.size.width / 2, addNoteImage.size.height / 2)
+        let addNoteImageView = UIImageView(image: noteImage)
+        addNoteImageView.frame = CGRectMake(0, 0, noteImage.size.width / 2, noteImage.size.height / 2)
         
         let addNoteLabel = UILabel(frame: CGRectZero)
-        addNoteLabel.text = "Add note"
-        addNoteLabel.font = UIFont(name: "OpenSans-Bold", size: 17.5)!
-        addNoteLabel.textColor = UIColor.whiteColor()
+        addNoteLabel.text = addNoteText
+        addNoteLabel.font = mediumBoldFont
+        addNoteLabel.textColor = whiteColor
         addNoteLabel.sizeToFit()
         
         let addNoteX = newNoteButton.frame.width / 2
@@ -193,10 +192,10 @@ class NotesViewController: UIViewController {
         // UILabel used
         let titleView = UILabel()
         titleView.text = text
-        titleView.font = UIFont(name: "OpenSans", size: 17.5)!
-        titleView.textColor = UIColor.whiteColor()
-        let width = titleView.sizeThatFits(CGSizeMake(CGFloat.max, CGFloat.max)).width
-        titleView.frame = CGRect(origin:CGPointZero, size:CGSizeMake(width, 500))
+        titleView.font = mediumRegularFont
+        titleView.textColor = navBarTitleColor
+        titleView.sizeToFit()
+        titleView.frame.size.height = self.navigationController!.navigationBar.frame.size.height
         self.navigationItem.titleView = titleView
         
         // tapGesture triggers dropDownMenu to toggle
@@ -210,7 +209,7 @@ class NotesViewController: UIViewController {
         if (!loadingNotes) {
             // Shift back three months for fetching
             let dateShift = NSDateComponents()
-            dateShift.month = -3
+            dateShift.month = fetchPeriodInMonths
             let calendar = NSCalendar.currentCalendar()
             let startDate = calendar.dateByAddingComponents(dateShift, toDate: lastDateFetchTo, options: nil)!
             
@@ -336,7 +335,7 @@ class NotesViewController: UIViewController {
         // Configure and add the overlay, has same height as view
         overlayHeight = self.view.frame.height
         opaqueOverlay = UIView(frame: CGRectMake(0, -overlayHeight, self.view.frame.width, overlayHeight))
-        opaqueOverlay.backgroundColor = UIColor(red: 61/255, green: 61/255, blue: 61/255, alpha: 0.75)
+        opaqueOverlay.backgroundColor = blackishColor
         // tapGesture closes the dropDownMenu (and overlay)
         let tapGesture = UITapGestureRecognizer(target: self, action: "dropDownMenuPressed")
         tapGesture.numberOfTapsRequired = 1
@@ -351,8 +350,8 @@ class NotesViewController: UIViewController {
             self.dropDownHeight = (CGFloat(numGroups)+2.5)*userCellHeight + CGFloat(numGroups)*userCellThinSeparator + 2*userCellThickSeparator
         }
         let dropDownWidth = self.view.frame.width
-        self.dropDownMenu = UITableView(frame: CGRect(x: CGFloat(0), y: -dropDownHeight, width: dropDownWidth, height: dropDownHeight))
-        dropDownMenu.backgroundColor = UIColor(red: 0/255, green: 54/255, blue: 62/255, alpha: 1)
+        self.dropDownMenu = UITableView(frame: CGRect(x: 0, y: -dropDownHeight, width: dropDownWidth, height: dropDownHeight))
+        dropDownMenu.backgroundColor = darkGreenColor
         dropDownMenu.rowHeight = userCellHeight
         dropDownMenu.separatorInset.left = userCellInset
         dropDownMenu.registerClass(UserDropDownCell.self, forCellReuseIdentifier: NSStringFromClass(UserDropDownCell))
@@ -362,7 +361,7 @@ class NotesViewController: UIViewController {
         dropDownMenu.scrollsToTop = false
         
         // Drop down menu is only scrollable if the content fits
-        dropDownMenu.scrollEnabled = groups.count > 3
+        dropDownMenu.scrollEnabled = groups.count > maxGroupsShownInDropdown
         
         self.view.addSubview(dropDownMenu)
     }
@@ -372,7 +371,7 @@ class NotesViewController: UIViewController {
         if (isDropDownDisplayed) {
             // Configure navigationBar title to match filter
             if (filter == nil) {
-                self.configureTitleView("All Notes")
+                self.configureTitleView(allNotesTitle)
             } else {
                 self.configureTitleView(filter.fullName!)
             }
@@ -380,7 +379,7 @@ class NotesViewController: UIViewController {
             self.hideDropDownMenu()
         } else {
             // Configure navigationBar to display "Blip Notes"
-            self.configureTitleView("Blip notes")
+            self.configureTitleView(appTitle)
             // Show the dropDownMenu
             self.showDropDownMenu()
         }
@@ -391,10 +390,10 @@ class NotesViewController: UIViewController {
         // Determine final destination of dropDownMenu and opaqueOverlay/obstruction
         var frame: CGRect = self.dropDownMenu.frame
         frame.origin.y = -dropDownHeight
-        var obstructionFrame: CGRect = self.opaqueOverlay.frame
-        obstructionFrame.origin.y = -overlayHeight
+        var overlayFrame: CGRect = self.opaqueOverlay.frame
+        overlayFrame.origin.y = -overlayHeight
         // Perform animation
-        self.animateDropDownToFrame(frame, obstructionFrame: obstructionFrame) {
+        self.animateDropDownToFrame(frame, overlayFrame: overlayFrame) {
             self.isDropDownDisplayed = false
         }
     }
@@ -404,21 +403,21 @@ class NotesViewController: UIViewController {
         // Determine final destination of dropDownMenu and opaqueOverlay/obstruction
         var frame: CGRect = self.dropDownMenu.frame
         frame.origin.y = 0.0
-        var obstructionFrame: CGRect = self.opaqueOverlay.frame
-        obstructionFrame.origin.y = 0.0
+        var overlayFrame: CGRect = self.opaqueOverlay.frame
+        overlayFrame.origin.y = 0.0
         // Perform animation
-        self.animateDropDownToFrame(frame, obstructionFrame: obstructionFrame) {
+        self.animateDropDownToFrame(frame, overlayFrame: overlayFrame) {
             self.isDropDownDisplayed = true
         }
     }
     
     // dropDownMenu animations
-    func animateDropDownToFrame(frame: CGRect, obstructionFrame: CGRect, completion:() -> Void) {
+    func animateDropDownToFrame(frame: CGRect, overlayFrame: CGRect, completion:() -> Void) {
         if (!isDropDownAnimating) {
             isDropDownAnimating = true
-            UIView.animateKeyframesWithDuration(0.5, delay: 0.0, options: nil, animations: { () -> Void in
+            UIView.animateKeyframesWithDuration(dropDownAnimationTime, delay: 0.0, options: nil, animations: { () -> Void in
                 self.dropDownMenu.frame = frame
-                self.opaqueOverlay.frame = obstructionFrame
+                self.opaqueOverlay.frame = overlayFrame
                 }, completion: { (completed: Bool) -> Void in
                     self.isDropDownAnimating = false
                     if (completed) {

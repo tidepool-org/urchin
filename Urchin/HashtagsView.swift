@@ -149,7 +149,7 @@ class HashtagsView: UIView {
     func getAndSetDefaultHashtags() {
         // For now, the defaults are predefined here
         // Eventually, fetch from the Tidepool platform
-        let defaults = ["#exercise", "#low", "#high", "#meal", "#snack", "#stress", "#pumpfail", "#cgmfail", "#success", "#juicebox", "#pumpchange", "#cgmchange"]
+        let defaults = ["#low", "#exercise", "#meal", "#depressed", "#stress", "#site", "#sitechange", "#sensor", "#sensorchange", "#juicebox", "#devicesetting"]
         
         // Store the appDelegate
         let appDelegate =

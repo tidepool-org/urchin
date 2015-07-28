@@ -10,11 +10,6 @@ import Foundation
 import UIKit
 import CoreData
 
-let hashtagHeight: CGFloat = 36.0
-let expandedHashtagsViewH: CGFloat = 2 * labelInset + 3 * hashtagHeight + 3 * labelSpacing
-let condensedHashtagsViewH: CGFloat = 2 * labelInset + hashtagHeight
-let defaultMessage: String = "What's going on?"
-
 class AddNoteViewController: UIViewController {
     
     // DropDownMenu

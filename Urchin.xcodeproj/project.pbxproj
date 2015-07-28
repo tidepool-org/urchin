@@ -49,6 +49,8 @@
 		AA69320F1B66E9B20057F0A0 /* EditNoteVCAlertViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA69320D1B66E99B0057F0A0 /* EditNoteVCAlertViewDelegate.swift */; };
 		AA6932111B66EB910057F0A0 /* EditNoteVCTextViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6932101B66EB910057F0A0 /* EditNoteVCTextViewDelegate.swift */; };
 		AA6932121B66EC0E0057F0A0 /* EditNoteVCTextViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6932101B66EB910057F0A0 /* EditNoteVCTextViewDelegate.swift */; };
+		AA6932141B66EE0C0057F0A0 /* ConstantsAndStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6932131B66EE0C0057F0A0 /* ConstantsAndStyle.swift */; };
+		AA6932151B66FAC00057F0A0 /* ConstantsAndStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6932131B66EE0C0057F0A0 /* ConstantsAndStyle.swift */; };
 		AA698EEB1B541C0B004154E0 /* UIDeviceExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA698EEA1B541C0B004154E0 /* UIDeviceExtension.swift */; };
 		AA698EED1B545A07004154E0 /* EditNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA698EEC1B545A07004154E0 /* EditNoteViewController.swift */; };
 		AA6A7D7A1B62B1A4008215D8 /* apiConnectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6A7D791B62B1A4008215D8 /* apiConnectorTests.swift */; };
@@ -135,6 +137,7 @@
 		AA6932081B66E8260057F0A0 /* AddNoteVCAlertViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddNoteVCAlertViewDelegate.swift; sourceTree = "<group>"; };
 		AA69320D1B66E99B0057F0A0 /* EditNoteVCAlertViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditNoteVCAlertViewDelegate.swift; sourceTree = "<group>"; };
 		AA6932101B66EB910057F0A0 /* EditNoteVCTextViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditNoteVCTextViewDelegate.swift; sourceTree = "<group>"; };
+		AA6932131B66EE0C0057F0A0 /* ConstantsAndStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConstantsAndStyle.swift; sourceTree = "<group>"; };
 		AA698EEA1B541C0B004154E0 /* UIDeviceExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIDeviceExtension.swift; sourceTree = "<group>"; };
 		AA698EEC1B545A07004154E0 /* EditNoteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditNoteViewController.swift; sourceTree = "<group>"; };
 		AA6A7D791B62B1A4008215D8 /* apiConnectorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = apiConnectorTests.swift; sourceTree = "<group>"; };
@@ -212,6 +215,7 @@
 		AA3484F21B56AEBE0028C49B /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				AAB6B0521B605C440051472C /* FadeAnimator.swift */,
 				AA698EEA1B541C0B004154E0 /* UIDeviceExtension.swift */,
 				AA3484F31B56AED20028C49B /* UIDateFormatterExtension.swift */,
 			);
@@ -371,7 +375,6 @@
 				AACE31961B4AE15D00F90E1D /* Resources */,
 				AAA3F3121B508384000EB344 /* HashtagBolder.swift */,
 				AA3484F21B56AEBE0028C49B /* Extensions */,
-				AAB6B0521B605C440051472C /* FadeAnimator.swift */,
 			);
 			path = urchin;
 			sourceTree = "<group>";
@@ -406,6 +409,7 @@
 		AACE31961B4AE15D00F90E1D /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				AA6932131B66EE0C0057F0A0 /* ConstantsAndStyle.swift */,
 				AA66BA801B4C3E5300CCB008 /* Fonts */,
 				AA66BA7F1B4C3E4B00CCB008 /* Images */,
 			);
@@ -586,6 +590,7 @@
 				AAEFB16D1B5062CE000EF8B4 /* UrchinData.xcdatamodeld in Sources */,
 				AA6931F31B66DD6F0057F0A0 /* LoginVCTransitionDelegate.swift in Sources */,
 				AAB6B0531B605C440051472C /* FadeAnimator.swift in Sources */,
+				AA6932141B66EE0C0057F0A0 /* ConstantsAndStyle.swift in Sources */,
 				AAA3F3131B508384000EB344 /* HashtagBolder.swift in Sources */,
 				AA3484F01B559EA10028C49B /* HashtagsView.swift in Sources */,
 				AA993E301B3316C10027804C /* LoginViewController.swift in Sources */,
@@ -636,6 +641,7 @@
 				AA7920231B62AB630046038B /* LoadingView.swift in Sources */,
 				AA6AF8F21B5EA8920011F246 /* UIDateFormatterExtension.swift in Sources */,
 				AA7920201B62AB560046038B /* AddNoteViewController.swift in Sources */,
+				AA6932151B66FAC00057F0A0 /* ConstantsAndStyle.swift in Sources */,
 				AA6931EC1B66D4E90057F0A0 /* HashtagsScrollView.swift in Sources */,
 				AA6931FC1B66E12D0057F0A0 /* NotesVCTableViewDelegate.swift in Sources */,
 				AABCEFA01B3231910064FE49 /* hashtagBolderTests.swift in Sources */,

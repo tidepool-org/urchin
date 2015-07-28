@@ -30,8 +30,7 @@ extension NotesViewController: UITableViewDelegate {
             let usernameWidth = self.view.frame.width - (2 * noteCellInset + timedateLabel.frame.width + 2 * labelSpacing)
             usernameLabel.frame.size = CGSize(width: usernameWidth, height: CGFloat.max)
             usernameLabel.text = filteredNotes[indexPath.row].user!.fullName
-            usernameLabel.font = UIFont(name: "OpenSans-Bold", size: 17.5)!
-            usernameLabel.textColor = UIColor.blackColor()
+            usernameLabel.font = mediumBoldFont
             usernameLabel.adjustsFontSizeToFitWidth = false
             usernameLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
             usernameLabel.numberOfLines = 0
@@ -49,7 +48,7 @@ extension NotesViewController: UITableViewDelegate {
             let cellHeight: CGFloat
             // if the user who created the note is the same as the current user, allow space for edit button
             if (filteredNotes[indexPath.row].user!.userid == user.userid) {
-                cellHeight = noteCellInset + usernameLabel.frame.height + 2 * labelSpacing + messageLabel.frame.height + 2 * labelSpacing + 12.5 + noteCellInset
+                cellHeight = noteCellInset + usernameLabel.frame.height + 2 * labelSpacing + messageLabel.frame.height + 2 * labelSpacing + editButtonHeight + noteCellInset
             } else {
                 cellHeight = noteCellInset + usernameLabel.frame.height + 2 * labelSpacing + messageLabel.frame.height + noteCellInset
             }
@@ -62,8 +61,8 @@ extension NotesViewController: UITableViewDelegate {
                 // All / #nofilter
                 
                 let nameLabel = UILabel()
-                nameLabel.text = "All"
-                nameLabel.font = UIFont(name: "OpenSans-Bold", size: 17.5)
+                nameLabel.text = allTeamsTitle
+                nameLabel.font = mediumBoldFont
                 nameLabel.sizeToFit()
                 
                 return userCellThickSeparator + userCellInset + nameLabel.frame.height + userCellInset + userCellThinSeparator
@@ -71,8 +70,8 @@ extension NotesViewController: UITableViewDelegate {
                 // Logout
                 
                 let nameLabel = UILabel()
-                nameLabel.text = "Logout"
-                nameLabel.font = UIFont(name: "OpenSans-Bold", size: 17.5)
+                nameLabel.text = logoutTitle
+                nameLabel.font = mediumBoldFont
                 nameLabel.sizeToFit()
                 
                 return userCellInset + nameLabel.frame.height + userCellInset + (userCellThickSeparator - userCellThinSeparator)
@@ -80,12 +79,12 @@ extension NotesViewController: UITableViewDelegate {
                 // Some group / team / filter
                 
                 let nameLabel = UILabel()
-                nameLabel.frame.size = CGSize(width: self.view.frame.width - 2 * labelInset, height: 20.0)
+                nameLabel.frame.size = CGSize(width: self.view.frame.width - 2 * labelInset, height: dropDownGroupLabelHeight)
                 nameLabel.text = groups[indexPath.row - 1].fullName
                 if (filter === groups[indexPath.row - 1]) {
-                    nameLabel.font = UIFont(name: "OpenSans-Bold", size: 17.5)!
+                    nameLabel.font = mediumBoldFont
                 } else {
-                    nameLabel.font = UIFont(name: "OpenSans", size: 17.5)!
+                    nameLabel.font = mediumRegularFont
                 }
                 nameLabel.sizeToFit()
                 
@@ -105,7 +104,7 @@ extension NotesViewController: UITableViewDelegate {
                 // A group or all seleceted
                 if (indexPath.row == 0) {
                     // 'All' / #nofilter selected
-                    self.configureTitleView("All Notes")
+                    self.configureTitleView(allNotesTitle)
                     self.filter = nil
                 } else {
                     // Individual group / filter selected

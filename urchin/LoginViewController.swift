@@ -9,8 +9,6 @@
 import Foundation
 import UIKit
 
-let labelInset: CGFloat = 16
-
 class LogInViewController : UIViewController {
     
     // UI Elements
@@ -57,16 +55,13 @@ class LogInViewController : UIViewController {
         super.viewDidLoad()
         
         // Set background color (light grey)
-        self.view.backgroundColor = UIColor(red: 247/255, green: 247/255, blue: 248/255, alpha: 1)
+        self.view.backgroundColor = lightGreyColor
         
         // configure and add Tidepool logo to view
-        let tidepoolLogo = UIImage(named: "tidepoollogo") as UIImage!
         tidepoolLogoView.image = tidepoolLogo
-        let logoWidth = CGFloat(156)
-        let logoHeight = logoWidth * CGFloat(43.0/394.0)
-        let logoX = self.view.frame.width / 2 - CGFloat(logoWidth / 2)
-        let logoY = self.view.frame.height - (2*labelInset + logoHeight)
-        tidepoolLogoView.frame = CGRect(x: logoX, y: logoY, width: logoWidth, height: logoHeight)
+        let logoX = self.view.frame.width / 2 - CGFloat(tidepoolLogoWidth / 2)
+        let logoY = self.view.frame.height - (2*labelInset + tidepoolLogoHeight)
+        tidepoolLogoView.frame = CGRect(x: logoX, y: logoY, width: tidepoolLogoWidth, height: tidepoolLogoHeight)
         
         self.view.addSubview(tidepoolLogoView)
         
@@ -74,8 +69,8 @@ class LogInViewController : UIViewController {
         let versionNumber = UILabel(frame: CGRectZero)
         if let version = NSBundle.mainBundle().infoDictionary?["CFBundleShortVersionString"] as? String {
             versionNumber.text = "v.\(version)"
-            versionNumber.font = UIFont(name: "OpenSans", size: 12.5)!
-            versionNumber.textColor = UIColor(red: 61/255, green: 61/255, blue: 61/255, alpha: 1)
+            versionNumber.font = smallRegularFont
+            versionNumber.textColor = blackishColor
             versionNumber.sizeToFit()
             versionNumber.frame.origin.x = self.view.frame.width / 2 - versionNumber.frame.width / 2
             versionNumber.frame.origin.y = tidepoolLogoView.frame.maxY + labelSpacing
@@ -122,40 +117,39 @@ class LogInViewController : UIViewController {
             notificationCenter.addObserver(self, selector: "makeTransition", name: "makeTransitionToNotes", object: nil)
             
             // configure logo with notes icon
-            let image = UIImage(named: "notesicon") as UIImage!
-            logoView.image = image
-            let imageSize = logoView.image!.size.height
-            let imageX = self.view.frame.width / 2 - CGFloat(imageSize / 2)
+            logoView.image = notesIcon
+            let imageSize: CGFloat = logoView.image!.size.height
+            let imageX = self.view.frame.width / 2 - imageSize / 2
             logoView.frame = CGRect(x: imageX, y: 0, width: imageSize, height: imageSize)
             
             // configure title to "Blip notes" (urchin is still a great name)
-            titleLabel.text = "Blip notes"
-            titleLabel.font = UIFont(name: "OpenSans-Bold", size: 25)!
-            titleLabel.textColor = UIColor(red: 61/255, green: 61/255, blue: 61/255, alpha: 1)
+            titleLabel.text = appTitle
+            titleLabel.font = largeBoldFont
+            titleLabel.textColor = blackishColor
             titleLabel.sizeToFit()
             let titleX = self.view.frame.width / 2 - titleLabel.frame.width / 2
-            titleLabel.frame = CGRectMake(titleX, 0, titleLabel.frame.width, titleLabel.frame.height)
+            titleLabel.frame.origin.x = titleX
             
             // configure email entry field
-            let emailFieldWidth = self.view.frame.width - 2 * 25.0
+            let emailFieldWidth = self.view.frame.width - 2 * loginInset
             // email field height smaller for iPhone 4S
-            var emailFieldHeight = CGFloat(71)
+            var emailFieldHeight = textFieldHeight
             if (UIDevice.currentDevice().modelName == "iPhone 4S") {
-                emailFieldHeight = CGFloat(48)
+                emailFieldHeight = textFieldHeightSmall
             }
             let emailFieldX = self.view.frame.width / 2 - emailFieldWidth / 2
             emailField.frame = CGRectMake(emailFieldX, 0, emailFieldWidth, emailFieldHeight)
             emailField.borderStyle = UITextBorderStyle.Line
-            emailField.layer.borderColor = UIColor(red: 234/255, green: 234/255, blue: 234/255, alpha: 1).CGColor
-            emailField.layer.borderWidth = 2
-            emailField.attributedPlaceholder = NSAttributedString(string:"email",
-                attributes:[NSForegroundColorAttributeName: UIColor(red: 188/255, green: 190/255, blue: 192/255, alpha: 1), NSFontAttributeName: UIFont(name: "OpenSans", size: 25)!])
-            emailField.font = UIFont(name: "OpenSans", size: 25)!
-            emailField.textColor = UIColor(red: 61/255, green: 61/255, blue: 61/255, alpha: 1)
-            let padding = UIView(frame: CGRectMake(0, 0, 12, emailField.frame.height))
+            emailField.layer.borderColor = greyColor.CGColor
+            emailField.layer.borderWidth = textFieldBorderWidth
+            emailField.attributedPlaceholder = NSAttributedString(string: emailFieldPlaceholder,
+                attributes:[NSForegroundColorAttributeName: darkGreyColor, NSFontAttributeName: largeRegularFont])
+            emailField.font = largeRegularFont
+            emailField.textColor = blackishColor
+            let padding = UIView(frame: CGRectMake(0, 0, textFieldInset, emailField.frame.height))
             emailField.leftView = padding
             emailField.leftViewMode = UITextFieldViewMode.Always
-            emailField.backgroundColor = UIColor.whiteColor()
+            emailField.backgroundColor = textFieldBackgroundColor
             emailField.autocapitalizationType = UITextAutocapitalizationType.None
             emailField.autocorrectionType = UITextAutocorrectionType.No
             emailField.spellCheckingType = UITextSpellCheckingType.No
@@ -168,22 +162,22 @@ class LogInViewController : UIViewController {
             emailField.addTarget(self, action: "textFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
             
             // configure password entry field
-            let passwordFieldWidth = self.view.frame.width - 2 * 25.0
+            let passwordFieldWidth = self.view.frame.width - 2 * loginInset
             // password field height based upon email field height
             let passwordFieldHeight = emailFieldHeight
             let passwordFieldX = self.view.frame.width / 2 - passwordFieldWidth / 2
             passwordField.frame = CGRectMake(passwordFieldX, 0, passwordFieldWidth, passwordFieldHeight)
             passwordField.borderStyle = UITextBorderStyle.Line
-            passwordField.layer.borderColor = UIColor(red: 234/255, green: 234/255, blue: 234/255, alpha: 1).CGColor
+            passwordField.layer.borderColor = greyColor.CGColor
             passwordField.layer.borderWidth = 2
-            passwordField.attributedPlaceholder = NSAttributedString(string:"password",
-                attributes:[NSForegroundColorAttributeName: UIColor(red: 188/255, green: 190/255, blue: 192/255, alpha: 1), NSFontAttributeName: UIFont(name: "OpenSans", size: 25)!])
-            passwordField.font = UIFont(name: "OpenSans", size: 25)!
-            passwordField.textColor = UIColor(red: 61/255, green: 61/255, blue: 61/255, alpha: 1)
-            let paddingAgain = UIView(frame: CGRectMake(0, 0, 12, passwordField.frame.height))
+            passwordField.attributedPlaceholder = NSAttributedString(string: passFieldPlaceholder,
+                attributes:[NSForegroundColorAttributeName: darkGreyColor, NSFontAttributeName: largeRegularFont])
+            passwordField.font = largeRegularFont
+            passwordField.textColor = blackishColor
+            let paddingAgain = UIView(frame: CGRectMake(0, 0, textFieldInset, passwordField.frame.height))
             passwordField.leftView = paddingAgain
             passwordField.leftViewMode = UITextFieldViewMode.Always
-            passwordField.backgroundColor = UIColor.whiteColor()
+            passwordField.backgroundColor = textFieldBackgroundColor
             passwordField.autocapitalizationType = UITextAutocapitalizationType.None
             passwordField.autocorrectionType = UITextAutocorrectionType.No
             passwordField.spellCheckingType = UITextSpellCheckingType.No
@@ -196,27 +190,22 @@ class LogInViewController : UIViewController {
             passwordField.addTarget(self, action: "textFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
             
             // configure the remember me check box
-            let rememberX = CGFloat(25)
-            let unchecked = UIImage(named: "unchecked") as UIImage!
-            rememberMeCheckbox.image = unchecked
-            rememberMeCheckbox.frame = CGRectMake(rememberX, 0, unchecked.size.width, unchecked.size.height)
+            rememberMeCheckbox.image = uncheckedImage
+            rememberMeCheckbox.frame = CGRectMake(loginInset, 0, uncheckedImage.size.width, uncheckedImage.size.height)
             
             // configure remember me label
-            rememberMeLabel.text = "Remember me"
-            rememberMeLabel.font = UIFont(name: "OpenSans", size: 17.5)!
-            rememberMeLabel.textColor = UIColor(red: 152/255, green: 152/255, blue: 151/255, alpha: 1)
+            rememberMeLabel.text = rememberMeText
+            rememberMeLabel.font = mediumRegularFont
+            rememberMeLabel.textColor = darkestGreyColor
             rememberMeLabel.sizeToFit()
-            let rememberLabelX = rememberX + rememberMeCheckbox.frame.width + 8.0
-            rememberMeLabel.frame = CGRectMake(rememberLabelX, 0, rememberMeLabel.frame.width, rememberMeLabel.frame.height)
+            rememberMeLabel.frame.origin.x = loginInset + rememberMeCheckbox.frame.width + rememberMeSpacing
             
             // Create a whole view to add the remember me label and checkbox to
             //      --> user can click anywhere in view to trigger a checkbox press
-            let rememberMeW = rememberMeLabel.frame.maxX + rememberX
+            let rememberMeW = rememberMeLabel.frame.maxX + loginInset
             let rememberMeH = labelInset + rememberMeCheckbox.frame.height + labelInset
             rememberMeView.frame.size = CGSize(width: rememberMeW, height: rememberMeH)
-            let rememberMeX = CGFloat(0)
-            let rememberMeY = rememberMeCheckbox.frame.minY - labelInset
-            rememberMeView.frame.origin = CGPoint(x: rememberMeX, y: rememberMeY)
+            rememberMeView.frame.origin.y = rememberMeCheckbox.frame.minY - labelInset
             rememberMeView.backgroundColor = UIColor.clearColor()
             // tapGesture in view triggers animation
             let tap = UITapGestureRecognizer(target: self, action: "checkboxPressed:")
@@ -226,18 +215,16 @@ class LogInViewController : UIViewController {
             rememberMeView.addSubview(rememberMeLabel)
             
             // configure log in button
-            let logInWidth = CGFloat(100)
-            let logInHeight = CGFloat(50)
-            let logInX = self.view.frame.width - (25.0 + logInWidth)
-            logInButton.frame = CGRectMake(logInX, 0, logInWidth, logInHeight)
-            logInButton.backgroundColor = UIColor(red: 0/255, green: 150/255, blue: 171/255, alpha: 1)
+            let logInX = self.view.frame.width - (loginInset + loginButtonWidth)
+            logInButton.frame = CGRectMake(logInX, 0, loginButtonWidth, loginButtonHeight)
+            logInButton.backgroundColor = tealColor
             logInButton.alpha = 0.5
-            logInButton.setAttributedTitle(NSAttributedString(string:"Log in",
-                attributes:[NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont(name: "OpenSans", size: 17.5)!]), forState: UIControlState.Normal)
+            logInButton.setAttributedTitle(NSAttributedString(string: loginButtonText,
+                attributes:[NSForegroundColorAttributeName: loginButtonTextColor, NSFontAttributeName: mediumRegularFont]), forState: UIControlState.Normal)
             logInButton.addTarget(self, action: "logInPressed", forControlEvents: .TouchUpInside)
             
             // determine halfHeight of all UI elements
-            halfHeight = (titleLabel.frame.height + 14.5 + logoView.frame.height + 26.5 + emailField.frame.height + 10.21 + passwordField.frame.height + 12.5 + logInButton.frame.height) / 2
+            halfHeight = (titleLabel.frame.height + titleToLogo + logoView.frame.height + logoToEmail + emailField.frame.height + emailToPass + passwordField.frame.height + passToLogin + logInButton.frame.height) / 2
             
             // configure y-position of UI elements relative to center of view
             let centerY = self.view.frame.height / 2
@@ -293,14 +280,12 @@ class LogInViewController : UIViewController {
             // currently rememberMe --> change to don't rememberMe
             
             rememberMe = false
-            let unchecked = UIImage(named: "unchecked") as UIImage!
-            rememberMeCheckbox.image = unchecked
+            rememberMeCheckbox.image = uncheckedImage
         } else {
             // currently don't rememberMe --> change to rememberMe
             
             rememberMe = true
-            let checked = UIImage(named: "checked") as UIImage!
-            rememberMeCheckbox.image = checked
+            rememberMeCheckbox.image = checkedImage
         }
         println(rememberMe)
     }
@@ -355,7 +340,7 @@ class LogInViewController : UIViewController {
     func animateLogIn(centerY: CGFloat, completion:() -> Void) {
         if (!isAnimating) {
             isAnimating = true
-            UIView.animateKeyframesWithDuration(0.3, delay: 0.0, options: nil, animations: { () -> Void in
+            UIView.animateKeyframesWithDuration(loginAnimationTime, delay: 0.0, options: nil, animations: { () -> Void in
                 self.uiElementLocationFromCenterY(centerY)
                 
                 }, completion: { (completed: Bool) -> Void in
@@ -376,24 +361,25 @@ class LogInViewController : UIViewController {
         rememberMeCheckbox.frame.origin.y = labelInset
         rememberMeLabel.frame.origin.y = rememberMeCheckbox.frame.midY - rememberMeLabel.frame.height / 2
         rememberMeView.frame.origin.y = logInButton.frame.midY - (rememberMeCheckbox.frame.height / 2 + labelInset)
-        passwordField.frame.origin.y = logInButton.frame.origin.y - (12.5 + passwordField.frame.height)
-        emailField.frame.origin.y = passwordField.frame.origin.y - (10.21 + emailField.frame.height)
+        passwordField.frame.origin.y = logInButton.frame.origin.y - (passToLogin + passwordField.frame.height)
+        emailField.frame.origin.y = passwordField.frame.origin.y - (emailToPass + emailField.frame.height)
         configureLogoFrame()
-        logoView.frame.origin.y = emailField.frame.origin.y - (26.5 + logoView.frame.height)
+        logoView.frame.origin.y = emailField.frame.origin.y - (logoToEmail + logoView.frame.height)
         if (logoView.frame.height >= 50) {
-            titleLabel.frame.origin.y = logoView.frame.origin.y - (14.5 + titleLabel.frame.height)
+            titleLabel.frame.origin.y = logoView.frame.origin.y - (titleToLogo + titleLabel.frame.height)
         } else {
-            titleLabel.frame.origin.y = emailField.frame.origin.y - (14.5 + titleLabel.frame.height)
+            titleLabel.frame.origin.y = emailField.frame.origin.y - (titleToLogo + titleLabel.frame.height)
         }
     }
     
     // Size logo appropriately based upon space in view
     func configureLogoFrame() {
         let topToEmailField = emailField.frame.minY
-        var proposedLogoSize = topToEmailField - (73.5 + titleLabel.frame.height)
+        let space: CGFloat = topToTitle + titleToLogo + logoToEmail
+        var proposedLogoSize: CGFloat = topToEmailField - (space + titleLabel.frame.height)
         proposedLogoSize = min(proposedLogoSize, logoView.image!.size.height)
-        if (proposedLogoSize < 50) {
-            proposedLogoSize = 0.0
+        if (proposedLogoSize < minNotesIconSize) {
+            proposedLogoSize = 0
         }
         let imageX = self.view.frame.width / 2 - CGFloat(proposedLogoSize / 2)
         logoView.frame = CGRect(x: imageX, y: 0, width: proposedLogoSize, height: proposedLogoSize)
@@ -412,15 +398,9 @@ class LogInViewController : UIViewController {
     // Check validity of email
     func isValidEmail(testStr:String) -> Bool {
         
-        var emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}"
-        var range = testStr.rangeOfString(emailRegEx, options:.RegularExpressionSearch)
-        var result = range != nil ? true : false
-        if (result) {
-            return result
-        }
-        emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}+\\.[A-Za-z]{2,4}"
-        range = testStr.rangeOfString(emailRegEx, options:.RegularExpressionSearch)
-        result = range != nil ? true : false
+        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}"
+        let range = testStr.rangeOfString(emailRegEx, options:.RegularExpressionSearch)
+        let result = range != nil ? true : false
         return result
     }
     

@@ -23,10 +23,10 @@ extension NotesViewController: UITableViewDataSource {
             // Background color based upon odd or even row
             if (indexPath.row % 2 == 0) {
                 // even cell
-                cell.backgroundColor = UIColor(red: 247/255, green: 247/255, blue: 248/255, alpha: 1)
+                cell.backgroundColor = lightGreyColor
             } else {
                 // odd cell
-                cell.backgroundColor = UIColor(red: 152/255, green: 152/255, blue: 151/255, alpha: 0.23)
+                cell.backgroundColor = darkestGreyLowAlpha
             }
             
             cell.userInteractionEnabled = true

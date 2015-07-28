@@ -12,12 +12,12 @@ import UIKit
 extension LogInViewController: UITextFieldDelegate {
     // Change the textField border to blue when textField is being edited
     func textFieldDidBeginEditing(textField: UITextField) {
-        textField.layer.borderColor = UIColor(red: 0/255, green: 150/255, blue: 171/255, alpha: 1).CGColor
+        textField.layer.borderColor = tealColor.CGColor
     }
     
     // Change the textField border to gray when textField is done being edited
     func textFieldDidEndEditing(textField: UITextField) {
-        textField.layer.borderColor = UIColor(red: 234/255, green: 234/255, blue: 234/255, alpha: 1).CGColor
+        textField.layer.borderColor = greyColor.CGColor
     }
     
     func textFieldDidChange(textField: UITextField) {

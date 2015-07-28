@@ -9,10 +9,6 @@
 import Foundation
 import UIKit
 
-let noteCellHeight: CGFloat = 128
-let noteCellInset: CGFloat = 16
-let labelSpacing: CGFloat = 6
-
 class NoteCell: UITableViewCell {
     
     var note: Note?
