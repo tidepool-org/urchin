@@ -22,8 +22,8 @@ extension AddNoteViewController: UITextViewDelegate {
     func textViewDidEndEditing(textView: UITextView) {
         if textView.text.isEmpty {
             textView.text = defaultMessage
-            textView.font = UIFont(name: "OpenSans", size: 17.5)!
-            textView.textColor = UIColor(red: 167/255, green: 167/255, blue: 167/255, alpha: 1)
+            textView.font = mediumRegularFont
+            textView.textColor = messageTextColor
         }
     }
     

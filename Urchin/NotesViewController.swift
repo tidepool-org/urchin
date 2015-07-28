@@ -144,7 +144,7 @@ class NotesViewController: UIViewController {
         self.loadGroups()
         
         // Add rightBarButtonItem to down arrow for showing dropdown
-        var rightDropDownMenuButton: UIBarButtonItem = UIBarButtonItem(image: UIImage(named: "down"), style: .Plain, target: self, action: "dropDownMenuPressed")
+        var rightDropDownMenuButton: UIBarButtonItem = UIBarButtonItem(image: downArrow, style: .Plain, target: self, action: "dropDownMenuPressed")
         self.navigationItem.setRightBarButtonItem(rightDropDownMenuButton, animated: true)
         
         // Configure notification center to observe addNote and saveNote

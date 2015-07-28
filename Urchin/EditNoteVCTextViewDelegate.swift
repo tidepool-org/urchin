@@ -38,7 +38,7 @@ extension EditNoteViewController: UITextViewDelegate {
     func textViewDidEndEditing(textView: UITextView) {
         if textView.text.isEmpty {
             textView.text = defaultMessage
-            textView.textColor = UIColor(red: 167/255, green: 167/255, blue: 167/255, alpha: 1)
+            textView.textColor = messageTextColor
         }
     }
 }

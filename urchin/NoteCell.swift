@@ -33,8 +33,8 @@ class NoteCell: UITableViewCell {
         let usernameWidth = contentView.frame.width - (2 * noteCellInset + timedateLabel.frame.width + 2 * labelSpacing)
         usernameLabel.frame.size = CGSize(width: usernameWidth, height: CGFloat.max)
         usernameLabel.text = note.user!.fullName
-        usernameLabel.font = UIFont(name: "OpenSans-Bold", size: 17.5)!
-        usernameLabel.textColor = UIColor.blackColor()
+        usernameLabel.font = mediumBoldFont
+        usernameLabel.textColor = noteTextColor
         usernameLabel.adjustsFontSizeToFitWidth = false
         usernameLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
         usernameLabel.numberOfLines = 0
@@ -48,7 +48,7 @@ class NoteCell: UITableViewCell {
         // where the bottom of the first line of the name label is
         let helperLabel = UILabel(frame: CGRectZero)
         helperLabel.text = "Howard"
-        helperLabel.font = UIFont(name: "OpenSans-Bold", size: 17.5)!
+        helperLabel.font = mediumBoldFont
         helperLabel.sizeToFit()
         helperLabel.frame.origin = usernameLabel.frame.origin
         let timedateX = contentView.frame.width - (noteCellInset + timedateLabel.frame.width)
@@ -76,10 +76,10 @@ class NoteCell: UITableViewCell {
         // otherwise, don't put the edit button in
         if (note.user!.userid == user.userid) {
             editButton.frame = CGRectZero
-            let editTitle = NSAttributedString(string: "edit", attributes: [NSForegroundColorAttributeName: UIColor(red: 0/255, green: 150/255, blue: 171/255, alpha: 1), NSFontAttributeName: UIFont(name: "OpenSans", size: 12.5)!])
+            let editTitle = NSAttributedString(string: editButtonTitle, attributes: [NSForegroundColorAttributeName: tealColor, NSFontAttributeName: smallRegularFont])
             editButton.setAttributedTitle(editTitle, forState: .Normal)
             editButton.sizeToFit()
-            editButton.frame.size.height = 2 * labelSpacing + 12.5 + noteCellInset
+            editButton.frame.size.height = 2 * labelSpacing + editButtonHeight + noteCellInset
             editButton.frame.size.width = editButton.frame.width + 2 * noteCellInset
             let editX = contentView.frame.width - (editButton.frame.width)
             let editY = messageLabel.frame.maxY

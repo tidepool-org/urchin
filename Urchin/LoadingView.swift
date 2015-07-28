@@ -25,16 +25,16 @@ class LoadingView: UIView {
     init(text: String) {
         super.init(frame: CGRectZero)
                 
-        self.layer.cornerRadius = 10
-        self.backgroundColor = UIColor(red: 61/255, green: 61/255, blue: 61/255, alpha: 1)
+        self.layer.cornerRadius = loadingCornerRadius
+        self.backgroundColor = loadingViewBackground
         
         indicator.sizeToFit()
         indicator.startAnimating()
-        indicator.color = UIColor(red: 0/255, green: 150/255, blue: 171/255, alpha: 1)
+        indicator.color = loadingIndicatorColor
         
         label.text = text
-        label.font = UIFont(name: "OpenSans", size: 17.5)!
-        label.textColor = UIColor(red: 0/255, green: 150/255, blue: 171/255, alpha: 1)
+        label.font = mediumRegularFont
+        label.textColor = loadingTextColor
         label.sizeToFit()
         
         let width = 2 * labelInset + label.frame.width

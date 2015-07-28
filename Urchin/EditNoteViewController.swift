@@ -75,8 +75,8 @@ class EditNoteViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Set background color to light grey color for dark navigationBar
-        self.view.backgroundColor = UIColor(red: 247/255, green: 247/255, blue: 248/255, alpha: 1)
+        // Set background color to light grey color
+        self.view.backgroundColor = lightGreyColor
         
         // If device is running < iOS 8.0, make navigationBar NOT translucent
         if (UIDevice.currentDevice().systemVersion as NSString).floatValue < 8.0 {
@@ -86,10 +86,10 @@ class EditNoteViewController: UIViewController {
         // Configure title with group / team name
         // Title does not need tapGesture actions --> group is fixed
         self.title = groupFullName
-        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor(),NSFontAttributeName: UIFont(name: "OpenSans", size: 17.5)!]
+        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: navBarTitleColor, NSFontAttributeName: mediumRegularFont]
         
         // Configure close button (always present)
-        var closeButton: UIBarButtonItem = UIBarButtonItem(image: UIImage(named: "closex")!, style: .Plain, target: self, action: "closeVC:")
+        var closeButton: UIBarButtonItem = UIBarButtonItem(image: closeX, style: .Plain, target: self, action: "closeVC:")
         self.navigationItem.setLeftBarButtonItem(closeButton, animated: true)
         
         // configure date label
@@ -100,9 +100,9 @@ class EditNoteViewController: UIViewController {
         timedateLabel.frame.origin.y = labelInset
         
         // configure change button
-        changeDateLabel.text = "change"
-        changeDateLabel.font = UIFont(name: "OpenSans", size: 12.5)
-        changeDateLabel.textColor = UIColor(red: 0/255, green: 150/255, blue: 171/255, alpha: 1)
+        changeDateLabel.text = changeDateText
+        changeDateLabel.font = smallRegularFont
+        changeDateLabel.textColor = tealColor
         changeDateLabel.sizeToFit()
         changeDateLabel.frame.origin.x = self.view.frame.width - (labelInset + changeDateLabel.frame.width)
         changeDateLabel.frame.origin.y = timedateLabel.frame.midY - changeDateLabel.frame.height / 2
@@ -132,7 +132,7 @@ class EditNoteViewController: UIViewController {
         self.view.addSubview(datePicker)
         
         // configure first separator between date and hashtags
-        separatorOne.backgroundColor = UIColor(red: 151/255, green: 151/255, blue: 151/255, alpha: 1)
+        separatorOne.backgroundColor = darkestGreyColor
         separatorOne.frame.size = CGSize(width: self.view.frame.size.width, height: 1)
         separatorOne.frame.origin.x = 0
         separatorOne.frame.origin.y = timedateLabel.frame.maxY + labelInset
@@ -148,7 +148,7 @@ class EditNoteViewController: UIViewController {
         view.addSubview(hashtagsScrollView)
         
         // configure second separator between hashtags and messageBox
-        separatorTwo.backgroundColor = UIColor(red: 151/255, green: 151/255, blue: 151/255, alpha: 1)
+        separatorTwo.backgroundColor = darkestGreyColor
         separatorTwo.frame.size = CGSize(width: self.view.frame.size.width, height: 1)
         separatorTwo.frame.origin.x = 0
         separatorTwo.frame.origin.y = hashtagsScrollView.frame.maxY
@@ -156,20 +156,23 @@ class EditNoteViewController: UIViewController {
         self.view.addSubview(separatorTwo)
         
         // configure post button
-        postButton.setAttributedTitle(NSAttributedString(string:"Save",
-            attributes:[NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont(name: "OpenSans", size: 17.5)!]), forState: UIControlState.Normal)
-        postButton.backgroundColor = UIColor(red: 0/255, green: 150/255, blue: 171/255, alpha: 1)
+        postButton.setAttributedTitle(NSAttributedString(string: postButtonSave,
+            attributes:[NSForegroundColorAttributeName: postButtonTextColor, NSFontAttributeName: mediumRegularFont]), forState: UIControlState.Normal)
+        postButton.backgroundColor = tealColor
+        postButton.alpha = 0.5
         postButton.addTarget(self, action: "saveNote", forControlEvents: .TouchUpInside)
-        postButton.frame.size = CGSize(width: 112, height: 41)
+        postButton.frame.size = CGSize(width: postButtonW, height: postButtonH)
         postButton.frame.origin.x = self.view.frame.size.width - (labelInset + postButton.frame.width)
-        postButton.frame.origin.y = self.view.frame.size.height - (labelInset + postButton.frame.height + 64)
+        let navBarH = self.navigationController!.navigationBar.frame.size.height
+        let statusBarH = UIApplication.sharedApplication().statusBarFrame.size.height
+        postButton.frame.origin.y = self.view.frame.size.height - (labelInset + postButton.frame.height + navBarH + statusBarH)
         
         self.view.addSubview(postButton)
         
         // configure message box
         //      initializes with default placeholder text
-        messageBox.backgroundColor = UIColor(red: 247/255, green: 247/255, blue: 248/255, alpha: 1)
-        messageBox.font = UIFont(name: "OpenSans", size: 17.5)!
+        messageBox.backgroundColor = lightGreyColor
+        messageBox.font = mediumRegularFont
         let hashtagBolder = HashtagBolder()
         let attributedText = hashtagBolder.boldHashtags(note.messagetext)
         messageBox.attributedText = attributedText
@@ -190,10 +193,9 @@ class EditNoteViewController: UIViewController {
         self.view.addSubview(messageBox)
         
         // configure camera button
-        let camera = UIImage(named: "camera") as UIImage!
-        cameraButton.setImage(camera, forState: .Normal)
+        cameraButton.setImage(cameraImage, forState: .Normal)
         cameraButton.addTarget(self, action: "cameraPressed:", forControlEvents: .TouchUpInside)
-        cameraButton.frame.size = camera.size
+        cameraButton.frame.size = cameraImage.size
         let cameraX = 2 * labelInset
         let cameraY = postButton.frame.midY - cameraButton.frame.height / 2
         cameraButton.frame.origin = CGPoint(x: cameraX, y: cameraY)
@@ -202,10 +204,9 @@ class EditNoteViewController: UIViewController {
 //        self.view.addSubview(cameraButton)
         
         // configure location button
-        let location = UIImage(named: "location") as UIImage!
-        locationButton.setImage(location, forState: .Normal)
+        locationButton.setImage(locationImage, forState: .Normal)
         locationButton.addTarget(self, action: "locationPressed:", forControlEvents: .TouchUpInside)
-        locationButton.frame.size = location.size
+        locationButton.frame.size = locationImage.size
         let locationX = cameraButton.frame.maxX + 2 * labelInset
         let locationY = postButton.frame.midY - locationButton.frame.height / 2
         locationButton.frame.origin = CGPoint(x: locationX, y: locationY)
@@ -228,10 +229,10 @@ class EditNoteViewController: UIViewController {
             // If the note has been changed, show an alert
             let alert = UIAlertView()
             alert.delegate = self
-            alert.title = "Save Changes?"
-            alert.message = "You have made changes to this note. Would you like to save these changes?"
-            alert.addButtonWithTitle("Discard")
-            alert.addButtonWithTitle("Save")
+            alert.title = editAlertTitle
+            alert.message = editAlertMessage
+            alert.addButtonWithTitle(editAlertDiscard)
+            alert.addButtonWithTitle(editAlertSave)
             alert.show()
         } else {
             // Note has not been edited, dismiss the VC
@@ -260,11 +261,11 @@ class EditNoteViewController: UIViewController {
         if (!datePicker.hidden && !isAnimating) {
             isAnimating = true
             // Fade out the date picker with an animation
-            UIView.animateWithDuration(0.2, animations: {
+            UIView.animateWithDuration(datePickerFadeTime, animations: {
                 self.datePicker.alpha = 0.0
             })
             // Move all affected UI elements with animation
-            UIView.animateKeyframesWithDuration(0.3, delay: 0.0, options: nil, animations: { () -> Void in
+            UIView.animateKeyframesWithDuration(animationTime, delay: 0.0, options: nil, animations: { () -> Void in
                 // UI element location (and some sizing)
                 self.separatorOne.frame.origin.y = self.timedateLabel.frame.maxY + labelInset
                 //          note: hashtagsView completely expanded
@@ -280,7 +281,7 @@ class EditNoteViewController: UIViewController {
                     self.datePicker.hidden = true
                     self.isAnimating = false
                     // change the changeDateLabel back to 'change'
-                    self.changeDateLabel.text = "change"
+                    self.changeDateLabel.text = changeDateText
                     self.changeDateLabel.sizeToFit()
                     self.changeDateLabel.frame.origin.x = self.view.frame.width - (labelInset + self.changeDateLabel.frame.width)
                     if (hashtagsAfter) {
@@ -294,7 +295,7 @@ class EditNoteViewController: UIViewController {
     func openDatePicker() {
         if (datePicker.hidden && !isAnimating) {
             isAnimating = true
-            UIView.animateKeyframesWithDuration(0.3, delay: 0.0, options: nil, animations: { () -> Void in
+            UIView.animateKeyframesWithDuration(animationTime, delay: 0.0, options: nil, animations: { () -> Void in
                 
                 // UI element location (and some sizing)
                 self.separatorOne.frame.origin.y = self.datePicker.frame.maxY + labelInset / 2
@@ -308,7 +309,7 @@ class EditNoteViewController: UIViewController {
                 
                 }, completion: { (completed: Bool) -> Void in
                     // On completion, fade in the datePicker
-                    UIView.animateWithDuration(0.2, animations: {
+                    UIView.animateWithDuration(datePickerFadeTime, animations: {
                         self.datePicker.alpha = 1.0
                     })
                     // Set datePicker to show
@@ -316,7 +317,7 @@ class EditNoteViewController: UIViewController {
                     self.isAnimating = false
                     if (completed) {
                         // change the changeDateLabel to prompt done/close action
-                        self.changeDateLabel.text = "done"
+                        self.changeDateLabel.text = doneDateText
                         self.changeDateLabel.sizeToFit()
                         self.changeDateLabel.frame.origin.x = self.view.frame.width - (labelInset + self.changeDateLabel.frame.width)
                     }
@@ -337,7 +338,7 @@ class EditNoteViewController: UIViewController {
     func closeHashtagsPartially() {
         if (!hashtagsScrollView.hashtagsCollapsed && !isAnimating) {
             isAnimating = true
-            UIView.animateKeyframesWithDuration(0.3, delay: 0.0, options: nil, animations: { () -> Void in
+            UIView.animateKeyframesWithDuration(animationTime, delay: 0.0, options: nil, animations: { () -> Void in
                 
                 // size hashtags view to condensed size
                 self.hashtagsScrollView.linearHashtagsView()
@@ -369,8 +370,8 @@ class EditNoteViewController: UIViewController {
                     if (completed) {
                         // For iPhone 4S, change the button to be 'done'
                         if (UIDevice.currentDevice().modelName == "iPhone 4S") {
-                            self.changeDateLabel.text = "done"
-                            self.changeDateLabel.font = UIFont(name: "OpenSans-Bold", size: 12.5)!
+                            self.changeDateLabel.text = doneDateText
+                            self.changeDateLabel.font = smallBoldFont
                             self.changeDateLabel.sizeToFit()
                             self.changeDateLabel.frame.origin.x = self.view.frame.width - (labelInset + self.changeDateLabel.frame.width)
                         }
@@ -386,7 +387,7 @@ class EditNoteViewController: UIViewController {
     func openHashtagsCompletely() {
         if (hashtagsScrollView.hashtagsCollapsed && !isAnimating) {
             isAnimating = true
-            UIView.animateKeyframesWithDuration(0.3, delay: 0.0, options: nil, animations: { () -> Void in
+            UIView.animateKeyframesWithDuration(animationTime, delay: 0.0, options: nil, animations: { () -> Void in
                 
                 // hashtagsView has expanded size
                 self.hashtagsScrollView.pagedHashtagsView()
@@ -405,8 +406,8 @@ class EditNoteViewController: UIViewController {
                     if (completed) {
                         if (UIDevice.currentDevice().modelName == "iPhone 4S") {
                             // If iPhone 4S, change back from 'done' to 'change'
-                            self.changeDateLabel.text = "change"
-                            self.changeDateLabel.font = UIFont(name: "OpenSans", size: 12.5)!
+                            self.changeDateLabel.text = changeDateText
+                            self.changeDateLabel.font = smallRegularFont
                             self.changeDateLabel.sizeToFit()
                             self.changeDateLabel.frame.origin.x = self.view.frame.width - (labelInset + self.changeDateLabel.frame.width)
                         }
@@ -423,20 +424,17 @@ class EditNoteViewController: UIViewController {
         let dateFormatter = NSDateFormatter()
         timedateLabel.attributedText = dateFormatter.attributedStringFromDate(datePicker.date)
         timedateLabel.sizeToFit()
+        textViewDidChange(messageBox)
     }
     
-    // Camera functionality currently not developed. Just shows alert if camera button pressed.
+    // Camera functionality currently not developed.
     func cameraPressed(sender: UIButton!) {
-        let alert = UIAlertController(title: "Photos Not Supported", message: "Unfortunately, including photos in a note is not currently supported. We are working hard to add this feature soon.", preferredStyle: UIAlertControllerStyle.Alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .Cancel, handler: nil))
-        self.presentViewController(alert, animated: true, completion: nil)
+        // Do nothing
     }
     
-    // Location functionality currently not developed. Just shows alert if location button pressed.
+    // Location functionality currently not developed.
     func locationPressed(sender: UIButton!) {
-        let alert = UIAlertController(title: "Location Not Supported", message: "Unfortunately, including location in a note is not currently supported. We are working hard to add this feature soon.", preferredStyle: UIAlertControllerStyle.Alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .Cancel, handler: nil))
-        self.presentViewController(alert, animated: true, completion: nil)
+        // Do nothing
     }
     
     // saveNote action from saveNoteButton

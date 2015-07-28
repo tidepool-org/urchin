@@ -39,14 +39,13 @@ class Note {
     
     func dictionaryFromNote() -> [String: AnyObject] {
         let dateFormatter = NSDateFormatter()
-        let dateFormatterTwo = NSDateFormatter()
         let jsonObject: [String: AnyObject] = [
             "message": [
                 "guid": NSUUID().UUIDString,
                 "userid": self.userid,
                 "groupid": self.groupid,
                 "parentmessage": NSNull(),
-                "timestamp": dateFormatterTwo.isoStringFromDate(self.timestamp, zone: nil),
+                "timestamp": dateFormatter.isoStringFromDate(self.timestamp, zone: nil),
                 "messagetext": self.messagetext
             ]
         ]

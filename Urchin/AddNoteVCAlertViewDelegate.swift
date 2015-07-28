@@ -14,10 +14,10 @@ extension AddNoteViewController: UIAlertViewDelegate {
     func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
         switch buttonIndex {
         case 0:
-            println("Cancel")
+            println(addAlertCancel)
             break
         case 1:
-            println("Okay")
+            println(addAlertOkay)
             
             let notification = NSNotification(name: "doneAdding", object: nil)
             NSNotificationCenter.defaultCenter().postNotification(notification)

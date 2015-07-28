@@ -32,38 +32,36 @@ class UserDropDownCell: UITableViewCell {
         nameLabel.frame.origin.x = userCellInset
         
         // Configure right image to a lovely right arrow
-        let rightImage = UIImage(named: "right") as UIImage!
-        rightView.image = rightImage
-        
+        rightView.image = rightArrow
         
         if (key == "all") {
             // Configure nameLabel to be 'All', or #nofilter
-            nameLabel.text = "All"
-            nameLabel.font = UIFont(name: "OpenSans-Bold", size: 17.5)
+            nameLabel.text = allTeamsTitle
+            nameLabel.font = mediumRegularFont
             nameLabel.sizeToFit()
             nameLabel.frame.origin.y = userCellThickSeparator + userCellInset
             
             // configure thick separator at the top
             separator.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: userCellThickSeparator)
-            separator.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.25)
+            separator.backgroundColor = whiteQuarterAlpha
             self.addSubview(separator)
             
             // configure thin separator at the bottom
             separatorTwo.frame = CGRect(x: 0, y: self.frame.height - userCellThinSeparator, width: self.frame.width, height: userCellThinSeparator)
-            separatorTwo.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.25)
+            separatorTwo.backgroundColor = whiteQuarterAlpha
             self.addSubview(separatorTwo)
             
         } else if (key == "logout") {
             // Configure the name label to be 'Logout'... for logging out
-            self.nameLabel.text = "Logout"
-            nameLabel.font = UIFont(name: "OpenSans-Bold", size: 17.5)!
+            self.nameLabel.text = logoutTitle
+            nameLabel.font = mediumBoldFont
             nameLabel.sizeToFit()
             nameLabel.frame.origin.y = userCellThickSeparator - userCellThinSeparator + userCellInset
             
             // Configure the thick separator at the top
             // take out the height of the thin separator because the cell above has a thin separator at the bottom
             separator.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: userCellThickSeparator - userCellThinSeparator)
-            separator.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.25)
+            separator.backgroundColor = whiteQuarterAlpha
             self.addSubview(separator)
             
         } else if (key == "group") {
@@ -73,13 +71,13 @@ class UserDropDownCell: UITableViewCell {
             
             // configure the thin separator at the bottom of the cell
             separator.frame = CGRect(x: 0, y: self.frame.height - userCellThinSeparator, width: self.frame.width, height: userCellThinSeparator)
-            separator.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.25)
+            separator.backgroundColor = whiteQuarterAlpha
             self.addSubview(separator)
             
         }
         
-        let imageWidth = rightImage.size.width
-        let imageHeight = rightImage.size.height
+        let imageWidth = rightArrow.size.width
+        let imageHeight = rightArrow.size.height
         let imageX = self.frame.width - (userCellInset + imageWidth)
         let imageY = nameLabel.frame.midY - imageHeight / 2
         rightView.frame = CGRectMake(imageX, imageY, imageWidth, imageHeight)
@@ -92,12 +90,12 @@ class UserDropDownCell: UITableViewCell {
         self.group = group
         
         // configure the name label with the group name
-        nameLabel.frame.size = CGSize(width: contentView.frame.width + userCellInset, height: 20.0)
+        nameLabel.frame.size = CGSize(width: contentView.frame.width + userCellInset, height: dropDownGroupLabelHeight)
         self.nameLabel.text = group.fullName
         if (bold) {
-            nameLabel.font = UIFont(name: "OpenSans-Bold", size: 17.5)!
+            nameLabel.font = mediumBoldFont
         } else {
-            nameLabel.font = UIFont(name: "OpenSans", size: 17.5)!
+            nameLabel.font = mediumRegularFont
         }
         nameLabel.sizeToFit()
         

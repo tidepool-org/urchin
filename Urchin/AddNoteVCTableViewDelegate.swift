@@ -19,9 +19,9 @@ extension AddNoteViewController: UITableViewDelegate {
         nameLabel.frame.size = CGSize(width: self.view.frame.width - 2 * labelInset, height: 20.0)
         nameLabel.text = groups[indexPath.row].fullName
         if (group === groups[indexPath.row]) {
-            nameLabel.font = UIFont(name: "OpenSans-Bold", size: 17.5)!
+            nameLabel.font = mediumBoldFont
         } else {
-            nameLabel.font = UIFont(name: "OpenSans", size: 17.5)!
+            nameLabel.font = mediumRegularFont
         }
         nameLabel.sizeToFit()
         

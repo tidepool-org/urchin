@@ -20,14 +20,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Change navigation bar colors
         var navigationBarAppearace = UINavigationBar.appearance()
-        navigationBarAppearace.tintColor = UIColor.whiteColor()
-        navigationBarAppearace.barTintColor = UIColor(red: 0/255, green: 54/255, blue: 62/255, alpha: 1)
+        navigationBarAppearace.tintColor = navBarTint
+        navigationBarAppearace.barTintColor = darkGreenColor
         if (UIDevice.currentDevice().systemVersion as NSString).floatValue >= 8.0 {
             navigationBarAppearace.translucent = false
         }
         
         // Change navigation item title color
-        navigationBarAppearace.titleTextAttributes = [NSForegroundColorAttributeName:UIColor.whiteColor()]
+        navigationBarAppearace.titleTextAttributes = [NSForegroundColorAttributeName:navBarTitleColor]
         
         // Change status bar item color
         UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.LightContent

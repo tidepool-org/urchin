@@ -19,19 +19,24 @@ let darkGreyColor: UIColor = UIColor(red: 188/255, green: 190/255, blue: 192/255
 let greyColor: UIColor = UIColor(red: 234/255, green: 234/255, blue: 234/255, alpha: 1)
 let lightGreyColor: UIColor = UIColor(red: 247/255, green: 247/255, blue: 248/255, alpha: 1)
 let blackishColor: UIColor = UIColor(red: 61/255, green: 61/255, blue: 61/255, alpha: 1)
+let blackishLowAlpha: UIColor = UIColor(red: 61/255, green: 61/255, blue: 61/255, alpha: 0.75)
 let darkGreenColor: UIColor = UIColor(red: 0/255, green: 54/255, blue: 62/255, alpha: 1)
 let textFieldBackgroundColor: UIColor = UIColor.whiteColor()
 let tealColor: UIColor = UIColor(red: 0/255, green: 150/255, blue: 171/255, alpha: 1)
 let whiteColor: UIColor = UIColor.whiteColor()
 let loginButtonTextColor: UIColor = whiteColor
 let addNoteTextColor: UIColor = whiteColor
+let navBarTint: UIColor = whiteColor
 let navBarTitleColor: UIColor = whiteColor
+let postButtonTextColor: UIColor = whiteColor
 let noteTextColor: UIColor = UIColor.blackColor()
+let whiteQuarterAlpha: UIColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.25)
 
 let smallRegularFont: UIFont = UIFont(name: "OpenSans", size: 12.5)!
 let mediumRegularFont: UIFont = UIFont(name: "OpenSans", size: 17.5)!
 let largeRegularFont: UIFont = UIFont(name: "OpenSans", size: 25)!
 
+let smallBoldFont: UIFont = UIFont(name: "OpenSans-Bold", size: 12.5)!
 let mediumBoldFont: UIFont = UIFont(name: "OpenSans-Bold", size: 17.5)!
 let largeBoldFont: UIFont = UIFont(name: "OpenSans-Bold", size: 25)!
 
@@ -45,6 +50,10 @@ let dropDownAnimationTime: NSTimeInterval = 0.5
 
 let editButtonHeight: CGFloat = 12.5
 let dropDownGroupLabelHeight: CGFloat = 20.0
+
+let downArrow: UIImage = UIImage(named: "down")!
+let rightArrow: UIImage = UIImage(named: "right")!
+let closeX: UIImage = UIImage(named: "closex")!
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -91,14 +100,49 @@ let addNoteButtonHeight: CGFloat = 105
 
 let allNotesTitle: String = "All Notes"
 let addNoteText: String = "Add note"
+let noteForTitle: String = "Note for..."
 
 let fetchPeriodInMonths: Int = -3
 
 // ------------ AddNoteVC and EditNoteVC ------------
-let hashtagHeight: CGFloat = 36
+let messageTextColor: UIColor = UIColor(red: 167/255, green: 167/255, blue: 167/255, alpha: 1)
+
+let cameraImage: UIImage = UIImage(named: "camera")!
+let locationImage: UIImage = UIImage(named: "location")!
+
 let expandedHashtagsViewH: CGFloat = 2 * labelInset + 3 * hashtagHeight + 3 * labelSpacing
 let condensedHashtagsViewH: CGFloat = 2 * labelInset + hashtagHeight
+
 let defaultMessage: String = "What's going on?"
+let changeDateText: String = "change"
+let doneDateText: String = "done"
+
+let addAlertTitle: String = "Discard Note?"
+let addAlertMessage: String = "If you close this note, your note will be lost."
+let addAlertCancel: String = "Cancel"
+let addAlertOkay: String = "Okay"
+let postButtonText: String = "Post"
+let postButtonSave: String = "Save"
+
+let editAlertTitle: String = "Save Changes?"
+let editAlertMessage: String = "You have made changes to this note. Would you like to save these changes?"
+let editAlertDiscard: String = "Discard"
+let editAlertSave: String = "Save"
+
+let postButtonW: CGFloat = 112
+let postButtonH: CGFloat = 41
+
+let datePickerFadeTime: NSTimeInterval = 0.2
+let animationTime: NSTimeInterval = 0.3
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+// ------------ API Connector ------------
+let invalidLogin: String = "Invalid Login"
+let invalidLoginMessage: String = "Wrong username or password."
+
+let unknownError: String = "Unknown Error Occurred"
+let unknownErrorMessage: String = "An unknown error occurred while logging in. We are working hard to resolve this issue."
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -112,7 +156,36 @@ let userCellThinSeparator: CGFloat = 1
 let noteCellHeight: CGFloat = 128
 let noteCellInset: CGFloat = 16
 
+let editButtonTitle: String = "edit"
+
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+// ------------ Hashtags View ------------
+let hashtagColor: UIColor = UIColor.whiteColor()
+let hashtagBorderColor: UIColor = UIColor(red: 167/255, green: 167/255, blue: 167/255, alpha: 1)
+
+let hashtagBorderWidth: CGFloat = 1
+
+let hashtagHeight: CGFloat = 36
+
+// ------------ Loading View ------------
+let loadingViewBackground: UIColor = blackishColor
+let loadingIndicatorColor: UIColor = tealColor
+let loadingTextColor: UIColor = tealColor
+
+let loadingCornerRadius: CGFloat = 10
+
+let loadingLogIn: String = "Logging in..."
+let loadingTeams: String = "Loading teams..."
+let loadingNotes: String = "Loading notes..."
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+// ------------ Date Formatter ------------
+let uniformDateFormat: String = "EEEE M.d.yy h:mma"
+let iso8601dateOne: String = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
+let iso8601dateTwo: String = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+let regularDateFormat: String = "yyyy-MM-dd"
 
 // ------------ UIDevice ------------
 let deviceList =   ["x86_64":         "Simulator",

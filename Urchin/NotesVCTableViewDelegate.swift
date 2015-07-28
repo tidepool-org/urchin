@@ -115,7 +115,7 @@ extension NotesViewController: UITableViewDelegate {
                 // filter the notes based upon new filter
                 filterNotes()
                 // Scroll notes to top
-                self.notesTable.setContentOffset(CGPointMake(0, 0 - self.notesTable.contentInset.top), animated: true)
+                self.notesTable.setContentOffset(CGPointMake(0, -self.notesTable.contentInset.top), animated: true)
                 // toggle the dropDownMenu (hides the dropDownMenu)
                 self.dropDownMenuPressed()
             } else {
@@ -128,10 +128,13 @@ extension NotesViewController: UITableViewDelegate {
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
         if (scrollView.isEqual(notesTable)) {
+            
+            // Determine whether the notesTable is scrolled all the way down
             let height = scrollView.frame.height
             let contentYOffset = scrollView.contentOffset.y
             let distanceFromBottom = scrollView.contentSize.height - contentYOffset
             
+            // If so, load notes
             if (distanceFromBottom < height && !loadingNotes) {
                 loadNotes()
             }

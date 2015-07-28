@@ -53,7 +53,7 @@ class APIConnector {
 
         let headerDict = ["Authorization":"Basic \(base64LoginString)"]
         
-        let loading = LoadingView(text: "Logging in...")
+        let loading = LoadingView(text: loadingLogIn)
         
         let preRequest = { () -> Void in
             if (loginVC != nil) {
@@ -75,14 +75,14 @@ class APIConnector {
                     let notification = NSNotification(name: "prepareLogin", object: nil)
                     NSNotificationCenter.defaultCenter().postNotification(notification)
                     
-                    self.alertWithOkayButton("Invalid Login", message: "Wrong username or password.")
+                    self.alertWithOkayButton(invalidLogin, message: invalidLoginMessage)
                 } else {
                     println("an unknown error occurred")
                     
                     let notification = NSNotification(name: "prepareLogin", object: nil)
                     NSNotificationCenter.defaultCenter().postNotification(notification)
                     
-                    self.alertWithOkayButton("Unknown Error Occurred", message: "An unknown error occurred while logging in. We are working hard to resolve this issue.")
+                    self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
                 }
             } else {
                 if let httpResponse = response as? NSHTTPURLResponse {
@@ -110,7 +110,7 @@ class APIConnector {
                         let notification = NSNotification(name: "prepareLogin", object: nil)
                         NSNotificationCenter.defaultCenter().postNotification(notification)
                         
-                        self.alertWithOkayButton("Unknown Error Occurred", message: "An unknown error occurred while logging in. We are working hard to resolve this issue.")
+                        self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
                     }
                 } else {
                     println("an unknown error occurred")
@@ -118,7 +118,7 @@ class APIConnector {
                     let notification = NSNotification(name: "prepareLogin", object: nil)
                     NSNotificationCenter.defaultCenter().postNotification(notification)
                     
-                    self.alertWithOkayButton("Unknown Error Occurred", message: "An unknown error occurred while logging in. We are working hard to resolve this issue.")
+                    self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
                 }
             }
             // If there is a loginVC, remove the loading view from it
@@ -286,11 +286,11 @@ class APIConnector {
                     })
                 } else {
                     println("an unknown error occurred")
-                    self.alertWithOkayButton("Unknown Error Occurred", message: "An unknown error occurred while logging out. We are working hard to resolve this issue.")
+                    self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
                 }
             } else {
                 println("an unknown error occurred")
-                self.alertWithOkayButton("Unknown Error Occurred", message: "An unknown error occurred while logging out. We are working hard to resolve this issue.")
+                self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
             }
         }
         
@@ -320,11 +320,11 @@ class APIConnector {
                     NSNotificationCenter.defaultCenter().postNotification(notification)
                 } else {
                     println("an unknown error occurred")
-                    self.alertWithOkayButton("Unknown Error Occurred", message: "An unknown error occurred while fetching profile info. We are working hard to resolve this issue.")
+                    self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
                 }
             } else {
                 println("an unknown error occurred")
-                self.alertWithOkayButton("Unknown Error Occurred", message: "An unknown error occurred while fetching profile info. We are working hard to resolve this issue.")
+                self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
             }
         }
         
@@ -337,14 +337,8 @@ class APIConnector {
         
         let headerDict = ["x-tidepool-session-token":"\(x_tidepool_session_token)"]
         
-        let loading = LoadingView(text: "Loading teams...")
-        
         let preRequest = { () -> Void in
-//            let loadingX = notesVC.notesTable.frame.width / 2 - loading.frame.width / 2
-//            let loadingY = notesVC.notesTable.frame.height / 2 - loading.frame.height / 2
-//            loading.frame.origin = CGPoint(x: loadingX, y: loadingY)
-//            notesVC.view.addSubview(loading)
-//            notesVC.view.bringSubviewToFront(loading)
+            // Nothing to do
         }
         
         let completion = { (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
@@ -359,13 +353,12 @@ class APIConnector {
                     }
                 } else {
                     println("an unknown error occurred")
-                    self.alertWithOkayButton("Unknown Error Occurred", message: "An unknown error occurred while fetching teams. We are working hard to resolve this issue.")
+                    self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
                 }
             } else {
                 println("an unknown error occurred")
-                self.alertWithOkayButton("Unknown Error Occurred", message: "An unknown error occurred while fetching teams. We are working hard to resolve this issue.")
+                self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
             }
-//            loading.removeFromSuperview()
         }
         
         request("GET", urlExtension: urlExtension, headerDict: headerDict, body: nil, preRequest: preRequest, completion: completion)
@@ -378,17 +371,9 @@ class APIConnector {
         
         let headerDict = ["x-tidepool-session-token":"\(x_tidepool_session_token)"]
         
-        let loading = LoadingView(text: "Loading notes...")
-        
         let preRequest = { () -> Void in
             notesVC.loadingNotes = true
             notesVC.numberFetches++
-            
-//            let loadingX = notesVC.notesTable.frame.width / 2 - loading.frame.width / 2
-//            let loadingY = notesVC.notesTable.frame.height / 2 - loading.frame.height / 2
-//            loading.frame.origin = CGPoint(x: loadingX, y: loadingY)
-//            notesVC.view.addSubview(loading)
-//            notesVC.view.bringSubviewToFront(loading)
         }
         
         let completion = { (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
@@ -430,10 +415,9 @@ class APIConnector {
                     notesVC.notesTable.reloadData()
                 } else if (httpResponse.statusCode == 404) {
                     println("no notes in range \(httpResponse.statusCode), userid: \(userid)")
-                    //                    self.alertWithOkayButton("No notes in range", message: "No notes in this 3-month date range for user with userid: \(userid). There may be more notes for this user in the next 3 months.")
                 } else {
                     println("an unknown error occurred \(httpResponse.statusCode)")
-                    self.alertWithOkayButton("Unknown Error Occurred", message: "An unknown error occurred while fetching notes. We are working hard to resolve this issue.")
+                    self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
                 }
                 
                 notesVC.numberFetches--
@@ -442,9 +426,8 @@ class APIConnector {
                 }
             } else {
                 println("an unknown error occurred")
-                self.alertWithOkayButton("Unknown Error Occurred", message: "An unknown error occurred while fetching notes. We are working hard to resolve this issue.")
+                self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
             }
-//            loading.removeFromSuperview()
         }
         
         request("GET", urlExtension: urlExtension, headerDict: headerDict, body: nil, preRequest: preRequest, completion: completion)
@@ -480,11 +463,11 @@ class APIConnector {
                     
                 } else {
                     println("an unknown error occurred")
-                    self.alertWithOkayButton("Unknown Error Occurred", message: "An unknown error occurred while posting the note. We are working hard to resolve this issue.")
+                    self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
                 }
             } else {
                 println("an unknown error occurred")
-                self.alertWithOkayButton("Unknown Error Occurred", message: "An unknown error occurred while posting the note. We are working hard to resolve this issue.")
+                self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
             }
         }
         
@@ -518,11 +501,11 @@ class APIConnector {
                     notesVC.notesTable.reloadData()
                 } else {
                     println("an unknown error occurred")
-                    self.alertWithOkayButton("Unknown Error Occurred", message: "An unknown error occurred while editing the note. We are working hard to resolve this issue.")
+                    self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
                 }
             } else {
                 println("an unknown error occurred")
-                self.alertWithOkayButton("Unknown Error Occurred", message: "An unknown error occurred while editing the note. We are working hard to resolve this issue.")
+                self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
             }
         }
         

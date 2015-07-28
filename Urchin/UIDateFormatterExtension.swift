@@ -14,7 +14,7 @@ public extension NSDateFormatter {
     
     func attributedStringFromDate(date: NSDate) -> NSMutableAttributedString {
         // Date format being used.
-        self.dateFormat = "EEEE M.d.yy h:mma"
+        self.dateFormat = uniformDateFormat
         var dateString = self.stringFromDate(date)
         
         // Replace uppercase PM and AM with lowercase versions
@@ -32,8 +32,8 @@ public extension NSDateFormatter {
         }
 
         // Bold the last (count) characters (the time)
-        let attrStr = NSMutableAttributedString(string: dateString, attributes: [NSForegroundColorAttributeName: UIColor.blackColor(), NSFontAttributeName: UIFont(name: "OpenSans", size: 12.5)!])
-        attrStr.addAttribute(NSFontAttributeName, value: UIFont(name: "OpenSans-Bold", size: 12.5)!, range: NSRange(location: attrStr.length - count, length: count))
+        let attrStr = NSMutableAttributedString(string: dateString, attributes: [NSForegroundColorAttributeName: noteTextColor, NSFontAttributeName: smallRegularFont])
+        attrStr.addAttribute(NSFontAttributeName, value: smallBoldFont, range: NSRange(location: attrStr.length - count, length: count))
         
         return attrStr
     }
@@ -41,11 +41,11 @@ public extension NSDateFormatter {
     func dateFromISOString(string: String) -> NSDate {
         self.locale = NSLocale(localeIdentifier: "en_US_POSIX")
         self.timeZone = NSTimeZone.localTimeZone()
-        self.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
+        self.dateFormat = iso8601dateOne
         if let date = self.dateFromString(string) {
             return date
         } else {
-            self.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+            self.dateFormat = iso8601dateTwo
             return self.dateFromString(string)!
         }
     }
@@ -57,12 +57,12 @@ public extension NSDateFormatter {
         } else {
             self.timeZone = NSTimeZone.localTimeZone()
         }
-        self.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
+        self.dateFormat = iso8601dateOne
         return self.stringFromDate(date)
     }
     
     func stringFromRegDate(date:NSDate) -> String {
-        self.dateFormat = "yyyy-MM-dd"
+        self.dateFormat = regularDateFormat
         return stringFromDate(date)
     }
     

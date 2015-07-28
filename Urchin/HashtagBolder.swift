@@ -17,7 +17,7 @@ class HashtagBolder {
         
         // convert to attributed string
         let attributedText = NSMutableAttributedString(string: text as String)
-        attributedText.addAttributes([NSFontAttributeName: UIFont(name: "OpenSans", size: 17.5)!, NSForegroundColorAttributeName: UIColor(red: 61/255, green: 61/255, blue: 61/255, alpha: 1)], range: NSRange(location: 0, length: attributedText.length))
+        attributedText.addAttributes([NSFontAttributeName: mediumRegularFont, NSForegroundColorAttributeName: blackishColor], range: NSRange(location: 0, length: attributedText.length))
         
         // break apart the words
         let words = text.componentsSeparatedByString(" ")
@@ -73,7 +73,7 @@ class HashtagBolder {
                     // I have the range!
                     let range: NSRange = textHolder.rangeOfString(newword, options: NSStringCompareOptions.BackwardsSearch)
                     // make that range BOLD!
-                    attributedText.addAttributes([NSFontAttributeName: UIFont(name: "OpenSans-Bold", size: 17.5)!], range: range)
+                    attributedText.addAttributes([NSFontAttributeName: mediumBoldFont], range: range)
                     
                     boldedWords[newword]! += 1
                 } else {
@@ -82,7 +82,7 @@ class HashtagBolder {
                     boldedWords[newword] = 1
                     let range: NSRange = text.rangeOfString(newword, options: NSStringCompareOptions.BackwardsSearch)
                     // Oh, and bold it.
-                    attributedText.addAttributes([NSFontAttributeName: UIFont(name: "OpenSans-Bold", size: 17.5)!], range: range)
+                    attributedText.addAttributes([NSFontAttributeName: mediumBoldFont], range: range)
                 }
             }
         }

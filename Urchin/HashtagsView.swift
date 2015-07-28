@@ -145,7 +145,7 @@ class HashtagsView: UIView {
         }
     }
     
-    // Only called once if there are no hashtags saved in CoreData
+    // Only called if there are no hashtags saved in CoreData
     func getAndSetDefaultHashtags() {
         // For now, the defaults are predefined here
         // Eventually, fetch from the Tidepool platform
@@ -291,7 +291,6 @@ class HashtagsView: UIView {
                     var buttonX: CGFloat
                     if (page == 0 && col == 0) {
                         // First button on first page for each row
-                        // labelInset with a variant for the current page
                         buttonX = labelInset
                     } else if (col == 0) {
                         // First button on any other page, in any row
@@ -337,7 +336,7 @@ class HashtagsView: UIView {
         for button in hashtagButtons {
             button.frame.origin.y = labelInset
             
-            // If it is the first button, it's x origin is based upon which linearHashtagsPage the user is on
+            // If it is the first button, it's x origin is just the labelInset
             // Else, it's x origin is based upon the previous button
             if (index == 0) {
                 button.frame.origin.x = labelInset
@@ -355,14 +354,14 @@ class HashtagsView: UIView {
         let hashtag = hashtags[index]
         let hashtagText = hashtag.valueForKey("text") as! String
         hashtagButton.setAttributedTitle(NSAttributedString(string: hashtagText,
-            attributes:[NSForegroundColorAttributeName: UIColor(red: 61/255, green: 61/255, blue: 61/255, alpha: 1), NSFontAttributeName: UIFont(name: "OpenSans", size: 17.5)!]), forState: .Normal)
+            attributes:[NSForegroundColorAttributeName: blackishColor, NSFontAttributeName: mediumRegularFont]), forState: .Normal)
         hashtagButton.frame.size.height = hashtagHeight
         hashtagButton.sizeToFit()
         hashtagButton.frame.size.width = hashtagButton.frame.width + 4 * labelSpacing
-        hashtagButton.backgroundColor = UIColor.whiteColor()
+        hashtagButton.backgroundColor = hashtagColor
         hashtagButton.layer.cornerRadius = hashtagButton.frame.height / 2
-        hashtagButton.layer.borderWidth = 1
-        hashtagButton.layer.borderColor = UIColor(red: 167/255, green: 167/255, blue: 167/255, alpha: 1).CGColor
+        hashtagButton.layer.borderWidth = hashtagBorderWidth
+        hashtagButton.layer.borderColor = hashtagBorderColor.CGColor
         hashtagButton.addTarget(self, action: "hashtagPressed:", forControlEvents: .TouchUpInside)
         
         return hashtagButton
