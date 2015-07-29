@@ -15,13 +15,13 @@ class HashtagsView: UIView {
     // Hashtags from CoreData
     var hashtags = [NSManagedObject]()
     
-    // Paged hashtag arrangement, and linear hashtag arrangement
-    var pagedHashtagButtons: [[[UIButton]]] = []
+    // Vertical hashtag arrangement, and linear hashtag arrangement
+    var verticalHashtagButtons: [[UIButton]] = []
     var hashtagButtons: [UIButton] = []
     
     // Keep track of the total widths
     var totalLinearHashtagsWidth: CGFloat = 0
-    var totalPagedHashtagsWidth: CGFloat = 0
+    var totalVerticalHashtagsHeight: CGFloat = 0
     
     // Called to set up the view
     func configureHashtagsView() {
@@ -190,17 +190,14 @@ class HashtagsView: UIView {
         
         /* Keep track of:
                 - which number hashtag
-                - which page
                 - which row
                 - which column
         */
         var index = 0
         var row = 0
         var col = 0
-        var page = 0
         
-        // Keep track of the current page and row that is being worked on
-        var buttonPage: [[UIButton]] = []
+        // Keep track of the current row that is being worked on
         var buttonRow: [UIButton] = []
         
         // Infinite loop!!!
@@ -212,17 +209,6 @@ class HashtagsView: UIView {
                 break
             }
             
-            // If it's the end of the third row, reset for the next page
-            if (row > 2) {
-                row = 0
-                col = 0
-                page += 1
-                // Append the page and clear it
-                pagedHashtagButtons.append(buttonPage)
-                buttonPage = []
-                continue
-            }
-            
             // Configure the individual hashtag button
             let hashtagButton = configureHashtagButton(index)
             
@@ -231,103 +217,95 @@ class HashtagsView: UIView {
             // If it's the first one in a row, it's a label inset in
             // All other's in the row are based upon the previous hashtag in the row
             if (col == 0) {
-                buttonX = CGFloat(page) * UIScreen.mainScreen().bounds.width + labelInset
+                buttonX = labelInset
             } else {
-                buttonX = buttonRow[col - 1].frame.maxX + 2 * labelSpacing
+                buttonX = buttonRow[col - 1].frame.maxX + horizontalHashtagSpacing
             }
             
             // If the hashtag spills over to the next page, start a new row
-            if ((buttonX + hashtagButton.frame.width) > (CGFloat(page + 1) * UIScreen.mainScreen().bounds.width - labelInset)) {
-                // Append the row current row and reset/increment values
-                buttonPage.append(buttonRow)
+            if ((buttonX + hashtagButton.frame.width) > (UIScreen.mainScreen().bounds.width - labelInset)) {
+
+                totalVerticalHashtagsHeight += hashtagHeight + verticalHashtagSpacing
+                
+                // Append the current row and reset/increment values
+                verticalHashtagButtons.append(buttonRow)
                 buttonRow = []
                 row++
                 col = 0
                 continue
             } else {
                 // The button didn't spill over! Add to the totalLinearHashtagsWidth and append the button to the row
-                totalLinearHashtagsWidth += hashtagButton.frame.width + 2 * labelSpacing
+                totalLinearHashtagsWidth += hashtagButton.frame.width + horizontalHashtagSpacing
                 buttonRow.append(hashtagButton)
                 hashtagButtons.append(hashtagButton)
             }
             
-            // Set the x origin to the left allign position
+            // Set the x origin (used for determining the position of the next hashtagButton)
             buttonRow[col].frame.origin.x = buttonX
             
             // Increment the index and column
             index++
             col++
         }
+        
         // Take off the extra bit from the end of the totalLinearHashtagsWidth
-        totalLinearHashtagsWidth -= 2 * labelSpacing
-        // Append the most recent buttonRow to the buttonPage
-        buttonPage.append(buttonRow)
-        // Append the most recent buttonPage to all of the pages
-        pagedHashtagButtons.append(buttonPage)
+        totalLinearHashtagsWidth -= horizontalHashtagSpacing
+        
+        // If the last button row has more hashtags, increase the totalVerticalHashtagsHeight
+        if (buttonRow.count > 0) {
+            totalVerticalHashtagsHeight += hashtagHeight
+            
+            // Append the most recent buttonRow to the verticalHashtagButtons
+            verticalHashtagButtons.append(buttonRow)
+        } else {
+            // Else take the extra bit off (spacing between rows)
+            totalVerticalHashtagsHeight -= verticalHashtagSpacing
+        }
+        
         // Arrange in pages arrangement
-        pageHashtagArrangement()
+        verticalHashtagArrangement()
     }
     
     // For when the HashtagsView is expanded
-    func pageHashtagArrangement() {
+    func verticalHashtagArrangement() {
         
-        // For determining the total width of paged hashtags
-        // Keep track of the total width of each row
-        // Longest row will determine total width of paged hashtags
-        var rowZeroWidth: CGFloat = 0.0
-        var rowOneWidth: CGFloat = 0.0
-        var rowTwoWidth: CGFloat = 0.0
-        
-        var page = 0
-        for bPage in pagedHashtagButtons {
-            var row = 0
-            for bRow in bPage {
-                var col = 0
-                for button in bRow {
-                    // y origin is based upon which row the hashtag is in
-                    let buttonY = labelInset + CGFloat(row) * (hashtagHeight + 1.5 * labelSpacing)
-                    
-                    // buttonX is dependant on the first button on the first page for each row
-                    var buttonX: CGFloat
-                    if (page == 0 && col == 0) {
-                        // First button on first page for each row
-                        buttonX = labelInset
-                    } else if (col == 0) {
-                        // First button on any other page, in any row
-                        // Based upon the maxX of the last button on the previous page in the same row
-                        buttonX = pagedHashtagButtons[page - 1][row][pagedHashtagButtons[page - 1][row].count - 1].frame.maxX + 2 * labelSpacing
-                    } else {
-                        // Any other button
-                        // Based upon the previous button in the row (same page)
-                        buttonX = bRow[col - 1].frame.maxX + 2 * labelSpacing
-                    }
-                    
-                    button.frame.origin = CGPoint(x: buttonX, y: buttonY)
-                    self.addSubview(button)
-                    
-                    // Keep track of row width
-                    if (row == 0) {
-                        rowZeroWidth += button.frame.width + 2 * labelSpacing
-                    } else if (row == 1) {
-                        rowOneWidth += button.frame.width + 2 * labelSpacing
-                    } else if (row == 2) {
-                        rowTwoWidth += button.frame.width + 2 * labelSpacing
-                    }
-                    
-                    col++
-                }
-                row++
+        var row = 0
+        for bRow in verticalHashtagButtons {
+            
+            // y origin is based upon which row the hashtag is in
+            let buttonY = labelInset + CGFloat(row) * (hashtagHeight + verticalHashtagSpacing)
+            
+            // Find the total width of the row
+            var totalButtonWidth: CGFloat = CGFloat(0)
+            var i = 0
+            for button in bRow {
+                totalButtonWidth += button.frame.width + horizontalHashtagSpacing
+                i++
             }
-            page++
+            
+            // Determine the width between the outer margins
+            let totalWidth = totalButtonWidth - 2 * labelSpacing
+            // Take the halfWidth
+            let halfWidth = totalWidth / 2
+
+            // x origin of the left most button in the row
+            // (page - hashtagsPage) for paging
+            var buttonX = UIScreen.mainScreen().bounds.width / 2 - halfWidth
+            
+            var col = 0
+            for button in bRow {
+             
+                button.frame.origin = CGPoint(x: buttonX, y: buttonY)
+                self.addSubview(button)
+                
+                // increase the buttonX for the next button
+                buttonX = button.frame.maxX + horizontalHashtagSpacing
+                
+                col++
+            }
+            
+            row++
         }
-        
-        // Compensate for extra spacing added for last label
-        rowZeroWidth -= 2 * labelSpacing
-        rowOneWidth -= 2 * labelSpacing
-        rowTwoWidth -= 2 * labelSpacing
-        
-        // Set the total paged width to the maximum of the three
-        totalPagedHashtagsWidth = max(rowZeroWidth, rowOneWidth, rowTwoWidth)
     }
     
     // For when the HashtagsView is condensed
@@ -341,7 +319,7 @@ class HashtagsView: UIView {
             if (index == 0) {
                 button.frame.origin.x = labelInset
             } else {
-                button.frame.origin.x = hashtagButtons[index - 1].frame.maxX + 2 * labelSpacing
+                button.frame.origin.x = hashtagButtons[index - 1].frame.maxX + horizontalHashtagSpacing
             }
             index++
         }

@@ -20,7 +20,7 @@ class HashtagsScrollView: UIScrollView {
         hashtagsView.backgroundColor = UIColor.clearColor()
         // see HashtagsView.swift for detailed configuration
         hashtagsView.configureHashtagsView()
-        hashtagsView.frame.size = CGSize(width: hashtagsView.totalPagedHashtagsWidth + 2 * labelInset, height: expandedHashtagsViewH)
+        hashtagsView.frame.size = CGSize(width: self.frame.width, height: self.hashtagsView.totalVerticalHashtagsHeight + 2 * labelInset)
         
         self.backgroundColor = UIColor.clearColor()
         self.contentSize = hashtagsView.frame.size
@@ -30,9 +30,9 @@ class HashtagsScrollView: UIScrollView {
     
     func pagedHashtagsView() {
         self.frame.size.height = expandedHashtagsViewH
-        self.hashtagsView.frame.size = CGSize(width: self.hashtagsView.totalPagedHashtagsWidth + 2 * labelInset, height: expandedHashtagsViewH)
+        self.hashtagsView.frame.size = CGSize(width: self.frame.width, height: self.hashtagsView.totalVerticalHashtagsHeight + 2 * labelInset)
         self.contentSize = self.hashtagsView.frame.size
-        self.hashtagsView.pageHashtagArrangement()
+        self.hashtagsView.verticalHashtagArrangement()
     }
     
     func sizeZeroHashtagsView() {

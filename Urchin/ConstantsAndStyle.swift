@@ -370,11 +370,17 @@ let cameraImage: UIImage = UIImage(named: "camera")!
 let locationImage: UIImage = UIImage(named: "location")!
 
 /*
+    Number of rows to display in a vertical hashtags view
+        Note: If there are more than this many rows of hashtags, they will still be displayed, but the user will have to scroll to them
+*/
+let numberHashtagRows: CGFloat = 3
+
+/*
     Size for hashtags view, dependant on other values:
-        Expanded -> 3 rows of hashtags
+        Expanded -> x rows of hashtags
         Condensed -> Single, linear row
 */
-let expandedHashtagsViewH: CGFloat = 2 * labelInset + 3 * hashtagHeight + 3 * labelSpacing
+let expandedHashtagsViewH: CGFloat = 2 * labelInset + numberHashtagRows * hashtagHeight + (numberHashtagRows - 1) * (verticalHashtagSpacing)
 let condensedHashtagsViewH: CGFloat = 2 * labelInset + hashtagHeight
 
 /*
@@ -477,6 +483,16 @@ let hashtagBorderWidth: CGFloat = 1
     Height of hashtags --> size to fit used, so be careful changing this value
 */
 let hashtagHeight: CGFloat = 36
+
+/*
+    The spacing between rows of hashtags when the hashtags view is expanded and scrolls vertically
+*/
+let verticalHashtagSpacing: CGFloat = 1.5 * labelSpacing
+
+/*
+    The horizontal spacing between hashtags when the hashtags view is either vertical or horizontal
+*/
+let horizontalHashtagSpacing: CGFloat = 2 * labelSpacing
 
 // ------------ Loading View ------------
 
