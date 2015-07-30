@@ -39,7 +39,7 @@ class AddNoteViewController: UIViewController {
     let separatorOne: UIView = UIView()
     
     // hashtagsView for putting hashtags in your messages
-    let hashtagsScrollView: HashtagsScrollView = HashtagsScrollView()
+    let hashtagsScrollView: HashtagsScrollView
     
     // Separator between hashtags and messageBox
     let separatorTwo: UIView = UIView()
@@ -65,6 +65,7 @@ class AddNoteViewController: UIViewController {
     init(apiConnector: APIConnector, user: User, group: User, groups: [User]) {
         
         self.apiConnector = apiConnector
+        self.hashtagsScrollView = HashtagsScrollView(apiConnector: apiConnector)
         
         // data
         note = Note()

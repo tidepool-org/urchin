@@ -39,7 +39,6 @@ class APIConnector {
     func trackMetric(metricName: String) {
         
         let urlExtension = "/metrics/thisuser/\(metricsSource) - \(metricName)?source=\(metricsSource)&sourceVersion=\(UIApplication.appVersion())"
-        println(urlExtension)
         
         let headerDict: [String: String] = ["x-tidepool-session-token":"\(x_tidepool_session_token)"]
         
@@ -69,16 +68,10 @@ class APIConnector {
         let loginData: NSData = loginString.dataUsingEncoding(NSUTF8StringEncoding)!
         let base64LoginString = loginData.base64EncodedStringWithOptions(nil)
         
-        if (loginVC.rememberMe) {
-            self.saveLogin(base64LoginString)
-        } else {
-            self.saveLogin("")
-        }
-        
-        loginRequest(loginVC, base64LoginString: base64LoginString)
+        loginRequest(loginVC, base64LoginString: base64LoginString, saveLogin: true)
     }
     
-    func loginRequest(loginVC: LogInViewController?, base64LoginString: String) {
+    func loginRequest(loginVC: LogInViewController?, base64LoginString: String, saveLogin: Bool) {
 
         let headerDict = ["Authorization":"Basic \(base64LoginString)"]
         
@@ -124,6 +117,16 @@ class APIConnector {
                         if let sessionToken = httpResponse.allHeaderFields["x-tidepool-session-token"] as? String {
                             self.x_tidepool_session_token = sessionToken
                             self.user = User(userid: jsonResult.valueForKey("userid") as! String, apiConnector: self)
+                            
+                            if (saveLogin) {
+                                if (loginVC!.rememberMe) {
+                                    self.trackMetric("Remember Me Used")
+                                    
+                                    self.saveLogin(base64LoginString)
+                                } else {
+                                    self.saveLogin("")
+                                }
+                            }
                             
                             let notification = NSNotification(name: "makeTransitionToNotes", object: nil)
                             NSNotificationCenter.defaultCenter().postNotification(notification)
@@ -202,7 +205,7 @@ class APIConnector {
                     // Attempt to save the login
                     var error: NSError?
                     if !managedContext.save(&error) {
-                        println("Could not save \(error), \(error?.userInfo)")
+                        NSLog("Could not save log in remember me: \(error), \(error?.userInfo)")
                     }
                 }
                 let base64LoginString = results[0].valueForKey("login") as! String
@@ -210,7 +213,7 @@ class APIConnector {
                 if (base64LoginString != "") {
                     // Login information exists
                     
-                    self.loginRequest(nil, base64LoginString: base64LoginString)
+                    self.loginRequest(nil, base64LoginString: base64LoginString, saveLogin: false)
                 } else {
                     // Login information does not exist
                     
@@ -224,7 +227,7 @@ class APIConnector {
                 NSNotificationCenter.defaultCenter().postNotification(notification)
             }
         } else {
-            println("Could not fetch \(error), \(error!.userInfo)")
+            NSLog("Could not fetch remember me information: \(error), \(error!.userInfo)")
         }
     }
 
@@ -273,7 +276,7 @@ class APIConnector {
                 // Save the login
                 var errorTwo: NSError?
                 if !managedContext.save(&errorTwo) {
-                    println("Could not save \(errorTwo), \(errorTwo?.userInfo)")
+                    NSLog("Could not save new remember me info: \(errorTwo), \(errorTwo?.userInfo)")
                 }
             } else if (results.count == 1) {
                 // Set the value to the new saved login
@@ -289,11 +292,11 @@ class APIConnector {
                 // Attempt to save the login
                 var errorTwo: NSError?
                 if !managedContext.save(&errorTwo) {
-                    println("Could not save \(errorTwo), \(errorTwo?.userInfo)")
+                    NSLog("Could not save edited remember me info: \(errorTwo), \(errorTwo?.userInfo)")
                 }
             }
         }  else {
-            println("Could not fetch \(error), \(error!.userInfo)")
+            NSLog("Could not fetch remember me info: \(error), \(error!.userInfo)")
         }
     }
     
@@ -307,8 +310,8 @@ class APIConnector {
         
         let completion = { (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
             if let httpResponse = response as? NSHTTPURLResponse {
-                println("logout \(httpResponse.statusCode)")
                 if (httpResponse.statusCode == 200) {
+                    NSLog("Logged out")
                     let notification = NSNotification(name: "prepareLogin", object: nil)
                     NSNotificationCenter.defaultCenter().postNotification(notification)
                     
@@ -317,11 +320,11 @@ class APIConnector {
                         self.x_tidepool_session_token = ""
                     })
                 } else {
-                    println("an unknown error occurred")
+                    NSLog("Did not log out - invalid status code \(httpResponse.statusCode)")
                     self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
                 }
             } else {
-                println("an unknown error occurred")
+                NSLog("Did not log out - response could not be parsed")
                 self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
             }
         }
@@ -341,8 +344,9 @@ class APIConnector {
         
         let completion = { (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
             if let httpResponse = response as? NSHTTPURLResponse {
-                println("findProfile \(httpResponse.statusCode)")
                 if (httpResponse.statusCode == 200) {
+                    NSLog("Profile found: \(otherUser.userid)")
+                    
                     var userDict: NSDictionary = (NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: nil) as? NSDictionary)!
                     
                     otherUser.processUserDict(userDict)
@@ -351,11 +355,11 @@ class APIConnector {
                     let notification = NSNotification(name: "anotherGroup", object: nil)
                     NSNotificationCenter.defaultCenter().postNotification(notification)
                 } else {
-                    println("an unknown error occurred")
+                    NSLog("Did not find profile - invalid status code \(httpResponse.statusCode)")
                     self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
                 }
             } else {
-                println("an unknown error occurred")
+                NSLog("Did not find profile - response could not be parsed")
                 self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
             }
         }
@@ -375,8 +379,8 @@ class APIConnector {
         
         let completion = { (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
             if let httpResponse = response as? NSHTTPURLResponse {
-                println("getAllViewableUsers \(httpResponse.statusCode)")
                 if (httpResponse.statusCode == 200) {
+                    NSLog("Found viewable users for user: \(self.user?.userid)")
                     var jsonResult: NSDictionary = (NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: nil) as? NSDictionary)!
                     
                     for key in jsonResult.keyEnumerator() {
@@ -384,11 +388,11 @@ class APIConnector {
                         notesVC.groups.insert(group, atIndex: 0)
                     }
                 } else {
-                    println("an unknown error occurred")
+                    NSLog("Did not find viewable users - invalid status code \(httpResponse.statusCode)")
                     self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
                 }
             } else {
-                println("an unknown error occurred")
+                NSLog("Did not find viewable users - response could not be parsed")
                 self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
             }
         }
@@ -410,9 +414,9 @@ class APIConnector {
         
         let completion = { (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
             if let httpResponse = response as? NSHTTPURLResponse {
-                println("getNotesForUserInDateRange \(httpResponse.statusCode)")
-                
                 if (httpResponse.statusCode == 200) {
+                    NSLog("Got notes for user (\(userid)) in given date range: \(dateFormatter.isoStringFromDate(start, zone: nil)) to \(dateFormatter.isoStringFromDate(end, zone: nil))")
+                    
                     var notes: [Note] = []
                     
                     var jsonResult: NSDictionary = (NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: nil) as? NSDictionary)!
@@ -446,9 +450,9 @@ class APIConnector {
                     notesVC.filterNotes()
                     notesVC.notesTable.reloadData()
                 } else if (httpResponse.statusCode == 404) {
-                    println("no notes in range \(httpResponse.statusCode), userid: \(userid)")
+                    NSLog("No notes retrieved, status code: \(httpResponse.statusCode), userid: \(userid)")
                 } else {
-                    println("an unknown error occurred \(httpResponse.statusCode)")
+                    NSLog("No notes retrieved - invalid status code \(httpResponse.statusCode)")
                     self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
                 }
                 
@@ -457,7 +461,7 @@ class APIConnector {
                     notesVC.loadingNotes = false
                 }
             } else {
-                println("an unknown error occurred")
+                NSLog("No notes retrieved - could not parse response")
                 self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
             }
         }
@@ -481,9 +485,10 @@ class APIConnector {
         
         let completion = { (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
             if let httpResponse = response as? NSHTTPURLResponse {
-                println("doPostWithNote \(httpResponse.statusCode)")
                 
                 if (httpResponse.statusCode == 201) {
+                    NSLog("Sent note for groupid: \(note.groupid)")
+                    
                     var jsonResult: NSDictionary = (NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: nil) as? NSDictionary)!
                     
                     note.id = jsonResult.valueForKey("id") as! String
@@ -494,11 +499,11 @@ class APIConnector {
                     notesVC.notesTable.reloadData()
                     
                 } else {
-                    println("an unknown error occurred")
+                    NSLog("Did not send note for groupid \(note.groupid) - invalid status code \(httpResponse.statusCode)")
                     self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
                 }
             } else {
-                println("an unknown error occurred")
+                NSLog("Did not send note for groupid \(note.groupid) - could not parse response")
                 self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
             }
         }
@@ -522,8 +527,8 @@ class APIConnector {
         
         let completion = { (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
             if let httpResponse = response as? NSHTTPURLResponse {
-                println("editNote \(httpResponse.statusCode)")
                 if (httpResponse.statusCode == 200) {
+                    NSLog("Edited note with id \(originalNote.id)")
                     
                     originalNote.messagetext = editedNote.messagetext
                     originalNote.timestamp = editedNote.timestamp
@@ -532,11 +537,11 @@ class APIConnector {
                     notesVC.filterNotes()
                     notesVC.notesTable.reloadData()
                 } else {
-                    println("an unknown error occurred")
+                    NSLog("Did not edit note with id \(originalNote.id) - invalid status code \(httpResponse.statusCode)")
                     self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
                 }
             } else {
-                println("an unknown error occurred")
+                NSLog("Did not edit note with id \(originalNote.id) - could not parse response")
                 self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
             }
         }

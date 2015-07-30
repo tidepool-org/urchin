@@ -88,15 +88,17 @@ class LogInViewController : UIViewController {
     }
     
     func directLoginAttempt() {
-        println("direct login attempt called")
         directLogin = false
         
         if (!apiConnector.x_tidepool_session_token.isEmpty && apiConnector.user != nil) {
+            
+            apiConnector.trackMetric("Logged In")
             
             let notesScene = UINavigationController(rootViewController: NotesViewController(apiConnector: apiConnector))
             notesScene.transitioningDelegate = self
             self.presentViewController(notesScene, animated: true, completion: nil)
         } else {
+            NSLog("Session token is empty or user was not created")
             prepareLogin()
         }
     }
@@ -105,6 +107,8 @@ class LogInViewController : UIViewController {
         
         if (!loginPrepared) {
             loginPrepared = true
+            
+            NSLog("Preparing log in")
             
             let notificationCenter = NSNotificationCenter.defaultCenter()
             
@@ -272,7 +276,7 @@ class LogInViewController : UIViewController {
             
             self.presentViewController(notesScene, animated: true, completion: nil)
         } else {
-            println("*** DISPLAY ERROR MESSAGES TO USER ***")
+            NSLog("Session token is empty or user was not created")
         }
     }
     

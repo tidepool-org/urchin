@@ -27,7 +27,7 @@ class EditNoteViewController: UIViewController {
     let separatorOne: UIView = UIView()
     
     //hashtagsView for appending hashtags to messages
-    let hashtagsScrollView: HashtagsScrollView = HashtagsScrollView()
+    let hashtagsScrollView: HashtagsScrollView
     
     // Separator between hashtags and messageBox
     let separatorTwo: UIView = UIView()
@@ -52,6 +52,7 @@ class EditNoteViewController: UIViewController {
     init(apiConnector: APIConnector, note: Note, groupFullName: String) {
         
         self.apiConnector = apiConnector
+        self.hashtagsScrollView = HashtagsScrollView(apiConnector: apiConnector)
         
         // data
         self.note = note

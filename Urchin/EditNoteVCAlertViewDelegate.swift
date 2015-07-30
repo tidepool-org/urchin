@@ -15,7 +15,7 @@ extension EditNoteViewController: UIAlertViewDelegate {
     func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
         switch buttonIndex {
         case 0:
-            println(editAlertDiscard)
+            NSLog("Discard edits from note")
             
             let notification = NSNotification(name: "doneEditing", object: nil)
             NSNotificationCenter.defaultCenter().postNotification(notification)
@@ -26,13 +26,13 @@ extension EditNoteViewController: UIAlertViewDelegate {
             
             break
         case 1:
-            println(editAlertSave)
+            NSLog("Save edited note")
             
             self.saveNote()
             
             break
         default:
-            println("uh oh")
+            NSLog("Unknown case occurred with alert. Closing alert.")
             break
         }
     }

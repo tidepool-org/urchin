@@ -16,6 +16,18 @@ class HashtagsScrollView: UIScrollView, UIScrollViewDelegate {
     // Helper for animations
     var hashtagsCollapsed: Bool = false
     
+    let apiConnector: APIConnector
+    
+    init(apiConnector: APIConnector) {
+        self.apiConnector = apiConnector
+        
+        super.init(frame: CGRectZero)
+    }
+
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     func configureHashtagsScrollView() {
         self.delegate = self
         
@@ -50,12 +62,18 @@ class HashtagsScrollView: UIScrollView, UIScrollViewDelegate {
         self.hashtagsView.linearHashtagArrangement()
     }
     
-    func scrollViewDidScroll(scrollView: UIScrollView) {
+    var contentPosition: CGPoint = CGPoint(x: 0.0, y: 0.0)
+    
+    func scrollViewWillEndDragging(scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        let scrollOffset = scrollView.contentOffset
         
-        let scrollOffset = scrollView.contentOffset.x
-        
-        if (scrollOffset > 0) {
-            println("scrolled")
+        if (scrollOffset.x - contentPosition.x > 0) {
+            self.apiConnector.trackMetric("Scrolled Right On Hashtags")
         }
+        if (scrollOffset.y - contentPosition.y > 0) {
+            self.apiConnector.trackMetric("Scrolled Down On Hashtags")
+        }
+        
+        contentPosition = scrollOffset
     }
 }
