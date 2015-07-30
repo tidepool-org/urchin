@@ -12,7 +12,8 @@ import CoreData
 
 class APIConnector {
     
-    var baseURL: String = "https://devel-api.tidepool.io"
+    let baseURL: String = "https://devel-api.tidepool.io"
+    let metricsSource: String = "urchin"
     var x_tidepool_session_token: String = ""
     var user: User?
     
@@ -20,7 +21,8 @@ class APIConnector {
         
         preRequest()
         
-        let urlString = baseURL + urlExtension
+        var urlString = baseURL + urlExtension
+        urlString = urlString.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         let url = NSURL(string: urlString)
         let request = NSMutableURLRequest(URL: url!)
         request.HTTPMethod = method
@@ -32,6 +34,33 @@ class APIConnector {
         NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) { (response, data, error) -> Void in
             completion(response: response, data: data, error: error)
         }
+    }
+    
+    func trackMetric(metricName: String) {
+        
+        let urlExtension = "/metrics/thisuser/\(metricsSource) - \(metricName)?source=\(metricsSource)&sourceVersion=\(UIApplication.appVersion())"
+        println(urlExtension)
+        
+        let headerDict: [String: String] = ["x-tidepool-session-token":"\(x_tidepool_session_token)"]
+        
+        let preRequest = { () -> Void in
+            // nothing to do
+        }
+        
+        let completion = { (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
+            if let httpResponse = response as? NSHTTPURLResponse {
+                if (httpResponse.statusCode == 200) {
+                    NSLog("Tracked metric: \(metricName)")
+                } else {
+                    NSLog("Invalid status code: \(httpResponse.statusCode) for tracking metric: \(metricName)")
+                }
+            } else {
+                NSLog("Invalid response for tracking metric")
+            }
+        }
+        
+        request("GET", urlExtension: urlExtension, headerDict: headerDict, body: nil, preRequest: preRequest, completion: completion)
+        
     }
     
     func login(loginVC: LogInViewController, username: String, password: String) {
@@ -70,14 +99,14 @@ class APIConnector {
             
             if let code = jsonResult.valueForKey("code") as? Int {
                 if (code == 401) {
-                    println("incorrect login information")
+                    NSLog("Invalid login request: \(code)")
                     
                     let notification = NSNotification(name: "prepareLogin", object: nil)
                     NSNotificationCenter.defaultCenter().postNotification(notification)
                     
                     self.alertWithOkayButton(invalidLogin, message: invalidLoginMessage)
                 } else {
-                    println("an unknown error occurred")
+                    NSLog("Invalid login request: \(code)")
                     
                     let notification = NSNotification(name: "prepareLogin", object: nil)
                     NSNotificationCenter.defaultCenter().postNotification(notification)
@@ -86,9 +115,10 @@ class APIConnector {
                 }
             } else {
                 if let httpResponse = response as? NSHTTPURLResponse {
-                    println("login \(httpResponse.statusCode)")
                     
                     if (httpResponse.statusCode == 200) {
+                        NSLog("Successful login: \(httpResponse.statusCode)")
+                        
                         var jsonResult: NSDictionary = (NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: nil) as? NSDictionary)!
                         
                         if let sessionToken = httpResponse.allHeaderFields["x-tidepool-session-token"] as? String {
@@ -101,11 +131,13 @@ class APIConnector {
                             let notificationTwo = NSNotification(name: "directLogin", object: nil)
                             NSNotificationCenter.defaultCenter().postNotification(notificationTwo)
                         } else {
+                            NSLog("Invalid login: \(httpResponse.statusCode)")
+                            
                             let notification = NSNotification(name: "prepareLogin", object: nil)
                             NSNotificationCenter.defaultCenter().postNotification(notification)
                         }
                     } else {
-                        println("an unknown error occurred")
+                        NSLog("Invalid status code: \(httpResponse.statusCode) for logging in")
                         
                         let notification = NSNotification(name: "prepareLogin", object: nil)
                         NSNotificationCenter.defaultCenter().postNotification(notification)
@@ -113,7 +145,7 @@ class APIConnector {
                         self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
                     }
                 } else {
-                    println("an unknown error occurred")
+                    NSLog("Invalid response for logging in")
                     
                     let notification = NSNotification(name: "prepareLogin", object: nil)
                     NSNotificationCenter.defaultCenter().postNotification(notification)

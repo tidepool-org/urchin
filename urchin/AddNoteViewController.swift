@@ -33,6 +33,7 @@ class AddNoteViewController: UIViewController {
     var datePickerShown: Bool = false
     var isAnimating: Bool = false
     let datePicker: UIDatePicker = UIDatePicker()
+    let previousDate: NSDate
     
     // Separator between date/time and hashtags
     let separatorOne: UIView = UIView()
@@ -49,6 +50,9 @@ class AddNoteViewController: UIViewController {
     let cameraButton: UIButton = UIButton()
     let locationButton: UIButton = UIButton()
     
+    // API Connector
+    let apiConnector: APIConnector
+    
     // Data
     let note: Note
     var group: User
@@ -58,7 +62,9 @@ class AddNoteViewController: UIViewController {
     // Keyboard frame for positioning UI Elements, initially zero
     var keyboardFrame: CGRect = CGRectZero
     
-    init(user: User, group: User, groups: [User]) {
+    init(apiConnector: APIConnector, user: User, group: User, groups: [User]) {
+        
+        self.apiConnector = apiConnector
         
         // data
         note = Note()
@@ -68,6 +74,8 @@ class AddNoteViewController: UIViewController {
         self.group = group
         self.groups = groups
         self.user = user
+        
+        self.previousDate = datePicker.date
         
         super.init(nibName: nil, bundle: nil)
     }
@@ -290,6 +298,8 @@ class AddNoteViewController: UIViewController {
     
     // close the VC on button press from leftBarButtonItem
     func closeVC(sender: UIBarButtonItem!) {
+        self.apiConnector.trackMetric("Clicked Close Add or Edit Note")
+        
         if (!messageBox.text.isEmpty && messageBox.text != defaultMessage) {
             // If the note has been edited, show an alert
             // DOES NOT show alert if date or group has been changed
@@ -314,6 +324,7 @@ class AddNoteViewController: UIViewController {
     // Toggle the datepicker open or closed depending on if it is currently showing
     // Called by the changeDateView
     func changeDatePressed(sender: UIView!) {
+        self.apiConnector.trackMetric("Clicked Change Date")
         if (!datePicker.hidden) {
             closeDatePicker(false)
         } else {
@@ -488,6 +499,20 @@ class AddNoteViewController: UIViewController {
     
     // Called when date picker date has changed
     func datePickerAction(sender: UIDatePicker) {
+        let calendar = NSCalendar.currentCalendar()
+        let compCurr = calendar.components((.CalendarUnitYear | .CalendarUnitMonth | .CalendarUnitDay | .CalendarUnitHour | .CalendarUnitMinute), fromDate: datePicker.date)
+        let compWas = calendar.components((.CalendarUnitYear | .CalendarUnitMonth | .CalendarUnitDay | .CalendarUnitHour | .CalendarUnitMinute), fromDate: previousDate)
+        
+        if (compCurr.day != compWas.day || compCurr.month != compWas.month || compCurr.year != compWas.year) {
+            self.apiConnector.trackMetric("Date Changed")
+        }
+        if (compCurr.hour != compWas.hour) {
+            self.apiConnector.trackMetric("Hour Changed")
+        }
+        if (compCurr.minute != compWas.minute) {
+            self.apiConnector.trackMetric("Minute Changed")
+        }
+        
         let dateFormatter = NSDateFormatter()
         timedateLabel.attributedText = dateFormatter.attributedStringFromDate(datePicker.date)
         timedateLabel.sizeToFit()
@@ -506,6 +531,8 @@ class AddNoteViewController: UIViewController {
     // postNote action from postNoteButton
     func postNote(sender: UIButton!) {
         if (messageBox.text != defaultMessage && !messageBox.text.isEmpty) {
+            self.apiConnector.trackMetric("Clicked Post Note")
+            
             // if messageBox has text (not default message or empty) --> set the note to have values
             self.note.messagetext = self.messageBox.text
             self.note.groupid = self.group.userid
@@ -560,6 +587,9 @@ class AddNoteViewController: UIViewController {
     // Handle hashtagPressed notification from hashtagsView (hashtag button was pressed)
     func hashtagPressed(notification: NSNotification) {
         // unwrap the hashtag from userInfo
+        
+        self.apiConnector.trackMetric("Clicked Hashtag")
+        
         let userInfo:Dictionary<String,String!> = notification.userInfo as! Dictionary<String,String!>
         let hashtag = userInfo["hashtag"]!
         

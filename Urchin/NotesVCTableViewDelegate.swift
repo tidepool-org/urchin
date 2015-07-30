@@ -103,13 +103,20 @@ extension NotesViewController: UITableViewDelegate {
             if (indexPath.section == 0) {
                 // A group or all seleceted
                 if (indexPath.row == 0) {
+                    if (filter != nil) {
+                        self.apiConnector.trackMetric("Clicked All in Feed")
+                    }
+                    
                     // 'All' / #nofilter selected
                     self.configureTitleView(allNotesTitle)
                     self.filter = nil
                 } else {
+                    
                     // Individual group / filter selected
-                    let cell = dropDownMenu.cellForRowAtIndexPath(indexPath) as! UserDropDownCell
-                    self.filter = cell.group
+                    if (filter !== groups[indexPath.row - 1]) {
+                        self.apiConnector.trackMetric("Changed Person in Feed")
+                    }
+                    self.filter = groups[indexPath.row - 1]
                     self.configureTitleView(filter.fullName!)
                 }
                 // filter the notes based upon new filter
@@ -121,6 +128,7 @@ extension NotesViewController: UITableViewDelegate {
             } else {
                 // Logout selected
                 // Unwind VC
+                self.apiConnector.trackMetric("Logged Out")
                 apiConnector.logout(self)
             }
         }
@@ -136,6 +144,8 @@ extension NotesViewController: UITableViewDelegate {
             
             // If so, load notes
             if (distanceFromBottom < height && !loadingNotes) {
+                self.apiConnector.trackMetric("Scrolled Down For More Notes")
+                
                 loadNotes()
             }
         }

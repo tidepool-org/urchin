@@ -38,15 +38,20 @@ class EditNoteViewController: UIViewController {
     let cameraButton: UIButton = UIButton()
     let locationButton: UIButton = UIButton()
     
+    let apiConnector: APIConnector
+    
     // Original note, edited note, and the full name for the group
     let note: Note
     let editedNote: Note
     let groupFullName: String
+    let previousDate: NSDate
     
     // Keyboard frame for positioning UI Elements
     var keyboardFrame: CGRect = CGRectZero
     
-    init(note: Note, groupFullName: String) {
+    init(apiConnector: APIConnector, note: Note, groupFullName: String) {
+        
+        self.apiConnector = apiConnector
         
         // data
         self.note = note
@@ -54,6 +59,8 @@ class EditNoteViewController: UIViewController {
         editedNote.createdtime = note.createdtime
         editedNote.messagetext = note.messagetext
         self.groupFullName = groupFullName
+        
+        self.previousDate = note.timestamp
         
         // Initialize keyboard frame of size Zero
         keyboardFrame = CGRectZero
@@ -222,9 +229,11 @@ class EditNoteViewController: UIViewController {
         // Add an observer to notificationCenter to handle hashtagPress events from HashtagsView
         notificationCenter.addObserver(self, selector: "hashtagPressed:", name: "hashtagPressed", object: nil)
     }
-    
+
     // close the VC on button press from leftBarButtonItem
     func closeVC(sender: UIBarButtonItem!) {
+        self.apiConnector.trackMetric("Clicked Close Add or Edit Note")
+        
         if (note.messagetext != messageBox.text || note.timestamp != datePicker.date) {
             // If the note has been changed, show an alert
             let alert = UIAlertView()
@@ -248,6 +257,8 @@ class EditNoteViewController: UIViewController {
     // Toggle the datepicker open or closed depending on if it is currently showing
     // Called by the changeDateView
     func changeDatePressed(sender: UIView!) {
+        self.apiConnector.trackMetric("Clicked Change Date")
+
         if (!datePicker.hidden) {
             closeDatePicker(false)
         } else {
@@ -421,6 +432,20 @@ class EditNoteViewController: UIViewController {
     
     // Called when date picker date has changed
     func datePickerAction(sender: UIDatePicker) {
+        let calendar = NSCalendar.currentCalendar()
+        let compCurr = calendar.components((.CalendarUnitYear | .CalendarUnitMonth | .CalendarUnitDay | .CalendarUnitHour | .CalendarUnitMinute), fromDate: datePicker.date)
+        let compWas = calendar.components((.CalendarUnitYear | .CalendarUnitMonth | .CalendarUnitDay | .CalendarUnitHour | .CalendarUnitMinute), fromDate: previousDate)
+        
+        if (compCurr.day != compWas.day || compCurr.month != compWas.month || compCurr.year != compWas.year) {
+            self.apiConnector.trackMetric("Date Changed")
+        }
+        if (compCurr.hour != compWas.hour) {
+            self.apiConnector.trackMetric("Hour Changed")
+        }
+        if (compCurr.minute != compWas.minute) {
+            self.apiConnector.trackMetric("Minute Changed")
+        }
+        
         let dateFormatter = NSDateFormatter()
         timedateLabel.attributedText = dateFormatter.attributedStringFromDate(datePicker.date)
         timedateLabel.sizeToFit()
@@ -440,6 +465,8 @@ class EditNoteViewController: UIViewController {
     // saveNote action from saveNoteButton
     func saveNote() {
         if ((note.messagetext != messageBox.text || note.timestamp != datePicker.date) && messageBox.text != defaultMessage && !messageBox.text.isEmpty) {
+            self.apiConnector.trackMetric("Clicked Save Note")
+            
             // if messageBox has text (not default message or empty) --> set the note to have values
             // groupid does not change
             self.editedNote.messagetext = self.messageBox.text
@@ -492,6 +519,9 @@ class EditNoteViewController: UIViewController {
     
     // Handle hashtagPressed notification from hashtagsView (hashtag button was pressed)
     func hashtagPressed(notification: NSNotification) {
+        
+        self.apiConnector.trackMetric("Clicked Hashtag")
+
         // unwrap the hashtag from userInfo
         let userInfo:Dictionary<String,String!> = notification.userInfo as! Dictionary<String,String!>
         let hashtag = userInfo["hashtag"]!

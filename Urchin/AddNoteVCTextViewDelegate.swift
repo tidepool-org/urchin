@@ -13,6 +13,8 @@ extension AddNoteViewController: UITextViewDelegate {
     
     // textViewDidBeginEditing, clear the messageBox if default message
     func textViewDidBeginEditing(textView: UITextView) {
+        self.apiConnector.trackMetric("Clicked On Message Box")
+        
         if (textView.text == defaultMessage) {
             textView.text = nil
         }

@@ -221,10 +221,14 @@ class NotesViewController: UIViewController {
         }
     }
     
-    // Called on newNoteButton press or when 
+    // Called on newNoteButton press
     func newNote(sender: AnyObject) {
         if (!addOrEditShowing) {
             addOrEditShowing = true
+            
+            if (sender is UIButton) {
+                self.apiConnector.trackMetric("Clicked Add Note")
+            }
             
             // determine default option for note's group
             let groupForVC: User
@@ -236,7 +240,7 @@ class NotesViewController: UIViewController {
             }
             
             // Initialize new AddNoteViewController
-            addNoteViewController = AddNoteViewController(user: user, group: groupForVC, groups: groups)
+            addNoteViewController = AddNoteViewController(apiConnector: apiConnector, user: user, group: groupForVC, groups: groups)
             addNoteViewController!.note.createdtime = NSDate()
             addNoteViewController!.note.timestamp = NSDate()
             
@@ -264,7 +268,7 @@ class NotesViewController: UIViewController {
         } else {
             groupForVC = filter
         }
-        addNoteViewController = AddNoteViewController(user: user, group: groupForVC, groups: groups)
+        addNoteViewController = AddNoteViewController(apiConnector: apiConnector, user: user, group: groupForVC, groups: groups)
     }
     
     func doneAdding(notification: NSNotification) {
@@ -314,6 +318,8 @@ class NotesViewController: UIViewController {
         if (!addOrEditShowing) {
             addOrEditShowing = true
             
+            self.apiConnector.trackMetric("Clicked Edit Note")
+            
             let thenote = filteredNotes[sender.tag]
             
             var groupFullName: String = ""
@@ -325,7 +331,7 @@ class NotesViewController: UIViewController {
             }
             
             // Instantiate new EditNoteVC and present editNoteScene
-            editNoteViewController = EditNoteViewController(note: thenote, groupFullName: groupFullName)
+            editNoteViewController = EditNoteViewController(apiConnector: apiConnector, note: thenote, groupFullName: groupFullName)
             let editNoteScene = UINavigationController(rootViewController: editNoteViewController!)
             self.presentViewController(editNoteScene, animated: true, completion: nil)
         }

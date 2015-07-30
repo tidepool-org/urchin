@@ -37,7 +37,7 @@ class UserDropDownCell: UITableViewCell {
         if (key == "all") {
             // Configure nameLabel to be 'All', or #nofilter
             nameLabel.text = allTeamsTitle
-            nameLabel.font = mediumRegularFont
+            nameLabel.font = mediumBoldFont
             nameLabel.sizeToFit()
             nameLabel.frame.origin.y = userCellThickSeparator + userCellInset
             

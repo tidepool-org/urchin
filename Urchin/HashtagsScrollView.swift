@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class HashtagsScrollView: UIScrollView {
+class HashtagsScrollView: UIScrollView, UIScrollViewDelegate {
     
     let hashtagsView: HashtagsView = HashtagsView()
     
@@ -17,6 +17,8 @@ class HashtagsScrollView: UIScrollView {
     var hashtagsCollapsed: Bool = false
     
     func configureHashtagsScrollView() {
+        self.delegate = self
+        
         hashtagsView.backgroundColor = UIColor.clearColor()
         // see HashtagsView.swift for detailed configuration
         hashtagsView.configureHashtagsView()
@@ -46,5 +48,14 @@ class HashtagsScrollView: UIScrollView {
         self.hashtagsView.frame.size = CGSize(width: self.hashtagsView.totalLinearHashtagsWidth + 2 * labelInset, height: condensedHashtagsViewH)
         self.contentSize = self.hashtagsView.frame.size
         self.hashtagsView.linearHashtagArrangement()
+    }
+    
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        
+        let scrollOffset = scrollView.contentOffset.x
+        
+        if (scrollOffset > 0) {
+            println("scrolled")
+        }
     }
 }

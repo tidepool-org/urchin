@@ -67,16 +67,15 @@ class LogInViewController : UIViewController {
         
         // configure version number for below Tidepool logo, add version number to view
         let versionNumber = UILabel(frame: CGRectZero)
-        if let version = NSBundle.mainBundle().infoDictionary?["CFBundleShortVersionString"] as? String {
-            versionNumber.text = "v.\(version)"
-            versionNumber.font = smallRegularFont
-            versionNumber.textColor = blackishColor
-            versionNumber.sizeToFit()
-            versionNumber.frame.origin.x = self.view.frame.width / 2 - versionNumber.frame.width / 2
-            versionNumber.frame.origin.y = tidepoolLogoView.frame.maxY + labelSpacing
+        
+        versionNumber.text = "v.\(UIApplication.appVersion())"
+        versionNumber.font = smallRegularFont
+        versionNumber.textColor = blackishColor
+        versionNumber.sizeToFit()
+        versionNumber.frame.origin.x = self.view.frame.width / 2 - versionNumber.frame.width / 2
+        versionNumber.frame.origin.y = tidepoolLogoView.frame.maxY + labelSpacing
             
-            self.view.addSubview(versionNumber)
-        }
+        self.view.addSubview(versionNumber)
         
         let notificationCenter = NSNotificationCenter.defaultCenter()
         
@@ -257,6 +256,9 @@ class LogInViewController : UIViewController {
     func makeTransition() {
         
         if (!apiConnector.x_tidepool_session_token.isEmpty && apiConnector.user != nil) {
+            
+            apiConnector.trackMetric("Logged In")
+            
             emailField.text = ""
             passwordField.text = ""
             self.textFieldDidChange(emailField)

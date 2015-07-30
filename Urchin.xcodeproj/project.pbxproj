@@ -115,6 +115,8 @@
 		AAE778A41B4B408F00949CEE /* note.png in Resources */ = {isa = PBXBuildFile; fileRef = AAE778A21B4B408F00949CEE /* note.png */; };
 		AAE778A51B4B408F00949CEE /* note@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AAE778A31B4B408F00949CEE /* note@2x.png */; };
 		AAEFB16D1B5062CE000EF8B4 /* UrchinData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = AAEFB16B1B5062CE000EF8B4 /* UrchinData.xcdatamodeld */; };
+		AAFBE7DE1B69814B007E480D /* UIApplicationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAFBE7DD1B69814B007E480D /* UIApplicationExtension.swift */; };
+		AAFBE7DF1B698229007E480D /* UIApplicationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAFBE7DD1B69814B007E480D /* UIApplicationExtension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -189,6 +191,7 @@
 		AAE778A21B4B408F00949CEE /* note.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = note.png; sourceTree = "<group>"; };
 		AAE778A31B4B408F00949CEE /* note@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "note@2x.png"; sourceTree = "<group>"; };
 		AAEFB16C1B5062CE000EF8B4 /* UrchinData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = UrchinData.xcdatamodel; sourceTree = "<group>"; };
+		AAFBE7DD1B69814B007E480D /* UIApplicationExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIApplicationExtension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -238,6 +241,7 @@
 			isa = PBXGroup;
 			children = (
 				AAA3F3121B508384000EB344 /* HashtagBolder.swift */,
+				AAFBE7DD1B69814B007E480D /* UIApplicationExtension.swift */,
 				AAB6B0521B605C440051472C /* FadeAnimator.swift */,
 				AA698EEA1B541C0B004154E0 /* UIDeviceExtension.swift */,
 				AA3484F31B56AED20028C49B /* UIDateFormatterExtension.swift */,
@@ -642,6 +646,7 @@
 				AA6931F01B66DB270057F0A0 /* LoginVCTextFieldDelegate.swift in Sources */,
 				AA3484F41B56AED20028C49B /* UIDateFormatterExtension.swift in Sources */,
 				AA6932031B66E5FB0057F0A0 /* AddNoteVCTableViewDataSource.swift in Sources */,
+				AAFBE7DE1B69814B007E480D /* UIApplicationExtension.swift in Sources */,
 				AA6931FA1B66E0100057F0A0 /* NotesVCTableViewDelegate.swift in Sources */,
 				AA6931F81B66DE4E0057F0A0 /* NotesVCTableViewDataSource.swift in Sources */,
 				AA3652CC1B34A163001F514D /* Patient.swift in Sources */,
@@ -677,6 +682,7 @@
 				AA6931F11B66DCDD0057F0A0 /* LoginVCTextFieldDelegate.swift in Sources */,
 				AA69320A1B66E8440057F0A0 /* AddNoteVCAlertViewDelegate.swift in Sources */,
 				AA79201F1B62AB470046038B /* NotesViewController.swift in Sources */,
+				AAFBE7DF1B698229007E480D /* UIApplicationExtension.swift in Sources */,
 				AA79201D1B62AB330046038B /* Patient.swift in Sources */,
 				AA7920281B62AB9D0046038B /* AppDelegate.swift in Sources */,
 				AA79201B1B62AB2B0046038B /* Note.swift in Sources */,

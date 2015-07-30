@@ -33,8 +33,13 @@ extension AddNoteViewController: UITableViewDelegate {
         // Immediately deselect row
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
         // Set the current group and note's groupid to the selected group
-        self.group = groups[indexPath.row]
-        self.note.groupid = self.group.userid
+        if (group !== groups[indexPath.row]) {
+            self.apiConnector.trackMetric("Clicked Different Person in Add Note")
+            
+            self.group = groups[indexPath.row]
+            self.note.groupid = self.group.userid
+        }
+        
         // Toggle the dropDownMenu (closed)
         self.dropDownMenuPressed()
     }
