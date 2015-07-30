@@ -110,7 +110,7 @@ class APIConnector {
                 if let httpResponse = response as? NSHTTPURLResponse {
                     
                     if (httpResponse.statusCode == 200) {
-                        NSLog("Successful login: \(httpResponse.statusCode)")
+                        NSLog("Logged in")
                         
                         var jsonResult: NSDictionary = (NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: nil) as? NSDictionary)!
                         

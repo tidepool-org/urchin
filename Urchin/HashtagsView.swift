@@ -70,7 +70,7 @@ class HashtagsView: UIView {
                     // Attempt to save the hashtag
                     var errorTwo: NSError?
                     if !managedContext.save(&errorTwo) {
-                        println("Could not save \(errorTwo), \(errorTwo?.userInfo)")
+                        NSLog("Could increase number of usages for hashtag \(text): \(errorTwo), \(errorTwo?.userInfo)")
                     }
                     
                     break
@@ -97,12 +97,12 @@ class HashtagsView: UIView {
                 // Save the hashtag
                 var errorTwo: NSError?
                 if !managedContext.save(&errorTwo) {
-                    println("Could not save \(errorTwo), \(errorTwo?.userInfo)")
+                    NSLog("Could not save new hashtag \(text): \(errorTwo), \(errorTwo?.userInfo)")
                 }
             }
             
         } else {
-            println("Could not fetch \(error), \(error!.userInfo)")
+            NSLog("Could not fetch hashtags to handle hashtag \(text): \(error), \(error!.userInfo)")
         }
     }
     
@@ -135,7 +135,7 @@ class HashtagsView: UIView {
             // Let hashtags be the results
             self.hashtags = results
         } else {
-            println("Could not fetch \(error), \(error!.userInfo)")
+            NSLog("Could not fetch hashtags: \(error), \(error!.userInfo)")
         }
         
         // If it didn't find any hashtags (first time using app)
@@ -177,7 +177,7 @@ class HashtagsView: UIView {
             // Save the hashtag in CoreData
             var error: NSError?
             if !managedContext.save(&error) {
-                println("Could not save \(error), \(error?.userInfo)")
+                NSLog("Could not save default hashtag \(text): \(error), \(error?.userInfo)")
             }
             
             // Append the hashtag to the list of hashtags

@@ -143,7 +143,7 @@ extension NotesViewController: UITableViewDelegate {
             let distanceFromBottom = scrollView.contentSize.height - contentYOffset
             
             // If so, load notes
-            if (distanceFromBottom < height && !loadingNotes) {
+            if (distanceFromBottom == height && !loadingNotes) {
                 self.apiConnector.trackMetric("Scrolled Down For More Notes")
                 
                 loadNotes()

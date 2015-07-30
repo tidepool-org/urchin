@@ -293,7 +293,6 @@ class LogInViewController : UIViewController {
             rememberMe = true
             rememberMeCheckbox.image = checkedImage
         }
-        println(rememberMe)
     }
     
     // handle touch events
