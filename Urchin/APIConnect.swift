@@ -12,7 +12,6 @@ import CoreData
 
 class APIConnector {
     
-    let baseURL: String = "https://devel-api.tidepool.io"
     let metricsSource: String = "urchin"
     var x_tidepool_session_token: String = ""
     var user: User?

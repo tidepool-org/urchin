@@ -442,6 +442,14 @@ let invalidLoginMessage: String = "Wrong username or password."
 let unknownError: String = "Unknown Error Occurred"
 let unknownErrorMessage: String = "An unknown error occurred while logging in. We are working hard to resolve this issue."
 
+/*
+    Secret, secret! I got a secret!
+    (Change the server)
+*/
+var baseURL: String = develURL
+let develURL: String = "https://devel-api.tidepool.io"
+let prodURL: String = "https://api.tidepool.io/"
+
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 // ------------ UserDropDownCell -----------

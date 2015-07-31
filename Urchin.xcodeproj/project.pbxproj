@@ -110,6 +110,8 @@
 		AABCEFAC1B3232C60064FE49 /* NoteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABCEFAB1B3232C60064FE49 /* NoteCell.swift */; };
 		AABCEFAE1B3234360064FE49 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABCEFAD1B3234360064FE49 /* Note.swift */; };
 		AACE31981B4AE17700F90E1D /* tidepoollogo.png in Resources */ = {isa = PBXBuildFile; fileRef = AACE31971B4AE17700F90E1D /* tidepoollogo.png */; };
+		AADD00391B6BFC28003D931E /* LoginVCActionSheetDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AADD00381B6BFC28003D931E /* LoginVCActionSheetDelegate.swift */; };
+		AADD003A1B6C05A5003D931E /* LoginVCActionSheetDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AADD00381B6BFC28003D931E /* LoginVCActionSheetDelegate.swift */; };
 		AADECC7A1B4F34AA0043E888 /* location.png in Resources */ = {isa = PBXBuildFile; fileRef = AADECC761B4F34AA0043E888 /* location.png */; };
 		AADECC7B1B4F34AA0043E888 /* location@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AADECC771B4F34AA0043E888 /* location@2x.png */; };
 		AADECC7C1B4F34AA0043E888 /* camera.png in Resources */ = {isa = PBXBuildFile; fileRef = AADECC781B4F34AA0043E888 /* camera.png */; };
@@ -187,6 +189,7 @@
 		AABCEFAB1B3232C60064FE49 /* NoteCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteCell.swift; sourceTree = "<group>"; };
 		AABCEFAD1B3234360064FE49 /* Note.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
 		AACE31971B4AE17700F90E1D /* tidepoollogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tidepoollogo.png; sourceTree = "<group>"; };
+		AADD00381B6BFC28003D931E /* LoginVCActionSheetDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginVCActionSheetDelegate.swift; sourceTree = "<group>"; };
 		AADECC761B4F34AA0043E888 /* location.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = location.png; sourceTree = "<group>"; };
 		AADECC771B4F34AA0043E888 /* location@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "location@2x.png"; sourceTree = "<group>"; };
 		AADECC781B4F34AA0043E888 /* camera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera.png; sourceTree = "<group>"; };
@@ -311,6 +314,7 @@
 				AA6931EF1B66DB270057F0A0 /* LoginVCTextFieldDelegate.swift */,
 				AA4AB35B1B6AF29100FEA705 /* LoginVCNetworkConnection.swift */,
 				AA6931F21B66DD6F0057F0A0 /* LoginVCTransitionDelegate.swift */,
+				AADD00381B6BFC28003D931E /* LoginVCActionSheetDelegate.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -666,6 +670,7 @@
 				AA03FB8A1B5848FD001B9435 /* APIConnect.swift in Sources */,
 				AABCEF8A1B3231910064FE49 /* AppDelegate.swift in Sources */,
 				AA3652C41B338525001F514D /* NotesViewController.swift in Sources */,
+				AADD00391B6BFC28003D931E /* LoginVCActionSheetDelegate.swift in Sources */,
 				AA8301001B4D986300F8ADE6 /* AddNoteViewController.swift in Sources */,
 				AA698EEB1B541C0B004154E0 /* UIDeviceExtension.swift in Sources */,
 				AABCEFAC1B3232C60064FE49 /* NoteCell.swift in Sources */,
@@ -690,6 +695,7 @@
 				AA7920251B62AB790046038B /* NoteCell.swift in Sources */,
 				AA6932071B66E6D30057F0A0 /* AddNoteVCTableViewDelegate.swift in Sources */,
 				AA6932011B66E5910057F0A0 /* AddNoteVCTextViewDelegate.swift in Sources */,
+				AADD003A1B6C05A5003D931E /* LoginVCActionSheetDelegate.swift in Sources */,
 				AA6931F11B66DCDD0057F0A0 /* LoginVCTextFieldDelegate.swift in Sources */,
 				AA69320A1B66E8440057F0A0 /* AddNoteVCAlertViewDelegate.swift in Sources */,
 				AA79201F1B62AB470046038B /* NotesViewController.swift in Sources */,

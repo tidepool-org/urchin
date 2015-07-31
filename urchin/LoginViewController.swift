@@ -9,7 +9,11 @@
 import Foundation
 import UIKit
 
-class LogInViewController : UIViewController {
+class LogInViewController : UIViewController, UIActionSheetDelegate {
+    
+    // Secret, secret! I got a secret! (Change the server)
+    var corners: [CGRect] = []
+    var cornersBool: [Bool] = [false, false, false, false]
     
     // UI Elements
     let logoView: UIImageView = UIImageView()
@@ -100,6 +104,34 @@ class LogInViewController : UIViewController {
             errorLabel.frame.origin.y = self.view.frame.height / 2 - errorLabel.frame.height / 2
             self.view.addSubview(errorLabel)
         }
+        
+        let width: CGFloat = 100
+        let height: CGFloat = width
+        corners.append(CGRect(x: 0, y: 0, width: width, height: height))
+        corners.append(CGRect(x: self.view.frame.width - width, y: 0, width: width, height: height))
+        corners.append(CGRect(x: 0, y: self.view.frame.height - height, width: width, height: height))
+        corners.append(CGRect(x: self.view.frame.width - width, y: self.view.frame.height - height, width: width, height: height))
+    }
+    
+    func checkCorners() {
+        for cornerBool in cornersBool {
+            if (!cornerBool) {
+                return
+            }
+        }
+        
+        showServerActionSheet()
+    }
+    
+    func showServerActionSheet() {
+        cornersBool = [false, false, false, false]
+        
+        let actionSheet = UIActionSheet()
+        actionSheet.delegate = self
+        actionSheet.title = "Server"
+        actionSheet.addButtonWithTitle("Development")
+        actionSheet.addButtonWithTitle("Production")
+        actionSheet.showInView(self.view)
     }
     
     func directLoginAttempt() {
@@ -318,6 +350,26 @@ class LogInViewController : UIViewController {
             self.moveDownLogIn()
         }
         super.touchesBegan(touches, withEvent: event)
+    }
+    
+    override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
+        if let touch = touches.first as? UITouch {
+            
+            let touchLocation = touch.locationInView(self.view)
+            
+            var i = 0
+            for corner in corners {
+                let viewFrame = self.view.convertRect(corner, fromView: self.view)
+                
+                if CGRectContainsPoint(viewFrame, touchLocation) {
+                    cornersBool[i] = true
+                    self.checkCorners()
+                    return
+                }
+                
+                i++
+            }
+        }
     }
 
     // UIKeyboardWillShowNotification
