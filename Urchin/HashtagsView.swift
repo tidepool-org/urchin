@@ -70,7 +70,7 @@ class HashtagsView: UIView {
                     // Attempt to save the hashtag
                     var errorTwo: NSError?
                     if !managedContext.save(&errorTwo) {
-                        NSLog("Could increase number of usages for hashtag \(text): \(errorTwo), \(errorTwo?.userInfo)")
+                        NSLog("Couldn't increase number of usages for hashtag \(text): \(errorTwo), \(errorTwo?.userInfo)")
                     }
                     
                     break

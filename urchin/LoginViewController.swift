@@ -84,7 +84,22 @@ class LogInViewController : UIViewController {
         // add observer for prepareLogin
         notificationCenter.addObserver(self, selector: "prepareLogin", name: "prepareLogin", object: nil)
 
-        apiConnector.login()
+        if (self.isConnectedToNetwork()) {
+            apiConnector.login()
+        } else {
+            NSLog("Not connected to network")
+            let errorLabel: UILabel = UILabel()
+            errorLabel.text = "Please try again when you are connected to a wireless network."
+            errorLabel.font = mediumBoldFont
+            errorLabel.textColor = blackishColor
+            errorLabel.textAlignment = .Center
+            errorLabel.numberOfLines = 0
+            errorLabel.frame.size = CGSize(width: self.view.frame.width - 2 * loginInset, height: CGFloat.max)
+            errorLabel.sizeToFit()
+            errorLabel.frame.origin.x = self.view.frame.width / 2 - errorLabel.frame.width / 2
+            errorLabel.frame.origin.y = self.view.frame.height / 2 - errorLabel.frame.height / 2
+            self.view.addSubview(errorLabel)
+        }
     }
     
     func directLoginAttempt() {
