@@ -197,7 +197,7 @@ class LogInViewController : UIViewController, UIActionSheetDelegate {
             signUpView.addSubview(signUpImage)
             signUpView.addSubview(signUpLabel)
             
-            self.view.addSubview(signUpView)
+//            self.view.addSubview(signUpView)
             
             // configure logo with notes icon
             logoView.image = notesIcon
@@ -323,7 +323,7 @@ class LogInViewController : UIViewController, UIActionSheetDelegate {
         }
     }
     
-    // called by passwordField and logInButton
+    // called by logInButton
     func logInPressed() {
 
         // Guards against invalid credentials and animation occuring
