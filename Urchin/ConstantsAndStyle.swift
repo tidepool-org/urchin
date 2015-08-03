@@ -29,6 +29,7 @@ let labelInset: CGFloat = 16
 /*
     Separators in Add/EditNoteVCs
     RememberMeLabel textColor in LoginVC
+    Sign Up Label textColor in LoginVC
 */
 let darkestGreyColor: UIColor = UIColor(red: 152/255, green: 152/255, blue: 151/255, alpha: 1)
 
@@ -277,6 +278,11 @@ let uncheckedImage: UIImage = UIImage(named: "unchecked") as UIImage!
 let checkedImage: UIImage = UIImage(named: "checked") as UIImage!
 
 /*
+    Sign up image for sign up process
+*/
+let signUpButtonImage: UIImage = uncheckedImage
+
+/*
     Placeholder text for text fields
 */
 let emailFieldPlaceholder: String = "email"
@@ -286,6 +292,16 @@ let passFieldPlaceholder: String = "password"
     Remember me checkbox label text
 */
 let rememberMeText: String = "Remember me"
+
+/* 
+    Sign up label text
+*/
+let signUpText: String = "Sign up"
+
+/*
+    URL for signing up for blip
+*/
+let signUpURL: NSURL = NSURL(string: "https://blip-ucsf-pilot.tidepool.io/#/signup")!
 
 /*
     Log in button title
@@ -309,6 +325,11 @@ let loginInset: CGFloat = 25
     Spacing between the remember me checkbox and remember me label
 */
 let rememberMeSpacing: CGFloat = 8
+
+/*
+    Spacing between the sign up image and label
+*/
+let signUpSpacing: CGFloat = 8
 
 /*
     Size of the log in button

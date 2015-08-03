@@ -13,7 +13,7 @@ class LogInViewController : UIViewController, UIActionSheetDelegate {
     
     // Secret, secret! I got a secret! (Change the server)
     var corners: [CGRect] = []
-    var cornersBool: [Bool] = [false, false, false, false]
+    var cornersBool: [Bool] = [false, false, false]
     
     // UI Elements
     let logoView: UIImageView = UIImageView()
@@ -24,6 +24,9 @@ class LogInViewController : UIViewController, UIActionSheetDelegate {
     let rememberMeCheckbox: UIImageView = UIImageView()
     var rememberMe: Bool = false
     let rememberMeLabel: UILabel = UILabel()
+    let signUpView: UIView = UIView()
+    let signUpImage: UIImageView = UIImageView()
+    let signUpLabel: UILabel = UILabel()
     let logInButton: UIButton = UIButton()
     let tidepoolLogoView: UIImageView = UIImageView()
     
@@ -108,7 +111,6 @@ class LogInViewController : UIViewController, UIActionSheetDelegate {
         let width: CGFloat = 100
         let height: CGFloat = width
         corners.append(CGRect(x: 0, y: 0, width: width, height: height))
-        corners.append(CGRect(x: self.view.frame.width - width, y: 0, width: width, height: height))
         corners.append(CGRect(x: 0, y: self.view.frame.height - height, width: width, height: height))
         corners.append(CGRect(x: self.view.frame.width - width, y: self.view.frame.height - height, width: width, height: height))
     }
@@ -124,7 +126,7 @@ class LogInViewController : UIViewController, UIActionSheetDelegate {
     }
     
     func showServerActionSheet() {
-        cornersBool = [false, false, false, false]
+        cornersBool = [false, false, false]
         
         let actionSheet = UIActionSheet()
         actionSheet.delegate = self
@@ -166,6 +168,36 @@ class LogInViewController : UIViewController, UIActionSheetDelegate {
             
             // add observer for makeTransition to NotesVC
             notificationCenter.addObserver(self, selector: "makeTransition", name: "makeTransitionToNotes", object: nil)
+            
+            // configure the sign up image
+            signUpImage.image = signUpButtonImage
+            signUpImage.frame.size = signUpButtonImage.size
+            signUpImage.frame.origin = CGPoint(x: loginInset, y: loginInset)
+            
+            // configure sign up label
+            signUpLabel.text = signUpText
+            signUpLabel.font = mediumBoldFont
+            signUpLabel.textColor = darkestGreyColor
+            signUpLabel.sizeToFit()
+            let signUpLabelX = loginInset + signUpImage.frame.width + signUpSpacing
+            let signUpLabelY = signUpImage.frame.midY - signUpLabel.frame.height / 2
+            signUpLabel.frame.origin = CGPoint(x: signUpLabelX, y: signUpLabelY)
+            
+            // Create a whole view to add the sign up label and image to
+            //      --> user can click anywhere in view to trigger sign up process
+            let signUpW = signUpImage.frame.width + signUpSpacing + signUpLabel.frame.width + 2 * loginInset
+            let signUpH = labelInset + signUpImage.frame.height + labelInset
+            signUpView.frame.size = CGSize(width: signUpW, height: signUpH)
+            signUpView.frame.origin = CGPoint(x: self.view.frame.width - signUpW, y: 0)
+            signUpView.backgroundColor = UIColor.clearColor()
+            // tapGesture in view triggers sign up process
+            let tapGesture = UITapGestureRecognizer(target: self, action: "signUpPressed:")
+            signUpView.addGestureRecognizer(tapGesture)
+            // add labels to view
+            signUpView.addSubview(signUpImage)
+            signUpView.addSubview(signUpLabel)
+            
+            self.view.addSubview(signUpView)
             
             // configure logo with notes icon
             logoView.image = notesIcon
@@ -341,6 +373,12 @@ class LogInViewController : UIViewController, UIActionSheetDelegate {
             rememberMe = true
             rememberMeCheckbox.image = checkedImage
         }
+    }
+    
+    // Trigger sign up process
+    // For now, open up signup in browser
+    func signUpPressed(sender: UIView!) {
+        UIApplication.sharedApplication().openURL(signUpURL)
     }
     
     // handle touch events
