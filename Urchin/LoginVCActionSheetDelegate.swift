@@ -17,6 +17,10 @@ extension LogInViewController: UIActionSheetDelegate {
             NSLog("Switched to development server")
             baseURL = develURL
             break
+        case "Staging":
+            NSLog("Switched to staging server")
+            baseURL = stagingURL
+            break
         case "Production":
             NSLog("Switched to production server")
             baseURL = prodURL

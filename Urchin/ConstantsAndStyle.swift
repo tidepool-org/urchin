@@ -448,7 +448,8 @@ let unknownErrorMessage: String = "An unknown error occurred while logging in. W
 */
 var baseURL: String = develURL
 let develURL: String = "https://devel-api.tidepool.io"
-let prodURL: String = "https://api.tidepool.io/"
+let stagingURL: String = "https://staging-api.tidepool.io"
+let prodURL: String = "https://api.tidepool.io"
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

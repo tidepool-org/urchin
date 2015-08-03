@@ -22,6 +22,7 @@ class APIConnector {
         
         var urlString = baseURL + urlExtension
         urlString = urlString.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
+        println(urlString)
         let url = NSURL(string: urlString)
         let request = NSMutableURLRequest(URL: url!)
         request.HTTPMethod = method

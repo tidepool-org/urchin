@@ -130,6 +130,7 @@ class LogInViewController : UIViewController, UIActionSheetDelegate {
         actionSheet.delegate = self
         actionSheet.title = "Server"
         actionSheet.addButtonWithTitle("Development")
+        actionSheet.addButtonWithTitle("Staging")
         actionSheet.addButtonWithTitle("Production")
         actionSheet.showInView(self.view)
     }
