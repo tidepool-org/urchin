@@ -595,7 +595,7 @@ class AddNoteViewController: UIViewController {
         let hashtag = userInfo["hashtag"]!
         
         // append hashtag to messageBox.text
-        if (messageBox.text == defaultMessage) {
+        if (messageBox.text == defaultMessage || messageBox.text.isEmpty) {
             // currently default message
             messageBox.text = hashtag
         } else {
