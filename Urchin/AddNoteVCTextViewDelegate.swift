@@ -44,8 +44,4 @@ extension AddNoteViewController: UITextViewDelegate {
             postButton.alpha = 0.5
         }
     }
-
-    
-    
-    
 }
