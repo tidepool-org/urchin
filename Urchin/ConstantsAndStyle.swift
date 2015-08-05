@@ -502,6 +502,7 @@ let editButtonTitle: String = "edit"
     Background and border colors for hashtag buttons
 */
 let hashtagColor: UIColor = UIColor.whiteColor()
+let hashtagHighlightedColor: UIColor = UIColor(red: 188/255, green: 227/255, blue: 232/255, alpha: 1)
 let hashtagBorderColor: UIColor = UIColor(red: 167/255, green: 167/255, blue: 167/255, alpha: 1)
 
 /*

@@ -340,14 +340,21 @@ class HashtagsView: UIView {
         hashtagButton.layer.cornerRadius = hashtagButton.frame.height / 2
         hashtagButton.layer.borderWidth = hashtagBorderWidth
         hashtagButton.layer.borderColor = hashtagBorderColor.CGColor
-        hashtagButton.addTarget(self, action: "hashtagPressed:", forControlEvents: .TouchUpInside)
+        hashtagButton.addTarget(self, action: "hashtagReleased:", forControlEvents: .TouchUpInside)
+        hashtagButton.addTarget(self, action: "hashtagPressed:", forControlEvents: .TouchDown)
         
         return hashtagButton
     }
     
-    // A hashtag button was pressed, so send a notification with userInfo to the AddNoteVC or EditNoteVC
-    func hashtagPressed(sender: UIButton!) {
+    // A hashtag button was released, so send a notification with userInfo to the AddNoteVC or EditNoteVC
+    func hashtagReleased(sender: UIButton!) {
+        sender.backgroundColor = hashtagColor
         let notification = NSNotification(name: "hashtagPressed", object: nil, userInfo: ["hashtag":sender.titleLabel!.text!])
         NSNotificationCenter.defaultCenter().postNotification(notification)
+    }
+    
+    // A hashtag button was pressed down, so change the color of the button to show it
+    func hashtagPressed(sender: UIButton!) {
+        sender.backgroundColor = hashtagHighlightedColor
     }
 }
