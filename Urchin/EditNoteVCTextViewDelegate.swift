@@ -13,12 +13,18 @@ extension EditNoteViewController: UITextViewDelegate {
     
     func textViewDidChange(textView: UITextView) {
         if (textView.text != defaultMessage) {
+            // take the cursor position
+            let range = textView.selectedTextRange
+            
             // use hashtagBolder extension to bold the hashtags
             let hashtagBolder = HashtagBolder()
             let attributedText = hashtagBolder.boldHashtags(textView.text)
             
             // set textView (messageBox) text to new attributed text
             textView.attributedText = attributedText
+            
+            // put the cursor back in the same position
+            textView.selectedTextRange = range
         }
         if ((note.messagetext != textView.text || note.timestamp != datePicker.date) && textView.text != defaultMessage && !textView.text.isEmpty) {
             postButton.alpha = 1.0
