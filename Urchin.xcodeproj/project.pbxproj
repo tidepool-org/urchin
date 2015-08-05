@@ -53,7 +53,6 @@
 		AA6932121B66EC0E0057F0A0 /* EditNoteVCTextViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6932101B66EB910057F0A0 /* EditNoteVCTextViewDelegate.swift */; };
 		AA6932141B66EE0C0057F0A0 /* ConstantsAndStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6932131B66EE0C0057F0A0 /* ConstantsAndStyle.swift */; };
 		AA6932151B66FAC00057F0A0 /* ConstantsAndStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6932131B66EE0C0057F0A0 /* ConstantsAndStyle.swift */; };
-		AA698EEB1B541C0B004154E0 /* UIDeviceExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA698EEA1B541C0B004154E0 /* UIDeviceExtension.swift */; };
 		AA698EED1B545A07004154E0 /* EditNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA698EEC1B545A07004154E0 /* EditNoteViewController.swift */; };
 		AA6A7D7A1B62B1A4008215D8 /* apiConnectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6A7D791B62B1A4008215D8 /* apiConnectorTests.swift */; };
 		AA6AF8EF1B5EA2AC0011F246 /* HashtagBolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA3F3121B508384000EB344 /* HashtagBolder.swift */; };
@@ -71,7 +70,6 @@
 		AA7920231B62AB630046038B /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA54DBBE1B596DE7005F8448 /* LoadingView.swift */; };
 		AA7920241B62AB760046038B /* UserDropDownCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3652CD1B34A8E4001F514D /* UserDropDownCell.swift */; };
 		AA7920251B62AB790046038B /* NoteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABCEFAB1B3232C60064FE49 /* NoteCell.swift */; };
-		AA7920261B62AB8E0046038B /* UIDeviceExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA698EEA1B541C0B004154E0 /* UIDeviceExtension.swift */; };
 		AA7920271B62AB920046038B /* FadeAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB6B0521B605C440051472C /* FadeAnimator.swift */; };
 		AA7920281B62AB9D0046038B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABCEF891B3231910064FE49 /* AppDelegate.swift */; };
 		AA8301001B4D986300F8ADE6 /* AddNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA8300FF1B4D986300F8ADE6 /* AddNoteViewController.swift */; };
@@ -167,7 +165,6 @@
 		AA69320D1B66E99B0057F0A0 /* EditNoteVCAlertViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditNoteVCAlertViewDelegate.swift; sourceTree = "<group>"; };
 		AA6932101B66EB910057F0A0 /* EditNoteVCTextViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditNoteVCTextViewDelegate.swift; sourceTree = "<group>"; };
 		AA6932131B66EE0C0057F0A0 /* ConstantsAndStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConstantsAndStyle.swift; sourceTree = "<group>"; };
-		AA698EEA1B541C0B004154E0 /* UIDeviceExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIDeviceExtension.swift; sourceTree = "<group>"; };
 		AA698EEC1B545A07004154E0 /* EditNoteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditNoteViewController.swift; sourceTree = "<group>"; };
 		AA6A7D791B62B1A4008215D8 /* apiConnectorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = apiConnectorTests.swift; sourceTree = "<group>"; };
 		AA6AF8F01B5EA81F0011F246 /* dateFormatterExtensionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = dateFormatterExtensionTests.swift; sourceTree = "<group>"; };
@@ -249,7 +246,6 @@
 				AAA3F3121B508384000EB344 /* HashtagBolder.swift */,
 				AAFBE7DD1B69814B007E480D /* UIApplicationExtension.swift */,
 				AAB6B0521B605C440051472C /* FadeAnimator.swift */,
-				AA698EEA1B541C0B004154E0 /* UIDeviceExtension.swift */,
 				AA3484F31B56AED20028C49B /* UIDateFormatterExtension.swift */,
 			);
 			name = Extensions;
@@ -672,7 +668,6 @@
 				AA3652C41B338525001F514D /* NotesViewController.swift in Sources */,
 				AADD00391B6BFC28003D931E /* LoginVCActionSheetDelegate.swift in Sources */,
 				AA8301001B4D986300F8ADE6 /* AddNoteViewController.swift in Sources */,
-				AA698EEB1B541C0B004154E0 /* UIDeviceExtension.swift in Sources */,
 				AABCEFAC1B3232C60064FE49 /* NoteCell.swift in Sources */,
 				AA3652C21B33847A001F514D /* User.swift in Sources */,
 				AA54DBBF1B596DE7005F8448 /* LoadingView.swift in Sources */,
@@ -691,7 +686,6 @@
 				AA4AB35D1B6AF31400FEA705 /* LoginVCNetworkConnection.swift in Sources */,
 				AA6932041B66E6210057F0A0 /* AddNoteVCTableViewDataSource.swift in Sources */,
 				AA6AF8F11B5EA81F0011F246 /* dateFormatterExtensionTests.swift in Sources */,
-				AA7920261B62AB8E0046038B /* UIDeviceExtension.swift in Sources */,
 				AA7920251B62AB790046038B /* NoteCell.swift in Sources */,
 				AA6932071B66E6D30057F0A0 /* AddNoteVCTableViewDelegate.swift in Sources */,
 				AA6932011B66E5910057F0A0 /* AddNoteVCTextViewDelegate.swift in Sources */,

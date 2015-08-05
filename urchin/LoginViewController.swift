@@ -215,9 +215,9 @@ class LogInViewController : UIViewController, UIActionSheetDelegate {
             
             // configure email entry field
             let emailFieldWidth = self.view.frame.width - 2 * loginInset
-            // email field height smaller for iPhone 4S
+            // email field height smaller for small view sizes
             var emailFieldHeight = textFieldHeight
-            if (UIDevice.currentDevice().modelName == "iPhone 4S") {
+            if (self.view.frame.height < 500) {
                 emailFieldHeight = textFieldHeightSmall
             }
             let emailFieldX = self.view.frame.width / 2 - emailFieldWidth / 2
