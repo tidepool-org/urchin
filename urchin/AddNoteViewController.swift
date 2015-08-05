@@ -424,8 +424,9 @@ class AddNoteViewController: UIViewController {
                 self.hashtagsScrollView.frame.origin.y = self.separatorOne.frame.maxY
                 // position affected UI elements
                 self.separatorTwo.frame.origin.y = self.hashtagsScrollView.frame.maxY
-                if (UIDevice.currentDevice().modelName != "iPhone 4S") {
-                    // Not an iPhone 4s
+                var separatorToBottom: CGFloat = self.view.frame.height - self.separatorTwo.frame.maxY
+                if (separatorToBottom > 300) {
+                    // Small Device
                     
                     // Move up controls
                     self.postButton.frame.origin.y = self.view.frame.height - (self.keyboardFrame.height + labelInset + self.postButton.frame.height)
@@ -436,7 +437,7 @@ class AddNoteViewController: UIViewController {
                     self.messageBox.frame.size = CGSize(width: self.messageBox.frame.width, height: messageBoxH)
                     self.messageBox.frame.origin.y = self.separatorTwo.frame.maxY + labelInset
                 } else {
-                    // An iPhone 4S
+                    // Larger device
                     
                     // Do not move up controls, just resize messageBox
                     let messageBoxH = self.view.frame.height - (self.separatorTwo.frame.maxY + self.keyboardFrame.height + 2 * labelInset)
@@ -447,8 +448,9 @@ class AddNoteViewController: UIViewController {
                 }, completion: { (completed: Bool) -> Void in
                     self.isAnimating = false
                     if (completed) {
-                        if (UIDevice.currentDevice().modelName == "iPhone 4S") {
-                            // For iPhone 4S, change the button to be 'done'
+                        var separatorToBottom: CGFloat = self.view.frame.height - self.separatorTwo.frame.maxY
+                        if (separatorToBottom < 300) {
+                            // For small view, change the button to be 'done'
                             self.changeDateLabel.text = doneDateText
                             self.changeDateLabel.font = smallBoldFont
                             self.changeDateLabel.sizeToFit()
@@ -483,8 +485,8 @@ class AddNoteViewController: UIViewController {
                 }, completion: { (completed: Bool) -> Void in
                     self.isAnimating = false
                     if (completed) {
-                        if (UIDevice.currentDevice().modelName == "iPhone 4S") {
-                            // If iPhone 4S, change back from 'done' to 'change'
+                        if (self.changeDateLabel.text == doneDateText) {
+                            // Label says 'done', change back to 'change'
                             self.changeDateLabel.text = changeDateText
                             self.changeDateLabel.font = smallRegularFont
                             self.changeDateLabel.sizeToFit()

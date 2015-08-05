@@ -357,19 +357,20 @@ class EditNoteViewController: UIViewController {
                 self.hashtagsScrollView.frame.origin.y = self.separatorOne.frame.maxY
                 // position affected UI elements
                 self.separatorTwo.frame.origin.y = self.hashtagsScrollView.frame.maxY
-                if (UIDevice.currentDevice().modelName != "iPhone 4S") {
-                    // Not an iPhone 4s
+                var separatorToBottom: CGFloat = self.view.frame.height - self.separatorTwo.frame.maxY
+                if (separatorToBottom > 300) {
+                    // Larger device
                     
                     // Move up controls
                     self.postButton.frame.origin.y = self.view.frame.height - (self.keyboardFrame.height + labelInset + self.postButton.frame.height)
                     self.cameraButton.frame.origin.y = self.postButton.frame.midY - self.cameraButton.frame.height / 2
                     self.locationButton.frame.origin.y = self.postButton.frame.midY - self.locationButton.frame.height / 2
-                    // REsize messageBox
+                    // Resize messageBox
                     let messageBoxH = (self.postButton.frame.minY - self.separatorTwo.frame.maxY) - 2 * labelInset
                     self.messageBox.frame.size = CGSize(width: self.messageBox.frame.width, height: messageBoxH)
                     self.messageBox.frame.origin.y = self.separatorTwo.frame.maxY + labelInset
                 } else {
-                    // An iPhone 4S
+                    // Smaller device
                     
                     // Do not move up controls, just resize messageBox
                     let messageBoxH = self.view.frame.height - (self.separatorTwo.frame.maxY + self.keyboardFrame.height + 2 * labelInset)
@@ -380,8 +381,8 @@ class EditNoteViewController: UIViewController {
                 }, completion: { (completed: Bool) -> Void in
                     self.isAnimating = false
                     if (completed) {
-                        // For iPhone 4S, change the button to be 'done'
-                        if (UIDevice.currentDevice().modelName == "iPhone 4S") {
+                        var separatorToBottom: CGFloat = self.view.frame.height - self.separatorTwo.frame.maxY
+                        if (separatorToBottom < 300) {
                             self.changeDateLabel.text = doneDateText
                             self.changeDateLabel.font = smallBoldFont
                             self.changeDateLabel.sizeToFit()
@@ -416,8 +417,8 @@ class EditNoteViewController: UIViewController {
                 }, completion: { (completed: Bool) -> Void in
                     self.isAnimating = false
                     if (completed) {
-                        if (UIDevice.currentDevice().modelName == "iPhone 4S") {
-                            // If iPhone 4S, change back from 'done' to 'change'
+                        if (self.changeDateLabel.text == doneDateText) {
+                            // If label says 'done', change back to 'change'
                             self.changeDateLabel.text = changeDateText
                             self.changeDateLabel.font = smallRegularFont
                             self.changeDateLabel.sizeToFit()

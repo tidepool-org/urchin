@@ -179,7 +179,7 @@ let mediumRegularFont: UIFont = UIFont(name: "OpenSans", size: 17.5)!
 let largeRegularFont: UIFont = UIFont(name: "OpenSans", size: 25)!
 
 /*
-    done label for iPhone 4S (Add/EditNoteVC)
+    done label for small device screen (Add/EditNoteVC)
     Attributed date format, for bold time (NoteCell/UIDateFormatterExtension)
 */
 let smallBoldFont: UIFont = UIFont(name: "OpenSans-Bold", size: 12.5)!
@@ -571,7 +571,7 @@ let regularDateFormat: String = "yyyy-MM-dd"
         Used for determining the exact device being used.
         UIDeviceExtension
 */
-let deviceList =   ["x86_64":         "Simulator",
+let deviceList =   ["x86_64":         "iPhone 4S",
     "iPod1,1":      "iPod Touch",       // (Original)
     "iPod2,1":      "iPod Touch 2",     // (Second Generation)
     "iPod3,1":      "iPod Touch 3",     // (Third Generation)
