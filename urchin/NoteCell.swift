@@ -19,7 +19,7 @@ class NoteCell: UITableViewCell {
     var messageLabel: UILabel = UILabel()
     
     // Configure the note cell to contain... the note!
-    func configureWithNote(note: Note, user: User) {
+    func configureWithNote(note: Note, user: User, groupName: String) {
         
         self.note = note
         
@@ -32,9 +32,9 @@ class NoteCell: UITableViewCell {
         // Configure the username label, with the full name
         let usernameWidth = contentView.frame.width - (2 * noteCellInset + timedateLabel.frame.width + 2 * labelSpacing)
         usernameLabel.frame.size = CGSize(width: usernameWidth, height: CGFloat.max)
-        usernameLabel.text = note.user!.fullName
-        usernameLabel.font = mediumBoldFont
-        usernameLabel.textColor = noteTextColor
+        let attrUsernameLabel = NSMutableAttributedString(string: note.user!.fullName! + groupName, attributes: [NSForegroundColorAttributeName: noteTextColor, NSFontAttributeName: mediumBoldFont])
+        attrUsernameLabel.addAttributes([NSForegroundColorAttributeName: darkestGreyColor, NSFontAttributeName: mediumRegularFont], range: NSRange(location: count(note.user!.fullName!), length: count(groupName)))
+        usernameLabel.attributedText = attrUsernameLabel
         usernameLabel.adjustsFontSizeToFitWidth = false
         usernameLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
         usernameLabel.numberOfLines = 0
@@ -52,7 +52,7 @@ class NoteCell: UITableViewCell {
         helperLabel.sizeToFit()
         helperLabel.frame.origin = usernameLabel.frame.origin
         let timedateX = contentView.frame.width - (noteCellInset + timedateLabel.frame.width)
-        let timedateY = helperLabel.frame.maxY - (timedateLabel.frame.height + 2)
+        let timedateY = helperLabel.frame.maxY - (timedateLabel.frame.height + 1)
         timedateLabel.frame.origin = CGPoint(x: timedateX, y: timedateY)
         
         // Configure the message label, leverage the hashtag bolder

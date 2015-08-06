@@ -18,7 +18,20 @@ extension NotesViewController: UITableViewDataSource {
             
             let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(NoteCell), forIndexPath: indexPath) as! NoteCell
             
-            cell.configureWithNote(filteredNotes[indexPath.row], user: user)
+            let note = filteredNotes[indexPath.row]
+            
+            // If the note is between different users, need a "to so-and-so" appendage
+            var groupName: String = ""
+            if (note.groupid != note.userid) {
+                for group in groups {
+                    if (group.userid == note.groupid) {
+                        groupName = " to \(group.fullName!)"
+                        break
+                    }
+                }
+            }
+            
+            cell.configureWithNote(note, user: user, groupName: groupName)
             
             // Background color based upon odd or even row
             if (indexPath.row % 2 == 0) {

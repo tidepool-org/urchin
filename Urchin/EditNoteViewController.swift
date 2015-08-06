@@ -191,8 +191,8 @@ class EditNoteViewController: UIViewController {
         messageBox.frame.origin.y = separatorTwo.frame.maxY + labelInset
         messageBox.delegate = self
         messageBox.autocapitalizationType = UITextAutocapitalizationType.Sentences
-        messageBox.autocorrectionType = UITextAutocorrectionType.No
-        messageBox.spellCheckingType = UITextSpellCheckingType.Default
+        messageBox.autocorrectionType = UITextAutocorrectionType.Yes
+        messageBox.spellCheckingType = UITextSpellCheckingType.Yes
         messageBox.keyboardAppearance = UIKeyboardAppearance.Dark
         messageBox.keyboardType = UIKeyboardType.Default
         messageBox.returnKeyType = UIReturnKeyType.Default

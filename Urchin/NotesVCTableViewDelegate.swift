@@ -16,21 +16,32 @@ extension NotesViewController: UITableViewDelegate {
         if (tableView.isEqual(notesTable)) {
             // NotesTable
             
+            let note = filteredNotes[indexPath.row]
+            
             // Create labels that 'determine' height of cell
             
             // Configure the date label size first using extended dateFormatter
             // used for sizing usernameLabel
             let timedateLabel = UILabel()
             let dateFormatter = NSDateFormatter()
-            timedateLabel.attributedText = dateFormatter.attributedStringFromDate(filteredNotes[indexPath.row].timestamp)
+            timedateLabel.attributedText = dateFormatter.attributedStringFromDate(note.timestamp)
             timedateLabel.sizeToFit()
             
             // Configure the username label, with the full name
             let usernameLabel = UILabel()
             let usernameWidth = self.view.frame.width - (2 * noteCellInset + timedateLabel.frame.width + 2 * labelSpacing)
             usernameLabel.frame.size = CGSize(width: usernameWidth, height: CGFloat.max)
-            usernameLabel.text = filteredNotes[indexPath.row].user!.fullName
-            usernameLabel.font = mediumBoldFont
+            var attrUsernameLabel = NSMutableAttributedString(string: note.user!.fullName!, attributes: [NSForegroundColorAttributeName: noteTextColor, NSFontAttributeName: mediumBoldFont])
+            if (note.groupid != note.userid) {
+                for group in groups {
+                    if (group.userid == note.groupid) {
+                        attrUsernameLabel = NSMutableAttributedString(string: "\(note.user!.fullName!) to \(group.fullName!)", attributes: [NSForegroundColorAttributeName: noteTextColor, NSFontAttributeName: mediumBoldFont])
+                        attrUsernameLabel.addAttributes([NSForegroundColorAttributeName: darkestGreyColor, NSFontAttributeName: mediumRegularFont], range: NSRange(location: count(note.user!.fullName!), length: count(group.fullName!)))
+                        break
+                    }
+                }
+            }
+            usernameLabel.attributedText = attrUsernameLabel
             usernameLabel.adjustsFontSizeToFitWidth = false
             usernameLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
             usernameLabel.numberOfLines = 0
@@ -38,7 +49,7 @@ extension NotesViewController: UITableViewDelegate {
             
             let messageLabel = UILabel(frame: CGRect(x: 0, y: 0, width: self.view.frame.width - 2*noteCellInset, height: CGFloat.max))
             let hashtagBolder = HashtagBolder()
-            let attributedText = hashtagBolder.boldHashtags(filteredNotes[indexPath.row].messagetext)
+            let attributedText = hashtagBolder.boldHashtags(note.messagetext)
             messageLabel.attributedText = attributedText
             messageLabel.adjustsFontSizeToFitWidth = false
             messageLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
@@ -47,7 +58,7 @@ extension NotesViewController: UITableViewDelegate {
             
             let cellHeight: CGFloat
             // if the user who created the note is the same as the current user, allow space for edit button
-            if (filteredNotes[indexPath.row].user!.userid == user.userid) {
+            if (note.user!.userid == user.userid) {
                 cellHeight = noteCellInset + usernameLabel.frame.height + 2 * labelSpacing + messageLabel.frame.height + 2 * labelSpacing + editButtonHeight + noteCellInset
             } else {
                 cellHeight = noteCellInset + usernameLabel.frame.height + 2 * labelSpacing + messageLabel.frame.height + noteCellInset
