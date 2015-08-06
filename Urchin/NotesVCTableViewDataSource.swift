@@ -52,36 +52,42 @@ extension NotesViewController: UITableViewDataSource {
         } else {
             // Configure UserDropDownCell
             
+            let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(UserDropDownCell), forIndexPath: indexPath) as! UserDropDownCell
+            
             if (indexPath.section == 0 && indexPath.row == 0) {
                 // All Users / #nofilter cell
-                let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(UserDropDownCell), forIndexPath: indexPath) as! UserDropDownCell
                 
                 cell.configure("all")
                 
-                return cell
             } else if (indexPath.section == 1 && indexPath.row == 0) {
                 // Logout cell
-                let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(UserDropDownCell), forIndexPath: indexPath) as! UserDropDownCell
                 
                 cell.configure("logout")
                 
-                return cell
+            } else if (indexPath.section == 2 && indexPath.row == 0) {
+                
+                // Version cell
+                cell.configure("version")
+                
+                cell.selectionStyle = .None
+                cell.userInteractionEnabled = false
+                
             } else {
                 // Individual group / filter cell
-                let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(UserDropDownCell), forIndexPath: indexPath) as! UserDropDownCell
                 
                 cell.configure(groups[indexPath.row - 1], arrow: true, bold: false)
                 
-                return cell
             }
+            
+            return cell
         }
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         if (tableView.isEqual(dropDownMenu)) {
             // DropDownMenu
-            // Filters and Logout = 2
-            return 2
+            // Filters, Logout, and Version = 3
+            return 3
         } else {
             // Just a list of notes
             // Possibly change if conversations are shown in feed?
@@ -99,9 +105,14 @@ extension NotesViewController: UITableViewDataSource {
             if (section == 0) {
                 // Number of groups + 1 for 'All' / #nofilter
                 return groups.count + 1
-            } else {
+            } else if (section == 1) {
                 // Only 1 for 'Logout'
                 return 1
+            } else if (section == 2) {
+                // Version number
+                return 1
+            } else {
+                return 0
             }
         } else {
             // Why not?

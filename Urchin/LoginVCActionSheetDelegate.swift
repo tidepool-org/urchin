@@ -12,23 +12,15 @@ import UIKit
 extension LogInViewController: UIActionSheetDelegate {
     
     func actionSheet(actionSheet: UIActionSheet, clickedButtonAtIndex buttonIndex: Int) {
-        switch actionSheet.buttonTitleAtIndex(buttonIndex) {
-        case "Development":
-            NSLog("Switched to development server")
-            baseURL = develURL
-            break
-        case "Staging":
-            NSLog("Switched to staging server")
-            baseURL = stagingURL
-            break
-        case "Production":
-            NSLog("Switched to production server")
-            baseURL = prodURL
-            break
-        default:
-            NSLog("Server selection: case not handled")
-            break
-        }
+        let server = actionSheet.buttonTitleAtIndex(buttonIndex)
+        
+        baseURL = servers[server]!
+        
+        version.text = UIApplication.versionBuildServer()
+        version.sizeToFit()
+        version.frame.origin.x = self.view.frame.width / 2 - version.frame.width / 2
+                
+        NSLog("Switched to \(server) server")
     }
     
 }

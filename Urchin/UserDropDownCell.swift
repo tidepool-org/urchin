@@ -74,6 +74,20 @@ class UserDropDownCell: UITableViewCell {
             separator.backgroundColor = whiteQuarterAlpha
             self.addSubview(separator)
             
+        } else if (key == "version") {
+            // Configure the name label to contain the version
+            self.nameLabel.text = UIApplication.versionBuildServer()
+            nameLabel.font = mediumBoldFont
+            nameLabel.sizeToFit()
+            nameLabel.frame.origin.x = self.frame.width / 2 - nameLabel.frame.width / 2
+            nameLabel.frame.origin.y = userCellThickSeparator + userCellInset
+            
+            // Configure the thick separator at the top
+            separator.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: userCellThickSeparator)
+            separator.backgroundColor = whiteQuarterAlpha
+            self.addSubview(separator)
+            
+            rightView.hidden = true
         }
         
         let imageWidth = rightArrow.size.width

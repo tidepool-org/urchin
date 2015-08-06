@@ -13,7 +13,7 @@ class LogInViewController : UIViewController, UIActionSheetDelegate {
     
     // Secret, secret! I got a secret! (Change the server)
     var corners: [CGRect] = []
-    var cornersBool: [Bool] = [false, false, false]
+    var cornersBool: [Bool] = []
     
     // UI Elements
     let logoView: UIImageView = UIImageView()
@@ -29,6 +29,7 @@ class LogInViewController : UIViewController, UIActionSheetDelegate {
     let signUpLabel: UILabel = UILabel()
     let logInButton: UIButton = UIButton()
     let tidepoolLogoView: UIImageView = UIImageView()
+    let version: UILabel = UILabel()
     
     // Helper values
     var isLogoDisplayed: Bool = true
@@ -73,16 +74,14 @@ class LogInViewController : UIViewController, UIActionSheetDelegate {
         self.view.addSubview(tidepoolLogoView)
         
         // configure version number for below Tidepool logo, add version number to view
-        let versionNumber = UILabel(frame: CGRectZero)
-        
-        versionNumber.text = "v.\(UIApplication.appVersion())"
-        versionNumber.font = smallRegularFont
-        versionNumber.textColor = blackishColor
-        versionNumber.sizeToFit()
-        versionNumber.frame.origin.x = self.view.frame.width / 2 - versionNumber.frame.width / 2
-        versionNumber.frame.origin.y = tidepoolLogoView.frame.maxY + labelSpacing
+        version.text = UIApplication.versionBuildServer()
+        version.font = smallRegularFont
+        version.textColor = blackishColor
+        version.sizeToFit()
+        version.frame.origin.x = self.view.frame.width / 2 - version.frame.width / 2
+        version.frame.origin.y = tidepoolLogoView.frame.maxY + labelSpacing
             
-        self.view.addSubview(versionNumber)
+        self.view.addSubview(version)
         
         let notificationCenter = NSNotificationCenter.defaultCenter()
         
@@ -111,8 +110,12 @@ class LogInViewController : UIViewController, UIActionSheetDelegate {
         let width: CGFloat = 100
         let height: CGFloat = width
         corners.append(CGRect(x: 0, y: 0, width: width, height: height))
+        corners.append(CGRect(x: self.view.frame.width - width, y: 0, width: width, height: height))
         corners.append(CGRect(x: 0, y: self.view.frame.height - height, width: width, height: height))
         corners.append(CGRect(x: self.view.frame.width - width, y: self.view.frame.height - height, width: width, height: height))
+        for (var i = 0; i < corners.count; i++) {
+            cornersBool.append(false)
+        }
     }
     
     func checkCorners() {
@@ -126,14 +129,18 @@ class LogInViewController : UIViewController, UIActionSheetDelegate {
     }
     
     func showServerActionSheet() {
-        cornersBool = [false, false, false]
+        for (var i = 0; i < corners.count; i++) {
+            cornersBool[i] = false
+        }
         
         let actionSheet = UIActionSheet()
         actionSheet.delegate = self
         actionSheet.title = "Server"
-        actionSheet.addButtonWithTitle("Development")
-        actionSheet.addButtonWithTitle("Staging")
-        actionSheet.addButtonWithTitle("Production")
+        
+        for server in servers {
+            actionSheet.addButtonWithTitle(server.0)
+        }
+        
         actionSheet.showInView(self.view)
     }
     

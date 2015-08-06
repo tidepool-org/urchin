@@ -19,9 +19,17 @@ extension UIApplication {
         return NSBundle.mainBundle().objectForInfoDictionaryKey(kCFBundleVersionKey as String) as! String
     }
     
-    class func versionBuild() -> String {
+    class func versionBuildServer() -> String {
         let version = appVersion(), build = appBuild()
         
-        return version == build ? "v\(version)" : "v\(version)(\(build))"
+        var serverName: String = ""
+        for server in servers {
+            if (server.1 == baseURL) {
+                serverName = server.0
+                break
+            }
+        }
+        
+        return serverName.isEmpty ? "v.\(version) (\(build))" : "v.\(version) (\(build)) on \(serverName)"
     }
 }

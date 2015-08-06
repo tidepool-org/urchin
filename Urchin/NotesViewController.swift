@@ -351,9 +351,9 @@ class NotesViewController: UIViewController {
         // Configure dropDownMenu, same width as view
         let numGroups = min(groups.count, maxGroupsShownInDropdown)
         if (numGroups == groups.count) {
-            self.dropDownHeight = CGFloat(numGroups+2)*userCellHeight + CGFloat(numGroups)*userCellThinSeparator + 2*userCellThickSeparator
+            self.dropDownHeight = CGFloat(numGroups+3)*userCellHeight + CGFloat(numGroups)*userCellThinSeparator + 2*userCellThickSeparator
         } else {
-            self.dropDownHeight = (CGFloat(numGroups)+2.5)*userCellHeight + CGFloat(numGroups)*userCellThinSeparator + 2*userCellThickSeparator
+            self.dropDownHeight = (CGFloat(numGroups)+3.5)*userCellHeight + CGFloat(numGroups)*userCellThinSeparator + 2*userCellThickSeparator
         }
         let dropDownWidth = self.view.frame.width
         self.dropDownMenu = UITableView(frame: CGRect(x: 0, y: -dropDownHeight, width: dropDownWidth, height: dropDownHeight))

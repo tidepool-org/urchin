@@ -86,6 +86,17 @@ extension NotesViewController: UITableViewDelegate {
                 nameLabel.sizeToFit()
                 
                 return userCellInset + nameLabel.frame.height + userCellInset + (userCellThickSeparator - userCellThinSeparator)
+            } else if (indexPath.section == 2 && indexPath.row == 0) {
+                
+                // Version
+                
+                let nameLabel = UILabel()
+                nameLabel.text = UIApplication.versionBuildServer()
+                nameLabel.font = mediumBoldFont
+                nameLabel.sizeToFit()
+                
+                return userCellInset + nameLabel.frame.height + userCellInset + userCellThickSeparator
+                
             } else {
                 // Some group / team / filter
                 
@@ -136,7 +147,7 @@ extension NotesViewController: UITableViewDelegate {
                 self.notesTable.setContentOffset(CGPointMake(0, -self.notesTable.contentInset.top), animated: true)
                 // toggle the dropDownMenu (hides the dropDownMenu)
                 self.dropDownMenuPressed()
-            } else {
+            } else if (indexPath.section == 1) {
                 // Logout selected
                 // Unwind VC
                 self.apiConnector.trackMetric("Logged Out")

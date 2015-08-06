@@ -467,10 +467,12 @@ let unknownErrorMessage: String = "An unknown error occurred while logging in. W
     Secret, secret! I got a secret!
     (Change the server)
 */
-var baseURL: String = develURL
-let develURL: String = "https://devel-api.tidepool.io"
-let stagingURL: String = "https://staging-api.tidepool.io"
-let prodURL: String = "https://api.tidepool.io"
+var baseURL: String = servers["Development"]!
+let servers: [String: String] = [
+    "Production": "https://api.tidepool.io",
+    "Development": "https://devel-api.tidepool.io",
+    "Staging": "https://staging-api.tidepool.io"
+]
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
