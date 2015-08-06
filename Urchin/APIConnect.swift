@@ -548,6 +548,96 @@ class APIConnector {
         request("PUT", urlExtension: urlExtension, headerDict: headerDict, body: body, preRequest: preRequest, completion: completion)
     }
     
+    // Save the currently used server.
+    // So when the user returns, the server is the last set server.
+    //      --> Primarily Tidepool employees changing server.
+    func saveServer(serverName: String) {
+        
+        // Store the appDelegate
+        let appDelegate =
+        UIApplication.sharedApplication().delegate as! AppDelegate
+        
+        // Store the managedContext
+        let managedContext = appDelegate.managedObjectContext!
+        
+        // Open a new fetch request
+        let fetchRequest = NSFetchRequest(entityName:"Server")
+        
+        var error: NSError?
+        
+        // Execute the fetch from CoreData
+        let fetchedResults =
+        managedContext.executeFetchRequest(fetchRequest,
+            error: &error) as? [NSManagedObject]
+        
+        if let results = fetchedResults {
+            
+            if (results.count == 0) {
+                // Create a new server for remembering
+                
+                // Initialize the new entity
+                let entity =  NSEntityDescription.entityForName("Server",
+                    inManagedObjectContext:
+                    managedContext)
+                
+                // Let it be a hashtag in the managedContext
+                let loginObj = NSManagedObject(entity: entity!,
+                    insertIntoManagedObjectContext:managedContext)
+                
+                // Save the encrypted login information
+                loginObj.setValue(serverName, forKey: "serverName")
+                
+            } else if (results.count == 1) {
+                // Set the value to the new server
+                results[0].setValue(serverName, forKey: "serverName")
+            }
+            
+            // Attempt to save the server
+            var errorTwo: NSError?
+            if !managedContext.save(&errorTwo) {
+                NSLog("Could not save edited remember me info: \(errorTwo), \(errorTwo?.userInfo)")
+            } else {
+                baseURL = servers[serverName]!
+            }
+            
+        } else {
+            NSLog("Could not fetch server information: \(error), \(error!.userInfo)")
+        }
+    }
+    
+    func loadServer() {
+        
+        // Store the appDelegate
+        let appDelegate =
+        UIApplication.sharedApplication().delegate as! AppDelegate
+        
+        // Store the managedContext
+        let managedContext = appDelegate.managedObjectContext!
+        
+        // Open a new fetch request
+        let fetchRequest = NSFetchRequest(entityName:"Server")
+        
+        var error: NSError?
+        
+        // Execute the fetch from CoreData
+        let fetchedResults =
+        managedContext.executeFetchRequest(fetchRequest,
+            error: &error) as? [NSManagedObject]
+        
+        if let results = fetchedResults {
+            if results.count == 1 {
+                
+                let serverName = results[0].valueForKey("serverName") as! String
+                
+                baseURL = servers[serverName]!
+                
+            }
+        } else {
+            NSLog("Could not fetch server information: \(error), \(error!.userInfo)")
+        }
+        
+    }
+    
     func alertWithOkayButton(title: String, message: String) {
         var unknownErrorAlert: UIAlertView = UIAlertView()
         unknownErrorAlert.title = title

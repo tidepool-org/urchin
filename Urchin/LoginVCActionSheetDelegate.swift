@@ -12,15 +12,15 @@ import UIKit
 extension LogInViewController: UIActionSheetDelegate {
     
     func actionSheet(actionSheet: UIActionSheet, clickedButtonAtIndex buttonIndex: Int) {
-        let server = actionSheet.buttonTitleAtIndex(buttonIndex)
+        let serverName = actionSheet.buttonTitleAtIndex(buttonIndex)
         
-        baseURL = servers[server]!
+        apiConnector.saveServer(serverName)
         
         version.text = UIApplication.versionBuildServer()
         version.sizeToFit()
         version.frame.origin.x = self.view.frame.width / 2 - version.frame.width / 2
                 
-        NSLog("Switched to \(server) server")
+        NSLog("Switched to \(serverName) server")
     }
     
 }

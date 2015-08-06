@@ -72,13 +72,13 @@
 		AA7920251B62AB790046038B /* NoteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABCEFAB1B3232C60064FE49 /* NoteCell.swift */; };
 		AA7920271B62AB920046038B /* FadeAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB6B0521B605C440051472C /* FadeAnimator.swift */; };
 		AA7920281B62AB9D0046038B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABCEF891B3231910064FE49 /* AppDelegate.swift */; };
+		AA829BB91B7409E500DFEBA0 /* UrchinData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = AA829BB71B7409E500DFEBA0 /* UrchinData.xcdatamodeld */; };
 		AA8301001B4D986300F8ADE6 /* AddNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA8300FF1B4D986300F8ADE6 /* AddNoteViewController.swift */; };
 		AA8301031B4DB4A400F8ADE6 /* closex.png in Resources */ = {isa = PBXBuildFile; fileRef = AA8301011B4DB4A400F8ADE6 /* closex.png */; };
 		AA8301041B4DB4A400F8ADE6 /* closex@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AA8301021B4DB4A400F8ADE6 /* closex@2x.png */; };
 		AA993E301B3316C10027804C /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA993E2F1B3316C10027804C /* LoginViewController.swift */; };
 		AAA3F3131B508384000EB344 /* HashtagBolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA3F3121B508384000EB344 /* HashtagBolder.swift */; };
 		AAB6B0531B605C440051472C /* FadeAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB6B0521B605C440051472C /* FadeAnimator.swift */; };
-		AAB95B9F1B682E1800912D83 /* UrchinData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = AAEFB16B1B5062CE000EF8B4 /* UrchinData.xcdatamodeld */; };
 		AAB95BA01B682E5200912D83 /* OpenSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AA66BA831B4C40FD00CCB008 /* OpenSans-Bold.ttf */; };
 		AAB95BA11B682E5600912D83 /* OpenSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AA66BA891B4C426E00CCB008 /* OpenSans-Regular.ttf */; };
 		AAB95BA21B682E6300912D83 /* closex.png in Resources */ = {isa = PBXBuildFile; fileRef = AA8301011B4DB4A400F8ADE6 /* closex.png */; };
@@ -116,7 +116,6 @@
 		AADECC7D1B4F34AA0043E888 /* camera@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AADECC791B4F34AA0043E888 /* camera@2x.png */; };
 		AAE778A41B4B408F00949CEE /* note.png in Resources */ = {isa = PBXBuildFile; fileRef = AAE778A21B4B408F00949CEE /* note.png */; };
 		AAE778A51B4B408F00949CEE /* note@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AAE778A31B4B408F00949CEE /* note@2x.png */; };
-		AAEFB16D1B5062CE000EF8B4 /* UrchinData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = AAEFB16B1B5062CE000EF8B4 /* UrchinData.xcdatamodeld */; };
 		AAFBE7DE1B69814B007E480D /* UIApplicationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAFBE7DD1B69814B007E480D /* UIApplicationExtension.swift */; };
 		AAFBE7DF1B698229007E480D /* UIApplicationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAFBE7DD1B69814B007E480D /* UIApplicationExtension.swift */; };
 /* End PBXBuildFile section */
@@ -168,6 +167,7 @@
 		AA698EEC1B545A07004154E0 /* EditNoteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditNoteViewController.swift; sourceTree = "<group>"; };
 		AA6A7D791B62B1A4008215D8 /* apiConnectorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = apiConnectorTests.swift; sourceTree = "<group>"; };
 		AA6AF8F01B5EA81F0011F246 /* dateFormatterExtensionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = dateFormatterExtensionTests.swift; sourceTree = "<group>"; };
+		AA829BB81B7409E500DFEBA0 /* UrchinData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = UrchinData.xcdatamodel; sourceTree = "<group>"; };
 		AA8300FF1B4D986300F8ADE6 /* AddNoteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddNoteViewController.swift; sourceTree = "<group>"; };
 		AA8301011B4DB4A400F8ADE6 /* closex.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = closex.png; sourceTree = "<group>"; };
 		AA8301021B4DB4A400F8ADE6 /* closex@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "closex@2x.png"; sourceTree = "<group>"; };
@@ -193,7 +193,6 @@
 		AADECC791B4F34AA0043E888 /* camera@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera@2x.png"; sourceTree = "<group>"; };
 		AAE778A21B4B408F00949CEE /* note.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = note.png; sourceTree = "<group>"; };
 		AAE778A31B4B408F00949CEE /* note@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "note@2x.png"; sourceTree = "<group>"; };
-		AAEFB16C1B5062CE000EF8B4 /* UrchinData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = UrchinData.xcdatamodel; sourceTree = "<group>"; };
 		AAFBE7DD1B69814B007E480D /* UIApplicationExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIApplicationExtension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -226,7 +225,7 @@
 		AA08280B1B5D7AC80016A7A3 /* Core Data */ = {
 			isa = PBXGroup;
 			children = (
-				AAEFB16B1B5062CE000EF8B4 /* UrchinData.xcdatamodeld */,
+				AA829BB71B7409E500DFEBA0 /* UrchinData.xcdatamodeld */,
 			);
 			name = "Core Data";
 			sourceTree = "<group>";
@@ -643,7 +642,6 @@
 			files = (
 				AA698EED1B545A07004154E0 /* EditNoteViewController.swift in Sources */,
 				AA6932091B66E8260057F0A0 /* AddNoteVCAlertViewDelegate.swift in Sources */,
-				AAEFB16D1B5062CE000EF8B4 /* UrchinData.xcdatamodeld in Sources */,
 				AA6931F31B66DD6F0057F0A0 /* LoginVCTransitionDelegate.swift in Sources */,
 				AAB6B0531B605C440051472C /* FadeAnimator.swift in Sources */,
 				AA4AB35C1B6AF29100FEA705 /* LoginVCNetworkConnection.swift in Sources */,
@@ -660,6 +658,7 @@
 				AA6931FA1B66E0100057F0A0 /* NotesVCTableViewDelegate.swift in Sources */,
 				AA6931F81B66DE4E0057F0A0 /* NotesVCTableViewDataSource.swift in Sources */,
 				AA3652CC1B34A163001F514D /* Patient.swift in Sources */,
+				AA829BB91B7409E500DFEBA0 /* UrchinData.xcdatamodeld in Sources */,
 				AA6932001B66E5450057F0A0 /* AddNoteVCTextViewDelegate.swift in Sources */,
 				AA69320E1B66E99B0057F0A0 /* EditNoteVCAlertViewDelegate.swift in Sources */,
 				AA03FB8A1B5848FD001B9435 /* APIConnect.swift in Sources */,
@@ -682,7 +681,6 @@
 			files = (
 				AA7920211B62AB5A0046038B /* EditNoteViewController.swift in Sources */,
 				AA7920271B62AB920046038B /* FadeAnimator.swift in Sources */,
-				AAB95B9F1B682E1800912D83 /* UrchinData.xcdatamodeld in Sources */,
 				AA4AB35D1B6AF31400FEA705 /* LoginVCNetworkConnection.swift in Sources */,
 				AA6932041B66E6210057F0A0 /* AddNoteVCTableViewDataSource.swift in Sources */,
 				AA6AF8F11B5EA81F0011F246 /* dateFormatterExtensionTests.swift in Sources */,
@@ -932,13 +930,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		AAEFB16B1B5062CE000EF8B4 /* UrchinData.xcdatamodeld */ = {
+		AA829BB71B7409E500DFEBA0 /* UrchinData.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				AAEFB16C1B5062CE000EF8B4 /* UrchinData.xcdatamodel */,
+				AA829BB81B7409E500DFEBA0 /* UrchinData.xcdatamodel */,
 			);
-			currentVersion = AAEFB16C1B5062CE000EF8B4 /* UrchinData.xcdatamodel */;
-			path = UrchinData.xcdatamodeld;
+			currentVersion = AA829BB81B7409E500DFEBA0 /* UrchinData.xcdatamodel */;
+			name = UrchinData.xcdatamodeld;
+			path = ../UrchinData.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};

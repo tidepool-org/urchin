@@ -91,6 +91,7 @@ class LogInViewController : UIViewController, UIActionSheetDelegate {
         notificationCenter.addObserver(self, selector: "prepareLogin", name: "prepareLogin", object: nil)
 
         if (self.isConnectedToNetwork()) {
+            apiConnector.loadServer()
             apiConnector.login()
         } else {
             NSLog("Not connected to network")
