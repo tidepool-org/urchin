@@ -461,7 +461,7 @@ let invalidLogin: String = "Invalid Login"
 let invalidLoginMessage: String = "Wrong username or password."
 
 let unknownError: String = "Unknown Error Occurred"
-let unknownErrorMessage: String = "An unknown error occurred while logging in. We are working hard to resolve this issue."
+let unknownErrorMessage: String = "An unknown error occurred. We are working hard to resolve this issue."
 
 /*
     Secret, secret! I got a secret!

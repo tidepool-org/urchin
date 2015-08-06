@@ -73,16 +73,6 @@ class LogInViewController : UIViewController, UIActionSheetDelegate {
         
         self.view.addSubview(tidepoolLogoView)
         
-        // configure version number for below Tidepool logo, add version number to view
-        version.text = UIApplication.versionBuildServer()
-        version.font = smallRegularFont
-        version.textColor = blackishColor
-        version.sizeToFit()
-        version.frame.origin.x = self.view.frame.width / 2 - version.frame.width / 2
-        version.frame.origin.y = tidepoolLogoView.frame.maxY + labelSpacing
-            
-        self.view.addSubview(version)
-        
         let notificationCenter = NSNotificationCenter.defaultCenter()
         
         // add observer for directLogin
@@ -176,6 +166,16 @@ class LogInViewController : UIViewController, UIActionSheetDelegate {
             
             // add observer for makeTransition to NotesVC
             notificationCenter.addObserver(self, selector: "makeTransition", name: "makeTransitionToNotes", object: nil)
+            
+            // configure version number for below Tidepool logo, add version number to view
+            version.text = UIApplication.versionBuildServer()
+            version.font = smallRegularFont
+            version.textColor = blackishColor
+            version.sizeToFit()
+            version.frame.origin.x = self.view.frame.width / 2 - version.frame.width / 2
+            version.frame.origin.y = tidepoolLogoView.frame.maxY + labelSpacing
+            
+            self.view.addSubview(version)
             
             // configure the sign up image
             signUpImage.image = signUpButtonImage
