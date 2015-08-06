@@ -342,6 +342,7 @@ class HashtagsView: UIView {
         hashtagButton.layer.borderColor = hashtagBorderColor.CGColor
         hashtagButton.addTarget(self, action: "hashtagReleased:", forControlEvents: .TouchUpInside)
         hashtagButton.addTarget(self, action: "hashtagPressed:", forControlEvents: .TouchDown)
+        hashtagButton.addTarget(self, action: "hashtagDragExited:", forControlEvents: .TouchDragExit)
         
         return hashtagButton
     }
@@ -356,5 +357,11 @@ class HashtagsView: UIView {
     // A hashtag button was pressed down, so change the color of the button to show it
     func hashtagPressed(sender: UIButton!) {
         sender.backgroundColor = hashtagHighlightedColor
+    }
+    
+    // A hashtag button was pressed down then dragged out, so change the color back
+    func hashtagDragExited(sender: UIButton!) {
+        sender.backgroundColor = hashtagColor
+        sender.sendActionsForControlEvents(.TouchCancel)
     }
 }
