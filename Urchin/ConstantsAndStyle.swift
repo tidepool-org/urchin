@@ -467,7 +467,7 @@ let unknownErrorMessage: String = "An unknown error occurred. We are working har
     Secret, secret! I got a secret!
     (Change the server)
 */
-var baseURL: String = servers["Development"]!
+var baseURL: String = servers["Production"]!
 let servers: [String: String] = [
     "Production": "https://api.tidepool.io",
     "Development": "https://devel-api.tidepool.io",
