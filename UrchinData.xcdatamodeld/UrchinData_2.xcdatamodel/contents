@@ -8,8 +8,12 @@
         <attribute name="expiration" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="login" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
+    <entity name="Server" syncable="YES">
+        <attribute name="serverName" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
     <elements>
         <element name="Hashtag" positionX="-45" positionY="0" width="128" height="30"/>
         <element name="Login" positionX="-18" positionY="27" width="128" height="30"/>
+        <element name="Server" positionX="-27" positionY="9" width="128" height="60"/>
     </elements>
 </model>

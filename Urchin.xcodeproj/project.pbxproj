@@ -138,6 +138,7 @@
 		AA3652C31B338525001F514D /* NotesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotesViewController.swift; sourceTree = "<group>"; };
 		AA3652CB1B34A163001F514D /* Patient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Patient.swift; sourceTree = "<group>"; };
 		AA3652CD1B34A8E4001F514D /* UserDropDownCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDropDownCell.swift; sourceTree = "<group>"; };
+		AA4184FB1B74307700EE53C3 /* UrchinData_2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = UrchinData_2.xcdatamodel; sourceTree = "<group>"; };
 		AA4AB35B1B6AF29100FEA705 /* LoginVCNetworkConnection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginVCNetworkConnection.swift; sourceTree = "<group>"; };
 		AA54DBBE1B596DE7005F8448 /* LoadingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		AA66BA771B4C292400CCB008 /* down.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = down.png; sourceTree = "<group>"; };
@@ -933,9 +934,10 @@
 		AA829BB71B7409E500DFEBA0 /* UrchinData.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				AA4184FB1B74307700EE53C3 /* UrchinData_2.xcdatamodel */,
 				AA829BB81B7409E500DFEBA0 /* UrchinData.xcdatamodel */,
 			);
-			currentVersion = AA829BB81B7409E500DFEBA0 /* UrchinData.xcdatamodel */;
+			currentVersion = AA4184FB1B74307700EE53C3 /* UrchinData_2.xcdatamodel */;
 			name = UrchinData.xcdatamodeld;
 			path = ../UrchinData.xcdatamodeld;
 			sourceTree = "<group>";
