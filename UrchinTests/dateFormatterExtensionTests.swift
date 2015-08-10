@@ -30,7 +30,7 @@ class dateFormatterExtensionTests: XCTestCase {
         let date = NSDate(timeIntervalSince1970: 946729800)
         
         // Expected result of formatted string.
-        let expected = NSMutableAttributedString(string: "Saturday 1.1.00 12:30pm", attributes: [NSForegroundColorAttributeName: UIColor.blackColor(), NSFontAttributeName: UIFont(name: "OpenSans", size: 12.5)!])
+        let expected = NSMutableAttributedString(string: "Saturday 1/1/00 12:30pm", attributes: [NSForegroundColorAttributeName: UIColor.blackColor(), NSFontAttributeName: UIFont(name: "OpenSans", size: 12.5)!])
         // Bold the time at the end.
         expected.addAttribute(NSFontAttributeName, value: UIFont(name: "OpenSans-Bold", size: 12.5)!, range: NSRange(location: 16, length: 7))
         

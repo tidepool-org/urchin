@@ -26,7 +26,7 @@ class apiConnectorTests: XCTestCase {
         super.tearDown()
     }
     
-    func testLoginFail() {
+    func testALoginFail() {
         // Expectation to be fulfilled once request returns with correct response.
         let expectation = expectationWithDescription("Asynchronous request")
         
@@ -60,7 +60,7 @@ class apiConnectorTests: XCTestCase {
         waitForExpectationsWithTimeout(5.0, handler: nil)
     }
     
-    func testLoginSuccess() {
+    func testBLoginSuccess() {
         // Expectation to be fulfilled once request returns with correct response.
         let expectation = expectationWithDescription("Asynchronous request")
         
@@ -97,10 +97,10 @@ class apiConnectorTests: XCTestCase {
         waitForExpectationsWithTimeout(5.0, handler:nil)
     }
     
-        func testLogout() {
+        func testCLogout() {
 
             // First, perform login request and verify that login was successful.
-            testLoginSuccess()
+            testBLoginSuccess()
             
             // Expectation to be fulfilled once request returns with correct response.
             let expectation = expectationWithDescription("Logout request")
@@ -131,15 +131,15 @@ class apiConnectorTests: XCTestCase {
         }
 
     
-    func testFindProfile() {
+    func testDFindProfile() {
         
         // First, perform login request and verify that login was successful.
-        testLoginSuccess()
+        testBLoginSuccess()
         
         // Expectation to be fulfilled once request returns with correct response.
         let expectation = expectationWithDescription("Profile request")
         
-        let urlExtension = "/metadata/" + "218ab599e9" + "/profile"
+        let urlExtension = "/metadata/" + "c8418d80ea" + "/profile"
         
         let headerDict = ["x-tidepool-session-token":"\(apiConnector.x_tidepool_session_token)"]
         
@@ -166,15 +166,15 @@ class apiConnectorTests: XCTestCase {
         waitForExpectationsWithTimeout(5.0, handler: nil)
     }
     
-    func testGetViewableUsers() {
+    func testEGetViewableUsers() {
 
         // First, perform login request and verify that login was successful.
-        testLoginSuccess()
+        testBLoginSuccess()
         
         // Expectation to be fulfilled once request returns with correct response.
         let expectation = expectationWithDescription("Viewable users request")
         
-        let urlExtension = "/access/groups/" + "218ab599e9"
+        let urlExtension = "/access/groups/" + "c8418d80ea"
         
         let headerDict = ["x-tidepool-session-token":"\(apiConnector.x_tidepool_session_token)"]
         
@@ -201,10 +201,10 @@ class apiConnectorTests: XCTestCase {
         waitForExpectationsWithTimeout(5.0, handler: nil)
     }
     
-    func testGetNotesNoNotes() {
+    func testFGetNotesNoNotes() {
         
         // First, perform login request and verify that login was successful.
-        testLoginSuccess()
+        testBLoginSuccess()
         
         // Expectation to be fulfilled once request returns with correct response.
         let expectation = expectationWithDescription("Asynchronous request")
@@ -212,7 +212,7 @@ class apiConnectorTests: XCTestCase {
         // NSDateFormatter extension used to generate ISO-8601 date string for request url extension.
         // Time period in the early 1900s. I don't think I was posting notes to the Tidepool platform then ;)
         let dateFormatter = NSDateFormatter()
-        let urlExtension = "/message/notes/" + "218ab599e9" + "?starttime=" + dateFormatter.isoStringFromDate(NSDate(timeIntervalSinceNow: -2208988800), zone: nil) + "&endtime="  + dateFormatter.isoStringFromDate(NSDate(timeIntervalSinceNow: -2207779200), zone: nil)
+        let urlExtension = "/message/notes/" + "c8418d80ea" + "?starttime=" + dateFormatter.isoStringFromDate(NSDate(timeIntervalSinceNow: -2208988800), zone: nil) + "&endtime="  + dateFormatter.isoStringFromDate(NSDate(timeIntervalSinceNow: -2207779200), zone: nil)
         
         let headerDict = ["x-tidepool-session-token":"\(apiConnector.x_tidepool_session_token)"]
 
@@ -239,22 +239,22 @@ class apiConnectorTests: XCTestCase {
         waitForExpectationsWithTimeout(5.0, handler: nil)
     }
     
-    func testPostNote() {
+    func testGPostNote() {
         
         // First, perform login request and verify that login was successful.
-        testLoginSuccess()
+        testBLoginSuccess()
         
         // Expectation to be fulfilled once request returns with correct response.
         let expectation = expectationWithDescription("Asynchronous request")
         
         // Always sending a note to the group associated with ethan+urchintests@tidepool.org.
-        let urlExtension = "/message/send/" + "218ab599e9"
+        let urlExtension = "/message/send/" + "c8418d80ea"
         
         let headerDict = ["x-tidepool-session-token":"\(apiConnector.x_tidepool_session_token)", "Content-Type":"application/json"]
         
         // Configure the note with userid, groupid, timestamp (right now), and messagetext.
-        note.userid = "218ab599e9"
-        note.groupid = "218ab599e9"
+        note.userid = "c8418d80ea"
+        note.groupid = "c8418d80ea"
         note.timestamp = NSDate()
         note.messagetext = "New note added from test."
         
@@ -293,11 +293,11 @@ class apiConnectorTests: XCTestCase {
         waitForExpectationsWithTimeout(5.0, handler: nil)
     }
 
-    func testEditNote() {
+    func testHEditNote() {
         
         // First, perform post request and verify that the post was successful.
         // Post request will perform login request and verify that it is also successful.
-        testPostNote()
+        testGPostNote()
         
         // Expectation to be fulfilled once request returns with correct response.
         let expectation = expectationWithDescription("Asynchronous request")
@@ -338,16 +338,16 @@ class apiConnectorTests: XCTestCase {
         waitForExpectationsWithTimeout(5.0, handler: nil)
     }
 
-    func testGetNotes() {
+    func testIGetNotes() {
         
         // First, perform login request and verify that login was successful.
-        testLoginSuccess()
+        testBLoginSuccess()
         
         // Expectation to be fulfilled once request returns with correct response.
         let expectation = expectationWithDescription("Asynchronous request")
         
         // Fetch all notes. There will always already be a note posted because the post test occurs before this test.
-        let urlExtension = "/message/notes/" + "218ab599e9" + "?starttime=" + "&endtime="
+        let urlExtension = "/message/notes/" + "c8418d80ea" + "?starttime=" + "&endtime="
         
         let headerDict = ["x-tidepool-session-token":"\(apiConnector.x_tidepool_session_token)"]
         
