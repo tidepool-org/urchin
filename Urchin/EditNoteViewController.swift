@@ -100,6 +100,13 @@ class EditNoteViewController: UIViewController {
         var closeButton: UIBarButtonItem = UIBarButtonItem(image: closeX, style: .Plain, target: self, action: "closeVC:")
         self.navigationItem.setLeftBarButtonItem(closeButton, animated: true)
         
+        if (baseURL == servers["Development"]!) {
+            println("On devel!")
+            
+            var deleteButton: UIBarButtonItem = UIBarButtonItem(title: "Delete", style: .Plain, target: self, action: "deleteNote:")
+            self.navigationItem.setRightBarButtonItem(deleteButton, animated: true)
+        }
+        
         // configure date label
         let dateFormatter = NSDateFormatter()
         timedateLabel.attributedText = dateFormatter.attributedStringFromDate(note.timestamp)
@@ -253,6 +260,19 @@ class EditNoteViewController: UIViewController {
             self.closeDatePicker(false)
             self.dismissViewControllerAnimated(true, completion: nil)
         }
+    }
+    
+    func deleteNote(sender: UIBarButtonItem!) {
+        // Done editing note
+        let notification = NSNotification(name: "doneEditing", object: nil)
+        NSNotificationCenter.defaultCenter().postNotification(notification)
+        
+        let notificationTwo = NSNotification(name: "deleteNote", object: nil)
+        NSNotificationCenter.defaultCenter().postNotification(notificationTwo)
+
+        self.view.endEditing(true)
+        self.closeDatePicker(false)
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
     
     // Toggle the datepicker open or closed depending on if it is currently showing

@@ -155,6 +155,8 @@ class NotesViewController: UIViewController {
         // Listen for when addNoteVC or editNoteVC has been closed without saving or posting
         notificationCenter.addObserver(self, selector: "doneAdding:", name: "doneAdding", object: nil)
         notificationCenter.addObserver(self, selector: "doneEditing:", name: "doneEditing", object: nil)
+        notificationCenter.addObserver(self, selector: "deleteNote:", name: "deleteNote", object: nil)
+
         // Listen for when group metadata has been fetched
         notificationCenter.addObserver(self, selector: "anotherGroup:", name: "anotherGroup", object: nil)
         // Listen for when to open an NewNoteVC
@@ -304,7 +306,15 @@ class NotesViewController: UIViewController {
     func saveNote(sender: AnyObject) {
         addOrEditShowing = false
         
-        apiConnector.editNote(self, editedNote: editNoteViewController!.editedNote, originalNote: editNoteViewController!.note)
+        apiConnector.editNote(self, editedNote: editNoteViewController!.editedNote, originalNote:
+        editNoteViewController!.note)
+    }
+    
+    func deleteNote(sender: AnyObject) {
+        addOrEditShowing = false
+
+        apiConnector.deleteNote(self, noteToDelete: editNoteViewController!.note)
+        
     }
     
     // Fetch and load the groups/teams that user is involved in

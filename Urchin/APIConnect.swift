@@ -548,6 +548,47 @@ class APIConnector {
         request("PUT", urlExtension: urlExtension, headerDict: headerDict, body: body, preRequest: preRequest, completion: completion)
     }
     
+    func deleteNote(notesVC: NotesViewController, noteToDelete: Note) {
+        let urlExtension = "/message/remove/" + noteToDelete.id
+        
+        let headerDict = ["x-tidepool-session-token":"\(x_tidepool_session_token)"]
+        
+        let preRequest = { () -> Void in
+            // nothing to do in the preRequest
+        }
+        
+        let completion = { (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
+            if let httpResponse = response as? NSHTTPURLResponse {
+                if (httpResponse.statusCode == 202) {
+                    NSLog("Deleted note with id \(noteToDelete.id)")
+                    
+                    var i = 0
+                    for note in notesVC.notes {
+                        
+                        if (note.id == noteToDelete.id) {
+                            notesVC.notes.removeAtIndex(i)
+                            break
+                        }
+                        
+                        i++
+                    }
+                    
+                    // filter the notes, sort the notes, reload notes table
+                    notesVC.filterNotes()
+                    notesVC.notesTable.reloadData()
+                } else {
+                    NSLog("Did not delete note with id \(noteToDelete.id) - invalid status code \(httpResponse.statusCode)")
+                    self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
+                }
+            } else {
+                NSLog("Did not delete note with id \(noteToDelete.id) - could not parse response")
+                self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
+            }
+        }
+        
+        request("DELETE", urlExtension: urlExtension, headerDict: headerDict, body: nil, preRequest: preRequest, completion: completion)
+    }
+    
     // Save the currently used server.
     // So when the user returns, the server is the last set server.
     //      --> Primarily Tidepool employees changing server.

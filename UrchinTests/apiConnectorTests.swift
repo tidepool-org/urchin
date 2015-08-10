@@ -13,12 +13,14 @@ class apiConnectorTests: XCTestCase {
     // Initial API connection and note used throughout testing
     var apiConnector: APIConnector = APIConnector()
     let note: Note = Note()
+    var userid: String = ""
     
     override func setUp() {
         super.setUp()
         // Setup code. This method is called before the invocation of each test method in the class.
         // Each test method is a new session.
         apiConnector = APIConnector()
+        baseURL = servers["Development"]!
     }
     
     override func tearDown() {
@@ -83,6 +85,10 @@ class apiConnectorTests: XCTestCase {
                 
                 // Store the session token for further use.
                 self.apiConnector.x_tidepool_session_token = httpResponse.allHeaderFields["x-tidepool-session-token"] as! String
+                
+                var jsonResult: NSDictionary = (NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: nil) as? NSDictionary)!
+                
+                self.userid = jsonResult.valueForKey("userid") as! String
                 // Fulfill the expectation so test passes time constraint.
                 expectation.fulfill()
             } else {
@@ -139,7 +145,7 @@ class apiConnectorTests: XCTestCase {
         // Expectation to be fulfilled once request returns with correct response.
         let expectation = expectationWithDescription("Profile request")
         
-        let urlExtension = "/metadata/" + "c8418d80ea" + "/profile"
+        let urlExtension = "/metadata/" + userid + "/profile"
         
         let headerDict = ["x-tidepool-session-token":"\(apiConnector.x_tidepool_session_token)"]
         
@@ -174,7 +180,7 @@ class apiConnectorTests: XCTestCase {
         // Expectation to be fulfilled once request returns with correct response.
         let expectation = expectationWithDescription("Viewable users request")
         
-        let urlExtension = "/access/groups/" + "c8418d80ea"
+        let urlExtension = "/access/groups/" + userid
         
         let headerDict = ["x-tidepool-session-token":"\(apiConnector.x_tidepool_session_token)"]
         
@@ -212,7 +218,7 @@ class apiConnectorTests: XCTestCase {
         // NSDateFormatter extension used to generate ISO-8601 date string for request url extension.
         // Time period in the early 1900s. I don't think I was posting notes to the Tidepool platform then ;)
         let dateFormatter = NSDateFormatter()
-        let urlExtension = "/message/notes/" + "c8418d80ea" + "?starttime=" + dateFormatter.isoStringFromDate(NSDate(timeIntervalSinceNow: -2208988800), zone: nil) + "&endtime="  + dateFormatter.isoStringFromDate(NSDate(timeIntervalSinceNow: -2207779200), zone: nil)
+        let urlExtension = "/message/notes/" + userid + "?starttime=" + dateFormatter.isoStringFromDate(NSDate(timeIntervalSinceNow: -2208988800), zone: nil) + "&endtime="  + dateFormatter.isoStringFromDate(NSDate(timeIntervalSinceNow: -2207779200), zone: nil)
         
         let headerDict = ["x-tidepool-session-token":"\(apiConnector.x_tidepool_session_token)"]
 
@@ -248,13 +254,13 @@ class apiConnectorTests: XCTestCase {
         let expectation = expectationWithDescription("Asynchronous request")
         
         // Always sending a note to the group associated with ethan+urchintests@tidepool.org.
-        let urlExtension = "/message/send/" + "c8418d80ea"
+        let urlExtension = "/message/send/" + userid
         
         let headerDict = ["x-tidepool-session-token":"\(apiConnector.x_tidepool_session_token)", "Content-Type":"application/json"]
         
         // Configure the note with userid, groupid, timestamp (right now), and messagetext.
-        note.userid = "c8418d80ea"
-        note.groupid = "c8418d80ea"
+        note.userid = userid
+        note.groupid = userid
         note.timestamp = NSDate()
         note.messagetext = "New note added from test."
         
@@ -347,7 +353,7 @@ class apiConnectorTests: XCTestCase {
         let expectation = expectationWithDescription("Asynchronous request")
         
         // Fetch all notes. There will always already be a note posted because the post test occurs before this test.
-        let urlExtension = "/message/notes/" + "c8418d80ea" + "?starttime=" + "&endtime="
+        let urlExtension = "/message/notes/" + userid + "?starttime=" + "&endtime="
         
         let headerDict = ["x-tidepool-session-token":"\(apiConnector.x_tidepool_session_token)"]
         
@@ -372,5 +378,42 @@ class apiConnectorTests: XCTestCase {
         
         // Wait 5.0 seconds until expectation has been fulfilled. If not, fail.
         waitForExpectationsWithTimeout(5.0, handler: nil)
+    }
+    
+    func testJDeleteNote() {
+        
+        // First, perform post request and verify that the post was successful.
+        // Post request will perform login request and verify that it is also successful.
+        testGPostNote()
+        
+        // Expectation to be fulfilled once request returns with correct response.
+        let expectation = expectationWithDescription("Asynchronous request")
+        
+        let urlExtension = "/message/remove/" + note.id
+        
+        let headerDict = ["x-tidepool-session-token":"\(apiConnector.x_tidepool_session_token)"]
+        
+        let preRequest = { () -> Void in
+            // nothing to verify in preRequest
+        }
+        
+        // To be completed once response has been received. Verify that the proper status code was received.
+        let completion = { (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
+            if let httpResponse = response as? NSHTTPURLResponse {
+                // Verify that editing the note was successful.
+                XCTAssertEqual(httpResponse.statusCode, 202, "Request for delete note")
+                // Fulfill the expectation so test passes time constraint.
+                expectation.fulfill()
+            } else {
+                XCTFail("Delete note request")
+            }
+        }
+        
+        // Post the request.
+        apiConnector.request("DELETE", urlExtension: urlExtension, headerDict: headerDict, body: nil, preRequest: preRequest, completion: completion)
+        
+        // Wait 5.0 seconds until expectation has been fulfilled. If not, fail.
+        waitForExpectationsWithTimeout(5.0, handler: nil)
+        
     }
 }
