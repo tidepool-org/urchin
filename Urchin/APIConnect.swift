@@ -381,7 +381,7 @@ class APIConnector {
                 if (httpResponse.statusCode == 200) {
                     NSLog("Found viewable users for user: \(self.user?.userid)")
                     var jsonResult: NSDictionary = (NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: nil) as? NSDictionary)!
-                                        
+                    
                     for key in jsonResult.keyEnumerator() {
                         let group = User(userid: key as! String, apiConnector: self)
                         notesVC.groups.insert(group, atIndex: 0)
