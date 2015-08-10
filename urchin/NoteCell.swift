@@ -43,7 +43,7 @@ class NoteCell: UITableViewCell {
         timedateLabel.sizeToFit()
         // Position timedateLabel
         let timedateX = noteCellInset
-        let timedateY = usernameLabel.frame.maxY + labelSpacing
+        let timedateY = usernameLabel.frame.maxY + labelSpacing / 2
         timedateLabel.frame.origin = CGPoint(x: timedateX, y: timedateY)
         
         // Configure the message label, leverage the hashtag bolder
@@ -56,7 +56,7 @@ class NoteCell: UITableViewCell {
         messageLabel.numberOfLines = 0
         messageLabel.sizeToFit()
         let messageX = noteCellInset
-        let messageY = timedateLabel.frame.maxY + labelSpacing
+        let messageY = timedateLabel.frame.maxY + 2 * labelSpacing
         messageLabel.frame.origin = CGPoint(x: messageX, y: messageY)
         
         contentView.addSubview(usernameLabel)

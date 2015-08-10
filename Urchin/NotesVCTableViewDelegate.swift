@@ -56,7 +56,7 @@ extension NotesViewController: UITableViewDelegate {
             messageLabel.sizeToFit()
             
             // Calculate the total note cell height
-            var cellHeight: CGFloat = noteCellInset + usernameLabel.frame.height + labelSpacing + timedateLabel.frame.height + labelSpacing + messageLabel.frame.height + noteCellInset
+            var cellHeight: CGFloat = noteCellInset + usernameLabel.frame.height + labelSpacing / 2 + timedateLabel.frame.height + 2 * labelSpacing + messageLabel.frame.height + noteCellInset
             // if the user who created the note is the same as the current user, allow space for edit button
             if (note.user!.userid == user.userid) {
                 cellHeight += 2 * labelSpacing + editButtonHeight
