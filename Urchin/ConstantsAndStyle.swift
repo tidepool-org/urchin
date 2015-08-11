@@ -182,24 +182,28 @@ let largeRegularFont: UIFont = UIFont(name: "OpenSans", size: 25)!
     done label for small device screen (Add/EditNoteVC)
     Attributed date format, for bold time (NoteCell/UIDateFormatterExtension)
 */
-let smallBoldFont: UIFont = UIFont(name: "OpenSans-Semibold", size: 12.5)!
+let smallBoldFont: UIFont = UIFont(name: "OpenSans-Bold", size: 12.5)!
 
 /*
     Drop Down Menu selected user (AddNoteVC)
     Bolded hashtags (Hashtag bolder)
-    Username label (NoteCell)
     NoteCell -> heightForRowAtIndexPath (NotesVC)
     Drop down menu "All" and "Logout" (NotesVC)
     Add note label on add note button (NotesVC)
 */
-let mediumBoldFont: UIFont = UIFont(name: "OpenSans-Semibold", size: 17.5)!
+let mediumBoldFont: UIFont = UIFont(name: "OpenSans-Bold", size: 17.5)!
 
 /*
     title label (LoginVC)
 */
-let largeBoldFont: UIFont = UIFont(name: "OpenSans-Semibold", size: 25)!
+let largeBoldFont: UIFont = UIFont(name: "OpenSans-Bold", size: 25)!
 
-/* 
+/*
+    Username label (NoteCell)
+*/
+let mediumSemiboldFont: UIFont = UIFont(name: "OpenSans-Semibold", size: 17.5)!
+
+/*
     title label (LoginVC)
     When drop down menu is exposed, Navigation bar title (NotesVC)
 */

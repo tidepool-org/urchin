@@ -87,7 +87,7 @@ class LogInViewController : UIViewController, UIActionSheetDelegate {
             NSLog("Not connected to network")
             let errorLabel: UILabel = UILabel()
             errorLabel.text = "Please try again when you are connected to a wireless network."
-            errorLabel.font = mediumBoldFont
+            errorLabel.font = mediumSemiboldFont
             errorLabel.textColor = blackishColor
             errorLabel.textAlignment = .Center
             errorLabel.numberOfLines = 0

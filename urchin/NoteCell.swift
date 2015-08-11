@@ -30,10 +30,10 @@ class NoteCell: UITableViewCell {
         
         var attrUsernameLabel: NSMutableAttributedString
         if (groupName.isEmpty) {
-            attrUsernameLabel = NSMutableAttributedString(string: note.user!.fullName!, attributes: [NSForegroundColorAttributeName: noteTextColor, NSFontAttributeName: mediumBoldFont])
+            attrUsernameLabel = NSMutableAttributedString(string: note.user!.fullName!, attributes: [NSForegroundColorAttributeName: noteTextColor, NSFontAttributeName: mediumSemiboldFont])
         } else {
             let text = "\(note.user!.fullName!) to \(groupName)"
-            attrUsernameLabel = NSMutableAttributedString(string: text, attributes: [NSForegroundColorAttributeName: noteTextColor, NSFontAttributeName: mediumBoldFont])
+            attrUsernameLabel = NSMutableAttributedString(string: text, attributes: [NSForegroundColorAttributeName: noteTextColor, NSFontAttributeName: mediumSemiboldFont])
             let length = count(" to ")
             let location = count(attrUsernameLabel.string) - (count(groupName) + length)
             attrUsernameLabel.addAttributes([NSForegroundColorAttributeName: darkestGreyColor, NSFontAttributeName: mediumRegularFont], range: NSRange(location: location, length: length))

@@ -31,12 +31,11 @@ extension NotesViewController: UITableViewDelegate {
                 let usernameLabel = UILabel()
                 let usernameWidth = self.view.frame.width - (2 * noteCellInset)
                 usernameLabel.frame.size = CGSize(width: usernameWidth, height: CGFloat.max)
-                var attrUsernameLabel = NSMutableAttributedString(string: note.user!.fullName!, attributes: [NSForegroundColorAttributeName: noteTextColor, NSFontAttributeName: mediumBoldFont])
+                var attrUsernameLabel = NSMutableAttributedString(string: note.user!.fullName!, attributes: [NSForegroundColorAttributeName: noteTextColor, NSFontAttributeName: mediumSemiboldFont])
                 if (note.groupid != note.userid) {
                     for group in groups {
                         if (group.userid == note.groupid) {
-                            attrUsernameLabel = NSMutableAttributedString(string: "\(note.user!.fullName!) to \(group.fullName!)", attributes: [NSForegroundColorAttributeName: noteTextColor, NSFontAttributeName: mediumBoldFont])
-                            attrUsernameLabel.addAttributes([NSForegroundColorAttributeName: darkestGreyColor, NSFontAttributeName: mediumRegularFont], range: NSRange(location: count(note.user!.fullName!), length: count(group.fullName!)))
+                            attrUsernameLabel = NSMutableAttributedString(string: "\(note.user!.fullName!) to \(group.fullName!)", attributes: [NSForegroundColorAttributeName: noteTextColor, NSFontAttributeName: mediumSemiboldFont])
                             break
                         }
                     }
