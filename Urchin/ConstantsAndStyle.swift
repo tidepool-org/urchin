@@ -36,7 +36,7 @@ let darkestGreyColor: UIColor = UIColor(red: 152/255, green: 152/255, blue: 151/
 /*
     Background color for even numbered noteCells (NotesVC)
 */
-let darkestGreyLowAlpha: UIColor = UIColor(red: 152/255, green: 152/255, blue: 151/255, alpha: 0.23)
+let darkestGreyLowAlpha: UIColor = UIColor(red: 152/255, green: 152/255, blue: 151/255, alpha: 0.2)
 
 /*
     Email and password field text color (LoginVC)
@@ -182,7 +182,7 @@ let largeRegularFont: UIFont = UIFont(name: "OpenSans", size: 25)!
     done label for small device screen (Add/EditNoteVC)
     Attributed date format, for bold time (NoteCell/UIDateFormatterExtension)
 */
-let smallBoldFont: UIFont = UIFont(name: "OpenSans-Bold", size: 12.5)!
+let smallBoldFont: UIFont = UIFont(name: "OpenSans-Semibold", size: 12.5)!
 
 /*
     Drop Down Menu selected user (AddNoteVC)
@@ -192,12 +192,12 @@ let smallBoldFont: UIFont = UIFont(name: "OpenSans-Bold", size: 12.5)!
     Drop down menu "All" and "Logout" (NotesVC)
     Add note label on add note button (NotesVC)
 */
-let mediumBoldFont: UIFont = UIFont(name: "OpenSans-Bold", size: 17.5)!
+let mediumBoldFont: UIFont = UIFont(name: "OpenSans-Semibold", size: 17.5)!
 
 /*
     title label (LoginVC)
 */
-let largeBoldFont: UIFont = UIFont(name: "OpenSans-Bold", size: 25)!
+let largeBoldFont: UIFont = UIFont(name: "OpenSans-Semibold", size: 25)!
 
 /* 
     title label (LoginVC)

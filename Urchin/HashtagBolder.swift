@@ -13,7 +13,7 @@ class HashtagBolder {
     
     // A function to identify, then bold, the hashtags in some text
     // returns an attributed string
-    func boldHashtags(text: NSString) -> NSAttributedString {
+    func boldHashtags(text: NSString) -> NSMutableAttributedString {
         
         // convert to attributed string
         let attributedText = NSMutableAttributedString(string: text as String)

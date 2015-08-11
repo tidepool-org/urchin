@@ -14,41 +14,53 @@ extension NotesViewController: UITableViewDataSource {
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if (tableView.isEqual(notesTable)) {
             
-            // Configure NoteCell
-            
-            let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(NoteCell), forIndexPath: indexPath) as! NoteCell
-            
-            let note = filteredNotes[indexPath.row]
-            
-            // If the note is between different users, need a "to so-and-so" appendage
-            var groupName: String = ""
-            if (note.groupid != note.userid) {
-                for group in groups {
-                    if (group.userid == note.groupid) {
-                        groupName = " to \(group.fullName!)"
-                        break
+            if (indexPath.row % 2 == 1) {
+                
+                // Configure Spacing Cell
+                
+                let cell = UITableViewCell()
+                
+                cell.backgroundColor = darkestGreyLowAlpha
+                
+                let test = UIView(frame: CGRect(x: 0, y: 0.5, width: self.view.frame.width, height: 5))
+                test.backgroundColor = darkestGreyLowAlpha
+                cell.addSubview(test)
+//                cell.layer.borderColor = UIColor.blackColor().CGColor
+//                cell.layer.borderWidth = 0.25
+                
+                return cell
+                
+            } else {
+                // Configure NoteCell
+                
+                let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(NoteCell), forIndexPath: indexPath) as! NoteCell
+                
+                let note = filteredNotes[indexPath.row / 2]
+                
+                // If the note is between different users, need a "to so-and-so" appendage
+                var groupName: String = ""
+                if (note.groupid != note.userid) {
+                    for group in groups {
+                        if (group.userid == note.groupid) {
+                            groupName = group.fullName!
+                            break
+                        }
                     }
                 }
-            }
-            
-            cell.configureWithNote(note, user: user, groupName: groupName)
-            
-            // Background color based upon odd or even row
-            if (indexPath.row % 2 == 0) {
-                // even cell
+                
+                cell.configureWithNote(note, user: user, groupName: groupName)
+                
                 cell.backgroundColor = lightGreyColor
-            } else {
-                // odd cell
-                cell.backgroundColor = darkestGreyLowAlpha
+                
+                cell.userInteractionEnabled = true
+                
+                // editButton tag to be indexPath.row so can be used in editPressed notification handling
+                cell.editButton.tag = indexPath.row / 2
+                cell.editButton.addTarget(self, action: "editPressed:", forControlEvents: .TouchUpInside)
+                
+                return cell
             }
-            
-            cell.userInteractionEnabled = true
-            
-            // editButton tag to be indexPath.row so can be used in editPressed notification handling
-            cell.editButton.tag = indexPath.row
-            cell.editButton.addTarget(self, action: "editPressed:", forControlEvents: .TouchUpInside)
-            
-            return cell
+
         } else {
             // Configure UserDropDownCell
             
@@ -99,7 +111,7 @@ extension NotesViewController: UITableViewDataSource {
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if (tableView.isEqual(notesTable)) {
             // NotesTable --> as many cells as filteredNotes
-            return filteredNotes.count
+            return 2 * filteredNotes.count - 1
         } else if (tableView.isEqual(dropDownMenu)){
             // DropDownMenu
             if (section == 0) {

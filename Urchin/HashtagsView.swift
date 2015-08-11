@@ -340,28 +340,33 @@ class HashtagsView: UIView {
         hashtagButton.layer.cornerRadius = hashtagButton.frame.height / 2
         hashtagButton.layer.borderWidth = hashtagBorderWidth
         hashtagButton.layer.borderColor = hashtagBorderColor.CGColor
-        hashtagButton.addTarget(self, action: "hashtagReleased:", forControlEvents: .TouchUpInside)
-        hashtagButton.addTarget(self, action: "hashtagPressed:", forControlEvents: .TouchDown)
-        hashtagButton.addTarget(self, action: "hashtagDragExited:", forControlEvents: .TouchDragExit)
+        hashtagButton.addTarget(self, action: "hashtagHighlight:", forControlEvents: .TouchDown)
+        hashtagButton.addTarget(self, action: "hashtagHighlight:", forControlEvents: .TouchDragInside)
+        hashtagButton.addTarget(self, action: "hashtagNormal:", forControlEvents: .TouchDragOutside)
+        hashtagButton.addTarget(self, action: "hashtagPress:", forControlEvents: .TouchUpInside)
+        hashtagButton.addTarget(self, action: "hashtagNormal:", forControlEvents: .TouchUpInside)
+        hashtagButton.addTarget(self, action: "hashtagNormal:", forControlEvents: .TouchUpOutside)
         
         return hashtagButton
     }
     
-    // A hashtag button was released, so send a notification with userInfo to the AddNoteVC or EditNoteVC
-    func hashtagReleased(sender: UIButton!) {
-        sender.backgroundColor = hashtagColor
+    // Hashtag was pressed, send notification to Add/EditNoteVC to add hashtag text to textbox
+    func hashtagPress(sender: UIButton) {
         let notification = NSNotification(name: "hashtagPressed", object: nil, userInfo: ["hashtag":sender.titleLabel!.text!])
         NSNotificationCenter.defaultCenter().postNotification(notification)
     }
     
-    // A hashtag button was pressed down, so change the color of the button to show it
-    func hashtagPressed(sender: UIButton!) {
-        sender.backgroundColor = hashtagHighlightedColor
+    // Animate the hashtag to the normal color
+    func hashtagNormal(sender: UIButton) {
+        UIView.animateWithDuration(0.2, animations: { () -> Void in
+            sender.backgroundColor = hashtagColor
+        })
     }
     
-    // A hashtag button was pressed down then dragged out, so change the color back
-    func hashtagDragExited(sender: UIButton!) {
-        sender.backgroundColor = hashtagColor
-        sender.sendActionsForControlEvents(.TouchCancel)
+    // Animate the hashtag to the highlighted color
+    func hashtagHighlight(sender: UIButton) {
+        UIView.animateWithDuration(0.15, animations: { () -> Void in
+            sender.backgroundColor = hashtagHighlightedColor
+        })
     }
 }

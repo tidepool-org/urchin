@@ -14,55 +14,66 @@ extension NotesViewController: UITableViewDelegate {
     // heightForRowAtIndexPath
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         if (tableView.isEqual(notesTable)) {
-            // NotesTable
             
-            let note = filteredNotes[indexPath.row]
-            
-            // Create labels that 'determine' height of cell
-            
-            // Configure the username label, with the full name
-            let usernameLabel = UILabel()
-            let usernameWidth = self.view.frame.width - (2 * noteCellInset)
-            usernameLabel.frame.size = CGSize(width: usernameWidth, height: CGFloat.max)
-            var attrUsernameLabel = NSMutableAttributedString(string: note.user!.fullName!, attributes: [NSForegroundColorAttributeName: noteTextColor, NSFontAttributeName: mediumBoldFont])
-            if (note.groupid != note.userid) {
-                for group in groups {
-                    if (group.userid == note.groupid) {
-                        attrUsernameLabel = NSMutableAttributedString(string: "\(note.user!.fullName!) to \(group.fullName!)", attributes: [NSForegroundColorAttributeName: noteTextColor, NSFontAttributeName: mediumBoldFont])
-                        attrUsernameLabel.addAttributes([NSForegroundColorAttributeName: darkestGreyColor, NSFontAttributeName: mediumRegularFont], range: NSRange(location: count(note.user!.fullName!), length: count(group.fullName!)))
-                        break
+            if (indexPath.row % 2 == 1) {
+                
+                return 6
+                
+            } else {
+                
+                // NotesTable
+                
+                let note = filteredNotes[indexPath.row / 2]
+                
+                // Create labels that 'determine' height of cell
+                
+                // Configure the username label, with the full name
+                let usernameLabel = UILabel()
+                let usernameWidth = self.view.frame.width - (2 * noteCellInset)
+                usernameLabel.frame.size = CGSize(width: usernameWidth, height: CGFloat.max)
+                var attrUsernameLabel = NSMutableAttributedString(string: note.user!.fullName!, attributes: [NSForegroundColorAttributeName: noteTextColor, NSFontAttributeName: mediumBoldFont])
+                if (note.groupid != note.userid) {
+                    for group in groups {
+                        if (group.userid == note.groupid) {
+                            attrUsernameLabel = NSMutableAttributedString(string: "\(note.user!.fullName!) to \(group.fullName!)", attributes: [NSForegroundColorAttributeName: noteTextColor, NSFontAttributeName: mediumBoldFont])
+                            attrUsernameLabel.addAttributes([NSForegroundColorAttributeName: darkestGreyColor, NSFontAttributeName: mediumRegularFont], range: NSRange(location: count(note.user!.fullName!), length: count(group.fullName!)))
+                            break
+                        }
                     }
                 }
+                usernameLabel.attributedText = attrUsernameLabel
+                usernameLabel.adjustsFontSizeToFitWidth = false
+                usernameLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
+                usernameLabel.numberOfLines = 0
+                usernameLabel.sizeToFit()
+                
+                // Configure the date label size using extended dateFormatter
+                let timedateLabel = UILabel()
+                let dateFormatter = NSDateFormatter()
+                timedateLabel.attributedText = dateFormatter.attributedStringFromDate(note.timestamp)
+                timedateLabel.sizeToFit()
+                
+                let messageLabel = UILabel(frame: CGRect(x: 0, y: 0, width: self.view.frame.width - 2*noteCellInset, height: CGFloat.max))
+                let hashtagBolder = HashtagBolder()
+                let attributedText = hashtagBolder.boldHashtags(note.messagetext)
+                messageLabel.attributedText = attributedText
+                messageLabel.adjustsFontSizeToFitWidth = false
+                messageLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
+                messageLabel.numberOfLines = 0
+                messageLabel.sizeToFit()
+                
+                // Calculate the total note cell height
+                var cellHeight: CGFloat = noteCellInset + usernameLabel.frame.height + labelSpacing / 2 + timedateLabel.frame.height + 2 * labelSpacing + messageLabel.frame.height + noteCellInset
+                // if the user who created the note is the same as the current user, allow space for edit button
+                if (note.user!.userid == user.userid) {
+                    cellHeight += userCellThinSeparator + 2 * noteCellInset + editButtonHeight
+                }
+                
+                return cellHeight
+                
             }
-            usernameLabel.attributedText = attrUsernameLabel
-            usernameLabel.adjustsFontSizeToFitWidth = false
-            usernameLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
-            usernameLabel.numberOfLines = 0
-            usernameLabel.sizeToFit()
             
-            // Configure the date label size using extended dateFormatter
-            let timedateLabel = UILabel()
-            let dateFormatter = NSDateFormatter()
-            timedateLabel.attributedText = dateFormatter.attributedStringFromDate(note.timestamp)
-            timedateLabel.sizeToFit()
             
-            let messageLabel = UILabel(frame: CGRect(x: 0, y: 0, width: self.view.frame.width - 2*noteCellInset, height: CGFloat.max))
-            let hashtagBolder = HashtagBolder()
-            let attributedText = hashtagBolder.boldHashtags(note.messagetext)
-            messageLabel.attributedText = attributedText
-            messageLabel.adjustsFontSizeToFitWidth = false
-            messageLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
-            messageLabel.numberOfLines = 0
-            messageLabel.sizeToFit()
-            
-            // Calculate the total note cell height
-            var cellHeight: CGFloat = noteCellInset + usernameLabel.frame.height + labelSpacing / 2 + timedateLabel.frame.height + 2 * labelSpacing + messageLabel.frame.height + noteCellInset
-            // if the user who created the note is the same as the current user, allow space for edit button
-            if (note.user!.userid == user.userid) {
-                cellHeight += 2 * labelSpacing + editButtonHeight
-            }
-            
-            return cellHeight
         } else {
             // DropDownMenu
             

@@ -107,6 +107,8 @@
 		AABCEFA01B3231910064FE49 /* hashtagBolderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABCEF9F1B3231910064FE49 /* hashtagBolderTests.swift */; };
 		AABCEFAC1B3232C60064FE49 /* NoteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABCEFAB1B3232C60064FE49 /* NoteCell.swift */; };
 		AABCEFAE1B3234360064FE49 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABCEFAD1B3234360064FE49 /* Note.swift */; };
+		AACC18081B7A6E2500EA6425 /* OpenSans-Semibold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AACC18071B7A6E2500EA6425 /* OpenSans-Semibold.ttf */; };
+		AACC18091B7A6E2500EA6425 /* OpenSans-Semibold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AACC18071B7A6E2500EA6425 /* OpenSans-Semibold.ttf */; };
 		AACE31981B4AE17700F90E1D /* tidepoollogo.png in Resources */ = {isa = PBXBuildFile; fileRef = AACE31971B4AE17700F90E1D /* tidepoollogo.png */; };
 		AADD00391B6BFC28003D931E /* LoginVCActionSheetDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AADD00381B6BFC28003D931E /* LoginVCActionSheetDelegate.swift */; };
 		AADD003A1B6C05A5003D931E /* LoginVCActionSheetDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AADD00381B6BFC28003D931E /* LoginVCActionSheetDelegate.swift */; };
@@ -186,6 +188,7 @@
 		AABCEF9F1B3231910064FE49 /* hashtagBolderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = hashtagBolderTests.swift; sourceTree = "<group>"; };
 		AABCEFAB1B3232C60064FE49 /* NoteCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteCell.swift; sourceTree = "<group>"; };
 		AABCEFAD1B3234360064FE49 /* Note.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
+		AACC18071B7A6E2500EA6425 /* OpenSans-Semibold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Semibold.ttf"; sourceTree = "<group>"; };
 		AACE31971B4AE17700F90E1D /* tidepoollogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tidepoollogo.png; sourceTree = "<group>"; };
 		AADD00381B6BFC28003D931E /* LoginVCActionSheetDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginVCActionSheetDelegate.swift; sourceTree = "<group>"; };
 		AADECC761B4F34AA0043E888 /* location.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = location.png; sourceTree = "<group>"; };
@@ -281,6 +284,7 @@
 			isa = PBXGroup;
 			children = (
 				AA66BA831B4C40FD00CCB008 /* OpenSans-Bold.ttf */,
+				AACC18071B7A6E2500EA6425 /* OpenSans-Semibold.ttf */,
 				AA66BA891B4C426E00CCB008 /* OpenSans-Regular.ttf */,
 			);
 			name = Fonts;
@@ -582,6 +586,7 @@
 				AAE778A51B4B408F00949CEE /* note@2x.png in Resources */,
 				AADECC7B1B4F34AA0043E888 /* location@2x.png in Resources */,
 				AA8301031B4DB4A400F8ADE6 /* closex.png in Resources */,
+				AACC18081B7A6E2500EA6425 /* OpenSans-Semibold.ttf in Resources */,
 				AA66BA8E1B4C695400CCB008 /* notesicon@2x.png in Resources */,
 				AA66BA8A1B4C426E00CCB008 /* OpenSans-Regular.ttf in Resources */,
 				AA66BA851B4C40FD00CCB008 /* OpenSans-Bold.ttf in Resources */,
@@ -606,6 +611,7 @@
 				AAB95BAA1B682E6300912D83 /* tidepoollogo.png in Resources */,
 				AAB95BA11B682E5600912D83 /* OpenSans-Regular.ttf in Resources */,
 				AAB95BB41B682E6300912D83 /* camera@2x.png in Resources */,
+				AACC18091B7A6E2500EA6425 /* OpenSans-Semibold.ttf in Resources */,
 				AAB95BA91B682E6300912D83 /* note@2x.png in Resources */,
 				AAB95BAF1B682E6300912D83 /* unchecked.png in Resources */,
 				AAB95BA01B682E5200912D83 /* OpenSans-Bold.ttf in Resources */,
