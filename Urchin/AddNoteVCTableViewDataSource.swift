@@ -17,7 +17,7 @@ extension AddNoteViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(UserDropDownCell), forIndexPath: indexPath) as! UserDropDownCell
         
         // Configure with the given group, no arrow, and only bolded if the current group selected is this group
-        cell.configure(groups[indexPath.row], arrow: false, bold: group === groups[indexPath.row])
+        cell.configure(groups[indexPath.row], last: indexPath.row == groups.count - 1, arrow: false, bold: group === groups[indexPath.row])
         
         return cell
     }

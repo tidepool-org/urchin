@@ -249,12 +249,8 @@ class AddNoteViewController: UIViewController {
         
         // Configure dropDownMenu, width same as view width
         //          No need to fetch groups --> VC is initialized with user's groups
-        let numGroups = min(groups.count, maxGroupsShownInDropdown + 2)
-        if (numGroups == groups.count) {
-            self.dropDownHeight = CGFloat(numGroups) * userCellHeight + CGFloat(numGroups-1)*userCellThinSeparator
-        } else {
-            self.dropDownHeight = (CGFloat(numGroups)+0.5)*userCellHeight + CGFloat(numGroups-1)*userCellThinSeparator
-        }
+        self.dropDownHeight = CGFloat(groups.count)*userCellHeight + CGFloat(groups.count - 1)*userCellThinSeparator
+        self.dropDownHeight = min(self.dropDownHeight, self.view.frame.height)
         let dropDownWidth = self.view.frame.width
         self.dropDownMenu = UITableView(frame: CGRect(x: CGFloat(0), y: -dropDownHeight, width: dropDownWidth, height: dropDownHeight))
         dropDownMenu.backgroundColor = darkGreenColor
@@ -266,10 +262,9 @@ class AddNoteViewController: UIViewController {
         dropDownMenu.separatorStyle = UITableViewCellSeparatorStyle.None
         
         // Drop down menu is only scrollable if the content fits
-        dropDownMenu.scrollEnabled = groups.count > (maxGroupsShownInDropdown + 2)
+        dropDownMenu.scrollEnabled = dropDownMenu.contentSize.height > self.dropDownHeight
         
         self.view.addSubview(dropDownMenu)
-        
         
         // Add observers for notificationCenter to handle keyboard events
         let notificationCenter = NSNotificationCenter.defaultCenter()

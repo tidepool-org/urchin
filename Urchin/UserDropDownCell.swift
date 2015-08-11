@@ -15,14 +15,12 @@ class UserDropDownCell: UITableViewCell {
     let nameLabel: UILabel = UILabel()
     let rightView: UIImageView = UIImageView()
     let separator: UIView = UIView()
-    let separatorTwo: UIView = UIView()
 
     // Group for the cell
     var group: User!
     
     func configure(key: String) {
         separator.removeFromSuperview()
-        separatorTwo.removeFromSuperview()
         
         // Set background color to dark green
         self.backgroundColor = UIColor(red: 0/255, green: 54/255, blue: 62/255, alpha: 1)
@@ -40,40 +38,40 @@ class UserDropDownCell: UITableViewCell {
             nameLabel.text = allTeamsTitle
             nameLabel.font = mediumBoldFont
             nameLabel.sizeToFit()
-            nameLabel.frame.origin.y = userCellThickSeparator + userCellInset
-            
-            // configure thick separator at the top
-            separator.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: userCellThickSeparator)
-            separator.backgroundColor = whiteQuarterAlpha
-            self.addSubview(separator)
+            nameLabel.frame.origin.y = userCellInset
             
             // configure thin separator at the bottom
-            separatorTwo.frame = CGRect(x: 0, y: self.frame.height - userCellThinSeparator, width: self.frame.width, height: userCellThinSeparator)
-            separatorTwo.backgroundColor = whiteQuarterAlpha
-            self.addSubview(separatorTwo)
+            separator.frame = CGRect(x: 2*userCellInset, y: self.frame.height - userCellThinSeparator, width: self.frame.width - 4*userCellInset, height: userCellThinSeparator)
+            separator.backgroundColor = whiteQuarterAlpha
+            self.addSubview(separator)
             
         } else if (key == "logout") {
             // Configure the name label to be 'Logout'... for logging out
             self.nameLabel.text = logoutTitle
             nameLabel.font = mediumBoldFont
             nameLabel.sizeToFit()
-            nameLabel.frame.origin.y = userCellThickSeparator - userCellThinSeparator + userCellInset
+            nameLabel.frame.origin.y = userCellThickSeparator + userCellInset
             
             // Configure the thick separator at the top
             // take out the height of the thin separator because the cell above has a thin separator at the bottom
-            separator.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: userCellThickSeparator - userCellThinSeparator)
+            separator.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: userCellThickSeparator)
             separator.backgroundColor = whiteQuarterAlpha
             self.addSubview(separator)
             
         } else if (key == "group") {
             
             // position the nameLabel
-            self.nameLabel.frame.origin = CGPoint(x: 6*userCellInset, y: userCellInset)
+            self.nameLabel.frame.origin = CGPoint(x: 3*userCellInset, y: userCellInset)
             
             // configure the thin separator at the bottom of the cell
-            separator.frame = CGRect(x: 0, y: self.frame.height - userCellThinSeparator, width: self.frame.width, height: userCellThinSeparator)
+            separator.frame = CGRect(x: 2*userCellInset, y: self.frame.height - userCellThinSeparator, width: self.frame.width - 4*userCellInset, height: userCellThinSeparator)
             separator.backgroundColor = whiteQuarterAlpha
             self.addSubview(separator)
+            
+        } else if (key == "grouplast") {
+            
+            // position the nameLabel
+            self.nameLabel.frame.origin = CGPoint(x: 3*userCellInset, y: userCellInset)
             
         } else if (key == "version") {
             // Configure the name label to contain the version
@@ -91,7 +89,7 @@ class UserDropDownCell: UITableViewCell {
             rightView.hidden = true
         }
         
-        let imageWidth = rightArrow.size.width
+        let imageWidth = rightArrow.size.width / 2
         let imageHeight = rightArrow.size.height
         let imageX = self.frame.width - (userCellInset + imageWidth)
         let imageY = nameLabel.frame.midY - imageHeight / 2
@@ -101,7 +99,7 @@ class UserDropDownCell: UITableViewCell {
         self.addSubview(nameLabel)
     }
     
-    func configure(group: User, arrow: Bool, bold: Bool) {
+    func configure(group: User, last: Bool, arrow: Bool, bold: Bool) {
         self.group = group
         
         // configure the name label with the group name
@@ -114,7 +112,11 @@ class UserDropDownCell: UITableViewCell {
         }
         nameLabel.sizeToFit()
         
-        configure("group")
+        if last {
+            configure("grouplast")
+        } else {
+            configure("group")
+        }
         
         // hide the right arrow if necessary
         if (!arrow) {

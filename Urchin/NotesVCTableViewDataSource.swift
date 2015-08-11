@@ -89,7 +89,7 @@ extension NotesViewController: UITableViewDataSource {
             } else {
                 // Individual group / filter cell
                 
-                cell.configure(groups[indexPath.row - 1], arrow: true, bold: false)
+                cell.configure(groups[indexPath.row - 1], last: indexPath.row == groups.count, arrow: true, bold: false)
                 
             }
             

@@ -359,12 +359,8 @@ class NotesViewController: UIViewController {
         self.view.addSubview(opaqueOverlay)
         
         // Configure dropDownMenu, same width as view
-        let numGroups = min(groups.count, maxGroupsShownInDropdown)
-        if (numGroups == groups.count) {
-            self.dropDownHeight = CGFloat(numGroups+3)*userCellHeight + CGFloat(numGroups)*userCellThinSeparator + 2*userCellThickSeparator
-        } else {
-            self.dropDownHeight = (CGFloat(numGroups)+3.5)*userCellHeight + CGFloat(numGroups)*userCellThinSeparator + 2*userCellThickSeparator
-        }
+        self.dropDownHeight = CGFloat(groups.count+3)*userCellHeight + CGFloat(groups.count)*userCellThinSeparator + 2*userCellThickSeparator
+        self.dropDownHeight = min(self.dropDownHeight, self.view.frame.height)
         let dropDownWidth = self.view.frame.width
         self.dropDownMenu = UITableView(frame: CGRect(x: 0, y: -dropDownHeight, width: dropDownWidth, height: dropDownHeight))
         dropDownMenu.backgroundColor = darkGreenColor
@@ -377,7 +373,7 @@ class NotesViewController: UIViewController {
         dropDownMenu.scrollsToTop = false
         
         // Drop down menu is only scrollable if the content fits
-        dropDownMenu.scrollEnabled = groups.count > maxGroupsShownInDropdown
+        dropDownMenu.scrollEnabled = dropDownMenu.contentSize.height > self.dropDownHeight
         
         self.view.addSubview(dropDownMenu)
     }

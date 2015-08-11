@@ -496,7 +496,7 @@ let servers: [String: String] = [
 */
 let userCellHeight: CGFloat = 56.0
 let userCellInset: CGFloat = 16
-let userCellThickSeparator: CGFloat = 4
+let userCellThickSeparator: CGFloat = 2
 let userCellThinSeparator: CGFloat = 1
 
 // ------------ NoteCell ------------
