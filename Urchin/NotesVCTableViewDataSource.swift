@@ -25,8 +25,8 @@ extension NotesViewController: UITableViewDataSource {
                 let test = UIView(frame: CGRect(x: 0, y: 0.5, width: self.view.frame.width, height: 5))
                 test.backgroundColor = darkestGreyLowAlpha
                 cell.addSubview(test)
-//                cell.layer.borderColor = UIColor.blackColor().CGColor
-//                cell.layer.borderWidth = 0.25
+                
+                cell.userInteractionEnabled = false
                 
                 return cell
                 
@@ -53,6 +53,7 @@ extension NotesViewController: UITableViewDataSource {
                 cell.backgroundColor = lightGreyColor
                 
                 cell.userInteractionEnabled = true
+                cell.selectionStyle = .None
                 
                 // editButton tag to be indexPath.row so can be used in editPressed notification handling
                 cell.editButton.tag = indexPath.row / 2
