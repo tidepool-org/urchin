@@ -67,6 +67,8 @@ extension NotesViewController: UITableViewDataSource {
             
             let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(UserDropDownCell), forIndexPath: indexPath) as! UserDropDownCell
             
+            cell.userInteractionEnabled = true
+            
             if (indexPath.section == 0 && indexPath.row == 0) {
                 // All Users / #nofilter cell
                 
@@ -82,7 +84,6 @@ extension NotesViewController: UITableViewDataSource {
                 // Version cell
                 cell.configure("version")
                 
-                cell.selectionStyle = .None
                 cell.userInteractionEnabled = false
                 
             } else {

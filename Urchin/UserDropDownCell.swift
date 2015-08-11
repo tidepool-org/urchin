@@ -33,6 +33,7 @@ class UserDropDownCell: UITableViewCell {
         
         // Configure right image to a lovely right arrow
         rightView.image = rightArrow
+        rightView.hidden = false
         
         if (key == "all") {
             // Configure nameLabel to be 'All', or #nofilter
