@@ -103,7 +103,7 @@ class EditNoteViewController: UIViewController {
         if (baseURL == servers["Development"]!) {
             println("On devel!")
             
-            var deleteButton: UIBarButtonItem = UIBarButtonItem(title: "Delete", style: .Plain, target: self, action: "deleteNote:")
+            var deleteButton: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Trash, target: self, action: "deleteNote:")
             self.navigationItem.setRightBarButtonItem(deleteButton, animated: true)
         }
         
@@ -263,16 +263,15 @@ class EditNoteViewController: UIViewController {
     }
     
     func deleteNote(sender: UIBarButtonItem!) {
-        // Done editing note
-        let notification = NSNotification(name: "doneEditing", object: nil)
-        NSNotificationCenter.defaultCenter().postNotification(notification)
+        self.apiConnector.trackMetric("Clicked Delete Note")
         
-        let notificationTwo = NSNotification(name: "deleteNote", object: nil)
-        NSNotificationCenter.defaultCenter().postNotification(notificationTwo)
-
-        self.view.endEditing(true)
-        self.closeDatePicker(false)
-        self.dismissViewControllerAnimated(true, completion: nil)
+        let alert = UIAlertView()
+        alert.delegate = self
+        alert.title = trashAlertTitle
+        alert.message = trashAlertMessage
+        alert.addButtonWithTitle(trashAlertCancel)
+        alert.addButtonWithTitle(trashAlertOkay)
+        alert.show()
     }
     
     // Toggle the datepicker open or closed depending on if it is currently showing

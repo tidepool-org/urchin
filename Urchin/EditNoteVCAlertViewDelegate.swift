@@ -13,27 +13,55 @@ extension EditNoteViewController: UIAlertViewDelegate {
     
     // Handle alert view events
     func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
-        switch buttonIndex {
-        case 0:
-            NSLog("Discard edits from note")
+        
+        if (alertView.title == editAlertTitle && alertView.message == editAlertMessage) {
+            switch buttonIndex {
+            case 0:
+                NSLog("Discard edits from note")
+                
+                let notification = NSNotification(name: "doneEditing", object: nil)
+                NSNotificationCenter.defaultCenter().postNotification(notification)
+                
+                self.view.endEditing(true)
+                self.closeDatePicker(false)
+                self.dismissViewControllerAnimated(true, completion: nil)
+                
+                break
+            case 1:
+                NSLog("Save edited note")
+                
+                self.saveNote()
+                
+                break
+            default:
+                NSLog("Unknown case occurred with alert. Closing alert.")
+                break
+            }
+        } else if (alertView.title == trashAlertTitle && alertView.message == trashAlertMessage) {
+            switch buttonIndex {
+            case 0:
+                NSLog("Do not trash note")
             
-            let notification = NSNotification(name: "doneEditing", object: nil)
-            NSNotificationCenter.defaultCenter().postNotification(notification)
-            
-            self.view.endEditing(true)
-            self.closeDatePicker(false)
-            self.dismissViewControllerAnimated(true, completion: nil)
-            
-            break
-        case 1:
-            NSLog("Save edited note")
-            
-            self.saveNote()
-            
-            break
-        default:
-            NSLog("Unknown case occurred with alert. Closing alert.")
-            break
+                break
+            case 1:
+                NSLog("Trash note")
+                
+                // Done editing note
+                let notification = NSNotification(name: "doneEditing", object: nil)
+                NSNotificationCenter.defaultCenter().postNotification(notification)
+                
+                let notificationTwo = NSNotification(name: "deleteNote", object: nil)
+                NSNotificationCenter.defaultCenter().postNotification(notificationTwo)
+                
+                self.view.endEditing(true)
+                self.closeDatePicker(false)
+                self.dismissViewControllerAnimated(true, completion: nil)
+                
+                break
+            default:
+                NSLog("Unknown case occurred with alert. Closing alert.")
+                break
+            }
         }
     }
     

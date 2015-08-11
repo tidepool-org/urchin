@@ -438,6 +438,14 @@ let editAlertDiscard: String = "Discard"
 let editAlertSave: String = "Save"
 
 /*
+    EditNoteVC alert text on attempt to trash note
+*/
+let trashAlertTitle: String = "Delete Note?"
+let trashAlertMessage: String = "Once you delete this note, it cannot be recovered."
+let trashAlertCancel: String = "Cancel"
+let trashAlertOkay: String = "Okay"
+
+/*
     Post button sizing
 */
 let postButtonW: CGFloat = 112
