@@ -103,6 +103,14 @@ class AddNoteViewController: UIViewController {
             self.navigationController?.navigationBar.translucent = false
         }
         
+        // Thicken navBar border
+        let border = CALayer()
+        border.borderColor = UIColor.blackColor().CGColor
+        border.borderWidth = 1
+        let navBarLayer = self.navigationController!.navigationBar.layer
+        border.frame = CGRect(x: 0, y: navBarLayer.bounds.height, width: navBarLayer.bounds.width, height: 1)
+        navBarLayer.addSublayer(border)
+        
         // Configure title to initial group (may be changed later with dropDown)
         configureTitleView(group.fullName!)
         
@@ -252,7 +260,7 @@ class AddNoteViewController: UIViewController {
         self.dropDownHeight = CGFloat(groups.count)*userCellHeight + CGFloat(groups.count - 1)*userCellThinSeparator
         self.dropDownHeight = min(self.dropDownHeight, self.view.frame.height)
         let dropDownWidth = self.view.frame.width
-        self.dropDownMenu = UITableView(frame: CGRect(x: CGFloat(0), y: -dropDownHeight, width: dropDownWidth, height: dropDownHeight))
+        self.dropDownMenu = UITableView(frame: CGRect(x: CGFloat(0), y: -(dropDownHeight+2*shadowHeight), width: dropDownWidth, height: dropDownHeight))
         dropDownMenu.backgroundColor = darkGreenColor
         dropDownMenu.rowHeight = userCellHeight
         dropDownMenu.separatorInset.left = userCellInset
@@ -263,6 +271,13 @@ class AddNoteViewController: UIViewController {
         
         // Drop down menu is only scrollable if the content fits
         dropDownMenu.scrollEnabled = dropDownMenu.contentSize.height > self.dropDownHeight
+        
+        // Shadowing
+        dropDownMenu.layer.masksToBounds = false
+        dropDownMenu.layer.shadowColor = UIColor.blackColor().CGColor
+        dropDownMenu.layer.shadowOffset = CGSize(width: 0, height: shadowHeight)
+        dropDownMenu.layer.shadowOpacity = 1.0
+        dropDownMenu.layer.shadowRadius = shadowHeight
         
         self.view.addSubview(dropDownMenu)
         
@@ -678,7 +693,7 @@ class AddNoteViewController: UIViewController {
     func hideDropDownMenu() {
         // Set the destination frames
         var frame: CGRect = self.dropDownMenu.frame
-        frame.origin.y = -dropDownHeight
+        frame.origin.y = -(dropDownHeight+2*shadowHeight)
         var obstructionFrame: CGRect = self.opaqueOverlay.frame
         obstructionFrame.origin.y = -overlayHeight
         self.animateDropDownToFrame(frame, obstructionFrame: obstructionFrame) {

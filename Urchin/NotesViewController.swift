@@ -92,6 +92,14 @@ class NotesViewController: UIViewController {
         if (UIDevice.currentDevice().systemVersion as NSString).floatValue < 8.0 {
             self.navigationController?.navigationBar.translucent = false
         }
+
+        // Thicken navBar border
+        let border = CALayer()
+        border.borderColor = UIColor.blackColor().CGColor
+        border.borderWidth = 1
+        let navBarLayer = self.navigationController!.navigationBar.layer
+        border.frame = CGRect(x: 0, y: navBarLayer.bounds.height, width: navBarLayer.bounds.width, height: 1)
+        navBarLayer.addSublayer(border)
         
         // navigationBar title begins with "All Notes" to match #nofilter to start
         configureTitleView(allNotesTitle)

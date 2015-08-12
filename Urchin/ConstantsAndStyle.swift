@@ -251,7 +251,7 @@ let dropDownGroupLabelHeight: CGFloat = 20.0
 /*
     Used for dropDownMenu shadow height (NotesVC, AddNoteVC)
 */
-let shadowHeight: CGFloat = 5.0
+let shadowHeight: CGFloat = 2.5
 
 // -----
 
