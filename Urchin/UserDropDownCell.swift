@@ -89,7 +89,7 @@ class UserDropDownCell: UITableViewCell {
             rightView.hidden = true
         }
         
-        let imageWidth = rightArrow.size.width / 2
+        let imageWidth = rightArrow.size.width
         let imageHeight = rightArrow.size.height
         let imageX = self.frame.width - (userCellInset + imageWidth)
         let imageY = nameLabel.frame.midY - imageHeight / 2
