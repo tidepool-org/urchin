@@ -101,7 +101,6 @@ class EditNoteViewController: UIViewController {
         self.navigationItem.setLeftBarButtonItem(closeButton, animated: true)
         
         if (baseURL == servers["Development"]!) {
-            println("On devel!")
             
             var deleteButton: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Trash, target: self, action: "deleteNote:")
             self.navigationItem.setRightBarButtonItem(deleteButton, animated: true)

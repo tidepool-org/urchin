@@ -238,9 +238,20 @@ let dropDownAnimationTime: NSTimeInterval = 0.5
 let editButtonHeight: CGFloat = 12.5
 
 /*
+    Width used for the edit button in a NoteCell
+        Need to adjust font size appropriately if this is changed
+*/
+let editButtonWidth: CGFloat = 62.0
+
+/*
     Preferred height of the group/team label in any dropDownMenu (NotesVC, AddNoteVC)
 */
 let dropDownGroupLabelHeight: CGFloat = 20.0
+
+/*
+    Used for dropDownMenu shadow height (NotesVC, AddNoteVC)
+*/
+let shadowHeight: CGFloat = 5.0
 
 // -----
 

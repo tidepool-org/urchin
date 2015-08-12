@@ -29,7 +29,12 @@ extension NotesViewController: UITableViewDelegate {
                 
                 // Configure the username label, with the full name
                 let usernameLabel = UILabel()
-                let usernameWidth = self.view.frame.width - (2 * noteCellInset)
+                
+                var usernameWidth = self.view.frame.width - (2 * noteCellInset)
+                if (note.user!.userid == user.userid) {
+                    // Compensate for width of edit button
+                    usernameWidth -= editButtonWidth
+                }
                 usernameLabel.frame.size = CGSize(width: usernameWidth, height: CGFloat.max)
                 var attrUsernameLabel = NSMutableAttributedString(string: note.user!.fullName!, attributes: [NSForegroundColorAttributeName: noteTextColor, NSFontAttributeName: mediumSemiboldFont])
                 if (note.groupid != note.userid) {
@@ -63,10 +68,6 @@ extension NotesViewController: UITableViewDelegate {
                 
                 // Calculate the total note cell height
                 var cellHeight: CGFloat = noteCellInset + usernameLabel.frame.height + labelSpacing / 2 + timedateLabel.frame.height + 2 * labelSpacing + messageLabel.frame.height + noteCellInset
-                // if the user who created the note is the same as the current user, allow space for edit button
-                if (note.user!.userid == user.userid) {
-                    cellHeight += userCellThinSeparator + 2 * noteCellInset + editButtonHeight
-                }
                 
                 return cellHeight
                 

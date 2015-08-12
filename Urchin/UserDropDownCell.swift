@@ -41,7 +41,7 @@ class UserDropDownCell: UITableViewCell {
             nameLabel.frame.origin.y = userCellInset
             
             // configure thin separator at the bottom
-            separator.frame = CGRect(x: 2*userCellInset, y: self.frame.height - userCellThinSeparator, width: self.frame.width - 4*userCellInset, height: userCellThinSeparator)
+            separator.frame = CGRect(x: 2*userCellInset, y: self.frame.height - userCellThinSeparator, width: self.frame.width - 2*userCellInset, height: userCellThinSeparator)
             separator.backgroundColor = whiteQuarterAlpha
             self.addSubview(separator)
             
@@ -64,7 +64,7 @@ class UserDropDownCell: UITableViewCell {
             self.nameLabel.frame.origin = CGPoint(x: 3*userCellInset, y: userCellInset)
             
             // configure the thin separator at the bottom of the cell
-            separator.frame = CGRect(x: 2*userCellInset, y: self.frame.height - userCellThinSeparator, width: self.frame.width - 4*userCellInset, height: userCellThinSeparator)
+            separator.frame = CGRect(x: 2*userCellInset, y: self.frame.height - userCellThinSeparator, width: self.frame.width - 2*userCellInset, height: userCellThinSeparator)
             separator.backgroundColor = whiteQuarterAlpha
             self.addSubview(separator)
             
@@ -121,6 +121,8 @@ class UserDropDownCell: UITableViewCell {
         // hide the right arrow if necessary
         if (!arrow) {
             self.rightView.hidden = true
+            
+            separator.frame.size.width = self.frame.width - 4 * noteCellInset
             
             nameLabel.frame.origin.x = self.frame.width / 2 - nameLabel.frame.width / 2
         }

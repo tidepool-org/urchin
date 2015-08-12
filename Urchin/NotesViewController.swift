@@ -362,7 +362,7 @@ class NotesViewController: UIViewController {
         self.dropDownHeight = CGFloat(groups.count+3)*userCellHeight + CGFloat(groups.count)*userCellThinSeparator + 2*userCellThickSeparator
         self.dropDownHeight = min(self.dropDownHeight, self.view.frame.height)
         let dropDownWidth = self.view.frame.width
-        self.dropDownMenu = UITableView(frame: CGRect(x: 0, y: -dropDownHeight, width: dropDownWidth, height: dropDownHeight))
+        self.dropDownMenu = UITableView(frame: CGRect(x: 0, y: -(dropDownHeight + 2*shadowHeight), width: dropDownWidth, height: dropDownHeight))
         dropDownMenu.backgroundColor = darkGreenColor
         dropDownMenu.rowHeight = userCellHeight
         dropDownMenu.separatorInset.left = userCellInset
@@ -371,6 +371,13 @@ class NotesViewController: UIViewController {
         dropDownMenu.delegate = self
         dropDownMenu.separatorStyle = UITableViewCellSeparatorStyle.None
         dropDownMenu.scrollsToTop = false
+        
+        // Shadowing
+        dropDownMenu.layer.masksToBounds = false
+        dropDownMenu.layer.shadowColor = UIColor.blackColor().CGColor
+        dropDownMenu.layer.shadowOffset = CGSize(width: 0, height: shadowHeight)
+        dropDownMenu.layer.shadowOpacity = 1.0
+        dropDownMenu.layer.shadowRadius = shadowHeight
         
         // Drop down menu is only scrollable if the content fits
         dropDownMenu.scrollEnabled = dropDownMenu.contentSize.height > self.dropDownHeight
@@ -401,7 +408,7 @@ class NotesViewController: UIViewController {
     func hideDropDownMenu() {
         // Determine final destination of dropDownMenu and opaqueOverlay/obstruction
         var frame: CGRect = self.dropDownMenu.frame
-        frame.origin.y = -dropDownHeight
+        frame.origin.y = -(dropDownHeight + 2*shadowHeight)
         var overlayFrame: CGRect = self.opaqueOverlay.frame
         overlayFrame.origin.y = -overlayHeight
         // Perform animation

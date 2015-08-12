@@ -17,15 +17,32 @@ class NoteCell: UITableViewCell {
     let timedateLabel: UILabel = UILabel()
     let editButton: UIButton = UIButton()
     var messageLabel: UILabel = UILabel()
-    let separator: UIView = UIView()
     
     // Configure the note cell to contain... the note!
     func configureWithNote(note: Note, user: User, groupName: String) {
         
         self.note = note
         
+        // If the note was made by the current user, be able to edit it
+        // otherwise, don't put the edit button in
+        editButton.frame = CGRectZero
+        if (note.user!.userid == user.userid) {
+            let editTitle = NSAttributedString(string: editButtonTitle, attributes: [NSForegroundColorAttributeName: darkestGreyColor, NSFontAttributeName: smallRegularFont])
+            editButton.setAttributedTitle(editTitle, forState: .Normal)
+            editButton.sizeToFit()
+            editButton.frame.size.height = noteCellInset + editButtonHeight + noteCellInset
+            editButton.frame.size.width = editButton.frame.width + 2 * noteCellInset
+            let editX: CGFloat = contentView.frame.width - (editButton.frame.width)
+            let editY: CGFloat = 0
+            editButton.frame.origin = CGPoint(x: editX, y: editY)
+            
+            contentView.addSubview(editButton)
+        } else {
+            editButton.removeFromSuperview()
+        }
+        
         // Configure the username label, with the full name
-        let usernameWidth = contentView.frame.width - (2 * noteCellInset)
+        let usernameWidth = contentView.frame.width - (2 * noteCellInset + editButton.frame.width)
         usernameLabel.frame.size = CGSize(width: usernameWidth, height: CGFloat.max)
         
         var attrUsernameLabel: NSMutableAttributedString
@@ -82,30 +99,5 @@ class NoteCell: UITableViewCell {
         contentView.addSubview(usernameLabel)
         contentView.addSubview(timedateLabel)
         contentView.addSubview(messageLabel)
-        
-        // If the note was made by the current user, be able to edit it
-        // otherwise, don't put the edit button in
-        if (note.user!.userid == user.userid) {
-            separator.frame = CGRect(x: noteCellInset, y: messageLabel.frame.maxY + noteCellInset, width: contentView.frame.width - 2 * noteCellInset, height: userCellThinSeparator)
-            separator.backgroundColor = darkestGreyLowAlpha
-            
-            contentView.addSubview(separator)
-            
-            editButton.frame = CGRectZero
-            let editTitle = NSAttributedString(string: editButtonTitle, attributes: [NSForegroundColorAttributeName: darkestGreyColor, NSFontAttributeName: smallRegularFont])
-            editButton.setAttributedTitle(editTitle, forState: .Normal)
-            editButton.sizeToFit()
-            editButton.frame.size.height = noteCellInset + editButtonHeight + noteCellInset
-            editButton.frame.size.width = editButton.frame.width + 2 * noteCellInset
-            let editX = contentView.frame.width - (editButton.frame.width)
-            let editY = separator.frame.maxY
-            editButton.frame.origin = CGPoint(x: editX, y: editY)
-            
-            contentView.addSubview(editButton)
-        } else {
-            separator.removeFromSuperview()
-            editButton.removeFromSuperview()
-        }
     }
-    
 }
