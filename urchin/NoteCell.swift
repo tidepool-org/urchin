@@ -35,21 +35,11 @@ class NoteCell: UITableViewCell {
             editButton.frame.size.width = editButton.frame.width + 2 * hitBoxAmount
             editButton.frame.origin.x = editX
             
-//            editButton.layer.borderWidth = 1
-//            editButton.layer.borderColor = UIColor.redColor().CGColor
-            
             let helperLabel = UILabel()
             helperLabel.font = mediumSemiboldFont
             helperLabel.text = "Howard"
             helperLabel.sizeToFit()
             editButton.frame.origin.y = (noteCellInset + helperLabel.frame.height) - (editButtonHeight + hitBoxAmount + 2)
-            
-            let line = UIView()
-            line.frame.size.width = self.frame.width
-            line.frame.size.height = 1
-            line.frame.origin.y = noteCellInset + helperLabel.frame.height
-//            line.backgroundColor = UIColor.greenColor()
-            contentView.addSubview(line)
             
             contentView.addSubview(editButton)
         } else {
@@ -81,9 +71,6 @@ class NoteCell: UITableViewCell {
         let usernameX = noteCellInset
         let usernameY = noteCellInset
         usernameLabel.frame.origin = CGPoint(x: usernameX, y: usernameY)
-        
-//        usernameLabel.layer.borderColor = UIColor.redColor().CGColor
-//        usernameLabel.layer.borderWidth = 1
         
         // Configure the date label using extended dateFormatter
         let dateFormatter = NSDateFormatter()
