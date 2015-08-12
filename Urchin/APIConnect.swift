@@ -16,6 +16,9 @@ class APIConnector {
     var x_tidepool_session_token: String = ""
     var user: User?
     
+    private var groupsToFetchFor = 0
+    private var groupsFetched = 0
+    
     func request(method: String, urlExtension: String, headerDict: [String: String], body: NSData?, preRequest: () -> Void, completion: (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void) {
         
         preRequest()
@@ -115,7 +118,7 @@ class APIConnector {
                         
                         if let sessionToken = httpResponse.allHeaderFields["x-tidepool-session-token"] as? String {
                             self.x_tidepool_session_token = sessionToken
-                            self.user = User(userid: jsonResult.valueForKey("userid") as! String, apiConnector: self)
+                            self.user = User(userid: jsonResult.valueForKey("userid") as! String, apiConnector: self, notesVC: nil)
                             
                             if (saveLogin) {
                                 if (loginVC!.rememberMe) {
@@ -317,6 +320,8 @@ class APIConnector {
                     notesVC.dismissViewControllerAnimated(true, completion: {
                         self.user = nil
                         self.x_tidepool_session_token = ""
+                        self.groupsFetched = 0
+                        self.groupsToFetchFor = 0
                     })
                 } else {
                     NSLog("Did not log out - invalid status code \(httpResponse.statusCode)")
@@ -331,7 +336,7 @@ class APIConnector {
         request("POST", urlExtension: "/auth/logout", headerDict: headerDict, body: nil, preRequest: preRequest, completion: completion)
     }
     
-    func findProfile(otherUser: User) {
+    func findProfile(otherUser: User, notesVC: NotesViewController?) {
         
         let urlExtension = "/metadata/" + otherUser.userid + "/profile"
         
@@ -350,9 +355,24 @@ class APIConnector {
                     
                     otherUser.processUserDict(userDict)
                     
-                    // Send notification to NotesVC to handle new note that was just created
-                    let notification = NSNotification(name: "anotherGroup", object: nil)
-                    NSNotificationCenter.defaultCenter().postNotification(notification)
+                    println(notesVC)
+                    if (notesVC != nil) {
+                        self.groupsFetched++
+                        
+                        // Insert logic here for DSAs only
+                        if (otherUser.patient != nil && (otherUser.patient?.aboutMe != nil || otherUser.patient?.birthday != nil || otherUser.patient?.diagnosisDate != nil)) {
+                            println("DSA")
+                            notesVC!.groups.insert(otherUser, atIndex: 0)
+                        }
+                        
+                        if (self.groupsFetched == self.groupsToFetchFor) {
+                            // Send notification to NotesVC to notify that groups are ready
+                            let notification = NSNotification(name: "groupsReady", object: nil)
+                            NSNotificationCenter.defaultCenter().postNotification(notification)
+                        }
+                    }
+                    
+                    
                 } else {
                     NSLog("Did not find profile - invalid status code \(httpResponse.statusCode)")
                     self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
@@ -382,10 +402,12 @@ class APIConnector {
                     NSLog("Found viewable users for user: \(self.user?.userid)")
                     var jsonResult: NSDictionary = (NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: nil) as? NSDictionary)!
                     
+                    var i = 0
                     for key in jsonResult.keyEnumerator() {
-                        let group = User(userid: key as! String, apiConnector: self)
-                        notesVC.groups.insert(group, atIndex: 0)
+                        let group = User(userid: key as! String, apiConnector: self, notesVC: notesVC)
+                        i++
                     }
+                    self.groupsToFetchFor = i
                 } else {
                     NSLog("Did not find viewable users - invalid status code \(httpResponse.statusCode)")
                     self.alertWithOkayButton(unknownError, message: unknownErrorMessage)

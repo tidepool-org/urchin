@@ -166,7 +166,7 @@ class NotesViewController: UIViewController {
         notificationCenter.addObserver(self, selector: "deleteNote:", name: "deleteNote", object: nil)
 
         // Listen for when group metadata has been fetched
-        notificationCenter.addObserver(self, selector: "anotherGroup:", name: "anotherGroup", object: nil)
+        notificationCenter.addObserver(self, selector: "groupsReady:", name: "groupsReady", object: nil)
         // Listen for when to open an NewNoteVC
         notificationCenter.addObserver(self, selector: "newNote:", name: "newNote", object: nil)
     }
@@ -178,15 +178,13 @@ class NotesViewController: UIViewController {
         initialAddNote()
     }
     
-    func anotherGroup(notification: NSNotification) {
-        groupsWMetadata++
-        if (groups.count != 0 && groupsWMetadata == groups.count + 1) {
-            groupsReadyForTransition = true
-            initialAddNote()
-            
-            configureDropDownMenu()
-            self.loadNotes()
-        }
+    func groupsReady(notification: NSNotification) {
+
+        groupsReadyForTransition = true
+        initialAddNote()
+        
+        configureDropDownMenu()
+        self.loadNotes()
     }
     
     func initialAddNote() {

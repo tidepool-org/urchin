@@ -7,14 +7,14 @@
 	<key>IDESourceControlProjectIdentifier</key>
 	<string>80EDBF04-99E1-42FD-9A85-7C431288AC42</string>
 	<key>IDESourceControlProjectName</key>
-	<string>urchin</string>
+	<string>project</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>933250CA36C0951E230457AEB7CD4BAC48D8E5AE</key>
 		<string>https://github.com/tidepool-org/urchin.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>urchin.xcodeproj</string>
+	<string>urchin.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>933250CA36C0951E230457AEB7CD4BAC48D8E5AE</key>

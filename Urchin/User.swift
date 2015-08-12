@@ -14,10 +14,10 @@ class User {
     let userid: String
     var patient: Patient?
     
-    init(userid: String, apiConnector: APIConnector) {
+    init(userid: String, apiConnector: APIConnector, notesVC: NotesViewController?) {
         self.userid = userid
         
-        apiConnector.findProfile(self)
+        apiConnector.findProfile(self, notesVC: notesVC)
     }
     
     init(userid: String) {
