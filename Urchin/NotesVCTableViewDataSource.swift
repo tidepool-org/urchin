@@ -55,6 +55,10 @@ extension NotesViewController: UITableViewDataSource {
             
             cell.userInteractionEnabled = true
             
+            var customSelection = UIView()
+            customSelection.backgroundColor = tealColor
+            cell.selectedBackgroundView = customSelection
+            
             if (indexPath.section == 0 && indexPath.row == 0) {
                 // All Users / #nofilter cell
                 

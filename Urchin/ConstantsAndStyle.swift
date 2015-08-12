@@ -131,7 +131,7 @@ let noteTextColor: UIColor = UIColor.blackColor()
 /*
     Separator color (UserDropDownCell)
 */
-let whiteQuarterAlpha: UIColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.25)
+let whiteQuarterAlpha: UIColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.2)
 
 // -----
 
@@ -241,7 +241,7 @@ let editButtonHeight: CGFloat = 12.5
     Width used for the edit button in a NoteCell
         Need to adjust font size appropriately if this is changed
 */
-let editButtonWidth: CGFloat = 62.0
+let editButtonWidth: CGFloat = 70.0
 
 /*
     Preferred height of the group/team label in any dropDownMenu (NotesVC, AddNoteVC)
@@ -252,6 +252,11 @@ let dropDownGroupLabelHeight: CGFloat = 20.0
     Used for dropDownMenu shadow height (NotesVC, AddNoteVC)
 */
 let shadowHeight: CGFloat = 2.5
+
+/*
+    Size of extra space for hitboxes
+*/
+let hitBoxAmount: CGFloat = 20.0
 
 // -----
 
@@ -506,8 +511,8 @@ let servers: [String: String] = [
         also inset amount
 */
 let userCellHeight: CGFloat = 56.0
-let userCellInset: CGFloat = 16
-let userCellThickSeparator: CGFloat = 2
+let userCellInset: CGFloat = labelInset
+let userCellThickSeparator: CGFloat = 1
 let userCellThinSeparator: CGFloat = 1
 
 // ------------ NoteCell ------------
@@ -515,7 +520,7 @@ let userCellThinSeparator: CGFloat = 1
 /*
     Note cell inset amount and title for edit button
 */
-let noteCellInset: CGFloat = 16
+let noteCellInset: CGFloat = labelInset
 
 let editButtonTitle: String = "edit"
 

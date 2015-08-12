@@ -105,7 +105,7 @@ class AddNoteViewController: UIViewController {
         
         // Thicken navBar border
         let border = CALayer()
-        border.borderColor = UIColor.blackColor().CGColor
+        border.borderColor = whiteQuarterAlpha.CGColor
         border.borderWidth = 1
         let navBarLayer = self.navigationController!.navigationBar.layer
         border.frame = CGRect(x: 0, y: navBarLayer.bounds.height, width: navBarLayer.bounds.width, height: 1)
@@ -274,9 +274,9 @@ class AddNoteViewController: UIViewController {
         
         // Shadowing
         dropDownMenu.layer.masksToBounds = false
-        dropDownMenu.layer.shadowColor = UIColor.blackColor().CGColor
+        dropDownMenu.layer.shadowColor = blackishColor.CGColor
         dropDownMenu.layer.shadowOffset = CGSize(width: 0, height: shadowHeight)
-        dropDownMenu.layer.shadowOpacity = 1.0
+        dropDownMenu.layer.shadowOpacity = 0.75
         dropDownMenu.layer.shadowRadius = shadowHeight
         
         self.view.addSubview(dropDownMenu)

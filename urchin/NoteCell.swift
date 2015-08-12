@@ -30,11 +30,26 @@ class NoteCell: UITableViewCell {
             let editTitle = NSAttributedString(string: editButtonTitle, attributes: [NSForegroundColorAttributeName: darkestGreyColor, NSFontAttributeName: smallRegularFont])
             editButton.setAttributedTitle(editTitle, forState: .Normal)
             editButton.sizeToFit()
-            editButton.frame.size.height = noteCellInset + editButtonHeight + noteCellInset
-            editButton.frame.size.width = editButton.frame.width + 2 * noteCellInset
-            let editX: CGFloat = contentView.frame.width - (editButton.frame.width)
-            let editY: CGFloat = 0
-            editButton.frame.origin = CGPoint(x: editX, y: editY)
+            let editX: CGFloat = contentView.frame.width - (editButton.frame.width + 2 * hitBoxAmount)
+            editButton.frame.size.height = hitBoxAmount + editButtonHeight + hitBoxAmount
+            editButton.frame.size.width = editButton.frame.width + 2 * hitBoxAmount
+            editButton.frame.origin.x = editX
+            
+//            editButton.layer.borderWidth = 1
+//            editButton.layer.borderColor = UIColor.redColor().CGColor
+            
+            let helperLabel = UILabel()
+            helperLabel.font = mediumSemiboldFont
+            helperLabel.text = "Howard"
+            helperLabel.sizeToFit()
+            editButton.frame.origin.y = (noteCellInset + helperLabel.frame.height) - (editButtonHeight + hitBoxAmount + 2)
+            
+            let line = UIView()
+            line.frame.size.width = self.frame.width
+            line.frame.size.height = 1
+            line.frame.origin.y = noteCellInset + helperLabel.frame.height
+//            line.backgroundColor = UIColor.greenColor()
+            contentView.addSubview(line)
             
             contentView.addSubview(editButton)
         } else {
@@ -61,9 +76,14 @@ class NoteCell: UITableViewCell {
         usernameLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
         usernameLabel.numberOfLines = 0
         usernameLabel.sizeToFit()
+        println(usernameLabel.frame.height)
+
         let usernameX = noteCellInset
         let usernameY = noteCellInset
         usernameLabel.frame.origin = CGPoint(x: usernameX, y: usernameY)
+        
+//        usernameLabel.layer.borderColor = UIColor.redColor().CGColor
+//        usernameLabel.layer.borderWidth = 1
         
         // Configure the date label using extended dateFormatter
         let dateFormatter = NSDateFormatter()

@@ -76,10 +76,10 @@ class UserDropDownCell: UITableViewCell {
         } else if (key == "version") {
             // Configure the name label to contain the version
             self.nameLabel.text = UIApplication.versionBuildServer()
-            nameLabel.font = mediumBoldFont
+            nameLabel.font = smallRegularFont
             nameLabel.sizeToFit()
             nameLabel.frame.origin.x = self.frame.width / 2 - nameLabel.frame.width / 2
-            nameLabel.frame.origin.y = userCellThickSeparator + userCellInset
+            nameLabel.frame.origin.y = userCellThickSeparator + ((self.frame.height - userCellThickSeparator) / 2 - nameLabel.frame.height / 2)
             
             // Configure the thick separator at the top
             separator.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: userCellThickSeparator)
@@ -103,7 +103,6 @@ class UserDropDownCell: UITableViewCell {
         self.group = group
         
         // configure the name label with the group name
-        nameLabel.frame.size = CGSize(width: contentView.frame.width + userCellInset, height: dropDownGroupLabelHeight)
         self.nameLabel.text = group.fullName
         if (bold) {
             nameLabel.font = mediumBoldFont
@@ -111,6 +110,7 @@ class UserDropDownCell: UITableViewCell {
             nameLabel.font = mediumRegularFont
         }
         nameLabel.sizeToFit()
+        nameLabel.frame.size.width = min(nameLabel.frame.width, contentView.frame.width - 6 * userCellInset)
         
         if last {
             configure("grouplast")
