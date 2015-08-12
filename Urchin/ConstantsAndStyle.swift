@@ -36,7 +36,7 @@ let darkestGreyColor: UIColor = UIColor(red: 152/255, green: 152/255, blue: 151/
 /*
     Background color for even numbered noteCells (NotesVC)
 */
-let darkestGreyLowAlpha: UIColor = UIColor(red: 152/255, green: 152/255, blue: 151/255, alpha: 0.2)
+let darkestGreyLowAlpha: UIColor = UIColor(red: 152/255, green: 152/255, blue: 151/255, alpha: 0.125)
 
 /*
     Email and password field text color (LoginVC)
