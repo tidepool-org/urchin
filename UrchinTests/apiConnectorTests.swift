@@ -15,12 +15,16 @@ class apiConnectorTests: XCTestCase {
     let note: Note = Note()
     var userid: String = ""
     
+    var email: String = "ethan+urchintests@tidepool.org"
+    var pass: String = "urchintests"
+    var server: String = "Development"
+    
     override func setUp() {
         super.setUp()
         // Setup code. This method is called before the invocation of each test method in the class.
         // Each test method is a new session.
         apiConnector = APIConnector()
-        baseURL = servers["Development"]!
+        baseURL = servers[server]!
     }
     
     override func tearDown() {
@@ -33,7 +37,7 @@ class apiConnectorTests: XCTestCase {
         let expectation = expectationWithDescription("Asynchronous request")
         
         // Invalid password for a login request.
-        let loginString = NSString(format: "%@:%@", "ethan+urchintests@tidepool.org", "invalidpass")
+        let loginString = NSString(format: "%@:%@", email, "invalidpass")
         let loginData: NSData = loginString.dataUsingEncoding(NSUTF8StringEncoding)!
         let base64LoginString = loginData.base64EncodedStringWithOptions(nil)
         
@@ -67,7 +71,7 @@ class apiConnectorTests: XCTestCase {
         let expectation = expectationWithDescription("Asynchronous request")
         
         // Valid password for a login request.
-        let loginString = NSString(format: "%@:%@", "ethan+urchintests@tidepool.org", "urchintests")
+        let loginString = NSString(format: "%@:%@", email, "urchintests")
         let loginData: NSData = loginString.dataUsingEncoding(NSUTF8StringEncoding)!
         let base64LoginString = loginData.base64EncodedStringWithOptions(nil)
         
@@ -457,6 +461,47 @@ class apiConnectorTests: XCTestCase {
         
         // Wait 5.0 seconds until expectation has been fulfilled. If not, fail.
         waitForExpectationsWithTimeout(5.0, handler: nil)
+        
+    }
+    
+    func testKOnStaging() {
+        
+        email = "ethan+urchintests@tidepool.org"
+        pass = "urchintests"
+        server = "Staging"
+        
+        testALoginFail()
+        testBLoginSuccess()
+        testCLogout()
+        testDFindProfile()
+        testEGetViewableUsers()
+        testFGetNotesNoNotes()
+        testGPostNote()
+        testHEditNote()
+        testIGetNotes()
+        testJDeleteNote()
+        testKRefreshToken()
+        
+    }
+    
+    func testLOnProd() {
+        
+        email = "ethan+urchintests@tidepool.org"
+        pass = "urchintests"
+        server = "Production"
+        
+        testALoginFail()
+        testBLoginSuccess()
+        testCLogout()
+        testDFindProfile()
+        testEGetViewableUsers()
+        testFGetNotesNoNotes()
+        testGPostNote()
+        testHEditNote()
+        testIGetNotes()
+        // Do not test delete note yet...
+//        testJDeleteNote()
+        testKRefreshToken()
         
     }
 }
