@@ -106,11 +106,8 @@ class EditNoteViewController: UIViewController {
         var closeButton: UIBarButtonItem = UIBarButtonItem(image: closeX, style: .Plain, target: self, action: "closeVC:")
         self.navigationItem.setLeftBarButtonItem(closeButton, animated: true)
         
-        if (baseURL == servers["Development"]! || baseURL == servers["Staging"]!) {
-            
-            var deleteButton: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Trash, target: self, action: "deleteNote:")
-            self.navigationItem.setRightBarButtonItem(deleteButton, animated: true)
-        }
+        var deleteButton: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Trash, target: self, action: "deleteNote:")
+        self.navigationItem.setRightBarButtonItem(deleteButton, animated: true)
         
         // configure date label
         let dateFormatter = NSDateFormatter()
