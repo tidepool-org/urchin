@@ -386,14 +386,12 @@ class APIConnector {
                     var userDict: NSDictionary = (NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: nil) as? NSDictionary)!
                     
                     otherUser.processUserDict(userDict)
-                    println("\(otherUser.fullName) \(otherUser.userid)")
                     
                     if (notesVC != nil) {
                         self.groupsFetched++
                         
                         // Insert logic here for DSAs only
                         if (otherUser.patient != nil && (otherUser.patient?.aboutMe != nil || otherUser.patient?.birthday != nil || otherUser.patient?.diagnosisDate != nil)) {
-                            println("DSA for \(otherUser.fullName)")
                             notesVC!.groups.insert(otherUser, atIndex: 0)
                         }
                         
@@ -433,9 +431,7 @@ class APIConnector {
                 if (httpResponse.statusCode == 200) {
                     NSLog("Found viewable users for user: \(self.user?.userid)")
                     var jsonResult: NSDictionary = (NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: nil) as? NSDictionary)!
-                    
-                    println(jsonResult)
-                    
+                                        
                     var i = 0
                     for key in jsonResult.keyEnumerator() {
                         let group = User(userid: key as! String, apiConnector: self, notesVC: notesVC)

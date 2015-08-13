@@ -181,15 +181,16 @@ class NotesViewController: UIViewController {
     func groupsReady(notification: NSNotification) {
 
         if (groups.count != 0) {
-            groupsReadyForTransition = true
-            initialAddNote()
+            
+            sortGroups()
             
             self.view.addSubview(newNoteButton)
+            
+            configureDropDownMenu()
+            
             // Add rightBarButtonItem to down arrow for showing dropdown
             var rightDropDownMenuButton: UIBarButtonItem = UIBarButtonItem(image: downArrow, style: .Plain, target: self, action: "dropDownMenuPressed")
             self.navigationItem.setRightBarButtonItem(rightDropDownMenuButton, animated: true)
-            
-            configureDropDownMenu()
             
             if (groups.count == 1) {
                 configureTitleView(appTitle)
@@ -197,6 +198,9 @@ class NotesViewController: UIViewController {
                 // navigationBar title is "All Notes" to match #nofilter to start
                 configureTitleView(allNotesTitle)
             }
+            
+            groupsReadyForTransition = true
+            initialAddNote()
             
             loadNotes()
         } else {
@@ -230,6 +234,17 @@ class NotesViewController: UIViewController {
             
             self.newNoteButton.removeFromSuperview()
             self.navigationItem.setRightBarButtonItem(nil, animated: true)
+        }
+        
+    }
+    
+    func sortGroups() {
+        
+        sort(&groups) {
+            if ($0.userid == self.user.userid) {
+                return true
+            }
+            return $0.fullName < $1.fullName
         }
         
     }
