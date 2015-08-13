@@ -140,12 +140,18 @@ class APIConnector {
                             
                             let notification = NSNotification(name: "prepareLogin", object: nil)
                             NSNotificationCenter.defaultCenter().postNotification(notification)
+                            
+                            let notificationTwo = NSNotification(name: "forcedLogout", object: nil)
+                            NSNotificationCenter.defaultCenter().postNotification(notificationTwo)
                         }
                     } else {
                         NSLog("Invalid status code: \(httpResponse.statusCode) for logging in")
                         
                         let notification = NSNotification(name: "prepareLogin", object: nil)
                         NSNotificationCenter.defaultCenter().postNotification(notification)
+                        
+                        let notificationTwo = NSNotification(name: "forcedLogout", object: nil)
+                        NSNotificationCenter.defaultCenter().postNotification(notificationTwo)
                         
                         self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
                     }
@@ -154,6 +160,9 @@ class APIConnector {
                     
                     let notification = NSNotification(name: "prepareLogin", object: nil)
                     NSNotificationCenter.defaultCenter().postNotification(notification)
+                    
+                    let notificationTwo = NSNotification(name: "forcedLogout", object: nil)
+                    NSNotificationCenter.defaultCenter().postNotification(notificationTwo)
                     
                     self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
                 }
@@ -221,12 +230,18 @@ class APIConnector {
                     
                     let notification = NSNotification(name: "prepareLogin", object: nil)
                     NSNotificationCenter.defaultCenter().postNotification(notification)
+                    
+                    let notificationTwo = NSNotification(name: "forcedLogout", object: nil)
+                    NSNotificationCenter.defaultCenter().postNotification(notificationTwo)
                 }
             } else {
                 // Login information does not exist
                 
                 let notification = NSNotification(name: "prepareLogin", object: nil)
                 NSNotificationCenter.defaultCenter().postNotification(notification)
+                
+                let notificationTwo = NSNotification(name: "forcedLogout", object: nil)
+                NSNotificationCenter.defaultCenter().postNotification(notificationTwo)
             }
         } else {
             NSLog("Could not fetch remember me information: \(error), \(error!.userInfo)")
@@ -313,24 +328,58 @@ class APIConnector {
         }
         
         let completion = { (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
-            if let httpResponse = response as? NSHTTPURLResponse {
-                
-                if (httpResponse.statusCode == 200) {
-                    // Store the session token for further use.
-                    self.x_tidepool_session_token = httpResponse.allHeaderFields["x-tidepool-session-token"] as! String
+            var jsonResult: NSDictionary = (NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: nil) as? NSDictionary)!
+            
+            if let code = jsonResult.valueForKey("code") as? Int {
+                if (code == 401) {
+                    NSLog("Could not refresh session token: \(code)")
+                    
+                    self.tryLoginFromRefreshToken()
+                    
                 } else {
-                    NSLog("Did not log out - invalid status code \(httpResponse.statusCode)")
-                    self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
+                    NSLog("Could not refresh session token: \(code)")
+                    
+                    self.tryLoginFromRefreshToken()
                 }
-                
             } else {
-                NSLog("Did not log out - response could not be parsed")
-                self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
+                if let httpResponse = response as? NSHTTPURLResponse {
+                    
+                    if (httpResponse.statusCode == 200) {
+                        NSLog("Refreshed session token")
+                        
+                        // Store the session token for further use.
+                        self.x_tidepool_session_token = httpResponse.allHeaderFields["x-tidepool-session-token"] as! String
+                        
+                        // Send notification to NotesVC to open new note
+                        let notification = NSNotification(name: "newNote", object: nil)
+                        NSNotificationCenter.defaultCenter().postNotification(notification)
+                        
+                        
+                    } else {
+                        NSLog("Could not refresh session token - invalid status code \(httpResponse.statusCode)")
+                        
+                        self.tryLoginFromRefreshToken()
+                    }
+                    
+                } else {
+                    NSLog("Could not refresh session token - response could not be parsed")
+                    
+                    self.tryLoginFromRefreshToken()
+                }
             }
+            
         }
         
         // Post the request.
         self.request("GET", urlExtension: urlExtension, headerDict: headerDict, body: nil, preRequest: preRequest, completion: completion)
+        
+    }
+    
+    func tryLoginFromRefreshToken() {
+        
+        self.groupsFetched = 0
+        self.groupsToFetchFor = 0
+        self.login()
         
     }
     

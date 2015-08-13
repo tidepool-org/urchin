@@ -169,6 +169,10 @@ class NotesViewController: UIViewController {
         notificationCenter.addObserver(self, selector: "groupsReady:", name: "groupsReady", object: nil)
         // Listen for when to open an NewNoteVC
         notificationCenter.addObserver(self, selector: "newNote:", name: "newNote", object: nil)
+        // Listen for when to refresh session token
+        notificationCenter.addObserver(self, selector: "refreshSessionToken:", name: "refreshSessionToken", object: nil)
+        // Listen for when force a logout
+        notificationCenter.addObserver(self, selector: "forcedLogout:", name: "forcedLogout", object: nil)
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -252,8 +256,31 @@ class NotesViewController: UIViewController {
     func logout() {
         // Logout selected
         // Unwind VC
-        self.apiConnector.trackMetric("Logged Out")
+        apiConnector.trackMetric("Logged Out")
         apiConnector.logout(self)
+    }
+    
+    func forcedLogout(notification: NSNotification) {
+        
+        // For when session token has expired
+        
+        let notification = NSNotification(name: "prepareLogin", object: nil)
+        NSNotificationCenter.defaultCenter().postNotification(notification)
+        
+        if (addOrEditShowing) {
+            self.dismissViewControllerAnimated(true, completion: {
+                self.dismissViewControllerAnimated(true, completion: {
+                    self.apiConnector.user = nil
+                    self.apiConnector.x_tidepool_session_token = ""
+                })
+            })
+        } else {
+            self.dismissViewControllerAnimated(true, completion: {
+                self.apiConnector.user = nil
+                self.apiConnector.x_tidepool_session_token = ""
+            })
+        }
+        
     }
     
     func initialAddNote() {
@@ -395,6 +422,10 @@ class NotesViewController: UIViewController {
     // Fetch and load the groups/teams that user is involved in
     func loadGroups() {
         apiConnector.getAllViewableUsers(self)
+    }
+    
+    func refreshSessionToken(notification: NSNotification) {
+        apiConnector.refreshToken()
     }
     
     // Handle editPressed notification
