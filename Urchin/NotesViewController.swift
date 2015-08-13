@@ -101,8 +101,14 @@ class NotesViewController: UIViewController {
         border.frame = CGRect(x: 0, y: navBarLayer.bounds.height, width: navBarLayer.bounds.width, height: 1)
         navBarLayer.addSublayer(border)
         
-        // navigationBar title begins with "All Notes" to match #nofilter to start
-        configureTitleView(allNotesTitle)
+        // Title view starts as App title
+        let titleView = UILabel()
+        titleView.text = appTitle
+        titleView.font = mediumRegularFont
+        titleView.textColor = navBarTitleColor
+        titleView.sizeToFit()
+        titleView.frame.size.height = self.navigationController!.navigationBar.frame.size.height
+        self.navigationItem.titleView = titleView
         
         // Initialize the notesTable to fill whole view, besides addNoteButton
         // Configure the notesTable
@@ -178,13 +184,21 @@ class NotesViewController: UIViewController {
             groupsReadyForTransition = true
             initialAddNote()
             
-            configureDropDownMenu()
-            loadNotes()
-            
             self.view.addSubview(newNoteButton)
             // Add rightBarButtonItem to down arrow for showing dropdown
             var rightDropDownMenuButton: UIBarButtonItem = UIBarButtonItem(image: downArrow, style: .Plain, target: self, action: "dropDownMenuPressed")
             self.navigationItem.setRightBarButtonItem(rightDropDownMenuButton, animated: true)
+            
+            configureDropDownMenu()
+            
+            if (groups.count == 1) {
+                configureTitleView(appTitle)
+            } else {
+                // navigationBar title is "All Notes" to match #nofilter to start
+                configureTitleView(allNotesTitle)
+            }
+            
+            loadNotes()
         } else {
             NSLog("No data storage accounts")
             let errorLabel: UILabel = UILabel()
@@ -213,7 +227,6 @@ class NotesViewController: UIViewController {
             logoutLabel.userInteractionEnabled = true
             logoutLabel.addGestureRecognizer(recognizer)
             self.view.addSubview(logoutLabel)
-            
             
             self.newNoteButton.removeFromSuperview()
             self.navigationItem.setRightBarButtonItem(nil, animated: true)
@@ -406,7 +419,8 @@ class NotesViewController: UIViewController {
         self.view.addSubview(opaqueOverlay)
         
         // Configure dropDownMenu, same width as view
-        self.dropDownHeight = CGFloat(groups.count+3)*userCellHeight + CGFloat(groups.count)*userCellThinSeparator + 2*userCellThickSeparator
+        let additionalCells = groups.count == 1 ? 1 : 3
+        self.dropDownHeight = CGFloat(groups.count+additionalCells)*userCellHeight + CGFloat(groups.count)*userCellThinSeparator + 2*userCellThickSeparator
         self.dropDownHeight = min(self.dropDownHeight, self.view.frame.height)
         let dropDownWidth = self.view.frame.width
         self.dropDownMenu = UITableView(frame: CGRect(x: 0, y: -(dropDownHeight + 2*shadowHeight), width: dropDownWidth, height: dropDownHeight))
@@ -436,10 +450,12 @@ class NotesViewController: UIViewController {
     func dropDownMenuPressed() {
         if (isDropDownDisplayed) {
             // Configure navigationBar title to match filter
-            if (filter == nil) {
-                self.configureTitleView(allNotesTitle)
-            } else {
-                self.configureTitleView(filter.fullName!)
+            if (groups.count > 1) {
+                if (filter == nil) {
+                    self.configureTitleView(allNotesTitle)
+                } else {
+                    self.configureTitleView(filter.fullName!)
+                }
             }
             // Hide the dropDownMenu
             self.hideDropDownMenu()

@@ -53,34 +53,54 @@ extension NotesViewController: UITableViewDataSource {
             
             let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(UserDropDownCell), forIndexPath: indexPath) as! UserDropDownCell
             
+            
             cell.userInteractionEnabled = true
             
             var customSelection = UIView()
             customSelection.backgroundColor = tealColor
             cell.selectedBackgroundView = customSelection
             
-            if (indexPath.section == 0 && indexPath.row == 0) {
-                // All Users / #nofilter cell
+            if (groups.count == 1) {
                 
-                cell.configure("all")
-                
-            } else if (indexPath.section == 1 && indexPath.row == 0) {
-                // Logout cell
-                
-                cell.configure("logout")
-                
-            } else if (indexPath.section == 2 && indexPath.row == 0) {
-                
-                // Version cell
-                cell.configure("version")
-                
-                cell.userInteractionEnabled = false
+                if (indexPath.section == 0 && indexPath.row == 0) {
+                    // Logout cell
+                    
+                    cell.configure("logout")
+                    
+                } else if (indexPath.section == 1 && indexPath.row == 0) {
+                    // Version cell
+                    
+                    cell.configure("version")
+                    
+                    cell.userInteractionEnabled = false
+                    
+                }
                 
             } else {
-                // Individual group / filter cell
                 
-                cell.configure(groups[indexPath.row - 1], last: indexPath.row == groups.count, arrow: true, bold: false)
-                
+                if (indexPath.section == 0 && indexPath.row == 0) {
+                    // All Users / #nofilter cell
+                    
+                    cell.configure("all")
+                    
+                } else if (indexPath.section == 1 && indexPath.row == 0) {
+                    // Logout cell
+                    
+                    cell.configure("logout")
+                    
+                } else if (indexPath.section == 2 && indexPath.row == 0) {
+                    
+                    // Version cell
+                    cell.configure("version")
+                    
+                    cell.userInteractionEnabled = false
+                    
+                } else {
+                    // Individual group / filter cell
+                    
+                    cell.configure(groups[indexPath.row - 1], last: indexPath.row == groups.count, arrow: true, bold: false)
+                    
+                }
             }
             
             return cell
@@ -90,8 +110,13 @@ extension NotesViewController: UITableViewDataSource {
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         if (tableView.isEqual(dropDownMenu)) {
             // DropDownMenu
-            // Filters, Logout, and Version = 3
-            return 3
+            if (groups.count == 1) {
+                // Logout and Version = 2
+                return 2
+            } else {
+                // Filters, Logout, and Version = 3
+                return 3
+            }
         } else {
             // Just a list of notes
             // Possibly change if conversations are shown in feed?
@@ -105,19 +130,26 @@ extension NotesViewController: UITableViewDataSource {
             // NotesTable --> as many cells as filteredNotes
             return filteredNotes.count
         } else if (tableView.isEqual(dropDownMenu)){
+            
             // DropDownMenu
-            if (section == 0) {
-                // Number of groups + 1 for 'All' / #nofilter
-                return groups.count + 1
-            } else if (section == 1) {
-                // Only 1 for 'Logout'
-                return 1
-            } else if (section == 2) {
-                // Version number
+            if (groups.count == 1) {
+                // Only one group, therefore only logout and version number cells, each in their own section
                 return 1
             } else {
-                return 0
+                if (section == 0) {
+                    // Number of groups + 1 for 'All' / #nofilter
+                    return groups.count + 1
+                } else if (section == 1) {
+                    // Only 1 for 'Logout'
+                    return 1
+                } else if (section == 2) {
+                    // Version number
+                    return 1
+                } else {
+                    return 0
+                }
             }
+            
         } else {
             // Why not?
             return 0

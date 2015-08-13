@@ -111,9 +111,6 @@ class AddNoteViewController: UIViewController {
         border.frame = CGRect(x: 0, y: navBarLayer.bounds.height, width: navBarLayer.bounds.width, height: 1)
         navBarLayer.addSublayer(border)
         
-        // Configure title to initial group (may be changed later with dropDown)
-        configureTitleView(group.fullName!)
-        
         // Configure 'x' to close VC
         closeButton.image = closeX
         closeButton.style = .Plain
@@ -122,9 +119,22 @@ class AddNoteViewController: UIViewController {
         // navigationBar begins with leftBarButtonItem to close VC
         self.navigationItem.setLeftBarButtonItem(closeButton, animated: true)
         
-        // Configure rightDropDownMenuButton to trigger dropDownMenu toggle
-        var rightDropDownMenuButton: UIBarButtonItem = UIBarButtonItem(image: downArrow, style: .Plain, target: self, action: "dropDownMenuPressed")
-        self.navigationItem.setRightBarButtonItem(rightDropDownMenuButton, animated: true)
+        if (groups.count > 1) {
+            // Configure title to initial group (may be changed later with dropDown)
+            configureTitleView(group.fullName!)
+            
+            // Configure rightDropDownMenuButton to trigger dropDownMenu toggle
+            var rightDropDownMenuButton: UIBarButtonItem = UIBarButtonItem(image: downArrow, style: .Plain, target: self, action: "dropDownMenuPressed")
+            self.navigationItem.setRightBarButtonItem(rightDropDownMenuButton, animated: true)
+        } else {
+            let titleView = UILabel()
+            titleView.text = group.fullName!
+            titleView.font = mediumRegularFont
+            titleView.textColor = navBarTitleColor
+            titleView.sizeToFit()
+            titleView.frame.size.height = self.navigationController!.navigationBar.frame.size.height
+            self.navigationItem.titleView = titleView
+        }
     
         // configure date label
         let dateFormatter = NSDateFormatter()
