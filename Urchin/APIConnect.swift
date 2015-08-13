@@ -355,13 +355,12 @@ class APIConnector {
                     
                     otherUser.processUserDict(userDict)
                     
-                    println(notesVC)
                     if (notesVC != nil) {
                         self.groupsFetched++
                         
                         // Insert logic here for DSAs only
                         if (otherUser.patient != nil && (otherUser.patient?.aboutMe != nil || otherUser.patient?.birthday != nil || otherUser.patient?.diagnosisDate != nil)) {
-                            println("DSA")
+                            println("DSA for \(otherUser.fullName)")
                             notesVC!.groups.insert(otherUser, atIndex: 0)
                         }
                         

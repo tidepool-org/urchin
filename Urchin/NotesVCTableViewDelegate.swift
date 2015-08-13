@@ -149,10 +149,7 @@ extension NotesViewController: UITableViewDelegate {
                 // toggle the dropDownMenu (hides the dropDownMenu)
                 self.dropDownMenuPressed()
             } else if (indexPath.section == 1) {
-                // Logout selected
-                // Unwind VC
-                self.apiConnector.trackMetric("Logged Out")
-                apiConnector.logout(self)
+                self.logout()
             }
         }
     }

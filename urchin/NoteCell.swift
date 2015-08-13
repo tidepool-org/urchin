@@ -66,7 +66,6 @@ class NoteCell: UITableViewCell {
         usernameLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
         usernameLabel.numberOfLines = 0
         usernameLabel.sizeToFit()
-        println(usernameLabel.frame.height)
 
         let usernameX = noteCellInset
         let usernameY = noteCellInset

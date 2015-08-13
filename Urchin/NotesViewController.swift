@@ -145,15 +145,9 @@ class NotesViewController: UIViewController {
         newNoteButton.addSubview(addNoteImageView)
         newNoteButton.addSubview(addNoteLabel)
         
-        self.view.addSubview(newNoteButton)
-        
         // Fetch the groups for notes and (eventually) dropDownMenu
         // Successful completion of fetch will configure dropDownMenu and then load notes
         self.loadGroups()
-        
-        // Add rightBarButtonItem to down arrow for showing dropdown
-        var rightDropDownMenuButton: UIBarButtonItem = UIBarButtonItem(image: downArrow, style: .Plain, target: self, action: "dropDownMenuPressed")
-        self.navigationItem.setRightBarButtonItem(rightDropDownMenuButton, animated: true)
         
         // Configure notification center to observe addNote and saveNote
         //      called from addNoteVC and editNoteVC respectively
@@ -180,11 +174,58 @@ class NotesViewController: UIViewController {
     
     func groupsReady(notification: NSNotification) {
 
-        groupsReadyForTransition = true
-        initialAddNote()
+        if (groups.count != 0) {
+            groupsReadyForTransition = true
+            initialAddNote()
+            
+            configureDropDownMenu()
+            loadNotes()
+            
+            self.view.addSubview(newNoteButton)
+            // Add rightBarButtonItem to down arrow for showing dropdown
+            var rightDropDownMenuButton: UIBarButtonItem = UIBarButtonItem(image: downArrow, style: .Plain, target: self, action: "dropDownMenuPressed")
+            self.navigationItem.setRightBarButtonItem(rightDropDownMenuButton, animated: true)
+        } else {
+            NSLog("No data storage accounts")
+            let errorLabel: UILabel = UILabel()
+            errorLabel.text = "Looks like you don't have access to any data yet. Please ask people to invite you to see their data in Blip so you can post notes for them."
+            errorLabel.font = mediumSemiboldFont
+            errorLabel.textColor = blackishColor
+            errorLabel.textAlignment = .Center
+            errorLabel.numberOfLines = 0
+            errorLabel.frame.size = CGSize(width: self.view.frame.width - 2 * labelInset, height: CGFloat.max)
+            errorLabel.sizeToFit()
+            errorLabel.frame.origin.x = self.view.frame.width / 2 - errorLabel.frame.width / 2
+            errorLabel.frame.origin.y = self.view.frame.height / 2 - errorLabel.frame.height / 2
+            self.view.addSubview(errorLabel)
+            
+            let logoutLabel = UILabel()
+            logoutLabel.text = "logout"
+            logoutLabel.font = mediumRegularFont
+            logoutLabel.textAlignment = .Center
+            logoutLabel.textColor = blackishColor
+            logoutLabel.sizeToFit()
+            logoutLabel.frame.size.width += 2 * hitBoxAmount
+            logoutLabel.frame.size.height += 2 * hitBoxAmount
+            logoutLabel.frame.origin.y = errorLabel.frame.maxY + labelSpacing
+            logoutLabel.frame.origin.x = self.view.frame.width / 2 - logoutLabel.frame.width / 2
+            let recognizer = UITapGestureRecognizer(target: self, action: "logout")
+            logoutLabel.userInteractionEnabled = true
+            logoutLabel.addGestureRecognizer(recognizer)
+            self.view.addSubview(logoutLabel)
+            
+            
+            self.newNoteButton.removeFromSuperview()
+            self.navigationItem.setRightBarButtonItem(nil, animated: true)
+        }
         
-        configureDropDownMenu()
-        self.loadNotes()
+    }
+    
+    func logout() {
+        // Logout selected
+        // Unwind VC
+        self.apiConnector.trackMetric("Logged Out")
+        apiConnector.logout(self)
     }
     
     func initialAddNote() {
