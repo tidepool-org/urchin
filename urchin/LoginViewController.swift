@@ -80,7 +80,7 @@ class LogInViewController : UIViewController, UIActionSheetDelegate {
         // add observer for prepareLogin
         notificationCenter.addObserver(self, selector: "prepareLogin", name: "prepareLogin", object: nil)
 
-        if (self.isConnectedToNetwork()) {
+        if (apiConnector.isConnectedToNetwork()) {
             apiConnector.loadServer()
             apiConnector.login()
         } else {

@@ -14,8 +14,6 @@
 		AA3652C41B338525001F514D /* NotesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3652C31B338525001F514D /* NotesViewController.swift */; };
 		AA3652CC1B34A163001F514D /* Patient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3652CB1B34A163001F514D /* Patient.swift */; };
 		AA3652CE1B34A8E4001F514D /* UserDropDownCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3652CD1B34A8E4001F514D /* UserDropDownCell.swift */; };
-		AA4AB35C1B6AF29100FEA705 /* LoginVCNetworkConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4AB35B1B6AF29100FEA705 /* LoginVCNetworkConnection.swift */; };
-		AA4AB35D1B6AF31400FEA705 /* LoginVCNetworkConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4AB35B1B6AF29100FEA705 /* LoginVCNetworkConnection.swift */; };
 		AA54DBBF1B596DE7005F8448 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA54DBBE1B596DE7005F8448 /* LoadingView.swift */; };
 		AA66BA791B4C292400CCB008 /* down.png in Resources */ = {isa = PBXBuildFile; fileRef = AA66BA771B4C292400CCB008 /* down.png */; };
 		AA66BA7A1B4C292400CCB008 /* down@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AA66BA781B4C292400CCB008 /* down@2x.png */; };
@@ -141,7 +139,6 @@
 		AA3652CB1B34A163001F514D /* Patient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Patient.swift; sourceTree = "<group>"; };
 		AA3652CD1B34A8E4001F514D /* UserDropDownCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDropDownCell.swift; sourceTree = "<group>"; };
 		AA4184FB1B74307700EE53C3 /* UrchinData_2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = UrchinData_2.xcdatamodel; sourceTree = "<group>"; };
-		AA4AB35B1B6AF29100FEA705 /* LoginVCNetworkConnection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginVCNetworkConnection.swift; sourceTree = "<group>"; };
 		AA54DBBE1B596DE7005F8448 /* LoadingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		AA66BA771B4C292400CCB008 /* down.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = down.png; sourceTree = "<group>"; };
 		AA66BA781B4C292400CCB008 /* down@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "down@2x.png"; sourceTree = "<group>"; };
@@ -312,7 +309,6 @@
 			isa = PBXGroup;
 			children = (
 				AA6931EF1B66DB270057F0A0 /* LoginVCTextFieldDelegate.swift */,
-				AA4AB35B1B6AF29100FEA705 /* LoginVCNetworkConnection.swift */,
 				AA6931F21B66DD6F0057F0A0 /* LoginVCTransitionDelegate.swift */,
 				AADD00381B6BFC28003D931E /* LoginVCActionSheetDelegate.swift */,
 			);
@@ -651,7 +647,6 @@
 				AA6932091B66E8260057F0A0 /* AddNoteVCAlertViewDelegate.swift in Sources */,
 				AA6931F31B66DD6F0057F0A0 /* LoginVCTransitionDelegate.swift in Sources */,
 				AAB6B0531B605C440051472C /* FadeAnimator.swift in Sources */,
-				AA4AB35C1B6AF29100FEA705 /* LoginVCNetworkConnection.swift in Sources */,
 				AA6932141B66EE0C0057F0A0 /* ConstantsAndStyle.swift in Sources */,
 				AAA3F3131B508384000EB344 /* HashtagBolder.swift in Sources */,
 				AA3484F01B559EA10028C49B /* HashtagsView.swift in Sources */,
@@ -688,7 +683,6 @@
 			files = (
 				AA7920211B62AB5A0046038B /* EditNoteViewController.swift in Sources */,
 				AA7920271B62AB920046038B /* FadeAnimator.swift in Sources */,
-				AA4AB35D1B6AF31400FEA705 /* LoginVCNetworkConnection.swift in Sources */,
 				AA6932041B66E6210057F0A0 /* AddNoteVCTableViewDataSource.swift in Sources */,
 				AA6AF8F11B5EA81F0011F246 /* dateFormatterExtensionTests.swift in Sources */,
 				AA7920251B62AB790046038B /* NoteCell.swift in Sources */,

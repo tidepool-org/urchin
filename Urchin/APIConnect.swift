@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import CoreData
+import SystemConfiguration
 
 class APIConnector {
     
@@ -19,23 +20,29 @@ class APIConnector {
     private var groupsToFetchFor = 0
     private var groupsFetched = 0
     
-    func request(method: String, urlExtension: String, headerDict: [String: String], body: NSData?, preRequest: () -> Void, completion: (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void) {
+    func request(method: String, urlExtension: String, headerDict: [String: String], body: NSData?, preRequest: () -> Void,
+        completion: (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void) {
         
-        preRequest()
-        
-        var urlString = baseURL + urlExtension
-        urlString = urlString.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
-        let url = NSURL(string: urlString)
-        let request = NSMutableURLRequest(URL: url!)
-        request.HTTPMethod = method
-        for (field, value) in headerDict {
-            request.setValue(value, forHTTPHeaderField: field)
-        }
-        request.HTTPBody = body
-        
-        NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) { (response, data, error) -> Void in
-            completion(response: response, data: data, error: error)
-        }
+            if (self.isConnectedToNetwork()) {
+                preRequest()
+                
+                var urlString = baseURL + urlExtension
+                urlString = urlString.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
+                let url = NSURL(string: urlString)
+                let request = NSMutableURLRequest(URL: url!)
+                request.HTTPMethod = method
+                for (field, value) in headerDict {
+                    request.setValue(value, forHTTPHeaderField: field)
+                }
+                request.HTTPBody = body
+                
+                NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) { (response, data, error) -> Void in
+                    completion(response: response, data: data, error: error)
+                }
+            } else {
+                NSLog("Not connected to network")
+                self.alertWithOkayButton("Not Connected to Network", message: "Please restart Blip notes when you are connected to a network.")
+            }
     }
     
     func trackMetric(metricName: String) {
@@ -785,6 +792,30 @@ class APIConnector {
         unknownErrorAlert.title = title
         unknownErrorAlert.message = message
         unknownErrorAlert.addButtonWithTitle("Okay")
+        
+        unknownErrorAlert.delegate = self
+        
         unknownErrorAlert.show()
+    }
+    
+    func isConnectedToNetwork() -> Bool {
+        
+        var zeroAddress = sockaddr_in(sin_len: 0, sin_family: 0, sin_port: 0, sin_addr: in_addr(s_addr: 0), sin_zero: (0, 0, 0, 0, 0, 0, 0, 0))
+        zeroAddress.sin_len = UInt8(sizeofValue(zeroAddress))
+        zeroAddress.sin_family = sa_family_t(AF_INET)
+        
+        let defaultRouteReachability = withUnsafePointer(&zeroAddress) {
+            SCNetworkReachabilityCreateWithAddress(nil, UnsafePointer($0)).takeRetainedValue()
+        }
+        
+        var flags: SCNetworkReachabilityFlags = 0
+        if SCNetworkReachabilityGetFlags(defaultRouteReachability, &flags) == 0 {
+            return false
+        }
+        
+        let isReachable = (flags & UInt32(kSCNetworkFlagsReachable)) != 0
+        let needsConnection = (flags & UInt32(kSCNetworkFlagsConnectionRequired)) != 0
+        
+        return isReachable && !needsConnection
     }
 }
