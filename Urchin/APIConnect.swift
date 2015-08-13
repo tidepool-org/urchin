@@ -302,6 +302,38 @@ class APIConnector {
         }
     }
     
+    func refreshToken() {
+        
+        let urlExtension = "/auth/login"
+        
+        let headerDict = ["x-tidepool-session-token":"\(x_tidepool_session_token)"]
+        
+        let preRequest = { () -> Void in
+            // Nothing to do (yet)
+        }
+        
+        let completion = { (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
+            if let httpResponse = response as? NSHTTPURLResponse {
+                
+                if (httpResponse.statusCode == 200) {
+                    // Store the session token for further use.
+                    self.x_tidepool_session_token = httpResponse.allHeaderFields["x-tidepool-session-token"] as! String
+                } else {
+                    NSLog("Did not log out - invalid status code \(httpResponse.statusCode)")
+                    self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
+                }
+                
+            } else {
+                NSLog("Did not log out - response could not be parsed")
+                self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
+            }
+        }
+        
+        // Post the request.
+        self.request("GET", urlExtension: urlExtension, headerDict: headerDict, body: nil, preRequest: preRequest, completion: completion)
+        
+    }
+    
     func logout(notesVC: NotesViewController) {
         
         let headerDict = ["x-tidepool-session-token":"\(x_tidepool_session_token)"]
@@ -354,6 +386,7 @@ class APIConnector {
                     var userDict: NSDictionary = (NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: nil) as? NSDictionary)!
                     
                     otherUser.processUserDict(userDict)
+                    println("\(otherUser.fullName) \(otherUser.userid)")
                     
                     if (notesVC != nil) {
                         self.groupsFetched++
@@ -400,6 +433,8 @@ class APIConnector {
                 if (httpResponse.statusCode == 200) {
                     NSLog("Found viewable users for user: \(self.user?.userid)")
                     var jsonResult: NSDictionary = (NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: nil) as? NSDictionary)!
+                    
+                    println(jsonResult)
                     
                     var i = 0
                     for key in jsonResult.keyEnumerator() {

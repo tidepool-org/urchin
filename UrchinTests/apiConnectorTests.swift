@@ -416,4 +416,47 @@ class apiConnectorTests: XCTestCase {
         waitForExpectationsWithTimeout(5.0, handler: nil)
         
     }
+    
+    func testKRefreshToken() {
+        
+        testBLoginSuccess()
+        
+        // Expectation to be fulfilled once request returns with correct response.
+        let expectation = expectationWithDescription("Asynchronous request")
+        
+        let urlExtension = "/auth/login"
+        
+        let headerDict = ["x-tidepool-session-token":"\(apiConnector.x_tidepool_session_token)"]
+        
+        let preRequest = { () -> Void in
+            // nothing to verify in preRequest
+        }
+        
+        // To be completed once response has been received. Verify that the proper status code was received.
+        let completion = { (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
+            if let httpResponse = response as? NSHTTPURLResponse {
+                // Verify that editing the note was successful.
+                XCTAssertEqual(httpResponse.statusCode, 200, "Request for session token refresh")
+                
+                // Store the session token for further use.
+                self.apiConnector.x_tidepool_session_token = httpResponse.allHeaderFields["x-tidepool-session-token"] as! String
+                
+                var jsonResult: NSDictionary = (NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: nil) as? NSDictionary)!
+                
+                self.userid = jsonResult.valueForKey("userid") as! String
+                
+                // Fulfill the expectation so test passes time constraint.
+                expectation.fulfill()
+            } else {
+                XCTFail("Refresh token request")
+            }
+        }
+        
+        // Post the request.
+        apiConnector.request("GET", urlExtension: urlExtension, headerDict: headerDict, body: nil, preRequest: preRequest, completion: completion)
+        
+        // Wait 5.0 seconds until expectation has been fulfilled. If not, fail.
+        waitForExpectationsWithTimeout(5.0, handler: nil)
+        
+    }
 }
