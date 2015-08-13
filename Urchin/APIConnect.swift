@@ -520,6 +520,10 @@ class APIConnector {
         }
         
         let completion = { (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
+            
+            // End refreshing for refresh control
+            notesVC.refreshControl.endRefreshing()
+            
             if let httpResponse = response as? NSHTTPURLResponse {
                 if (httpResponse.statusCode == 200) {
                     NSLog("Got notes for user (\(userid)) in given date range: \(dateFormatter.isoStringFromDate(start, zone: nil)) to \(dateFormatter.isoStringFromDate(end, zone: nil))")
@@ -558,6 +562,7 @@ class APIConnector {
                     notesVC.notesTable.reloadData()
                 } else if (httpResponse.statusCode == 404) {
                     NSLog("No notes retrieved, status code: \(httpResponse.statusCode), userid: \(userid)")
+                    println(httpResponse)
                 } else {
                     NSLog("No notes retrieved - invalid status code \(httpResponse.statusCode)")
                     self.alertWithOkayButton(unknownError, message: unknownErrorMessage)

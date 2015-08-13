@@ -32,8 +32,9 @@ class NotesViewController: UIViewController {
     // Table that contains all notes
     var notesTable: UITableView!
     
-    // Last date fetched to -- starts at current date
+    // Last date fetched to & beginning -- starts at current date
     var lastDateFetchTo: NSDate = NSDate()
+    var beginning: NSDate = NSDate()
     // True if currently loading more notes
     var loadingNotes: Bool = false
     
@@ -62,6 +63,8 @@ class NotesViewController: UIViewController {
     var groupsReadyForTransition = false
     var viewReadyForTransition = false
     var justLoggedIn = true
+    
+    var refreshControl:UIRefreshControl = UIRefreshControl()
     
     init(apiConnector: APIConnector) {
         // Initialize with API connection and user (from loginVC)
@@ -207,6 +210,10 @@ class NotesViewController: UIViewController {
             initialAddNote()
             
             loadNotes()
+            
+            self.refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh", attributes: [NSFontAttributeName: smallRegularFont, NSForegroundColorAttributeName: blackishColor])
+            self.refreshControl.addTarget(self, action: "refresh", forControlEvents: UIControlEvents.ValueChanged)
+            self.notesTable.addSubview(refreshControl)
         } else {
             NSLog("No data storage accounts")
             let errorLabel: UILabel = UILabel()
@@ -323,6 +330,20 @@ class NotesViewController: UIViewController {
             
             self.lastDateFetchTo = startDate
         }
+    }
+    
+    func refresh() {
+        
+        if (!loadingNotes) {
+            
+            notes = []
+            filteredNotes = []
+            
+            lastDateFetchTo = NSDate()
+            
+            loadNotes()
+        }
+        
     }
     
     // Called on newNoteButton press
