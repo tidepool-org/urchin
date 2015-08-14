@@ -20,6 +20,10 @@ class NotesViewController: UIViewController {
     // Count how many groups have metadata
     var groupsWMetadata: Int = 0
     
+    // For some smart fetching
+    var numberOfNotes: Int = 0
+    var consecutiveFetches: Int = 0
+    
     // Current user
     let user: User!
     // API Connection
@@ -170,6 +174,8 @@ class NotesViewController: UIViewController {
 
         // Listen for when group metadata has been fetched
         notificationCenter.addObserver(self, selector: "groupsReady:", name: "groupsReady", object: nil)
+        // Listen for when done fetching notes
+        notificationCenter.addObserver(self, selector: "doneFetching", name: "doneFetching", object: nil)
         // Listen for when to open an NewNoteVC
         notificationCenter.addObserver(self, selector: "newNote:", name: "newNote", object: nil)
         // Listen for when to refresh session token
@@ -252,10 +258,18 @@ class NotesViewController: UIViewController {
     func sortGroups() {
         
         sort(&groups) {
-            if ($0.userid == self.user.userid) {
-                return true
-            }
             return $0.fullName < $1.fullName
+        }
+        
+        for (var i = 0; i < groups.count; i++) {
+            if (groups[i].userid == user.userid) {
+                
+                let myDSA = groups[i]
+                groups.removeAtIndex(i)
+                groups.insert(myDSA, atIndex: 0)
+                
+                break
+            }
         }
         
     }
@@ -317,6 +331,8 @@ class NotesViewController: UIViewController {
     
     // Fetch notes
     func loadNotes() {
+        NSLog("Loading notes")
+        
         if (!loadingNotes) {
             // Shift back three months for fetching
             let dateShift = NSDateComponents()
@@ -333,14 +349,29 @@ class NotesViewController: UIViewController {
     }
     
     func refresh() {
+        NSLog("Refreshing notes table")
         
         if (!loadingNotes) {
             
             notes = []
             filteredNotes = []
             
+            numberOfNotes = 0
+            
             lastDateFetchTo = NSDate()
             
+            loadNotes()
+        }
+        
+    }
+    
+    func doneFetching() {
+        
+        let lastAmount = numberOfNotes
+        numberOfNotes = notes.count
+        
+        if ((lastAmount + 10) > numberOfNotes && consecutiveFetches < 4) {
+            consecutiveFetches++
             loadNotes()
         }
         
@@ -490,7 +521,7 @@ class NotesViewController: UIViewController {
         self.dropDownHeight = CGFloat(groups.count+additionalCells)*userCellHeight + CGFloat(groups.count)*userCellThinSeparator + 2*userCellThickSeparator
         self.dropDownHeight = min(self.dropDownHeight, self.view.frame.height)
         let dropDownWidth = self.view.frame.width
-        self.dropDownMenu = UITableView(frame: CGRect(x: 0, y: -(dropDownHeight + 2*shadowHeight), width: dropDownWidth, height: dropDownHeight))
+        self.dropDownMenu = UITableView(frame: CGRect(x: 0, y: -dropDownHeight, width: dropDownWidth, height: dropDownHeight))
         dropDownMenu.backgroundColor = darkGreenColor
         dropDownMenu.rowHeight = userCellHeight
         dropDownMenu.separatorInset.left = userCellInset
@@ -501,14 +532,15 @@ class NotesViewController: UIViewController {
         dropDownMenu.scrollsToTop = false
         
         // Shadowing
-        dropDownMenu.layer.masksToBounds = false
+        dropDownMenu.layer.masksToBounds = true
         dropDownMenu.layer.shadowColor = blackishColor.CGColor
         dropDownMenu.layer.shadowOffset = CGSize(width: 0, height: shadowHeight)
         dropDownMenu.layer.shadowOpacity = 0.75
         dropDownMenu.layer.shadowRadius = shadowHeight
         
         // Drop down menu is only scrollable if the content fits
-        dropDownMenu.scrollEnabled = dropDownMenu.contentSize.height > self.dropDownHeight
+        dropDownMenu.scrollEnabled = true
+//            dropDownMenu.contentSize.height > self.dropDownHeight
         
         self.view.addSubview(dropDownMenu)
     }
@@ -538,12 +570,13 @@ class NotesViewController: UIViewController {
     func hideDropDownMenu() {
         // Determine final destination of dropDownMenu and opaqueOverlay/obstruction
         var frame: CGRect = self.dropDownMenu.frame
-        frame.origin.y = -(dropDownHeight + 2*shadowHeight)
+        frame.origin.y = -dropDownHeight
         var overlayFrame: CGRect = self.opaqueOverlay.frame
         overlayFrame.origin.y = -overlayHeight
         // Perform animation
         self.animateDropDownToFrame(frame, overlayFrame: overlayFrame) {
             self.isDropDownDisplayed = false
+            self.dropDownMenu.layer.masksToBounds = true
         }
     }
     
@@ -557,6 +590,7 @@ class NotesViewController: UIViewController {
         // Perform animation
         self.animateDropDownToFrame(frame, overlayFrame: overlayFrame) {
             self.isDropDownDisplayed = true
+            self.dropDownMenu.layer.masksToBounds = false
         }
     }
     

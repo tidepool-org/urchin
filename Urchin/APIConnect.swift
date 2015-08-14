@@ -564,7 +564,6 @@ class APIConnector {
                     notesVC.notesTable.reloadData()
                 } else if (httpResponse.statusCode == 404) {
                     NSLog("No notes retrieved, status code: \(httpResponse.statusCode), userid: \(userid)")
-                    println(httpResponse)
                 } else {
                     NSLog("No notes retrieved - invalid status code \(httpResponse.statusCode)")
                     self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
@@ -573,6 +572,8 @@ class APIConnector {
                 notesVC.numberFetches--
                 if (notesVC.numberFetches == 0) {
                     notesVC.loadingNotes = false
+                    let notification = NSNotification(name: "doneFetching", object: nil)
+                    NSNotificationCenter.defaultCenter().postNotification(notification)
                 }
             } else {
                 NSLog("No notes retrieved - could not parse response")
@@ -801,7 +802,7 @@ class APIConnector {
             if NSClassFromString("UIAlertController") != nil {
                 
                 var alert = UIAlertController(title: title, message: message, preferredStyle: .Alert)
-                alert.addAction(UIAlertAction(title: addAlertCancel, style: .Default, handler: { Void in
+                alert.addAction(UIAlertAction(title: "Okay", style: .Default, handler: { Void in
                     self.isShowingAlert = false
                 }))
                 if var topController = UIApplication.sharedApplication().keyWindow?.rootViewController {

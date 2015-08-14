@@ -206,6 +206,7 @@ extension NotesViewController: UITableViewDelegate {
             if (distanceFromBottom == height && !loadingNotes) {
                 self.apiConnector.trackMetric("Scrolled Down For More Notes")
                 
+                consecutiveFetches = 0
                 loadNotes()
             }
         }
