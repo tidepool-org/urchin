@@ -330,13 +330,37 @@ class AddNoteViewController: UIViewController {
         if (!messageBox.text.isEmpty && messageBox.text != defaultMessage) {
             // If the note has been edited, show an alert
             // DOES NOT show alert if date or group has been changed
-            var alert = UIAlertView()
-            alert.delegate = self
-            alert.title = addAlertTitle
-            alert.message = addAlertMessage
-            alert.addButtonWithTitle(addAlertCancel)
-            alert.addButtonWithTitle(addAlertOkay)
-            alert.show()
+            
+            if NSClassFromString("UIAlertController") != nil {
+                
+                var alert = UIAlertController(title: addAlertTitle, message: addAlertMessage, preferredStyle: .Alert)
+                alert.addAction(UIAlertAction(title: addAlertCancel, style: .Cancel, handler: { Void in
+                    NSLog("Cancel alert and return to note")
+                }))
+                alert.addAction(UIAlertAction(title: addAlertOkay, style: .Default, handler: { Void in
+                    NSLog("Do not add note and close view controller")
+                    
+                    let notification = NSNotification(name: "doneAdding", object: nil)
+                    NSNotificationCenter.defaultCenter().postNotification(notification)
+                    
+                    self.view.endEditing(true)
+                    self.closeDatePicker(false)
+                    self.dismissViewControllerAnimated(true, completion: nil)
+                }))
+                self.presentViewController(alert, animated: true, completion: nil)
+                
+            } else {
+                
+                var alert = UIAlertView()
+                alert.delegate = self
+                alert.title = addAlertTitle
+                alert.message = addAlertMessage
+                alert.addButtonWithTitle(addAlertCancel)
+                alert.addButtonWithTitle(addAlertOkay)
+                alert.show()
+                
+            }
+            
         } else {
             // Note has not been edited, dismiss the VC
             let notification = NSNotification(name: "doneAdding", object: nil)

@@ -245,14 +245,41 @@ class EditNoteViewController: UIViewController {
         self.apiConnector.trackMetric("Clicked Close Add or Edit Note")
         
         if (note.messagetext != messageBox.text || note.timestamp != datePicker.date) {
+            
             // If the note has been changed, show an alert
-            let alert = UIAlertView()
-            alert.delegate = self
-            alert.title = editAlertTitle
-            alert.message = editAlertMessage
-            alert.addButtonWithTitle(editAlertDiscard)
-            alert.addButtonWithTitle(editAlertSave)
-            alert.show()
+            
+            if NSClassFromString("UIAlertController") != nil {
+                
+                var alert = UIAlertController(title: editAlertTitle, message: editAlertMessage, preferredStyle: .Alert)
+                alert.addAction(UIAlertAction(title: editAlertDiscard, style: .Cancel, handler: { Void in
+                    NSLog("Discard edits from note")
+                    
+                    let notification = NSNotification(name: "doneEditing", object: nil)
+                    NSNotificationCenter.defaultCenter().postNotification(notification)
+                    
+                    self.view.endEditing(true)
+                    self.closeDatePicker(false)
+                    self.dismissViewControllerAnimated(true, completion: nil)
+                }))
+                alert.addAction(UIAlertAction(title: editAlertSave, style: .Default, handler: { Void in
+                    NSLog("Save edited note")
+                    
+                    self.saveNote()
+                }))
+                self.presentViewController(alert, animated: true, completion: nil)
+                
+            } else {
+                
+                let alert = UIAlertView()
+                alert.delegate = self
+                alert.title = editAlertTitle
+                alert.message = editAlertMessage
+                alert.addButtonWithTitle(editAlertDiscard)
+                alert.addButtonWithTitle(editAlertSave)
+                alert.show()
+                
+            }
+            
         } else {
             // Note has not been edited, dismiss the VC
             let notification = NSNotification(name: "doneEditing", object: nil)
@@ -267,13 +294,43 @@ class EditNoteViewController: UIViewController {
     func deleteNote(sender: UIBarButtonItem!) {
         self.apiConnector.trackMetric("Clicked Delete Note")
         
-        let alert = UIAlertView()
-        alert.delegate = self
-        alert.title = trashAlertTitle
-        alert.message = trashAlertMessage
-        alert.addButtonWithTitle(trashAlertCancel)
-        alert.addButtonWithTitle(trashAlertOkay)
-        alert.show()
+        if NSClassFromString("UIAlertController") != nil {
+            
+            var alert = UIAlertController(title: trashAlertTitle, message: trashAlertMessage, preferredStyle: .Alert)
+            alert.addAction(UIAlertAction(title: trashAlertCancel, style: .Cancel, handler: { Void in
+                
+                NSLog("Do not trash note")
+                
+            }))
+            alert.addAction(UIAlertAction(title: trashAlertOkay, style: .Destructive, handler: { Void in
+                
+                NSLog("Trash note")
+                
+                // Done editing note
+                let notification = NSNotification(name: "doneEditing", object: nil)
+                NSNotificationCenter.defaultCenter().postNotification(notification)
+                
+                let notificationTwo = NSNotification(name: "deleteNote", object: nil)
+                NSNotificationCenter.defaultCenter().postNotification(notificationTwo)
+                
+                self.view.endEditing(true)
+                self.closeDatePicker(false)
+                self.dismissViewControllerAnimated(true, completion: nil)
+                
+            }))
+            self.presentViewController(alert, animated: true, completion: nil)
+            
+        } else {
+            
+            let alert = UIAlertView()
+            alert.delegate = self
+            alert.title = trashAlertTitle
+            alert.message = trashAlertMessage
+            alert.addButtonWithTitle(trashAlertCancel)
+            alert.addButtonWithTitle(trashAlertOkay)
+            alert.show()
+            
+        }
     }
     
     // Toggle the datepicker open or closed depending on if it is currently showing

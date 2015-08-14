@@ -20,6 +20,8 @@ class APIConnector {
     private var groupsToFetchFor = 0
     private var groupsFetched = 0
     
+    private var isShowingAlert = false
+    
     func request(method: String, urlExtension: String, headerDict: [String: String], body: NSData?, preRequest: () -> Void,
         completion: (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void) {
         
@@ -793,14 +795,35 @@ class APIConnector {
     }
     
     func alertWithOkayButton(title: String, message: String) {
-        var unknownErrorAlert: UIAlertView = UIAlertView()
-        unknownErrorAlert.title = title
-        unknownErrorAlert.message = message
-        unknownErrorAlert.addButtonWithTitle("Okay")
+        if (!isShowingAlert) {
+            isShowingAlert = true
+            
+            if NSClassFromString("UIAlertController") != nil {
+                
+                var alert = UIAlertController(title: title, message: message, preferredStyle: .Alert)
+                alert.addAction(UIAlertAction(title: addAlertCancel, style: .Default, handler: { Void in
+                    self.isShowingAlert = false
+                }))
+                if var topController = UIApplication.sharedApplication().keyWindow?.rootViewController {
+                    while let presentedViewController = topController.presentedViewController {
+                        topController = presentedViewController
+                    }
+                    
+                    topController.presentViewController(alert, animated: true, completion: nil)
+                }
+                
+            } else {
+                
+                var unknownErrorAlert: UIAlertView = UIAlertView()
+                unknownErrorAlert.title = title
+                unknownErrorAlert.message = message
+                unknownErrorAlert.addButtonWithTitle("Okay")
+                unknownErrorAlert.show()
+                
+            }
+        }
         
-        unknownErrorAlert.delegate = self
         
-        unknownErrorAlert.show()
     }
     
     func isConnectedToNetwork() -> Bool {

@@ -90,11 +90,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             dict[NSUnderlyingErrorKey] = error
             error = NSError(domain: "YOUR_ERROR_DOMAIN", code: 9999, userInfo: dict)
             
-            var unknownErrorAlert: UIAlertView = UIAlertView()
-            unknownErrorAlert.title = "Unrecoverable Error Occurred"
-            unknownErrorAlert.message = "An unrecoverable error occurred. The application will terminate shortly. Please contact the developer to determine the cause of the issue."
-            unknownErrorAlert.addButtonWithTitle("Okay")
-            unknownErrorAlert.show()
+            if NSClassFromString("UIAlertController") != nil {
+                
+                var alert = UIAlertController(title: "Unrecoverable Error Occurred", message: "An unrecoverable error occurred. The application will terminate shortly. Please contact the developer to determine the cause of the issue.", preferredStyle: .Alert)
+                alert.addAction(UIAlertAction(title: "Okay", style: .Default, handler: { Void in
+                    NSLog("Cancel alert and return to note")
+                }))
+                if var topController = UIApplication.sharedApplication().keyWindow?.rootViewController {
+                    while let presentedViewController = topController.presentedViewController {
+                        topController = presentedViewController
+                    }
+                    
+                    topController.presentViewController(alert, animated: true, completion: nil)
+                }
+                
+            } else {
+                
+                var unknownErrorAlert: UIAlertView = UIAlertView()
+                unknownErrorAlert.title = "Unrecoverable Error Occurred"
+                unknownErrorAlert.message = "An unrecoverable error occurred. The application will terminate shortly. Please contact the developer to determine the cause of the issue."
+                unknownErrorAlert.addButtonWithTitle("Okay")
+                unknownErrorAlert.show()
+                
+            }
+            
+            
             
             NSLog("Unresolved error \(error), \(error!.userInfo)")
             abort()
@@ -121,11 +141,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             var error: NSError? = nil
             if moc.hasChanges && !moc.save(&error) {
                 
-                var unknownErrorAlert: UIAlertView = UIAlertView()
-                unknownErrorAlert.title = "Unrecoverable Error Occurred"
-                unknownErrorAlert.message = "An unrecoverable error occurred. The application will terminate shortly. Please contact the developer to determine the cause of the issue."
-                unknownErrorAlert.addButtonWithTitle("Okay")
-                unknownErrorAlert.show()
+                if NSClassFromString("UIAlertController") != nil {
+                    
+                    var alert = UIAlertController(title: "Unrecoverable Error Occurred", message: "An unrecoverable error occurred. The application will terminate shortly. Please contact the developer to determine the cause of the issue.", preferredStyle: .Alert)
+                    alert.addAction(UIAlertAction(title: "Okay", style: .Default, handler: { Void in
+                        NSLog("Cancel alert and return to note")
+                    }))
+                    if var topController = UIApplication.sharedApplication().keyWindow?.rootViewController {
+                        while let presentedViewController = topController.presentedViewController {
+                            topController = presentedViewController
+                        }
+                        
+                        topController.presentViewController(alert, animated: true, completion: nil)
+                    }
+                    
+                } else {
+                    
+                    var unknownErrorAlert: UIAlertView = UIAlertView()
+                    unknownErrorAlert.title = "Unrecoverable Error Occurred"
+                    unknownErrorAlert.message = "An unrecoverable error occurred. The application will terminate shortly. Please contact the developer to determine the cause of the issue."
+                    unknownErrorAlert.addButtonWithTitle("Okay")
+                    unknownErrorAlert.show()
+                    
+                }
                 
                 NSLog("Unresolved error \(error), \(error!.userInfo)")
                 abort()
