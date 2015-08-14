@@ -64,6 +64,13 @@ class HashtagsScrollView: UIScrollView, UIScrollViewDelegate {
     
     var contentPosition: CGPoint = CGPoint(x: 0.0, y: 0.0)
     
+    func scrollViewWillBeginDragging(scrollView: UIScrollView) {
+        for hashtagButton in hashtagsView.hashtagButtons {
+            hashtagButton.sendActionsForControlEvents(.TouchCancel)
+            hashtagsView.hashtagNormal(hashtagButton)
+        }
+    }
+    
     func scrollViewWillEndDragging(scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         let scrollOffset = scrollView.contentOffset
         
