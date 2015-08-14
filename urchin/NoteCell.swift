@@ -102,8 +102,39 @@ class NoteCell: UITableViewCell {
         let messageY = timedateLabel.frame.maxY + 2 * labelSpacing
         messageLabel.frame.origin = CGPoint(x: messageX, y: messageY)
         
+        messageLabel.userInteractionEnabled = true
+        
+        let doubleTap = UITapGestureRecognizer(target: self, action: "copyToClipboard")
+        doubleTap.numberOfTapsRequired = 2
+        messageLabel.addGestureRecognizer(doubleTap)
+        
+        let longPress = UILongPressGestureRecognizer(target: self, action: "copyToClipboard")
+        messageLabel.addGestureRecognizer(longPress)
+        
         contentView.addSubview(usernameLabel)
         contentView.addSubview(timedateLabel)
         contentView.addSubview(messageLabel)
+    }
+    
+    func copyToClipboard() {
+        println(messageLabel.text!)
+        
+        UIPasteboard.generalPasteboard().string = messageLabel.text!
+        
+        UIView.animateWithDuration(0.1, animations: { () -> Void in
+            self.messageLabel.alpha = 0.1
+        }) { (completion) -> Void in
+            UIView.animateWithDuration(0.1, animations: { () -> Void in
+                self.messageLabel.alpha = 1.0
+            }, completion: { (completed) -> Void in
+                UIView.animateWithDuration(0.1, animations: { () -> Void in
+                    self.messageLabel.alpha = 0.1
+                }, completion: { (completed) -> Void in
+                    UIView.animateWithDuration(0.1, animations: { () -> Void in
+                        self.messageLabel.alpha = 1.0
+                    })
+                })
+            })
+        }
     }
 }
