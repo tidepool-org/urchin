@@ -273,8 +273,8 @@ class AddNoteViewController: UIViewController {
         
         // Configure dropDownMenu, width same as view width
         //          No need to fetch groups --> VC is initialized with user's groups
-        self.dropDownHeight = CGFloat(groups.count)*userCellHeight + CGFloat(groups.count - 1)*userCellThinSeparator
-        self.dropDownHeight = min(self.dropDownHeight, self.view.frame.height - (navBarH + statusBarH))
+        let proposedDropDownH = CGFloat(groups.count)*userCellHeight + CGFloat(groups.count - 1)*userCellThinSeparator
+        self.dropDownHeight = min(proposedDropDownH, self.view.frame.height - (navBarH + statusBarH))
         let dropDownWidth = self.view.frame.width
         self.dropDownMenu = UITableView(frame: CGRect(x: CGFloat(0), y: -dropDownHeight, width: dropDownWidth, height: dropDownHeight))
         dropDownMenu.backgroundColor = darkGreenColor
@@ -286,10 +286,7 @@ class AddNoteViewController: UIViewController {
         dropDownMenu.separatorStyle = UITableViewCellSeparatorStyle.None
         
         // Drop down menu is only scrollable if the content fits
-        dropDownMenu.scrollEnabled = true
-        println(dropDownMenu.contentSize.height)
-        println(self.dropDownHeight)
-//            dropDownMenu.contentSize.height > self.dropDownHeight
+        dropDownMenu.scrollEnabled = proposedDropDownH > self.dropDownMenu.frame.height
         
         // Shadowing
         dropDownMenu.layer.masksToBounds = true
