@@ -207,7 +207,7 @@ let mediumSemiboldFont: UIFont = UIFont(name: "OpenSans-Semibold", size: 17.5)!
     title label (LoginVC)
     When drop down menu is exposed, Navigation bar title (NotesVC)
 */
-let appTitle: String = "Blip notes"
+let appTitle: String = "Blip Notes"
 
 /*
     Navigation bar title when all teams are shown (NotesVC)
