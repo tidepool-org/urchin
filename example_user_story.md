@@ -31,3 +31,6 @@ Like Johnny, Jane can see all of Johnny's notes in the feed. Jane can add notes 
 
 Jane frequently checks Johnny's blood sugar in the middle of the night to be sure Johnny is not experiencing hyperglycemia, extremely high blood sugar levels, or hypoglycemia, extremely low blood sugar levels. As long as Jane is logged in, as soon as Blip Notes opens, a new note pops up. This is so it is quick and easy to add notes in the middle of the night, and even at other times of day.
 
+Miscellaneous
+------------
+Notes are not stored on the device. Login information is encrypted and stored if the user chooses "remember me." Hashtag usage information is stored to provide users with their most common hashtags at all times.
