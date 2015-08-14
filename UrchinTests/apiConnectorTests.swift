@@ -499,8 +499,7 @@ class apiConnectorTests: XCTestCase {
         testGPostNote()
         testHEditNote()
         testIGetNotes()
-        // Do not test delete note yet...
-//        testJDeleteNote()
+        testJDeleteNote()
         testKRefreshToken()
         
     }
