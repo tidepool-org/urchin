@@ -3,7 +3,6 @@
 //  urchin
 //
 //  Created by Ethan Look on 6/17/15.
-//  Edited to add this line by Howard Look on 9/23/2015 to create a new build for Beta.
 //  Copyright (c) 2015 Tidepool. All rights reserved.
 //
 

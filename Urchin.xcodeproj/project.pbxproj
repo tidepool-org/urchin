@@ -539,7 +539,7 @@
 					};
 				};
 			};
-			buildConfigurationList = AABCEF7F1B3231910064FE49 /* Build configuration list for PBXProject "urchin" */;
+			buildConfigurationList = AABCEF7F1B3231910064FE49 /* Build configuration list for PBXProject "Urchin" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -901,7 +901,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		AABCEF7F1B3231910064FE49 /* Build configuration list for PBXProject "urchin" */ = {
+		AABCEF7F1B3231910064FE49 /* Build configuration list for PBXProject "Urchin" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				AABCEFA11B3231910064FE49 /* Debug */,
