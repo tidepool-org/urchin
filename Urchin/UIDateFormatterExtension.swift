@@ -23,7 +23,7 @@ public extension NSDateFormatter {
         
         // Count backwards until the first space (will bold)
         var count = 0
-        for char in reverse(dateString) {
+        for char in Array(dateString.characters.reverse()) {
             if (char == " ") {
                 break
             } else {

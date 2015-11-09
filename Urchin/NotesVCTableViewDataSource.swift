@@ -56,7 +56,7 @@ extension NotesViewController: UITableViewDataSource {
             
             cell.userInteractionEnabled = true
             
-            var customSelection = UIView()
+            let customSelection = UIView()
             customSelection.backgroundColor = tealColor
             cell.selectedBackgroundView = customSelection
             

@@ -124,15 +124,24 @@ class LogInViewController : UIViewController, UIActionSheetDelegate {
             cornersBool[i] = false
         }
         
-        let actionSheet = UIActionSheet()
-        actionSheet.delegate = self
-        actionSheet.title = "Server"
-        
-        for server in servers {
-            actionSheet.addButtonWithTitle(server.0)
+        func selectServer(serverName: String) {
+            apiConnector.saveServer(serverName)
+            
+            version.text = UIApplication.versionBuildServer()
+            version.sizeToFit()
+            version.frame.origin.x = self.view.frame.width / 2 - version.frame.width / 2
+            
+            NSLog("Switched to \(serverName) server")
         }
         
-        actionSheet.showInView(self.view)
+        // use dialog to confirm delete with user!
+        let actionSheet = UIAlertController(title: "Server", message: "", preferredStyle: .ActionSheet)
+        for server in servers {
+            actionSheet.addAction(UIAlertAction(title: server.0, style: .Default, handler: { Void in
+                selectServer(server.0)
+            }))
+        }
+        self.presentViewController(actionSheet, animated: true, completion: nil)
     }
     
     func directLoginAttempt() {
@@ -338,7 +347,7 @@ class LogInViewController : UIViewController, UIActionSheetDelegate {
         if (checkCredentials() && !isAnimating) {
             view.endEditing(true)
             
-            apiConnector.login(self, username: emailField.text, password: passwordField.text)
+            apiConnector.login(self, username: emailField.text!, password: passwordField.text!)
         }
     }
     
@@ -390,7 +399,7 @@ class LogInViewController : UIViewController, UIActionSheetDelegate {
     }
     
     // handle touch events
-    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         if (!isAnimating) {
             // if not currently animating, end editing
             view.endEditing(true)
@@ -399,8 +408,8 @@ class LogInViewController : UIViewController, UIActionSheetDelegate {
         super.touchesBegan(touches, withEvent: event)
     }
     
-    override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
-        if let touch = touches.first as? UITouch {
+    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        if let touch = touches.first {
             
             let touchLocation = touch.locationInView(self.view)
             
@@ -459,7 +468,7 @@ class LogInViewController : UIViewController, UIActionSheetDelegate {
     func animateLogIn(centerY: CGFloat, completion:() -> Void) {
         if (!isAnimating) {
             isAnimating = true
-            UIView.animateKeyframesWithDuration(loginAnimationTime, delay: 0.0, options: nil, animations: { () -> Void in
+            UIView.animateKeyframesWithDuration(loginAnimationTime, delay: 0.0, options: [], animations: { () -> Void in
                 self.uiElementLocationFromCenterY(centerY)
                 
                 }, completion: { (completed: Bool) -> Void in
@@ -511,7 +520,7 @@ class LogInViewController : UIViewController, UIActionSheetDelegate {
             - invalid email
             - empty passwordField
         */
-        return !emailField.text.isEmpty && isValidEmail(emailField.text) && !passwordField.text.isEmpty
+        return !emailField.text!.isEmpty && isValidEmail(emailField.text!) && !passwordField.text!.isEmpty
     }
     
     // Check validity of email

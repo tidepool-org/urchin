@@ -61,7 +61,7 @@ extension NotesViewController: UITableViewDelegate {
             messageLabel.sizeToFit()
             
             // Calculate the total note cell height
-            var cellHeight: CGFloat = noteCellInset + usernameLabel.frame.height + labelSpacing / 2 + timedateLabel.frame.height + 2 * labelSpacing + messageLabel.frame.height + noteCellInset
+            let cellHeight: CGFloat = noteCellInset + usernameLabel.frame.height + labelSpacing / 2 + timedateLabel.frame.height + 2 * labelSpacing + messageLabel.frame.height + noteCellInset
             
             return cellHeight
             

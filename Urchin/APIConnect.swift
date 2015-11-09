@@ -29,7 +29,7 @@ class APIConnector {
                 preRequest()
                 
                 var urlString = baseURL + urlExtension
-                urlString = urlString.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
+                urlString = urlString.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
                 let url = NSURL(string: urlString)
                 let request = NSMutableURLRequest(URL: url!)
                 request.HTTPMethod = method
@@ -77,7 +77,7 @@ class APIConnector {
         
         let loginString = NSString(format: "%@:%@", username, password)
         let loginData: NSData = loginString.dataUsingEncoding(NSUTF8StringEncoding)!
-        let base64LoginString = loginData.base64EncodedStringWithOptions(nil)
+        let base64LoginString = loginData.base64EncodedStringWithOptions([])
         
         loginRequest(loginVC, base64LoginString: base64LoginString, saveLogin: true)
     }
@@ -99,7 +99,7 @@ class APIConnector {
         }
         
         let completion = { (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
-            var jsonResult: NSDictionary = (NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: nil) as? NSDictionary)!
+            let jsonResult: NSDictionary = ((try? NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers)) as? NSDictionary)!
             
             if let code = jsonResult.valueForKey("code") as? Int {
                 if (code == 401) {
@@ -123,7 +123,7 @@ class APIConnector {
                     if (httpResponse.statusCode == 200) {
                         NSLog("Logged in")
                         
-                        var jsonResult: NSDictionary = (NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: nil) as? NSDictionary)!
+                        let jsonResult: NSDictionary = ((try? NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers)) as? NSDictionary)!
                         
                         if let sessionToken = httpResponse.allHeaderFields["x-tidepool-session-token"] as? String {
                             self.x_tidepool_session_token = sessionToken
@@ -197,38 +197,37 @@ class APIConnector {
         // Open a new fetch request
         let fetchRequest = NSFetchRequest(entityName:"Login")
         
-        var error: NSError?
-        
         // Execute the fetch from CoreData
-        let fetchedResults =
-        managedContext.executeFetchRequest(fetchRequest,
-            error: &error) as? [NSManagedObject]
-        
-        if let results = fetchedResults {
-            if (results.count != 0) {
-                let expiration = results[0].valueForKey("expiration") as! NSDate
-                let dateFormatter = NSDateFormatter()
+        do {
+            let results =
+            try managedContext.executeFetchRequest(fetchRequest) as? [NSManagedObject]
+            
+            if (results!.count != 0) {
+                let expiration = results![0].valueForKey("expiration") as! NSDate
                 if (expiration.timeIntervalSinceNow < 0) {
-
+                    
                     // Login has expired!
                     
                     // Set the value to the new saved login
-                    results[0].setValue("", forKey: "login")
+                    results![0].setValue("", forKey: "login")
                     
                     // Save the expiration date (6 mo.s in advance)
                     let dateShift = NSDateComponents()
                     dateShift.month = 6
                     let calendar = NSCalendar.currentCalendar()
-                    let date = calendar.dateByAddingComponents(dateShift, toDate: NSDate(), options: nil)!
-                    results[0].setValue(date, forKey: "expiration")
+                    let date = calendar.dateByAddingComponents(dateShift, toDate: NSDate(), options: [])!
+                    results![0].setValue(date, forKey: "expiration")
                     
                     // Attempt to save the login
                     var error: NSError?
-                    if !managedContext.save(&error) {
+                    do {
+                        try managedContext.save()
+                    } catch let error1 as NSError {
+                        error = error1
                         NSLog("Could not save log in remember me: \(error), \(error?.userInfo)")
                     }
                 }
-                let base64LoginString = results[0].valueForKey("login") as! String
+                let base64LoginString = results![0].valueForKey("login") as! String
                 
                 if (base64LoginString != "") {
                     // Login information exists
@@ -252,8 +251,8 @@ class APIConnector {
                 let notificationTwo = NSNotification(name: "forcedLogout", object: nil)
                 NSNotificationCenter.defaultCenter().postNotification(notificationTwo)
             }
-        } else {
-            NSLog("Could not fetch remember me information: \(error), \(error!.userInfo)")
+        } catch let error as NSError {
+            NSLog("Could not fetch remember me information: \(error), \(error.userInfo)")
         }
     }
 
@@ -269,15 +268,12 @@ class APIConnector {
         // Open a new fetch request
         let fetchRequest = NSFetchRequest(entityName:"Login")
         
-        var error: NSError?
-        
-        // Execute the fetch
-        let fetchedResults =
-        managedContext.executeFetchRequest(fetchRequest,
-            error: &error) as? [NSManagedObject]
-        
-        if let results = fetchedResults {
-            if (results.count == 0) {
+        do {
+            // Execute the fetch
+            let results =
+            try managedContext.executeFetchRequest(fetchRequest) as? [NSManagedObject]
+            
+            if (results!.count == 0) {
                 // Create a new login for remembering
                 
                 // Initialize the new entity
@@ -296,33 +292,39 @@ class APIConnector {
                 let dateShift = NSDateComponents()
                 dateShift.month = 6
                 let calendar = NSCalendar.currentCalendar()
-                let date = calendar.dateByAddingComponents(dateShift, toDate: NSDate(), options: nil)!
+                let date = calendar.dateByAddingComponents(dateShift, toDate: NSDate(), options: [])!
                 loginObj.setValue(date, forKey: "expiration")
                 
                 // Save the login
                 var errorTwo: NSError?
-                if !managedContext.save(&errorTwo) {
+                do {
+                    try managedContext.save()
+                } catch let error as NSError {
+                    errorTwo = error
                     NSLog("Could not save new remember me info: \(errorTwo), \(errorTwo?.userInfo)")
                 }
-            } else if (results.count == 1) {
+            } else if (results!.count == 1) {
                 // Set the value to the new saved login
-                results[0].setValue(login, forKey: "login")
+                results![0].setValue(login, forKey: "login")
                 
                 // Save the expiration date (6 mo.s in advance)
                 let dateShift = NSDateComponents()
                 dateShift.month = 6
                 let calendar = NSCalendar.currentCalendar()
-                let date = calendar.dateByAddingComponents(dateShift, toDate: NSDate(), options: nil)!
-                results[0].setValue(date, forKey: "expiration")
+                let date = calendar.dateByAddingComponents(dateShift, toDate: NSDate(), options: [])!
+                results![0].setValue(date, forKey: "expiration")
                 
                 // Attempt to save the login
                 var errorTwo: NSError?
-                if !managedContext.save(&errorTwo) {
+                do {
+                    try managedContext.save()
+                } catch let error as NSError {
+                    errorTwo = error
                     NSLog("Could not save edited remember me info: \(errorTwo), \(errorTwo?.userInfo)")
                 }
             }
-        }  else {
-            NSLog("Could not fetch remember me info: \(error), \(error!.userInfo)")
+        } catch let error as NSError {
+            NSLog("Could not fetch remember me info: \(error), \(error.userInfo)")
         }
     }
     
@@ -337,7 +339,7 @@ class APIConnector {
         }
         
         let completion = { (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
-            var jsonResult: NSDictionary = (NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: nil) as? NSDictionary)!
+            let jsonResult: NSDictionary = ((try? NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers)) as? NSDictionary)!
             
             if let code = jsonResult.valueForKey("code") as? Int {
                 if (code == 401) {
@@ -441,7 +443,7 @@ class APIConnector {
                 if (httpResponse.statusCode == 200) {
                     NSLog("Profile found: \(otherUser.userid)")
                     
-                    var userDict: NSDictionary = (NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: nil) as? NSDictionary)!
+                    let userDict: NSDictionary = ((try? NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers)) as? NSDictionary)!
                     
                     otherUser.processUserDict(userDict)
                     
@@ -488,11 +490,11 @@ class APIConnector {
             if let httpResponse = response as? NSHTTPURLResponse {
                 if (httpResponse.statusCode == 200) {
                     NSLog("Found viewable users for user: \(self.user?.userid)")
-                    var jsonResult: NSDictionary = (NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: nil) as? NSDictionary)!
+                    let jsonResult: NSDictionary = ((try? NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers)) as? NSDictionary)!
                                         
                     var i = 0
                     for key in jsonResult.keyEnumerator() {
-                        let group = User(userid: key as! String, apiConnector: self, notesVC: notesVC)
+                        _ = User(userid: key as! String, apiConnector: self, notesVC: notesVC)
                         i++
                     }
                     self.groupsToFetchFor = i
@@ -532,9 +534,9 @@ class APIConnector {
                     
                     var notes: [Note] = []
                     
-                    var jsonResult: NSDictionary = (NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: nil) as? NSDictionary)!
+                    let jsonResult: NSDictionary = ((try? NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers)) as? NSDictionary)!
                     
-                    var messages: NSArray = jsonResult.valueForKey("messages") as! NSArray
+                    let messages: NSArray = jsonResult.valueForKey("messages") as! NSArray
                     
                     let dateFormatter = NSDateFormatter()
                     
@@ -591,8 +593,12 @@ class APIConnector {
         let headerDict = ["x-tidepool-session-token":"\(x_tidepool_session_token)", "Content-Type":"application/json"]
         
         let jsonObject = note.dictionaryFromNote()
-        var err: NSError?
-        let body = NSJSONSerialization.dataWithJSONObject(jsonObject, options: nil, error: &err)
+        let body: NSData?
+        do {
+            body = try NSJSONSerialization.dataWithJSONObject(jsonObject, options: [])
+        } catch {
+            body = nil
+        }
         
         let preRequest = { () -> Void in
             // nothing to do in prerequest
@@ -604,7 +610,7 @@ class APIConnector {
                 if (httpResponse.statusCode == 201) {
                     NSLog("Sent note for groupid: \(note.groupid)")
                     
-                    var jsonResult: NSDictionary = (NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: nil) as? NSDictionary)!
+                    let jsonResult: NSDictionary = ((try? NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers)) as? NSDictionary)!
                     
                     note.id = jsonResult.valueForKey("id") as! String
                     
@@ -633,8 +639,12 @@ class APIConnector {
         let headerDict = ["x-tidepool-session-token":"\(x_tidepool_session_token)", "Content-Type":"application/json"]
         
         let jsonObject = editedNote.updatesFromNote()
-        var err: NSError?
-        let body = NSJSONSerialization.dataWithJSONObject(jsonObject, options: nil, error: &err)
+        let body: NSData?
+        do {
+            body = try NSJSONSerialization.dataWithJSONObject(jsonObject, options: [])
+        } catch  {
+            body = nil
+        }
         
         let preRequest = { () -> Void in
             // nothing to do in the preRequest
@@ -720,16 +730,12 @@ class APIConnector {
         // Open a new fetch request
         let fetchRequest = NSFetchRequest(entityName:"Server")
         
-        var error: NSError?
-        
-        // Execute the fetch from CoreData
-        let fetchedResults =
-        managedContext.executeFetchRequest(fetchRequest,
-            error: &error) as? [NSManagedObject]
-        
-        if let results = fetchedResults {
+        do {
+            // Execute the fetch from CoreData
+            let results =
+            try managedContext.executeFetchRequest(fetchRequest) as? [NSManagedObject]
             
-            if (results.count == 0) {
+            if (results!.count == 0) {
                 // Create a new server for remembering
                 
                 // Initialize the new entity
@@ -744,21 +750,22 @@ class APIConnector {
                 // Save the encrypted login information
                 loginObj.setValue(serverName, forKey: "serverName")
                 
-            } else if (results.count == 1) {
+            } else if (results!.count == 1) {
                 // Set the value to the new server
-                results[0].setValue(serverName, forKey: "serverName")
+                results![0].setValue(serverName, forKey: "serverName")
             }
             
             // Attempt to save the server
             var errorTwo: NSError?
-            if !managedContext.save(&errorTwo) {
-                NSLog("Could not save edited remember me info: \(errorTwo), \(errorTwo?.userInfo)")
-            } else {
+            do {
+                try managedContext.save()
                 baseURL = servers[serverName]!
+            } catch let error as NSError {
+                errorTwo = error
+                NSLog("Could not save edited remember me info: \(errorTwo), \(errorTwo?.userInfo)")
             }
-            
-        } else {
-            NSLog("Could not fetch server information: \(error), \(error!.userInfo)")
+        } catch let error as NSError {
+            NSLog("Could not fetch server information: \(error), \(error.userInfo)")
         }
     }
     
@@ -774,26 +781,25 @@ class APIConnector {
         // Open a new fetch request
         let fetchRequest = NSFetchRequest(entityName:"Server")
         
-        var error: NSError?
-        
         // Execute the fetch from CoreData
-        let fetchedResults =
-        managedContext.executeFetchRequest(fetchRequest,
-            error: &error) as? [NSManagedObject]
-        
-        if let results = fetchedResults {
-            if results.count == 1 {
-                
-                let serverName = results[0].valueForKey("serverName") as! String
-                
-                baseURL = servers[serverName]!
-                
+        do {
+            let fetchedResults =
+            try managedContext.executeFetchRequest(fetchRequest) as? [NSManagedObject]
+            
+            if let results = fetchedResults {
+                if results.count == 1 {
+                    
+                    let serverName = results[0].valueForKey("serverName") as! String
+                    
+                    baseURL = servers[serverName]!
+                    
+                }
             }
-        } else {
-            NSLog("Could not fetch server information: \(error), \(error!.userInfo)")
+        } catch let error as NSError {
+            NSLog("Could not fetch server information: \(error), \(error.userInfo)")
         }
         
-    }
+     }
     
     func alertWithOkayButton(title: String, message: String) {
         if (!isShowingAlert) {
@@ -801,7 +807,7 @@ class APIConnector {
             
             if NSClassFromString("UIAlertController") != nil {
                 
-                var alert = UIAlertController(title: title, message: message, preferredStyle: .Alert)
+                let alert = UIAlertController(title: title, message: message, preferredStyle: .Alert)
                 alert.addAction(UIAlertAction(title: "Okay", style: .Default, handler: { Void in
                     self.isShowingAlert = false
                 }))
@@ -815,7 +821,7 @@ class APIConnector {
                 
             } else {
                 
-                var unknownErrorAlert: UIAlertView = UIAlertView()
+                let unknownErrorAlert: UIAlertView = UIAlertView()
                 unknownErrorAlert.title = title
                 unknownErrorAlert.message = message
                 unknownErrorAlert.addButtonWithTitle("Okay")
@@ -828,23 +834,17 @@ class APIConnector {
     }
     
     func isConnectedToNetwork() -> Bool {
-        
-        var zeroAddress = sockaddr_in(sin_len: 0, sin_family: 0, sin_port: 0, sin_addr: in_addr(s_addr: 0), sin_zero: (0, 0, 0, 0, 0, 0, 0, 0))
-        zeroAddress.sin_len = UInt8(sizeofValue(zeroAddress))
-        zeroAddress.sin_family = sa_family_t(AF_INET)
-        
-        let defaultRouteReachability = withUnsafePointer(&zeroAddress) {
-            SCNetworkReachabilityCreateWithAddress(nil, UnsafePointer($0)).takeRetainedValue()
+
+        do {
+            let reachability = try Reachability.reachabilityForInternetConnection()
+            return reachability.isReachable()
+        } catch ReachabilityError.FailedToCreateWithAddress(let address) {
+            NSLog("Unable to create\nReachability with address:\n\(address)")
+            return true
+        } catch {
+            NSLog("Other reachability error!")
+            return true
         }
-        
-        var flags: SCNetworkReachabilityFlags = 0
-        if SCNetworkReachabilityGetFlags(defaultRouteReachability, &flags) == 0 {
-            return false
-        }
-        
-        let isReachable = (flags & UInt32(kSCNetworkFlagsReachable)) != 0
-        let needsConnection = (flags & UInt32(kSCNetworkFlagsConnectionRequired)) != 0
-        
-        return isReachable && !needsConnection
     }
+    
 }

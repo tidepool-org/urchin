@@ -55,10 +55,9 @@ class Note {
     func updatesFromNote() -> [String: AnyObject] {
 
         let dateFormatter = NSDateFormatter()
-        let dateFormatterTwo = NSDateFormatter()
         let jsonObject: [String: AnyObject] = [
             "message": [
-                "timestamp": dateFormatterTwo.isoStringFromDate(self.timestamp, zone: nil),
+                "timestamp": dateFormatter.isoStringFromDate(self.timestamp, zone: nil),
                 "messagetext": self.messagetext
             ]
         ]

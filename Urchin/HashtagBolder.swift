@@ -33,7 +33,7 @@ class HashtagBolder {
                 var charsInHashtag: Int = 0
                 let symbols = NSCharacterSet.symbolCharacterSet()
                 let punctuation = NSCharacterSet.punctuationCharacterSet()
-                for char in (word as! String).unicodeScalars {
+                for char in (word ).unicodeScalars {
                     if (char == "#" && charsInHashtag == 0) {
                         charsInHashtag++
                         continue
@@ -46,7 +46,7 @@ class HashtagBolder {
                 }
                 
                 // the word without punctuation and symbols
-                let newword = (word as! NSString).substringToIndex(charsInHashtag)
+                let newword = (word as NSString).substringToIndex(charsInHashtag)
                 
                 // check to see if the hashtag has been used before
                 if (boldedWords[newword] != nil) {

@@ -16,7 +16,7 @@ extension AddNoteViewController: UITableViewDataSource {
         // Make the cell! UserDropDownCell
         let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(UserDropDownCell), forIndexPath: indexPath) as! UserDropDownCell
         
-        var customSelection = UIView()
+        let customSelection = UIView()
         customSelection.backgroundColor = tealColor
         cell.selectedBackgroundView = customSelection
         

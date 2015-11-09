@@ -56,8 +56,8 @@ class NoteCell: UITableViewCell {
         } else {
             let text = "\(note.user!.fullName!) to \(groupName)"
             attrUsernameLabel = NSMutableAttributedString(string: text, attributes: [NSForegroundColorAttributeName: noteTextColor, NSFontAttributeName: mediumSemiboldFont])
-            let length = count(" to ")
-            let location = count(attrUsernameLabel.string) - (count(groupName) + length)
+            let length = " to ".characters.count
+            let location = attrUsernameLabel.string.characters.count - (groupName.characters.count + length)
             attrUsernameLabel.addAttributes([NSForegroundColorAttributeName: darkestGreyColor, NSFontAttributeName: mediumRegularFont], range: NSRange(location: location, length: length))
         }
         
@@ -117,7 +117,7 @@ class NoteCell: UITableViewCell {
     }
     
     func copyToClipboard() {
-        println(messageLabel.text!)
+        print(messageLabel.text!)
         
         UIPasteboard.generalPasteboard().string = messageLabel.text!
         

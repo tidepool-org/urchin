@@ -61,7 +61,7 @@ class hashtagBolderTests: XCTestCase {
         // Test the speed of the hashtag bolder. Repeating hashtags take the most time.
         let text = "#first #second #first #second #first #second #first #second #first #second #first #second #first #second #first #second #first #second #first #second #first #second #first #second #first #second #first #second"
         self.measureBlock() {
-            let attrStr = self.hashtagBolder.boldHashtags(text)
+            let _ = self.hashtagBolder.boldHashtags(text)
         }
     }
     

@@ -81,7 +81,7 @@ class AddNoteViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -130,7 +130,7 @@ class AddNoteViewController: UIViewController {
             configureTitleView(group.fullName!)
             
             // Configure rightDropDownMenuButton to trigger dropDownMenu toggle
-            var rightDropDownMenuButton: UIBarButtonItem = UIBarButtonItem(image: downArrow, style: .Plain, target: self, action: "dropDownMenuPressed")
+            let rightDropDownMenuButton: UIBarButtonItem = UIBarButtonItem(image: downArrow, style: .Plain, target: self, action: "dropDownMenuPressed")
             self.navigationItem.setRightBarButtonItem(rightDropDownMenuButton, animated: true)
         } else {
             let titleView = UILabel()
@@ -333,7 +333,7 @@ class AddNoteViewController: UIViewController {
             
             if NSClassFromString("UIAlertController") != nil {
                 
-                var alert = UIAlertController(title: addAlertTitle, message: addAlertMessage, preferredStyle: .Alert)
+                let alert = UIAlertController(title: addAlertTitle, message: addAlertMessage, preferredStyle: .Alert)
                 alert.addAction(UIAlertAction(title: addAlertCancel, style: .Cancel, handler: { Void in
                     NSLog("Cancel alert and return to note")
                 }))
@@ -351,7 +351,7 @@ class AddNoteViewController: UIViewController {
                 
             } else {
                 
-                var alert = UIAlertView()
+                let alert = UIAlertView()
                 alert.delegate = self
                 alert.title = addAlertTitle
                 alert.message = addAlertMessage
@@ -393,7 +393,7 @@ class AddNoteViewController: UIViewController {
                 self.datePicker.alpha = 0.0
             })
             // Move all affected UI elements with animation
-            UIView.animateKeyframesWithDuration(animationTime, delay: 0.0, options: nil, animations: { () -> Void in
+            UIView.animateKeyframesWithDuration(animationTime, delay: 0.0, options: [], animations: { () -> Void in
                 
                 // UI element location (and some sizing)
                 self.separatorOne.frame.origin.y = self.timedateLabel.frame.maxY + labelInset
@@ -424,7 +424,7 @@ class AddNoteViewController: UIViewController {
     func openDatePicker() {
         if (datePicker.hidden && !isAnimating) {
             isAnimating = true
-            UIView.animateKeyframesWithDuration(animationTime, delay: 0.0, options: nil, animations: { () -> Void in
+            UIView.animateKeyframesWithDuration(animationTime, delay: 0.0, options: [], animations: { () -> Void in
                 
                 // UI element location (and some sizing)
                 self.separatorOne.frame.origin.y = self.datePicker.frame.maxY + labelInset / 2
@@ -467,14 +467,14 @@ class AddNoteViewController: UIViewController {
     func closeHashtagsPartially() {
         if (!hashtagsScrollView.hashtagsCollapsed && !isAnimating) {
             isAnimating = true
-            UIView.animateKeyframesWithDuration(animationTime, delay: 0.0, options: nil, animations: { () -> Void in
+            UIView.animateKeyframesWithDuration(animationTime, delay: 0.0, options: [], animations: { () -> Void in
                 
                 // size hashtags view to condensed size
                 self.hashtagsScrollView.linearHashtagsView()
                 self.hashtagsScrollView.frame.origin.y = self.separatorOne.frame.maxY
                 // position affected UI elements
                 self.separatorTwo.frame.origin.y = self.hashtagsScrollView.frame.maxY
-                var separatorToBottom: CGFloat = self.view.frame.height - self.separatorTwo.frame.maxY
+                let separatorToBottom: CGFloat = self.view.frame.height - self.separatorTwo.frame.maxY
                 if (separatorToBottom > 300) {
                     // Small Device
                     
@@ -498,7 +498,7 @@ class AddNoteViewController: UIViewController {
                 }, completion: { (completed: Bool) -> Void in
                     self.isAnimating = false
                     if (completed) {
-                        var separatorToBottom: CGFloat = self.view.frame.height - self.separatorTwo.frame.maxY
+                        let separatorToBottom: CGFloat = self.view.frame.height - self.separatorTwo.frame.maxY
                         if (separatorToBottom < 300) {
                             // For small view, change the button to be 'done'
                             self.changeDateLabel.text = doneDateText
@@ -518,7 +518,7 @@ class AddNoteViewController: UIViewController {
     func openHashtagsCompletely() {
         if (hashtagsScrollView.hashtagsCollapsed && !isAnimating) {
             isAnimating = true
-            UIView.animateKeyframesWithDuration(animationTime, delay: 0.0, options: nil, animations: { () -> Void in
+            UIView.animateKeyframesWithDuration(animationTime, delay: 0.0, options: [], animations: { () -> Void in
                 
                 // hashtagsView has expanded size
                 self.hashtagsScrollView.pagedHashtagsView()
@@ -553,8 +553,8 @@ class AddNoteViewController: UIViewController {
     // Called when date picker date has changed
     func datePickerAction(sender: UIDatePicker) {
         let calendar = NSCalendar.currentCalendar()
-        let compCurr = calendar.components((.CalendarUnitYear | .CalendarUnitMonth | .CalendarUnitDay | .CalendarUnitHour | .CalendarUnitMinute), fromDate: datePicker.date)
-        let compWas = calendar.components((.CalendarUnitYear | .CalendarUnitMonth | .CalendarUnitDay | .CalendarUnitHour | .CalendarUnitMinute), fromDate: previousDate)
+        let compCurr = calendar.components(([.Year, .Month, .Day, .Hour, .Minute]), fromDate: datePicker.date)
+        let compWas = calendar.components(([.Year, .Month, .Day, .Hour, .Minute]), fromDate: previousDate)
         
         if (compCurr.day != compWas.day || compCurr.month != compWas.month || compCurr.year != compWas.year) {
             self.apiConnector.trackMetric("Date Changed")
@@ -665,8 +665,8 @@ class AddNoteViewController: UIViewController {
     }
     
     // Handle touches in the view
-    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
-        if let touch = touches.first as? UITouch {
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        if let touch = touches.first {
             
             // determine if the touch (first touch) is in the hashtagsView
             let touchLocation = touch.locationInView(self.view)
@@ -762,7 +762,7 @@ class AddNoteViewController: UIViewController {
     func animateDropDownToFrame(frame: CGRect, obstructionFrame: CGRect, completion:() -> Void) {
         if (!isDropDownAnimating) {
             isDropDownAnimating = true
-            UIView.animateKeyframesWithDuration(0.5, delay: 0.0, options: nil, animations: { () -> Void in
+            UIView.animateKeyframesWithDuration(0.5, delay: 0.0, options: [], animations: { () -> Void in
                 // Animate to new frames
                 self.dropDownMenu.frame = frame
                 self.opaqueOverlay.frame = obstructionFrame
