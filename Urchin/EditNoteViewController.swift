@@ -248,9 +248,9 @@ class EditNoteViewController: UIViewController {
             
             // If the note has been changed, show an alert
             
-            if NSClassFromString("UIAlertController") != nil {
-                
+            if #available(iOS 8.0, *) {
                 let alert = UIAlertController(title: editAlertTitle, message: editAlertMessage, preferredStyle: .Alert)
+                
                 alert.addAction(UIAlertAction(title: editAlertDiscard, style: .Cancel, handler: { Void in
                     NSLog("Discard edits from note")
                     
@@ -294,9 +294,10 @@ class EditNoteViewController: UIViewController {
     func deleteNote(sender: UIBarButtonItem!) {
         self.apiConnector.trackMetric("Clicked Delete Note")
         
-        if NSClassFromString("UIAlertController") != nil {
+        if #available(iOS 8.0, *) {
             
             let alert = UIAlertController(title: trashAlertTitle, message: trashAlertMessage, preferredStyle: .Alert)
+            
             alert.addAction(UIAlertAction(title: trashAlertCancel, style: .Cancel, handler: { Void in
                 
                 NSLog("Do not trash note")

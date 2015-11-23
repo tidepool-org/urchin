@@ -119,29 +119,43 @@ class LogInViewController : UIViewController, UIActionSheetDelegate {
         showServerActionSheet()
     }
     
+    func selectServer(serverName: String) {
+        apiConnector.saveServer(serverName)
+        
+        version.text = UIApplication.versionBuildServer()
+        version.sizeToFit()
+        version.frame.origin.x = self.view.frame.width / 2 - version.frame.width / 2
+        
+        NSLog("Switched to \(serverName) server")
+    }
+    
     func showServerActionSheet() {
         for (var i = 0; i < corners.count; i++) {
             cornersBool[i] = false
         }
         
-        func selectServer(serverName: String) {
-            apiConnector.saveServer(serverName)
-            
-            version.text = UIApplication.versionBuildServer()
-            version.sizeToFit()
-            version.frame.origin.x = self.view.frame.width / 2 - version.frame.width / 2
-            
-            NSLog("Switched to \(serverName) server")
-        }
-        
         // use dialog to confirm delete with user!
-        let actionSheet = UIAlertController(title: "Server", message: "", preferredStyle: .ActionSheet)
-        for server in servers {
-            actionSheet.addAction(UIAlertAction(title: server.0, style: .Default, handler: { Void in
-                selectServer(server.0)
-            }))
+        if #available(iOS 8.0, *) {
+            let actionSheet = UIAlertController(title: "Server", message: "", preferredStyle: .ActionSheet)
+            
+            for server in servers {
+                actionSheet.addAction(UIAlertAction(title: server.0, style: .Default, handler: { Void in
+                    self.selectServer(server.0)
+                }))
+            }
+            self.presentViewController(actionSheet, animated: true, completion: nil)
+            
+        } else {
+            
+            let actionSheet = UIActionSheet(title: "Server", delegate: self, cancelButtonTitle: nil, destructiveButtonTitle: nil)
+            actionSheet.showInView(self.view)
         }
-        self.presentViewController(actionSheet, animated: true, completion: nil)
+    }
+    
+    func actionSheet(actionSheet: UIActionSheet, clickedButtonAtIndex buttonIndex: Int) {
+        
+        self.selectServer(actionSheet.buttonTitleAtIndex(buttonIndex)!)
+        
     }
     
     func directLoginAttempt() {

@@ -331,9 +331,9 @@ class AddNoteViewController: UIViewController {
             // If the note has been edited, show an alert
             // DOES NOT show alert if date or group has been changed
             
-            if NSClassFromString("UIAlertController") != nil {
-                
+            if #available(iOS 8.0, *) {
                 let alert = UIAlertController(title: addAlertTitle, message: addAlertMessage, preferredStyle: .Alert)
+                
                 alert.addAction(UIAlertAction(title: addAlertCancel, style: .Cancel, handler: { Void in
                     NSLog("Cancel alert and return to note")
                 }))
@@ -348,7 +348,6 @@ class AddNoteViewController: UIViewController {
                     self.dismissViewControllerAnimated(true, completion: nil)
                 }))
                 self.presentViewController(alert, animated: true, completion: nil)
-                
             } else {
                 
                 let alert = UIAlertView()

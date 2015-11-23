@@ -805,9 +805,9 @@ class APIConnector {
         if (!isShowingAlert) {
             isShowingAlert = true
             
-            if NSClassFromString("UIAlertController") != nil {
-                
+            if #available(iOS 8.0, *) {
                 let alert = UIAlertController(title: title, message: message, preferredStyle: .Alert)
+                
                 alert.addAction(UIAlertAction(title: "Okay", style: .Default, handler: { Void in
                     self.isShowingAlert = false
                 }))
@@ -829,8 +829,6 @@ class APIConnector {
                 
             }
         }
-        
-        
     }
     
     func isConnectedToNetwork() -> Bool {

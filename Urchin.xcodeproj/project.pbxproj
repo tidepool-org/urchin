@@ -541,7 +541,7 @@
 					};
 				};
 			};
-			buildConfigurationList = AABCEF7F1B3231910064FE49 /* Build configuration list for PBXProject "Urchin" */;
+			buildConfigurationList = AABCEF7F1B3231910064FE49 /* Build configuration list for PBXProject "urchin" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -841,7 +841,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = urchin/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MACH_O_TYPE = mh_execute;
 				PRODUCT_BUNDLE_IDENTIFIER = org.tidepool.blipnotes;
@@ -859,7 +859,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = urchin/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MACH_O_TYPE = mh_execute;
 				PRODUCT_BUNDLE_IDENTIFIER = org.tidepool.blipnotes;
@@ -908,7 +908,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		AABCEF7F1B3231910064FE49 /* Build configuration list for PBXProject "Urchin" */ = {
+		AABCEF7F1B3231910064FE49 /* Build configuration list for PBXProject "urchin" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				AABCEFA11B3231910064FE49 /* Debug */,
