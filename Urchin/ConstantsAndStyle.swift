@@ -498,8 +498,8 @@ let unknownErrorMessage: String = "An unknown error occurred. We are working har
 var baseURL: String = servers["Production"]!
 let servers: [String: String] = [
     "Production": "https://api.tidepool.org",
-    "Development": "https://devel-api.tidepool.org",
-    "Staging": "https://staging-api.tidepool.org"
+    "Development": "https://dev-api.tidepool.org",
+    "Staging": "https://stg-api.tidepool.org"
 ]
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
