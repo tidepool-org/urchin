@@ -98,6 +98,9 @@ class LogInViewController : UIViewController, UIActionSheetDelegate {
             self.view.addSubview(errorLabel)
         }
         
+        notificationCenter.addObserver(self, selector: "reachabilityChanged:", name: ReachabilityChangedNotification, object: nil)
+        configureForReachability()
+        
         let width: CGFloat = 100
         let height: CGFloat = width
         corners.append(CGRect(x: 0, y: 0, width: width, height: height))
@@ -107,6 +110,39 @@ class LogInViewController : UIViewController, UIActionSheetDelegate {
         for (var i = 0; i < corners.count; i++) {
             cornersBool.append(false)
         }
+    }
+    
+    func reachabilityChanged(note: NSNotification) {
+//        if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate, api = appDelegate.API {
+//            // try token refresh if we are now connected...
+//            // TODO: change message to "attempting token refresh"?
+//            if api.isConnectedToNetwork() && api.sessionToken != nil {
+//                NSLog("Login: attempting to refresh token...")
+//                api.refreshToken() { succeeded -> (Void) in
+//                    if succeeded {
+//                        appDelegate.setupUIForLoginSuccess()
+//                    } else {
+//                        NSLog("Refresh token failed, need to log in normally")
+//                        api.logout() {
+//                            self.configureForReachability()
+//                        }
+//                    }
+//                }
+//                return
+//            }
+//        }
+        configureForReachability()
+    }
+    
+    private func configureForReachability() {
+//        if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
+//            var connected = true
+//            if let api = appDelegate.API {
+//                connected = api.isConnectedToNetwork()
+//            }
+//            inputContainerView.hidden = !connected
+//            offlineMessageContainerView.hidden = connected
+//        }
     }
     
     func checkCorners() {
