@@ -16,6 +16,7 @@ class LogInViewController : UIViewController, UIActionSheetDelegate {
     var cornersBool: [Bool] = []
     
     // UI Elements
+    let reachLabel: UILabel = UILabel()
     let logoView: UIImageView = UIImageView()
     let titleLabel: UILabel = UILabel()
     let emailField: UITextField = UITextField()
@@ -80,23 +81,17 @@ class LogInViewController : UIViewController, UIActionSheetDelegate {
         // add observer for prepareLogin
         notificationCenter.addObserver(self, selector: "prepareLogin", name: "prepareLogin", object: nil)
 
-        if (apiConnector.isConnectedToNetwork()) {
-            apiConnector.loadServer()
-            apiConnector.login()
-        } else {
-            NSLog("Not connected to network")
-            let errorLabel: UILabel = UILabel()
-            errorLabel.text = "Please try again when you are connected to a wireless network."
-            errorLabel.font = mediumSemiboldFont
-            errorLabel.textColor = blackishColor
-            errorLabel.textAlignment = .Center
-            errorLabel.numberOfLines = 0
-            errorLabel.frame.size = CGSize(width: self.view.frame.width - 2 * loginInset, height: CGFloat.max)
-            errorLabel.sizeToFit()
-            errorLabel.frame.origin.x = self.view.frame.width / 2 - errorLabel.frame.width / 2
-            errorLabel.frame.origin.y = self.view.frame.height / 2 - errorLabel.frame.height / 2
-            self.view.addSubview(errorLabel)
-        }
+        reachLabel.text = "Please try again when you are connected to a wireless network."
+        reachLabel.font = mediumSemiboldFont
+        reachLabel.textColor = blackishColor
+        reachLabel.textAlignment = .Center
+        reachLabel.numberOfLines = 0
+        reachLabel.frame.size = CGSize(width: self.view.frame.width - 2 * loginInset, height: CGFloat.max)
+        reachLabel.sizeToFit()
+        reachLabel.frame.origin.x = self.view.frame.width / 2 - reachLabel.frame.width / 2
+        reachLabel.frame.origin.y = self.view.frame.height / 2 - reachLabel.frame.height / 2
+        reachLabel.hidden = true
+        self.view.addSubview(reachLabel)
         
         notificationCenter.addObserver(self, selector: "reachabilityChanged:", name: ReachabilityChangedNotification, object: nil)
         configureForReachability()
@@ -113,36 +108,20 @@ class LogInViewController : UIViewController, UIActionSheetDelegate {
     }
     
     func reachabilityChanged(note: NSNotification) {
-//        if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate, api = appDelegate.API {
-//            // try token refresh if we are now connected...
-//            // TODO: change message to "attempting token refresh"?
-//            if api.isConnectedToNetwork() && api.sessionToken != nil {
-//                NSLog("Login: attempting to refresh token...")
-//                api.refreshToken() { succeeded -> (Void) in
-//                    if succeeded {
-//                        appDelegate.setupUIForLoginSuccess()
-//                    } else {
-//                        NSLog("Refresh token failed, need to log in normally")
-//                        api.logout() {
-//                            self.configureForReachability()
-//                        }
-//                    }
-//                }
-//                return
-//            }
-//        }
         configureForReachability()
     }
     
     private func configureForReachability() {
-//        if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
-//            var connected = true
-//            if let api = appDelegate.API {
-//                connected = api.isConnectedToNetwork()
-//            }
-//            inputContainerView.hidden = !connected
-//            offlineMessageContainerView.hidden = connected
-//        }
+        let connected = apiConnector.isConnectedToNetwork()
+        
+        for view in self.view.subviews {
+            view.hidden = !connected
+        }
+        reachLabel.hidden = connected
+        if (connected) {
+            apiConnector.loadServer()
+            apiConnector.login()
+        }
     }
     
     func checkCorners() {
