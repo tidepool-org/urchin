@@ -1,10 +1,17 @@
-//
-//  NotesViewController.swift
-//  urchin
-//
-//  Created by Ethan Look on 6/18/15.
-//  Copyright (c) 2015 Tidepool. All rights reserved.
-//
+/*
+* Copyright (c) 2015, Tidepool Project
+*
+* This program is free software; you can redistribute it and/or modify it under
+* the terms of the associated License, which is identical to the BSD 2-Clause
+* License as published by the Open Source Initiative at opensource.org.
+*
+* This program is distributed in the hope that it will be useful, but WITHOUT
+* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+* FOR A PARTICULAR PURPOSE. See the License for more details.
+*
+* You should have received a copy of the License along with this program; if
+* not, you can obtain one from Tidepool Project at tidepool.org.
+*/
 
 import Foundation
 import UIKit
@@ -78,7 +85,7 @@ class NotesViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -202,7 +209,7 @@ class NotesViewController: UIViewController {
             configureDropDownMenu()
             
             // Add rightBarButtonItem to down arrow for showing dropdown
-            var rightDropDownMenuButton: UIBarButtonItem = UIBarButtonItem(image: downArrow, style: .Plain, target: self, action: "dropDownMenuPressed")
+            let rightDropDownMenuButton: UIBarButtonItem = UIBarButtonItem(image: downArrow, style: .Plain, target: self, action: "dropDownMenuPressed")
             self.navigationItem.setRightBarButtonItem(rightDropDownMenuButton, animated: true)
             
             if (groups.count == 1) {
@@ -257,7 +264,7 @@ class NotesViewController: UIViewController {
     
     func sortGroups() {
         
-        sort(&groups) {
+        groups.sortInPlace {
             return $0.fullName < $1.fullName
         }
         
@@ -338,7 +345,7 @@ class NotesViewController: UIViewController {
             let dateShift = NSDateComponents()
             dateShift.month = fetchPeriodInMonths
             let calendar = NSCalendar.currentCalendar()
-            let startDate = calendar.dateByAddingComponents(dateShift, toDate: lastDateFetchTo, options: nil)!
+            let startDate = calendar.dateByAddingComponents(dateShift, toDate: lastDateFetchTo, options: [])!
             
             for group in groups {
                 apiConnector.getNotesForUserInDateRange(self, userid: group.userid, start: startDate, end: lastDateFetchTo)
@@ -437,7 +444,7 @@ class NotesViewController: UIViewController {
     
     // Filter notes based upon current filter
     func filterNotes() {
-        notes.sort({$0.timestamp.timeIntervalSinceNow > $1.timestamp.timeIntervalSinceNow})
+        notes.sortInPlace({$0.timestamp.timeIntervalSinceNow > $1.timestamp.timeIntervalSinceNow})
         
         filteredNotes = []
         if (filter != nil) {
@@ -597,7 +604,7 @@ class NotesViewController: UIViewController {
     func animateDropDownToFrame(frame: CGRect, overlayFrame: CGRect, completion:() -> Void) {
         if (!isDropDownAnimating) {
             isDropDownAnimating = true
-            UIView.animateKeyframesWithDuration(dropDownAnimationTime, delay: 0.0, options: nil, animations: { () -> Void in
+            UIView.animateKeyframesWithDuration(dropDownAnimationTime, delay: 0.0, options: [], animations: { () -> Void in
                 self.dropDownMenu.frame = frame
                 self.opaqueOverlay.frame = overlayFrame
                 }, completion: { (completed: Bool) -> Void in

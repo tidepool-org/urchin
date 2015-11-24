@@ -1,10 +1,17 @@
-//
-//  AppDelegate.swift
-//  urchin
-//
-//  Created by Ethan Look on 6/17/15.
-//  Copyright (c) 2015 Tidepool. All rights reserved.
-//
+/*
+* Copyright (c) 2015, Tidepool Project
+*
+* This program is free software; you can redistribute it and/or modify it under
+* the terms of the associated License, which is identical to the BSD 2-Clause
+* License as published by the Open Source Initiative at opensource.org.
+*
+* This program is distributed in the hope that it will be useful, but WITHOUT
+* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+* FOR A PARTICULAR PURPOSE. See the License for more details.
+*
+* You should have received a copy of the License along with this program; if
+* not, you can obtain one from Tidepool Project at tidepool.org.
+*/
 
 import UIKit
 import CoreData
@@ -19,7 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         
         // Change navigation bar colors
-        var navigationBarAppearace = UINavigationBar.appearance()
+        let navigationBarAppearace = UINavigationBar.appearance()
         navigationBarAppearace.tintColor = navBarTint
         navigationBarAppearace.barTintColor = darkGreenColor
         if (UIDevice.currentDevice().systemVersion as NSString).floatValue >= 8.0 {
@@ -65,7 +72,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     lazy var applicationDocumentsDirectory: NSURL = {
         // The directory the application uses to store the Core Data store file. This code uses a directory named "com.xxxx.ProjectName" in the application's documents Application Support directory.
         let urls = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
-        return urls[urls.count-1] as! NSURL
+        return urls[urls.count-1] 
         }()
     
     lazy var managedObjectModel: NSManagedObjectModel = {
@@ -81,7 +88,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let url = self.applicationDocumentsDirectory.URLByAppendingPathComponent("urchin.sqlite")
         var error: NSError? = nil
         var failureReason = "There was an error creating or loading the application's saved data."
-        if coordinator!.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: url, options: [NSMigratePersistentStoresAutomaticallyOption: true, NSInferMappingModelAutomaticallyOption: true], error: &error) == nil {
+        do {
+            try coordinator!.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: url, options: [NSMigratePersistentStoresAutomaticallyOption: true, NSInferMappingModelAutomaticallyOption: true])
+        } catch var error1 as NSError {
+            error = error1
             coordinator = nil
             // Report any error we got.
             var dict = [String: AnyObject]()
@@ -90,8 +100,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             dict[NSUnderlyingErrorKey] = error
             error = NSError(domain: "YOUR_ERROR_DOMAIN", code: 9999, userInfo: dict)
             
-            if NSClassFromString("UIAlertController") != nil {
-                
+            if #available(iOS 8.0, *) {
                 var alert = UIAlertController(title: "Unrecoverable Error Occurred", message: "An unrecoverable error occurred. The application will terminate shortly. Please contact the developer to determine the cause of the issue.", preferredStyle: .Alert)
                 alert.addAction(UIAlertAction(title: "Okay", style: .Default, handler: { Void in
                     NSLog("Cancel alert and return to note")
@@ -103,21 +112,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     
                     topController.presentViewController(alert, animated: true, completion: nil)
                 }
-                
+
             } else {
-                
                 var unknownErrorAlert: UIAlertView = UIAlertView()
                 unknownErrorAlert.title = "Unrecoverable Error Occurred"
                 unknownErrorAlert.message = "An unrecoverable error occurred. The application will terminate shortly. Please contact the developer to determine the cause of the issue."
                 unknownErrorAlert.addButtonWithTitle("Okay")
                 unknownErrorAlert.show()
-                
             }
-            
-            
             
             NSLog("Unresolved error \(error), \(error!.userInfo)")
             abort()
+        } catch {
+            fatalError()
         }
         
         return coordinator
@@ -139,34 +146,38 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func saveContext () {
         if let moc = self.managedObjectContext {
             var error: NSError? = nil
-            if moc.hasChanges && !moc.save(&error) {
+            if moc.hasChanges {
+                do {
+                    try moc.save()
+                } catch let error1 as NSError {
+                    error = error1
                 
-                if NSClassFromString("UIAlertController") != nil {
-                    
-                    var alert = UIAlertController(title: "Unrecoverable Error Occurred", message: "An unrecoverable error occurred. The application will terminate shortly. Please contact the developer to determine the cause of the issue.", preferredStyle: .Alert)
-                    alert.addAction(UIAlertAction(title: "Okay", style: .Default, handler: { Void in
-                        NSLog("Cancel alert and return to note")
-                    }))
-                    if var topController = UIApplication.sharedApplication().keyWindow?.rootViewController {
-                        while let presentedViewController = topController.presentedViewController {
-                            topController = presentedViewController
-                        }
+                    if #available(iOS 8.0, *) {
+                        let alert = UIAlertController(title: "Unrecoverable Error Occurred", message: "An unrecoverable error occurred. The application will terminate shortly. Please contact the developer to determine the cause of the issue.", preferredStyle: .Alert)
                         
-                        topController.presentViewController(alert, animated: true, completion: nil)
+                        alert.addAction(UIAlertAction(title: "Okay", style: .Default, handler: { Void in
+                            NSLog("Cancel alert and return to note")
+                        }))
+                        if var topController = UIApplication.sharedApplication().keyWindow?.rootViewController {
+                            while let presentedViewController = topController.presentedViewController {
+                                topController = presentedViewController
+                            }
+                            
+                            topController.presentViewController(alert, animated: true, completion: nil)
+                        }
+                    } else {
+                        
+                        let unknownErrorAlert: UIAlertView = UIAlertView()
+                        unknownErrorAlert.title = "Unrecoverable Error Occurred"
+                        unknownErrorAlert.message = "An unrecoverable error occurred. The application will terminate shortly. Please contact the developer to determine the cause of the issue."
+                        unknownErrorAlert.addButtonWithTitle("Okay")
+                        unknownErrorAlert.show()
+                        
                     }
-                    
-                } else {
-                    
-                    var unknownErrorAlert: UIAlertView = UIAlertView()
-                    unknownErrorAlert.title = "Unrecoverable Error Occurred"
-                    unknownErrorAlert.message = "An unrecoverable error occurred. The application will terminate shortly. Please contact the developer to determine the cause of the issue."
-                    unknownErrorAlert.addButtonWithTitle("Okay")
-                    unknownErrorAlert.show()
-                    
-                }
                 
-                NSLog("Unresolved error \(error), \(error!.userInfo)")
-                abort()
+                    NSLog("Unresolved error \(error), \(error!.userInfo)")
+                    abort()
+                }
             }
         }
     }

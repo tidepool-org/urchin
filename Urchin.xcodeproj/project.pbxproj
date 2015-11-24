@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		48E4A4431BEE5879001A7B35 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E4A4421BEE5879001A7B35 /* Reachability.swift */; };
+		48E4A4441BEE5879001A7B35 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E4A4421BEE5879001A7B35 /* Reachability.swift */; };
 		AA03FB8A1B5848FD001B9435 /* APIConnect.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA03FB891B5848FD001B9435 /* APIConnect.swift */; };
 		AA3484F01B559EA10028C49B /* HashtagsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3484EF1B559EA10028C49B /* HashtagsView.swift */; };
 		AA3484F41B56AED20028C49B /* UIDateFormatterExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3484F31B56AED20028C49B /* UIDateFormatterExtension.swift */; };
@@ -108,8 +110,6 @@
 		AACC18081B7A6E2500EA6425 /* OpenSans-Semibold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AACC18071B7A6E2500EA6425 /* OpenSans-Semibold.ttf */; };
 		AACC18091B7A6E2500EA6425 /* OpenSans-Semibold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AACC18071B7A6E2500EA6425 /* OpenSans-Semibold.ttf */; };
 		AACE31981B4AE17700F90E1D /* tidepoollogo.png in Resources */ = {isa = PBXBuildFile; fileRef = AACE31971B4AE17700F90E1D /* tidepoollogo.png */; };
-		AADD00391B6BFC28003D931E /* LoginVCActionSheetDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AADD00381B6BFC28003D931E /* LoginVCActionSheetDelegate.swift */; };
-		AADD003A1B6C05A5003D931E /* LoginVCActionSheetDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AADD00381B6BFC28003D931E /* LoginVCActionSheetDelegate.swift */; };
 		AADECC7A1B4F34AA0043E888 /* location.png in Resources */ = {isa = PBXBuildFile; fileRef = AADECC761B4F34AA0043E888 /* location.png */; };
 		AADECC7B1B4F34AA0043E888 /* location@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AADECC771B4F34AA0043E888 /* location@2x.png */; };
 		AADECC7C1B4F34AA0043E888 /* camera.png in Resources */ = {isa = PBXBuildFile; fileRef = AADECC781B4F34AA0043E888 /* camera.png */; };
@@ -131,6 +131,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		48E4A4421BEE5879001A7B35 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		AA03FB891B5848FD001B9435 /* APIConnect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIConnect.swift; sourceTree = "<group>"; };
 		AA3484EF1B559EA10028C49B /* HashtagsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HashtagsView.swift; sourceTree = "<group>"; };
 		AA3484F31B56AED20028C49B /* UIDateFormatterExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIDateFormatterExtension.swift; sourceTree = "<group>"; };
@@ -187,7 +188,6 @@
 		AABCEFAD1B3234360064FE49 /* Note.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
 		AACC18071B7A6E2500EA6425 /* OpenSans-Semibold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Semibold.ttf"; sourceTree = "<group>"; };
 		AACE31971B4AE17700F90E1D /* tidepoollogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tidepoollogo.png; sourceTree = "<group>"; };
-		AADD00381B6BFC28003D931E /* LoginVCActionSheetDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginVCActionSheetDelegate.swift; sourceTree = "<group>"; };
 		AADECC761B4F34AA0043E888 /* location.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = location.png; sourceTree = "<group>"; };
 		AADECC771B4F34AA0043E888 /* location@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "location@2x.png"; sourceTree = "<group>"; };
 		AADECC781B4F34AA0043E888 /* camera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera.png; sourceTree = "<group>"; };
@@ -218,6 +218,7 @@
 		AA03FB881B5848CD001B9435 /* API */ = {
 			isa = PBXGroup;
 			children = (
+				48E4A4421BEE5879001A7B35 /* Reachability.swift */,
 				AA03FB891B5848FD001B9435 /* APIConnect.swift */,
 			);
 			name = API;
@@ -310,7 +311,6 @@
 			children = (
 				AA6931EF1B66DB270057F0A0 /* LoginVCTextFieldDelegate.swift */,
 				AA6931F21B66DD6F0057F0A0 /* LoginVCTransitionDelegate.swift */,
-				AADD00381B6BFC28003D931E /* LoginVCActionSheetDelegate.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -521,7 +521,9 @@
 		AABCEF7C1B3231910064FE49 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0640;
+				LastSwiftMigration = 0710;
+				LastSwiftUpdateCheck = 0710;
+				LastUpgradeCheck = 0710;
 				ORGANIZATIONNAME = Tidepool;
 				TargetAttributes = {
 					AABCEF831B3231910064FE49 = {
@@ -539,7 +541,7 @@
 					};
 				};
 			};
-			buildConfigurationList = AABCEF7F1B3231910064FE49 /* Build configuration list for PBXProject "Urchin" */;
+			buildConfigurationList = AABCEF7F1B3231910064FE49 /* Build configuration list for PBXProject "urchin" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -661,13 +663,13 @@
 				AA6931F81B66DE4E0057F0A0 /* NotesVCTableViewDataSource.swift in Sources */,
 				AA3652CC1B34A163001F514D /* Patient.swift in Sources */,
 				AA829BB91B7409E500DFEBA0 /* UrchinData.xcdatamodeld in Sources */,
+				48E4A4431BEE5879001A7B35 /* Reachability.swift in Sources */,
 				AA6932001B66E5450057F0A0 /* AddNoteVCTextViewDelegate.swift in Sources */,
 				AA69320E1B66E99B0057F0A0 /* EditNoteVCAlertViewDelegate.swift in Sources */,
 				AA03FB8A1B5848FD001B9435 /* APIConnect.swift in Sources */,
 				AABCEF8A1B3231910064FE49 /* AppDelegate.swift in Sources */,
 				AA3652CE1B34A8E4001F514D /* UserDropDownCell.swift in Sources */,
 				AA3652C41B338525001F514D /* NotesViewController.swift in Sources */,
-				AADD00391B6BFC28003D931E /* LoginVCActionSheetDelegate.swift in Sources */,
 				AA8301001B4D986300F8ADE6 /* AddNoteViewController.swift in Sources */,
 				AABCEFAC1B3232C60064FE49 /* NoteCell.swift in Sources */,
 				AA3652C21B33847A001F514D /* User.swift in Sources */,
@@ -688,7 +690,6 @@
 				AA7920251B62AB790046038B /* NoteCell.swift in Sources */,
 				AA6932071B66E6D30057F0A0 /* AddNoteVCTableViewDelegate.swift in Sources */,
 				AA6932011B66E5910057F0A0 /* AddNoteVCTextViewDelegate.swift in Sources */,
-				AADD003A1B6C05A5003D931E /* LoginVCActionSheetDelegate.swift in Sources */,
 				AA6931F11B66DCDD0057F0A0 /* LoginVCTextFieldDelegate.swift in Sources */,
 				AA69320A1B66E8440057F0A0 /* AddNoteVCAlertViewDelegate.swift in Sources */,
 				AA79201F1B62AB470046038B /* NotesViewController.swift in Sources */,
@@ -711,6 +712,7 @@
 				AA69320F1B66E9B20057F0A0 /* EditNoteVCAlertViewDelegate.swift in Sources */,
 				AA6A7D7A1B62B1A4008215D8 /* apiConnectorTests.swift in Sources */,
 				AA6931F41B66DD8E0057F0A0 /* LoginVCTransitionDelegate.swift in Sources */,
+				48E4A4441BEE5879001A7B35 /* Reachability.swift in Sources */,
 				AA6931FB1B66E12A0057F0A0 /* NotesVCTableViewDataSource.swift in Sources */,
 				AA7920221B62AB5F0046038B /* HashtagsView.swift in Sources */,
 				AA6932121B66EC0E0057F0A0 /* EditNoteVCTextViewDelegate.swift in Sources */,
@@ -768,6 +770,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -841,6 +844,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MACH_O_TYPE = mh_execute;
+				PRODUCT_BUNDLE_IDENTIFIER = org.tidepool.blipnotes;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -858,6 +862,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MACH_O_TYPE = mh_execute;
+				PRODUCT_BUNDLE_IDENTIFIER = org.tidepool.blipnotes;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -878,6 +883,7 @@
 				);
 				INFOPLIST_FILE = urchinTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.tidepool.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/urchin.app/urchin";
 			};
@@ -893,6 +899,7 @@
 				);
 				INFOPLIST_FILE = urchinTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.tidepool.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/urchin.app/urchin";
 			};
@@ -901,7 +908,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		AABCEF7F1B3231910064FE49 /* Build configuration list for PBXProject "Urchin" */ = {
+		AABCEF7F1B3231910064FE49 /* Build configuration list for PBXProject "urchin" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				AABCEFA11B3231910064FE49 /* Debug */,

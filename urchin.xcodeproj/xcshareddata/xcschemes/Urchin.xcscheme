@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0640"
+   LastUpgradeVersion = "0710"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -17,7 +17,7 @@
                BlueprintIdentifier = "AABCEF831B3231910064FE49"
                BuildableName = "urchin.app"
                BlueprintName = "urchin"
-               ReferencedContainer = "container:urchin.xcodeproj">
+               ReferencedContainer = "container:Urchin.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -31,16 +31,16 @@
                BlueprintIdentifier = "AABCEF981B3231910064FE49"
                BuildableName = "urchinTests.xctest"
                BlueprintName = "urchinTests"
-               ReferencedContainer = "container:urchin.xcodeproj">
+               ReferencedContainer = "container:Urchin.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
+      buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES"
-      buildConfiguration = "Debug">
+      shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
          <TestableReference
             skipped = "NO">
@@ -49,7 +49,7 @@
                BlueprintIdentifier = "AABCEF981B3231910064FE49"
                BuildableName = "urchinTests.xctest"
                BlueprintName = "urchinTests"
-               ReferencedContainer = "container:urchin.xcodeproj">
+               ReferencedContainer = "container:Urchin.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -59,18 +59,21 @@
             BlueprintIdentifier = "AABCEF831B3231910064FE49"
             BuildableName = "urchin.app"
             BlueprintName = "urchin"
-            ReferencedContainer = "container:urchin.xcodeproj">
+            ReferencedContainer = "container:Urchin.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
+      <AdditionalOptions>
+      </AdditionalOptions>
    </TestAction>
    <LaunchAction
+      buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
-      buildConfiguration = "Debug"
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
+      debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
       <BuildableProductRunnable
          runnableDebuggingMode = "0">
@@ -79,17 +82,17 @@
             BlueprintIdentifier = "AABCEF831B3231910064FE49"
             BuildableName = "urchin.app"
             BlueprintName = "urchin"
-            ReferencedContainer = "container:urchin.xcodeproj">
+            ReferencedContainer = "container:Urchin.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>
    <ProfileAction
+      buildConfiguration = "Release"
       shouldUseLaunchSchemeArgsEnv = "YES"
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
-      buildConfiguration = "Release"
       debugDocumentVersioning = "YES">
       <BuildableProductRunnable
          runnableDebuggingMode = "0">
@@ -98,7 +101,7 @@
             BlueprintIdentifier = "AABCEF831B3231910064FE49"
             BuildableName = "urchin.app"
             BlueprintName = "urchin"
-            ReferencedContainer = "container:urchin.xcodeproj">
+            ReferencedContainer = "container:Urchin.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

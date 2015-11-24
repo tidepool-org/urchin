@@ -1,10 +1,17 @@
-//
-//  hashtagBolderTests.swift
-//  urchinTests
-//
-//  Created by Ethan Look on 6/17/15.
-//  Copyright (c) 2015 Tidepool. All rights reserved.
-//
+/*
+* Copyright (c) 2015, Tidepool Project
+*
+* This program is free software; you can redistribute it and/or modify it under
+* the terms of the associated License, which is identical to the BSD 2-Clause
+* License as published by the Open Source Initiative at opensource.org.
+*
+* This program is distributed in the hope that it will be useful, but WITHOUT
+* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+* FOR A PARTICULAR PURPOSE. See the License for more details.
+*
+* You should have received a copy of the License along with this program; if
+* not, you can obtain one from Tidepool Project at tidepool.org.
+*/
 
 import UIKit
 import XCTest
@@ -61,7 +68,7 @@ class hashtagBolderTests: XCTestCase {
         // Test the speed of the hashtag bolder. Repeating hashtags take the most time.
         let text = "#first #second #first #second #first #second #first #second #first #second #first #second #first #second #first #second #first #second #first #second #first #second #first #second #first #second #first #second"
         self.measureBlock() {
-            let attrStr = self.hashtagBolder.boldHashtags(text)
+            let _ = self.hashtagBolder.boldHashtags(text)
         }
     }
     

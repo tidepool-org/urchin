@@ -1,18 +1,17 @@
-//
-//  LoadingView.swift
-//  urchin
-//
-//  Created by Ethan Look on 7/17/15.
-//  Copyright (c) 2015 Tidepool. All rights reserved.
-//
-//  Use the following code to add a loading view:
-//
-//  let loading = LoadingView(text: "Your text here...")
-//  let loadingX = self.view.frame.width / 2 - loading.frame.width / 2
-//  let loadingY = self.view.frame.height / 2 - loading.frame.height / 2
-//  loading.frame.origin = CGPoint(x: loadingX, y: loadingY)
-//  self.view.addSubview(loading)
-//
+/*
+* Copyright (c) 2015, Tidepool Project
+*
+* This program is free software; you can redistribute it and/or modify it under
+* the terms of the associated License, which is identical to the BSD 2-Clause
+* License as published by the Open Source Initiative at opensource.org.
+*
+* This program is distributed in the hope that it will be useful, but WITHOUT
+* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+* FOR A PARTICULAR PURPOSE. See the License for more details.
+*
+* You should have received a copy of the License along with this program; if
+* not, you can obtain one from Tidepool Project at tidepool.org.
+*/
 
 import Foundation
 import UIKit
@@ -48,7 +47,7 @@ class LoadingView: UIView {
         self.addSubview(label)
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     

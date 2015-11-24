@@ -1,10 +1,17 @@
-//
-//  apiConnectorTests.swift
-//  urchin
-//
-//  Created by Ethan Look on 7/24/15.
-//  Copyright (c) 2015 Tidepool. All rights reserved.
-//
+/*
+* Copyright (c) 2015, Tidepool Project
+*
+* This program is free software; you can redistribute it and/or modify it under
+* the terms of the associated License, which is identical to the BSD 2-Clause
+* License as published by the Open Source Initiative at opensource.org.
+*
+* This program is distributed in the hope that it will be useful, but WITHOUT
+* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+* FOR A PARTICULAR PURPOSE. See the License for more details.
+*
+* You should have received a copy of the License along with this program; if
+* not, you can obtain one from Tidepool Project at tidepool.org.
+*/
 
 import XCTest
 
@@ -39,7 +46,7 @@ class apiConnectorTests: XCTestCase {
         // Invalid password for a login request.
         let loginString = NSString(format: "%@:%@", email, "invalidpass")
         let loginData: NSData = loginString.dataUsingEncoding(NSUTF8StringEncoding)!
-        let base64LoginString = loginData.base64EncodedStringWithOptions(nil)
+        let base64LoginString = loginData.base64EncodedStringWithOptions([])
         
         let headerDict = ["Authorization":"Basic \(base64LoginString)"]
         
@@ -50,7 +57,7 @@ class apiConnectorTests: XCTestCase {
         // To be completed once response has been received. Verify that the proper status code was received.
         let completion = { (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
             // Parse the response.
-            var jsonResult: NSDictionary = (NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: nil) as? NSDictionary)!
+            let jsonResult: NSDictionary = ((try? NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers)) as? NSDictionary)!
             let code = jsonResult.valueForKey("code") as! Int
             
             // Test for invalid login credentials code.
@@ -73,7 +80,7 @@ class apiConnectorTests: XCTestCase {
         // Valid password for a login request.
         let loginString = NSString(format: "%@:%@", email, "urchintests")
         let loginData: NSData = loginString.dataUsingEncoding(NSUTF8StringEncoding)!
-        let base64LoginString = loginData.base64EncodedStringWithOptions(nil)
+        let base64LoginString = loginData.base64EncodedStringWithOptions([])
         
         let headerDict = ["Authorization":"Basic \(base64LoginString)"]
         
@@ -90,7 +97,7 @@ class apiConnectorTests: XCTestCase {
                 // Store the session token for further use.
                 self.apiConnector.x_tidepool_session_token = httpResponse.allHeaderFields["x-tidepool-session-token"] as! String
                 
-                var jsonResult: NSDictionary = (NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: nil) as? NSDictionary)!
+                let jsonResult: NSDictionary = ((try? NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers)) as? NSDictionary)!
                 
                 self.userid = jsonResult.valueForKey("userid") as! String
                 // Fulfill the expectation so test passes time constraint.
@@ -270,8 +277,12 @@ class apiConnectorTests: XCTestCase {
         
         // Get the json output of the note configured above.
         let jsonObject = note.dictionaryFromNote()
-        var err: NSError?
-        let body = NSJSONSerialization.dataWithJSONObject(jsonObject, options: nil, error: &err)
+        let body: NSData?
+        do {
+            body = try NSJSONSerialization.dataWithJSONObject(jsonObject, options: [])
+        } catch {
+            body = nil
+        }
         
         let preRequest = { () -> Void in
             // nothing to verify in preRequest
@@ -284,7 +295,7 @@ class apiConnectorTests: XCTestCase {
                 XCTAssertEqual(httpResponse.statusCode, 201, "Request for posting a note")
                 
                 // Parse the response.
-                var jsonResult: NSDictionary = (NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: nil) as? NSDictionary)!
+                let jsonResult: NSDictionary = ((try? NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers)) as? NSDictionary)!
                 
                 // Store the note's id that was returned in the response.
                 self.note.id = jsonResult.valueForKey("id") as! String
@@ -322,8 +333,12 @@ class apiConnectorTests: XCTestCase {
         
         // Get the json output for the edited notes.
         let jsonObject = note.updatesFromNote()
-        var err: NSError?
-        let body = NSJSONSerialization.dataWithJSONObject(jsonObject, options: nil, error: &err)
+        let body: NSData?
+        do {
+            body = try NSJSONSerialization.dataWithJSONObject(jsonObject, options: [])
+        } catch {
+            body = nil
+        }
         
         let preRequest = { () -> Void in
             // nothing to verify in preRequest
@@ -445,7 +460,7 @@ class apiConnectorTests: XCTestCase {
                 // Store the session token for further use.
                 self.apiConnector.x_tidepool_session_token = httpResponse.allHeaderFields["x-tidepool-session-token"] as! String
                 
-                var jsonResult: NSDictionary = (NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: nil) as? NSDictionary)!
+                let jsonResult: NSDictionary = ((try? NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers)) as? NSDictionary)!
                 
                 self.userid = jsonResult.valueForKey("userid") as! String
                 

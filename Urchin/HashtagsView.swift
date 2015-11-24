@@ -1,10 +1,17 @@
-//
-//  HashtagsView.swift
-//  urchin
-//
-//  Created by Ethan Look on 7/14/15.
-//  Copyright (c) 2015 Tidepool. All rights reserved.
-//
+/*
+* Copyright (c) 2015, Tidepool Project
+*
+* This program is free software; you can redistribute it and/or modify it under
+* the terms of the associated License, which is identical to the BSD 2-Clause
+* License as published by the Open Source Initiative at opensource.org.
+*
+* This program is distributed in the hope that it will be useful, but WITHOUT
+* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+* FOR A PARTICULAR PURPOSE. See the License for more details.
+*
+* You should have received a copy of the License along with this program; if
+* not, you can obtain one from Tidepool Project at tidepool.org.
+*/
 
 import Foundation
 import UIKit
@@ -45,19 +52,13 @@ class HashtagsView: UIView {
         // Open a new fetch request for a Hashtag
         let fetchRequest = NSFetchRequest(entityName:"Hashtag")
         
-        var error: NSError?
-        
         // Execute the fetch from CoreData
-        let fetchedResults =
-        managedContext.executeFetchRequest(fetchRequest,
-            error: &error) as? [NSManagedObject]
-        
-        // If there are results
-        if let results = fetchedResults {
+        do { let results =
+            try managedContext.executeFetchRequest(fetchRequest) as? [NSManagedObject]
             // keep track of whether or not the hashtag in question was fount
             var found = false
             
-            for result in results {
+            for result in results! {
                 // Check each result
                 if (result.valueForKey("text") as! String == text) {
                     // Fount it!
@@ -69,7 +70,10 @@ class HashtagsView: UIView {
                     
                     // Attempt to save the hashtag
                     var errorTwo: NSError?
-                    if !managedContext.save(&errorTwo) {
+                    do {
+                        try managedContext.save()
+                    } catch let error as NSError {
+                        errorTwo = error
                         NSLog("Couldn't increase number of usages for hashtag \(text): \(errorTwo), \(errorTwo?.userInfo)")
                     }
                     
@@ -96,13 +100,15 @@ class HashtagsView: UIView {
                 
                 // Save the hashtag
                 var errorTwo: NSError?
-                if !managedContext.save(&errorTwo) {
+                do {
+                    try managedContext.save()
+                } catch let error as NSError {
+                    errorTwo = error
                     NSLog("Could not save new hashtag \(text): \(errorTwo), \(errorTwo?.userInfo)")
                 }
             }
-            
-        } else {
-            NSLog("Could not fetch hashtags to handle hashtag \(text): \(error), \(error!.userInfo)")
+        } catch let error as NSError {
+            NSLog("Could not fetch hashtags to handle hashtag \(text): \(error), \(error.userInfo)")
         }
     }
     
@@ -123,19 +129,14 @@ class HashtagsView: UIView {
         let sortDescriptor = NSSortDescriptor(key: "usages", ascending: false)
         fetchRequest.sortDescriptors = [sortDescriptor]
         
-        var error: NSError?
-        
-        // Execute the fetch
-        let fetchedResults =
-        managedContext.executeFetchRequest(fetchRequest,
-            error: &error) as? [NSManagedObject]
-        
-        // If there were results
-        if let results = fetchedResults {
+        do {
+            // Execute the fetch
+            let results =
+            try managedContext.executeFetchRequest(fetchRequest) as? [NSManagedObject]
             // Let hashtags be the results
-            self.hashtags = results
-        } else {
-            NSLog("Could not fetch hashtags: \(error), \(error!.userInfo)")
+            self.hashtags = results!
+        } catch let error as NSError {
+            NSLog("Could not fetch hashtags: \(error), \(error.userInfo)")
         }
         
         // If it didn't find any hashtags (first time using app)
@@ -176,7 +177,10 @@ class HashtagsView: UIView {
             
             // Save the hashtag in CoreData
             var error: NSError?
-            if !managedContext.save(&error) {
+            do {
+                try managedContext.save()
+            } catch let error1 as NSError {
+                error = error1
                 NSLog("Could not save default hashtag \(text): \(error), \(error?.userInfo)")
             }
             

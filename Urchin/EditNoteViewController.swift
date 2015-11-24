@@ -1,10 +1,17 @@
-//
-//  EditNoteViewController.swift
-//  urchin
-//
-//  Created by Ethan Look on 7/13/15.
-//  Copyright (c) 2015 Tidepool. All rights reserved.
-//
+/*
+* Copyright (c) 2015, Tidepool Project
+*
+* This program is free software; you can redistribute it and/or modify it under
+* the terms of the associated License, which is identical to the BSD 2-Clause
+* License as published by the Open Source Initiative at opensource.org.
+*
+* This program is distributed in the hope that it will be useful, but WITHOUT
+* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+* FOR A PARTICULAR PURPOSE. See the License for more details.
+*
+* You should have received a copy of the License along with this program; if
+* not, you can obtain one from Tidepool Project at tidepool.org.
+*/
 
 import Foundation
 import UIKit
@@ -69,7 +76,7 @@ class EditNoteViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
     }
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -103,10 +110,10 @@ class EditNoteViewController: UIViewController {
         self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: navBarTitleColor, NSFontAttributeName: mediumRegularFont]
         
         // Configure close button (always present)
-        var closeButton: UIBarButtonItem = UIBarButtonItem(image: closeX, style: .Plain, target: self, action: "closeVC:")
+        let closeButton: UIBarButtonItem = UIBarButtonItem(image: closeX, style: .Plain, target: self, action: "closeVC:")
         self.navigationItem.setLeftBarButtonItem(closeButton, animated: true)
         
-        var deleteButton: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Trash, target: self, action: "deleteNote:")
+        let deleteButton: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Trash, target: self, action: "deleteNote:")
         self.navigationItem.setRightBarButtonItem(deleteButton, animated: true)
         
         // configure date label
@@ -248,9 +255,9 @@ class EditNoteViewController: UIViewController {
             
             // If the note has been changed, show an alert
             
-            if NSClassFromString("UIAlertController") != nil {
+            if #available(iOS 8.0, *) {
+                let alert = UIAlertController(title: editAlertTitle, message: editAlertMessage, preferredStyle: .Alert)
                 
-                var alert = UIAlertController(title: editAlertTitle, message: editAlertMessage, preferredStyle: .Alert)
                 alert.addAction(UIAlertAction(title: editAlertDiscard, style: .Cancel, handler: { Void in
                     NSLog("Discard edits from note")
                     
@@ -294,9 +301,10 @@ class EditNoteViewController: UIViewController {
     func deleteNote(sender: UIBarButtonItem!) {
         self.apiConnector.trackMetric("Clicked Delete Note")
         
-        if NSClassFromString("UIAlertController") != nil {
+        if #available(iOS 8.0, *) {
             
-            var alert = UIAlertController(title: trashAlertTitle, message: trashAlertMessage, preferredStyle: .Alert)
+            let alert = UIAlertController(title: trashAlertTitle, message: trashAlertMessage, preferredStyle: .Alert)
+            
             alert.addAction(UIAlertAction(title: trashAlertCancel, style: .Cancel, handler: { Void in
                 
                 NSLog("Do not trash note")
@@ -355,7 +363,7 @@ class EditNoteViewController: UIViewController {
                 self.datePicker.alpha = 0.0
             })
             // Move all affected UI elements with animation
-            UIView.animateKeyframesWithDuration(animationTime, delay: 0.0, options: nil, animations: { () -> Void in
+            UIView.animateKeyframesWithDuration(animationTime, delay: 0.0, options: [], animations: { () -> Void in
                 // UI element location (and some sizing)
                 self.separatorOne.frame.origin.y = self.timedateLabel.frame.maxY + labelInset
                 //          note: hashtagsView completely expanded
@@ -385,7 +393,7 @@ class EditNoteViewController: UIViewController {
     func openDatePicker() {
         if (datePicker.hidden && !isAnimating) {
             isAnimating = true
-            UIView.animateKeyframesWithDuration(animationTime, delay: 0.0, options: nil, animations: { () -> Void in
+            UIView.animateKeyframesWithDuration(animationTime, delay: 0.0, options: [], animations: { () -> Void in
                 
                 // UI element location (and some sizing)
                 self.separatorOne.frame.origin.y = self.datePicker.frame.maxY + labelInset / 2
@@ -428,14 +436,14 @@ class EditNoteViewController: UIViewController {
     func closeHashtagsPartially() {
         if (!hashtagsScrollView.hashtagsCollapsed && !isAnimating) {
             isAnimating = true
-            UIView.animateKeyframesWithDuration(animationTime, delay: 0.0, options: nil, animations: { () -> Void in
+            UIView.animateKeyframesWithDuration(animationTime, delay: 0.0, options: [], animations: { () -> Void in
                 
                 // size hashtags view to condensed size
                 self.hashtagsScrollView.linearHashtagsView()
                 self.hashtagsScrollView.frame.origin.y = self.separatorOne.frame.maxY
                 // position affected UI elements
                 self.separatorTwo.frame.origin.y = self.hashtagsScrollView.frame.maxY
-                var separatorToBottom: CGFloat = self.view.frame.height - self.separatorTwo.frame.maxY
+                let separatorToBottom: CGFloat = self.view.frame.height - self.separatorTwo.frame.maxY
                 if (separatorToBottom > 300) {
                     // Larger device
                     
@@ -459,7 +467,7 @@ class EditNoteViewController: UIViewController {
                 }, completion: { (completed: Bool) -> Void in
                     self.isAnimating = false
                     if (completed) {
-                        var separatorToBottom: CGFloat = self.view.frame.height - self.separatorTwo.frame.maxY
+                        let separatorToBottom: CGFloat = self.view.frame.height - self.separatorTwo.frame.maxY
                         if (separatorToBottom < 300) {
                             self.changeDateLabel.text = doneDateText
                             self.changeDateLabel.font = smallBoldFont
@@ -478,7 +486,7 @@ class EditNoteViewController: UIViewController {
     func openHashtagsCompletely() {
         if (hashtagsScrollView.hashtagsCollapsed && !isAnimating) {
             isAnimating = true
-            UIView.animateKeyframesWithDuration(animationTime, delay: 0.0, options: nil, animations: { () -> Void in
+            UIView.animateKeyframesWithDuration(animationTime, delay: 0.0, options: [], animations: { () -> Void in
                 
                 // hashtagsView has expanded size
                 self.hashtagsScrollView.pagedHashtagsView()
@@ -513,8 +521,8 @@ class EditNoteViewController: UIViewController {
     // Called when date picker date has changed
     func datePickerAction(sender: UIDatePicker) {
         let calendar = NSCalendar.currentCalendar()
-        let compCurr = calendar.components((.CalendarUnitYear | .CalendarUnitMonth | .CalendarUnitDay | .CalendarUnitHour | .CalendarUnitMinute), fromDate: datePicker.date)
-        let compWas = calendar.components((.CalendarUnitYear | .CalendarUnitMonth | .CalendarUnitDay | .CalendarUnitHour | .CalendarUnitMinute), fromDate: previousDate)
+        let compCurr = calendar.components(([.Year, .Month, .Day, .Hour, .Minute]), fromDate: datePicker.date)
+        let compWas = calendar.components(([.Year, .Month, .Day, .Hour, .Minute]), fromDate: previousDate)
         
         if (compCurr.day != compWas.day || compCurr.month != compWas.month || compCurr.year != compWas.year) {
             self.apiConnector.trackMetric("Date Changed")
@@ -625,8 +633,8 @@ class EditNoteViewController: UIViewController {
     }
     
     // Handle touches in the view
-    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
-        if let touch = touches.first as? UITouch {
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        if let touch = touches.first {
             // determine if the touch (first touch) is in the hashtagsView
             let touchLocation = touch.locationInView(self.view)
             let viewFrame = self.view.convertRect(hashtagsScrollView.frame, fromView: hashtagsScrollView.superview)

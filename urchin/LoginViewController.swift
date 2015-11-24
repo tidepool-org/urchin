@@ -16,6 +16,7 @@ class LogInViewController : UIViewController, UIActionSheetDelegate {
     var cornersBool: [Bool] = []
     
     // UI Elements
+    let reachLabel: UILabel = UILabel()
     let logoView: UIImageView = UIImageView()
     let titleLabel: UILabel = UILabel()
     let emailField: UITextField = UITextField()
@@ -80,23 +81,20 @@ class LogInViewController : UIViewController, UIActionSheetDelegate {
         // add observer for prepareLogin
         notificationCenter.addObserver(self, selector: "prepareLogin", name: "prepareLogin", object: nil)
 
-        if (apiConnector.isConnectedToNetwork()) {
-            apiConnector.loadServer()
-            apiConnector.login()
-        } else {
-            NSLog("Not connected to network")
-            let errorLabel: UILabel = UILabel()
-            errorLabel.text = "Please try again when you are connected to a wireless network."
-            errorLabel.font = mediumSemiboldFont
-            errorLabel.textColor = blackishColor
-            errorLabel.textAlignment = .Center
-            errorLabel.numberOfLines = 0
-            errorLabel.frame.size = CGSize(width: self.view.frame.width - 2 * loginInset, height: CGFloat.max)
-            errorLabel.sizeToFit()
-            errorLabel.frame.origin.x = self.view.frame.width / 2 - errorLabel.frame.width / 2
-            errorLabel.frame.origin.y = self.view.frame.height / 2 - errorLabel.frame.height / 2
-            self.view.addSubview(errorLabel)
-        }
+        reachLabel.text = "Please try again when you are connected to a wireless network."
+        reachLabel.font = mediumSemiboldFont
+        reachLabel.textColor = blackishColor
+        reachLabel.textAlignment = .Center
+        reachLabel.numberOfLines = 0
+        reachLabel.frame.size = CGSize(width: self.view.frame.width - 2 * loginInset, height: CGFloat.max)
+        reachLabel.sizeToFit()
+        reachLabel.frame.origin.x = self.view.frame.width / 2 - reachLabel.frame.width / 2
+        reachLabel.frame.origin.y = self.view.frame.height / 2 - reachLabel.frame.height / 2
+        reachLabel.hidden = true
+        self.view.addSubview(reachLabel)
+        
+        notificationCenter.addObserver(self, selector: "reachabilityChanged:", name: ReachabilityChangedNotification, object: nil)
+        configureForReachability()
         
         let width: CGFloat = 100
         let height: CGFloat = width
@@ -106,6 +104,23 @@ class LogInViewController : UIViewController, UIActionSheetDelegate {
         corners.append(CGRect(x: self.view.frame.width - width, y: self.view.frame.height - height, width: width, height: height))
         for (var i = 0; i < corners.count; i++) {
             cornersBool.append(false)
+        }
+    }
+    
+    func reachabilityChanged(note: NSNotification) {
+        configureForReachability()
+    }
+    
+    private func configureForReachability() {
+        let connected = apiConnector.isConnectedToNetwork()
+        
+        for view in self.view.subviews {
+            view.hidden = !connected
+        }
+        reachLabel.hidden = connected
+        if (connected) {
+            apiConnector.loadServer()
+            apiConnector.login()
         }
     }
     
@@ -119,20 +134,43 @@ class LogInViewController : UIViewController, UIActionSheetDelegate {
         showServerActionSheet()
     }
     
+    func selectServer(serverName: String) {
+        apiConnector.saveServer(serverName)
+        
+        version.text = UIApplication.versionBuildServer()
+        version.sizeToFit()
+        version.frame.origin.x = self.view.frame.width / 2 - version.frame.width / 2
+        
+        NSLog("Switched to \(serverName) server")
+    }
+    
     func showServerActionSheet() {
         for (var i = 0; i < corners.count; i++) {
             cornersBool[i] = false
         }
         
-        let actionSheet = UIActionSheet()
-        actionSheet.delegate = self
-        actionSheet.title = "Server"
-        
-        for server in servers {
-            actionSheet.addButtonWithTitle(server.0)
+        // use dialog to confirm delete with user!
+        if #available(iOS 8.0, *) {
+            let actionSheet = UIAlertController(title: "Server", message: "", preferredStyle: .ActionSheet)
+            
+            for server in servers {
+                actionSheet.addAction(UIAlertAction(title: server.0, style: .Default, handler: { Void in
+                    self.selectServer(server.0)
+                }))
+            }
+            self.presentViewController(actionSheet, animated: true, completion: nil)
+            
+        } else {
+            
+            let actionSheet = UIActionSheet(title: "Server", delegate: self, cancelButtonTitle: nil, destructiveButtonTitle: nil)
+            actionSheet.showInView(self.view)
         }
+    }
+    
+    func actionSheet(actionSheet: UIActionSheet, clickedButtonAtIndex buttonIndex: Int) {
         
-        actionSheet.showInView(self.view)
+        self.selectServer(actionSheet.buttonTitleAtIndex(buttonIndex)!)
+        
     }
     
     func directLoginAttempt() {
@@ -338,7 +376,7 @@ class LogInViewController : UIViewController, UIActionSheetDelegate {
         if (checkCredentials() && !isAnimating) {
             view.endEditing(true)
             
-            apiConnector.login(self, username: emailField.text, password: passwordField.text)
+            apiConnector.login(self, username: emailField.text!, password: passwordField.text!)
         }
     }
     
@@ -390,7 +428,7 @@ class LogInViewController : UIViewController, UIActionSheetDelegate {
     }
     
     // handle touch events
-    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         if (!isAnimating) {
             // if not currently animating, end editing
             view.endEditing(true)
@@ -399,8 +437,8 @@ class LogInViewController : UIViewController, UIActionSheetDelegate {
         super.touchesBegan(touches, withEvent: event)
     }
     
-    override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
-        if let touch = touches.first as? UITouch {
+    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        if let touch = touches.first {
             
             let touchLocation = touch.locationInView(self.view)
             
@@ -459,7 +497,7 @@ class LogInViewController : UIViewController, UIActionSheetDelegate {
     func animateLogIn(centerY: CGFloat, completion:() -> Void) {
         if (!isAnimating) {
             isAnimating = true
-            UIView.animateKeyframesWithDuration(loginAnimationTime, delay: 0.0, options: nil, animations: { () -> Void in
+            UIView.animateKeyframesWithDuration(loginAnimationTime, delay: 0.0, options: [], animations: { () -> Void in
                 self.uiElementLocationFromCenterY(centerY)
                 
                 }, completion: { (completed: Bool) -> Void in
@@ -511,7 +549,7 @@ class LogInViewController : UIViewController, UIActionSheetDelegate {
             - invalid email
             - empty passwordField
         */
-        return !emailField.text.isEmpty && isValidEmail(emailField.text) && !passwordField.text.isEmpty
+        return !emailField.text!.isEmpty && isValidEmail(emailField.text!) && !passwordField.text!.isEmpty
     }
     
     // Check validity of email
