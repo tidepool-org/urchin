@@ -484,6 +484,7 @@ class apiConnectorTests: XCTestCase {
         email = "ethan+urchintests@tidepool.org"
         pass = "urchintests"
         server = "Staging"
+        baseURL = servers[server]!
         
         testALoginFail()
         testBLoginSuccess()
@@ -504,6 +505,7 @@ class apiConnectorTests: XCTestCase {
         email = "ethan+urchintests@tidepool.org"
         pass = "urchintests"
         server = "Production"
+        baseURL = servers[server]!
         
         testALoginFail()
         testBLoginSuccess()
