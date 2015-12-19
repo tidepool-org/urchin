@@ -53,6 +53,9 @@ class UserDropDownCell: UITableViewCell {
             self.addSubview(separator)
             
         } else if (key == "logout") {
+            // Per spec, logout cell should not have right arrow
+            rightView.hidden = true
+            
             // Configure the name label to be 'Logout'... for logging out
             self.nameLabel.text = logoutTitle
             nameLabel.font = mediumBoldFont
