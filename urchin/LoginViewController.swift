@@ -150,21 +150,14 @@ class LogInViewController : UIViewController, UIActionSheetDelegate {
         }
         
         // use dialog to confirm delete with user!
-        if #available(iOS 8.0, *) {
-            let actionSheet = UIAlertController(title: "Server", message: "", preferredStyle: .ActionSheet)
-            
-            for server in servers {
-                actionSheet.addAction(UIAlertAction(title: server.0, style: .Default, handler: { Void in
-                    self.selectServer(server.0)
-                }))
-            }
-            self.presentViewController(actionSheet, animated: true, completion: nil)
-            
-        } else {
-            
-            let actionSheet = UIActionSheet(title: "Server", delegate: self, cancelButtonTitle: nil, destructiveButtonTitle: nil)
-            actionSheet.showInView(self.view)
+        let actionSheet = UIAlertController(title: "Server", message: "", preferredStyle: .ActionSheet)
+        
+        for server in servers {
+            actionSheet.addAction(UIAlertAction(title: server.0, style: .Default, handler: { Void in
+                self.selectServer(server.0)
+            }))
         }
+        self.presentViewController(actionSheet, animated: true, completion: nil)
     }
     
     func actionSheet(actionSheet: UIActionSheet, clickedButtonAtIndex buttonIndex: Int) {

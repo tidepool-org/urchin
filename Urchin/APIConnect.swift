@@ -812,28 +812,17 @@ class APIConnector {
         if (!isShowingAlert) {
             isShowingAlert = true
             
-            if #available(iOS 8.0, *) {
-                let alert = UIAlertController(title: title, message: message, preferredStyle: .Alert)
-                
-                alert.addAction(UIAlertAction(title: "Okay", style: .Default, handler: { Void in
-                    self.isShowingAlert = false
-                }))
-                if var topController = UIApplication.sharedApplication().keyWindow?.rootViewController {
-                    while let presentedViewController = topController.presentedViewController {
-                        topController = presentedViewController
-                    }
-                    
-                    topController.presentViewController(alert, animated: true, completion: nil)
+            let alert = UIAlertController(title: title, message: message, preferredStyle: .Alert)
+            
+            alert.addAction(UIAlertAction(title: "Okay", style: .Default, handler: { Void in
+                self.isShowingAlert = false
+            }))
+            if var topController = UIApplication.sharedApplication().keyWindow?.rootViewController {
+                while let presentedViewController = topController.presentedViewController {
+                    topController = presentedViewController
                 }
                 
-            } else {
-                
-                let unknownErrorAlert: UIAlertView = UIAlertView()
-                unknownErrorAlert.title = title
-                unknownErrorAlert.message = message
-                unknownErrorAlert.addButtonWithTitle("Okay")
-                unknownErrorAlert.show()
-                
+                topController.presentViewController(alert, animated: true, completion: nil)
             }
         }
     }
