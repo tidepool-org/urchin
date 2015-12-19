@@ -1,0 +1,788 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0250BB0AAF01286053E2E52A2133B704 /* NSDictionary+ObjectiveSugar.m in Sources */ = {isa = PBXBuildFile; fileRef = 448DAE15E182628B56814B6D68B223B9 /* NSDictionary+ObjectiveSugar.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		1770E35E4FFDF5AC6817C9C4D975C808 /* NSMutableArray+ObjectiveSugar.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E4E62D0F4E041D604C95DD968EA4C59 /* NSMutableArray+ObjectiveSugar.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		21FB651778F9A9DB5150CE25C8F13235 /* Pods-urchin-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = D12276AEAB759D87412B0CA06F19B674 /* Pods-urchin-dummy.m */; };
+		2A3CB4C8DCDAB113D45673F7A09784C5 /* OMHError.m in Sources */ = {isa = PBXBuildFile; fileRef = C0AB8CEDEE8FA1167299148211A0712F /* OMHError.m */; };
+		36CD84187B7CA0393557DA362871CF05 /* NSString+ObjectiveSugar.h in Headers */ = {isa = PBXBuildFile; fileRef = 41C4C3729BD81CD192081563E646D5B6 /* NSString+ObjectiveSugar.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		44729632291706452BD152DCEC44220E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 31C45C5F9CDE3234635F6296F67056A3 /* Foundation.framework */; };
+		4BFD8D0D5A6CF81B4645F872BC3F6773 /* NSArray+ObjectiveSugar.h in Headers */ = {isa = PBXBuildFile; fileRef = B996380F17DE169C42AC1642316268B1 /* NSArray+ObjectiveSugar.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4E84FF2DE95BDE6D8B1A598350F18053 /* NSString+ObjectiveSugar.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EFD90DF24C704D052D6EF49E18F9F51 /* NSString+ObjectiveSugar.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		52206B047D7B32E6A194B6F3C0BF7D03 /* NSNumber+ObjectiveSugar.h in Headers */ = {isa = PBXBuildFile; fileRef = 2C99964907B04279090045649E82B0A8 /* NSNumber+ObjectiveSugar.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5989409CDA38429FD77619D8AEC3A626 /* NSDate+RFC3339.h in Headers */ = {isa = PBXBuildFile; fileRef = 028DBA7437F721366961D84F2E6EAF43 /* NSDate+RFC3339.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		61EE17C68531F408524DA3F972EF1F53 /* NSDictionary+ObjectiveSugar.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EBD901068540D9F1EDC4CD8ED3A946F /* NSDictionary+ObjectiveSugar.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		633C686F6EB364D4152649EDE530C577 /* Granola-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 554FFBD2BC6377546BC6255E155006C5 /* Granola-dummy.m */; };
+		6614C354521B6385EBBD4CF97049BB55 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 31C45C5F9CDE3234635F6296F67056A3 /* Foundation.framework */; };
+		6A798406EA7775FAAF874220B79E6891 /* NSMutableArray+ObjectiveSugar.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F5C68AB98B55FD6B0070EC2C1272EBE /* NSMutableArray+ObjectiveSugar.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		6D27EEBB59B6C80218997C1672FF9C35 /* NSSet+ObjectiveSugar.h in Headers */ = {isa = PBXBuildFile; fileRef = B7BDD285CDE634C2063C237DC53EFB48 /* NSSet+ObjectiveSugar.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		765A4578B8E3AC5FFF131B61CF08B8B2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 31C45C5F9CDE3234635F6296F67056A3 /* Foundation.framework */; };
+		770534442DEF08C1CBBD47B5284BE7E5 /* NSSet+ObjectiveSugar.m in Sources */ = {isa = PBXBuildFile; fileRef = 365A29F167D1FC4C895C7E291B73ACB3 /* NSSet+ObjectiveSugar.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		87E53432F5FDB8BC6C4F762FB85D5295 /* NSArray+ObjectiveSugar.m in Sources */ = {isa = PBXBuildFile; fileRef = D3BE50FC72D6BAE25865A54A44F940AD /* NSArray+ObjectiveSugar.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		90E384FDBDF32397BE2FBA8F1A672EAB /* OMHSerializer.h in Headers */ = {isa = PBXBuildFile; fileRef = A23DDD6751DF962A350FEF672BA59A6A /* OMHSerializer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A080A1DFBD5E41CE606CA672AC90BBCB /* ObjectiveSugar.h in Headers */ = {isa = PBXBuildFile; fileRef = 730AE565EA302D97EEC332F4AE7CBAC2 /* ObjectiveSugar.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A6CDD7F356BE1D9DE744ACE3E5EC09EA /* OMHHealthKitConstantsMapper.h in Headers */ = {isa = PBXBuildFile; fileRef = 2440CD8B001E070A0B4928F7D5200B6E /* OMHHealthKitConstantsMapper.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AA5074058DECAF98F755C2D2A6D9F3BF /* Pods-urchinTests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = C6313976F49C03EED2DF4881010C63EA /* Pods-urchinTests-dummy.m */; };
+		B65198B8661C7F7973E58B44C400F090 /* OMHSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = B65F049F5D774639E8F7773B10744342 /* OMHSerializer.m */; };
+		BCF994F30C074186F3D046A27085778E /* OMHHealthKitConstantsMapper.m in Sources */ = {isa = PBXBuildFile; fileRef = AF751B9BB603F596A6C69E9D8A6133AA /* OMHHealthKitConstantsMapper.m */; };
+		C442856D64FB33AA5C7D14611DA97E83 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC9CA130B0A29EB3B15EF07DF6968ADB /* HealthKit.framework */; };
+		E8665AAE6DD533CFF89C7B2CFD025FAF /* NSDate+RFC3339.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C131836E8F36FA7FF79D5E71D7D0B70 /* NSDate+RFC3339.m */; };
+		E9E6B4A92BE7D109C667C45626C53B12 /* OMHError.h in Headers */ = {isa = PBXBuildFile; fileRef = 2CA2C43F746DB53F975B40BA90E6D02F /* OMHError.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		ED50BB96E2DFF01B3C872F8B4312E127 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 31C45C5F9CDE3234635F6296F67056A3 /* Foundation.framework */; };
+		EDADDEE9290E4297883E71ABE9A10171 /* NSNumber+ObjectiveSugar.m in Sources */ = {isa = PBXBuildFile; fileRef = C0BBC124F5E21F163C40BE1F747143DF /* NSNumber+ObjectiveSugar.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		F6DAA84D52CC218A804D938F41ABF35E /* ObjectiveSugar-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 7520BDF97F3CB08E68AA69CC780E449B /* ObjectiveSugar-dummy.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		4F6BF946A200187F0AB0E5E7E2910C5B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 95417DC137F8F6A12B73A64576EF45FD;
+			remoteInfo = ObjectiveSugar;
+		};
+		7DE73A118CEF9CF3290E0DF5B332E533 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 95417DC137F8F6A12B73A64576EF45FD;
+			remoteInfo = ObjectiveSugar;
+		};
+		9021C408F357D8F91DCC9D7043364FDC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 95417DC137F8F6A12B73A64576EF45FD;
+			remoteInfo = ObjectiveSugar;
+		};
+		EF643BC106274E47DBF3025E3C1DE88F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 66FA848F85525155CCCB2624E6E9686C;
+			remoteInfo = Granola;
+		};
+		F0D07DBE49D9355C2577653EC055141A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 66FA848F85525155CCCB2624E6E9686C;
+			remoteInfo = Granola;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		028DBA7437F721366961D84F2E6EAF43 /* NSDate+RFC3339.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSDate+RFC3339.h"; path = "Pod/Classes/NSDate+RFC3339.h"; sourceTree = "<group>"; };
+		056B5829A68911CD3E36AA8261327593 /* libGranola.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libGranola.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		0C131836E8F36FA7FF79D5E71D7D0B70 /* NSDate+RFC3339.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSDate+RFC3339.m"; path = "Pod/Classes/NSDate+RFC3339.m"; sourceTree = "<group>"; };
+		1EBD901068540D9F1EDC4CD8ED3A946F /* NSDictionary+ObjectiveSugar.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSDictionary+ObjectiveSugar.h"; path = "Classes/NSDictionary+ObjectiveSugar.h"; sourceTree = "<group>"; };
+		2440CD8B001E070A0B4928F7D5200B6E /* OMHHealthKitConstantsMapper.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = OMHHealthKitConstantsMapper.h; path = Pod/Classes/OMHHealthKitConstantsMapper.h; sourceTree = "<group>"; };
+		2470001A74122CE1EC072B83063842C0 /* Granola.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Granola.xcconfig; sourceTree = "<group>"; };
+		250B6BB20B9D9E2D0D7E6D638ECA0AC0 /* libPods-urchin.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-urchin.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2C99964907B04279090045649E82B0A8 /* NSNumber+ObjectiveSugar.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSNumber+ObjectiveSugar.h"; path = "Classes/NSNumber+ObjectiveSugar.h"; sourceTree = "<group>"; };
+		2CA2C43F746DB53F975B40BA90E6D02F /* OMHError.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = OMHError.h; path = Pod/Classes/OMHError.h; sourceTree = "<group>"; };
+		31C45C5F9CDE3234635F6296F67056A3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		365A29F167D1FC4C895C7E291B73ACB3 /* NSSet+ObjectiveSugar.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSSet+ObjectiveSugar.m"; path = "Classes/NSSet+ObjectiveSugar.m"; sourceTree = "<group>"; };
+		41C4C3729BD81CD192081563E646D5B6 /* NSString+ObjectiveSugar.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSString+ObjectiveSugar.h"; path = "Classes/NSString+ObjectiveSugar.h"; sourceTree = "<group>"; };
+		448DAE15E182628B56814B6D68B223B9 /* NSDictionary+ObjectiveSugar.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSDictionary+ObjectiveSugar.m"; path = "Classes/NSDictionary+ObjectiveSugar.m"; sourceTree = "<group>"; };
+		52533F20269957AE05ED40B44E335D94 /* ObjectiveSugar.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = ObjectiveSugar.xcconfig; sourceTree = "<group>"; };
+		554FFBD2BC6377546BC6255E155006C5 /* Granola-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Granola-dummy.m"; sourceTree = "<group>"; };
+		56D2B4288CF3081C7AFFE396708B408F /* Granola-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Granola-prefix.pch"; sourceTree = "<group>"; };
+		5B63056AAEBFE4A7461532C091673E89 /* libObjectiveSugar.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libObjectiveSugar.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		5E4F0E5BF85698D39D8044F3458BBF21 /* Pods-urchin-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-urchin-frameworks.sh"; sourceTree = "<group>"; };
+		6259499D01B1FB3C09D327F1BEF0CFDE /* Pods-urchin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-urchin.debug.xcconfig"; sourceTree = "<group>"; };
+		6DEAF1C41C96A986BCE0BC8B4CFEF7B0 /* Pods-urchin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-urchin.release.xcconfig"; sourceTree = "<group>"; };
+		730AE565EA302D97EEC332F4AE7CBAC2 /* ObjectiveSugar.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ObjectiveSugar.h; path = Classes/ObjectiveSugar.h; sourceTree = "<group>"; };
+		7520BDF97F3CB08E68AA69CC780E449B /* ObjectiveSugar-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "ObjectiveSugar-dummy.m"; sourceTree = "<group>"; };
+		7E4E62D0F4E041D604C95DD968EA4C59 /* NSMutableArray+ObjectiveSugar.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSMutableArray+ObjectiveSugar.h"; path = "Classes/NSMutableArray+ObjectiveSugar.h"; sourceTree = "<group>"; };
+		7EFD90DF24C704D052D6EF49E18F9F51 /* NSString+ObjectiveSugar.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSString+ObjectiveSugar.m"; path = "Classes/NSString+ObjectiveSugar.m"; sourceTree = "<group>"; };
+		8DFF31D2F74FED21391AAD83E77110CA /* Pods-urchin-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-urchin-resources.sh"; sourceTree = "<group>"; };
+		8F1450E1A55FC293CAD2EF1CC165F7F2 /* Pods-urchinTests-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-urchinTests-resources.sh"; sourceTree = "<group>"; };
+		941BD4D6569D0E8F034B21E8902B2ABA /* Pods-urchinTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-urchinTests.release.xcconfig"; sourceTree = "<group>"; };
+		9F5C68AB98B55FD6B0070EC2C1272EBE /* NSMutableArray+ObjectiveSugar.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSMutableArray+ObjectiveSugar.m"; path = "Classes/NSMutableArray+ObjectiveSugar.m"; sourceTree = "<group>"; };
+		A23DDD6751DF962A350FEF672BA59A6A /* OMHSerializer.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = OMHSerializer.h; path = Pod/Classes/OMHSerializer.h; sourceTree = "<group>"; };
+		A407D65F5D188C2CA5855343ADC3A8A6 /* Pods-urchinTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-urchinTests.debug.xcconfig"; sourceTree = "<group>"; };
+		A942A2D712241BF32019D65A652973FD /* Pods-urchinTests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-urchinTests-acknowledgements.plist"; sourceTree = "<group>"; };
+		AC213DB8677DCA15CC70983AE7BAE7D5 /* Pods-urchin-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-urchin-acknowledgements.plist"; sourceTree = "<group>"; };
+		AF751B9BB603F596A6C69E9D8A6133AA /* OMHHealthKitConstantsMapper.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = OMHHealthKitConstantsMapper.m; path = Pod/Classes/OMHHealthKitConstantsMapper.m; sourceTree = "<group>"; };
+		B65F049F5D774639E8F7773B10744342 /* OMHSerializer.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = OMHSerializer.m; path = Pod/Classes/OMHSerializer.m; sourceTree = "<group>"; };
+		B7BDD285CDE634C2063C237DC53EFB48 /* NSSet+ObjectiveSugar.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSSet+ObjectiveSugar.h"; path = "Classes/NSSet+ObjectiveSugar.h"; sourceTree = "<group>"; };
+		B996380F17DE169C42AC1642316268B1 /* NSArray+ObjectiveSugar.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSArray+ObjectiveSugar.h"; path = "Classes/NSArray+ObjectiveSugar.h"; sourceTree = "<group>"; };
+		BA6428E9F66FD5A23C0A2E06ED26CD2F /* Podfile */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		BC9CA130B0A29EB3B15EF07DF6968ADB /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.0.sdk/System/Library/Frameworks/HealthKit.framework; sourceTree = DEVELOPER_DIR; };
+		C0AB8CEDEE8FA1167299148211A0712F /* OMHError.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = OMHError.m; path = Pod/Classes/OMHError.m; sourceTree = "<group>"; };
+		C0BBC124F5E21F163C40BE1F747143DF /* NSNumber+ObjectiveSugar.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSNumber+ObjectiveSugar.m"; path = "Classes/NSNumber+ObjectiveSugar.m"; sourceTree = "<group>"; };
+		C6313976F49C03EED2DF4881010C63EA /* Pods-urchinTests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-urchinTests-dummy.m"; sourceTree = "<group>"; };
+		D0956DDD877F656974D193AEA883038C /* Pods-urchinTests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-urchinTests-acknowledgements.markdown"; sourceTree = "<group>"; };
+		D12276AEAB759D87412B0CA06F19B674 /* Pods-urchin-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-urchin-dummy.m"; sourceTree = "<group>"; };
+		D3BE50FC72D6BAE25865A54A44F940AD /* NSArray+ObjectiveSugar.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSArray+ObjectiveSugar.m"; path = "Classes/NSArray+ObjectiveSugar.m"; sourceTree = "<group>"; };
+		E4356D07C764CD9992691F3DD5BC5C5E /* libPods-urchinTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-urchinTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		ED2CDE331ED4DE26283B75D350E9D098 /* Pods-urchin-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-urchin-acknowledgements.markdown"; sourceTree = "<group>"; };
+		F2917E9207EA2952E893D55AC73AF70A /* Pods-urchinTests-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-urchinTests-frameworks.sh"; sourceTree = "<group>"; };
+		F94973F1E9F469A93910DEC984D830C0 /* ObjectiveSugar-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "ObjectiveSugar-prefix.pch"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		408337207E402286BDD1E6742F129AB9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ED50BB96E2DFF01B3C872F8B4312E127 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8402CC36170698B6F0EB82DA8FBC8E9C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6614C354521B6385EBBD4CF97049BB55 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C2C6B98238719F26B82FDB8C92ADA41B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				44729632291706452BD152DCEC44220E /* Foundation.framework in Frameworks */,
+				C442856D64FB33AA5C7D14611DA97E83 /* HealthKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DD5291995699042C2EBA65980C716374 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				765A4578B8E3AC5FFF131B61CF08B8B2 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0C1A9C02C923E96BDE7EAA37A087E34F /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				52533F20269957AE05ED40B44E335D94 /* ObjectiveSugar.xcconfig */,
+				7520BDF97F3CB08E68AA69CC780E449B /* ObjectiveSugar-dummy.m */,
+				F94973F1E9F469A93910DEC984D830C0 /* ObjectiveSugar-prefix.pch */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/ObjectiveSugar";
+			sourceTree = "<group>";
+		};
+		222ABB3A5DB85DD6018D2FEF122E19C3 /* Targets Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				40141EC407D27E5F24A994B09A41FCEF /* Pods-urchin */,
+				BA410EB1C75C43F61A4C62F481CE34B3 /* Pods-urchinTests */,
+			);
+			name = "Targets Support Files";
+			sourceTree = "<group>";
+		};
+		3FCBA4C5FFABA8F6FFC2D10A6A60E052 /* Granola */ = {
+			isa = PBXGroup;
+			children = (
+				028DBA7437F721366961D84F2E6EAF43 /* NSDate+RFC3339.h */,
+				0C131836E8F36FA7FF79D5E71D7D0B70 /* NSDate+RFC3339.m */,
+				2CA2C43F746DB53F975B40BA90E6D02F /* OMHError.h */,
+				C0AB8CEDEE8FA1167299148211A0712F /* OMHError.m */,
+				2440CD8B001E070A0B4928F7D5200B6E /* OMHHealthKitConstantsMapper.h */,
+				AF751B9BB603F596A6C69E9D8A6133AA /* OMHHealthKitConstantsMapper.m */,
+				A23DDD6751DF962A350FEF672BA59A6A /* OMHSerializer.h */,
+				B65F049F5D774639E8F7773B10744342 /* OMHSerializer.m */,
+				C889544B1356A336F3C84B239D2C0A76 /* Support Files */,
+			);
+			path = Granola;
+			sourceTree = "<group>";
+		};
+		40141EC407D27E5F24A994B09A41FCEF /* Pods-urchin */ = {
+			isa = PBXGroup;
+			children = (
+				ED2CDE331ED4DE26283B75D350E9D098 /* Pods-urchin-acknowledgements.markdown */,
+				AC213DB8677DCA15CC70983AE7BAE7D5 /* Pods-urchin-acknowledgements.plist */,
+				D12276AEAB759D87412B0CA06F19B674 /* Pods-urchin-dummy.m */,
+				5E4F0E5BF85698D39D8044F3458BBF21 /* Pods-urchin-frameworks.sh */,
+				8DFF31D2F74FED21391AAD83E77110CA /* Pods-urchin-resources.sh */,
+				6259499D01B1FB3C09D327F1BEF0CFDE /* Pods-urchin.debug.xcconfig */,
+				6DEAF1C41C96A986BCE0BC8B4CFEF7B0 /* Pods-urchin.release.xcconfig */,
+			);
+			name = "Pods-urchin";
+			path = "Target Support Files/Pods-urchin";
+			sourceTree = "<group>";
+		};
+		433CD3331B6C3787F473C941B61FC68F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				847E471A5B4E4B8BAB2CEBFC4DA19429 /* iOS */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		7DB346D0F39D3F0E887471402A8071AB = {
+			isa = PBXGroup;
+			children = (
+				BA6428E9F66FD5A23C0A2E06ED26CD2F /* Podfile */,
+				433CD3331B6C3787F473C941B61FC68F /* Frameworks */,
+				8A9DC087C9C3676614797BCC3C099985 /* Pods */,
+				850F976A7AE63C1114A743B3F6452DE1 /* Products */,
+				222ABB3A5DB85DD6018D2FEF122E19C3 /* Targets Support Files */,
+			);
+			sourceTree = "<group>";
+		};
+		847E471A5B4E4B8BAB2CEBFC4DA19429 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				31C45C5F9CDE3234635F6296F67056A3 /* Foundation.framework */,
+				BC9CA130B0A29EB3B15EF07DF6968ADB /* HealthKit.framework */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
+		850F976A7AE63C1114A743B3F6452DE1 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				056B5829A68911CD3E36AA8261327593 /* libGranola.a */,
+				5B63056AAEBFE4A7461532C091673E89 /* libObjectiveSugar.a */,
+				250B6BB20B9D9E2D0D7E6D638ECA0AC0 /* libPods-urchin.a */,
+				E4356D07C764CD9992691F3DD5BC5C5E /* libPods-urchinTests.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		8A11FAF3EA7C57C7466D5392848BE967 /* ObjectiveSugar */ = {
+			isa = PBXGroup;
+			children = (
+				B996380F17DE169C42AC1642316268B1 /* NSArray+ObjectiveSugar.h */,
+				D3BE50FC72D6BAE25865A54A44F940AD /* NSArray+ObjectiveSugar.m */,
+				1EBD901068540D9F1EDC4CD8ED3A946F /* NSDictionary+ObjectiveSugar.h */,
+				448DAE15E182628B56814B6D68B223B9 /* NSDictionary+ObjectiveSugar.m */,
+				7E4E62D0F4E041D604C95DD968EA4C59 /* NSMutableArray+ObjectiveSugar.h */,
+				9F5C68AB98B55FD6B0070EC2C1272EBE /* NSMutableArray+ObjectiveSugar.m */,
+				2C99964907B04279090045649E82B0A8 /* NSNumber+ObjectiveSugar.h */,
+				C0BBC124F5E21F163C40BE1F747143DF /* NSNumber+ObjectiveSugar.m */,
+				B7BDD285CDE634C2063C237DC53EFB48 /* NSSet+ObjectiveSugar.h */,
+				365A29F167D1FC4C895C7E291B73ACB3 /* NSSet+ObjectiveSugar.m */,
+				41C4C3729BD81CD192081563E646D5B6 /* NSString+ObjectiveSugar.h */,
+				7EFD90DF24C704D052D6EF49E18F9F51 /* NSString+ObjectiveSugar.m */,
+				730AE565EA302D97EEC332F4AE7CBAC2 /* ObjectiveSugar.h */,
+				0C1A9C02C923E96BDE7EAA37A087E34F /* Support Files */,
+			);
+			path = ObjectiveSugar;
+			sourceTree = "<group>";
+		};
+		8A9DC087C9C3676614797BCC3C099985 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				3FCBA4C5FFABA8F6FFC2D10A6A60E052 /* Granola */,
+				8A11FAF3EA7C57C7466D5392848BE967 /* ObjectiveSugar */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		BA410EB1C75C43F61A4C62F481CE34B3 /* Pods-urchinTests */ = {
+			isa = PBXGroup;
+			children = (
+				D0956DDD877F656974D193AEA883038C /* Pods-urchinTests-acknowledgements.markdown */,
+				A942A2D712241BF32019D65A652973FD /* Pods-urchinTests-acknowledgements.plist */,
+				C6313976F49C03EED2DF4881010C63EA /* Pods-urchinTests-dummy.m */,
+				F2917E9207EA2952E893D55AC73AF70A /* Pods-urchinTests-frameworks.sh */,
+				8F1450E1A55FC293CAD2EF1CC165F7F2 /* Pods-urchinTests-resources.sh */,
+				A407D65F5D188C2CA5855343ADC3A8A6 /* Pods-urchinTests.debug.xcconfig */,
+				941BD4D6569D0E8F034B21E8902B2ABA /* Pods-urchinTests.release.xcconfig */,
+			);
+			name = "Pods-urchinTests";
+			path = "Target Support Files/Pods-urchinTests";
+			sourceTree = "<group>";
+		};
+		C889544B1356A336F3C84B239D2C0A76 /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				2470001A74122CE1EC072B83063842C0 /* Granola.xcconfig */,
+				554FFBD2BC6377546BC6255E155006C5 /* Granola-dummy.m */,
+				56D2B4288CF3081C7AFFE396708B408F /* Granola-prefix.pch */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/Granola";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		342683B001570D1118053720032B31C7 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4BFD8D0D5A6CF81B4645F872BC3F6773 /* NSArray+ObjectiveSugar.h in Headers */,
+				61EE17C68531F408524DA3F972EF1F53 /* NSDictionary+ObjectiveSugar.h in Headers */,
+				1770E35E4FFDF5AC6817C9C4D975C808 /* NSMutableArray+ObjectiveSugar.h in Headers */,
+				52206B047D7B32E6A194B6F3C0BF7D03 /* NSNumber+ObjectiveSugar.h in Headers */,
+				6D27EEBB59B6C80218997C1672FF9C35 /* NSSet+ObjectiveSugar.h in Headers */,
+				36CD84187B7CA0393557DA362871CF05 /* NSString+ObjectiveSugar.h in Headers */,
+				A080A1DFBD5E41CE606CA672AC90BBCB /* ObjectiveSugar.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C2D4A23D9D33EE088B2A504EC8A94021 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5989409CDA38429FD77619D8AEC3A626 /* NSDate+RFC3339.h in Headers */,
+				E9E6B4A92BE7D109C667C45626C53B12 /* OMHError.h in Headers */,
+				A6CDD7F356BE1D9DE744ACE3E5EC09EA /* OMHHealthKitConstantsMapper.h in Headers */,
+				90E384FDBDF32397BE2FBA8F1A672EAB /* OMHSerializer.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		66FA848F85525155CCCB2624E6E9686C /* Granola */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2E5F738E4D8940BF25F2C1C7A275E5DE /* Build configuration list for PBXNativeTarget "Granola" */;
+			buildPhases = (
+				02BDEEEF6EFA749D4133DF3E1F2FE918 /* Sources */,
+				C2C6B98238719F26B82FDB8C92ADA41B /* Frameworks */,
+				C2D4A23D9D33EE088B2A504EC8A94021 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7FBC06BD1EA7E90082DB25D83247B7AC /* PBXTargetDependency */,
+			);
+			name = Granola;
+			productName = Granola;
+			productReference = 056B5829A68911CD3E36AA8261327593 /* libGranola.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		95417DC137F8F6A12B73A64576EF45FD /* ObjectiveSugar */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4229B4D5725E866EB141121C3D59E6A0 /* Build configuration list for PBXNativeTarget "ObjectiveSugar" */;
+			buildPhases = (
+				3C38D80DD48B2457CC235FDF8A21D27F /* Sources */,
+				408337207E402286BDD1E6742F129AB9 /* Frameworks */,
+				342683B001570D1118053720032B31C7 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ObjectiveSugar;
+			productName = ObjectiveSugar;
+			productReference = 5B63056AAEBFE4A7461532C091673E89 /* libObjectiveSugar.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		B86A9D792CDC1D5EA2F8C7CF367F1855 /* Pods-urchinTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 678C7B0D08FD73BF1394BA75B81BB1FC /* Build configuration list for PBXNativeTarget "Pods-urchinTests" */;
+			buildPhases = (
+				AF856681F34BAF883DBF3008FED8C3BA /* Sources */,
+				8402CC36170698B6F0EB82DA8FBC8E9C /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				157B0BFE58ABED09A8EC0254797F5419 /* PBXTargetDependency */,
+				5A76C807844207470B2CE137CEAAAA30 /* PBXTargetDependency */,
+			);
+			name = "Pods-urchinTests";
+			productName = "Pods-urchinTests";
+			productReference = E4356D07C764CD9992691F3DD5BC5C5E /* libPods-urchinTests.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		E6334EA43A1165CDA419B2A265F9A3C6 /* Pods-urchin */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C8030390782E933C2330242F4E818F91 /* Build configuration list for PBXNativeTarget "Pods-urchin" */;
+			buildPhases = (
+				E1914CA7F50464814C77819302456AE9 /* Sources */,
+				DD5291995699042C2EBA65980C716374 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				89DAC479AB6ADBAC07C4B78BE52DA3B2 /* PBXTargetDependency */,
+				8C191418875CF57CD90CEDD9EE716646 /* PBXTargetDependency */,
+			);
+			name = "Pods-urchin";
+			productName = "Pods-urchin";
+			productReference = 250B6BB20B9D9E2D0D7E6D638ECA0AC0 /* libPods-urchin.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		D41D8CD98F00B204E9800998ECF8427E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0700;
+				LastUpgradeCheck = 0700;
+			};
+			buildConfigurationList = 2D8E8EC45A3A1A1D94AE762CB5028504 /* Build configuration list for PBXProject "Pods" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 7DB346D0F39D3F0E887471402A8071AB;
+			productRefGroup = 850F976A7AE63C1114A743B3F6452DE1 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				66FA848F85525155CCCB2624E6E9686C /* Granola */,
+				95417DC137F8F6A12B73A64576EF45FD /* ObjectiveSugar */,
+				E6334EA43A1165CDA419B2A265F9A3C6 /* Pods-urchin */,
+				B86A9D792CDC1D5EA2F8C7CF367F1855 /* Pods-urchinTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		02BDEEEF6EFA749D4133DF3E1F2FE918 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				633C686F6EB364D4152649EDE530C577 /* Granola-dummy.m in Sources */,
+				E8665AAE6DD533CFF89C7B2CFD025FAF /* NSDate+RFC3339.m in Sources */,
+				2A3CB4C8DCDAB113D45673F7A09784C5 /* OMHError.m in Sources */,
+				BCF994F30C074186F3D046A27085778E /* OMHHealthKitConstantsMapper.m in Sources */,
+				B65198B8661C7F7973E58B44C400F090 /* OMHSerializer.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3C38D80DD48B2457CC235FDF8A21D27F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				87E53432F5FDB8BC6C4F762FB85D5295 /* NSArray+ObjectiveSugar.m in Sources */,
+				0250BB0AAF01286053E2E52A2133B704 /* NSDictionary+ObjectiveSugar.m in Sources */,
+				6A798406EA7775FAAF874220B79E6891 /* NSMutableArray+ObjectiveSugar.m in Sources */,
+				EDADDEE9290E4297883E71ABE9A10171 /* NSNumber+ObjectiveSugar.m in Sources */,
+				770534442DEF08C1CBBD47B5284BE7E5 /* NSSet+ObjectiveSugar.m in Sources */,
+				4E84FF2DE95BDE6D8B1A598350F18053 /* NSString+ObjectiveSugar.m in Sources */,
+				F6DAA84D52CC218A804D938F41ABF35E /* ObjectiveSugar-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AF856681F34BAF883DBF3008FED8C3BA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA5074058DECAF98F755C2D2A6D9F3BF /* Pods-urchinTests-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E1914CA7F50464814C77819302456AE9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				21FB651778F9A9DB5150CE25C8F13235 /* Pods-urchin-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		157B0BFE58ABED09A8EC0254797F5419 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = Granola;
+			target = 66FA848F85525155CCCB2624E6E9686C /* Granola */;
+			targetProxy = F0D07DBE49D9355C2577653EC055141A /* PBXContainerItemProxy */;
+		};
+		5A76C807844207470B2CE137CEAAAA30 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = ObjectiveSugar;
+			target = 95417DC137F8F6A12B73A64576EF45FD /* ObjectiveSugar */;
+			targetProxy = 7DE73A118CEF9CF3290E0DF5B332E533 /* PBXContainerItemProxy */;
+		};
+		7FBC06BD1EA7E90082DB25D83247B7AC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = ObjectiveSugar;
+			target = 95417DC137F8F6A12B73A64576EF45FD /* ObjectiveSugar */;
+			targetProxy = 9021C408F357D8F91DCC9D7043364FDC /* PBXContainerItemProxy */;
+		};
+		89DAC479AB6ADBAC07C4B78BE52DA3B2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = Granola;
+			target = 66FA848F85525155CCCB2624E6E9686C /* Granola */;
+			targetProxy = EF643BC106274E47DBF3025E3C1DE88F /* PBXContainerItemProxy */;
+		};
+		8C191418875CF57CD90CEDD9EE716646 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = ObjectiveSugar;
+			target = 95417DC137F8F6A12B73A64576EF45FD /* ObjectiveSugar */;
+			targetProxy = 4F6BF946A200187F0AB0E5E7E2910C5B /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		317D9AF97E1E0C472C53DF1D3AF2A041 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2470001A74122CE1EC072B83063842C0 /* Granola.xcconfig */;
+			buildSettings = {
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/Granola/Granola-prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		33FCC0208E63642BC2E26C5FF1E04E44 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6DEAF1C41C96A986BCE0BC8B4CFEF7B0 /* Pods-urchin.release.xcconfig */;
+			buildSettings = {
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				MACH_O_TYPE = staticlib;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		518A7F4723C039FF168BBDFC30DA707F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6259499D01B1FB3C09D327F1BEF0CFDE /* Pods-urchin.debug.xcconfig */;
+			buildSettings = {
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				MACH_O_TYPE = staticlib;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		67D9E27793281EE0A52E0586448D658E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 52533F20269957AE05ED40B44E335D94 /* ObjectiveSugar.xcconfig */;
+			buildSettings = {
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/ObjectiveSugar/ObjectiveSugar-prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		78ED268090D2E03AB9306A7FC672C9E9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A407D65F5D188C2CA5855343ADC3A8A6 /* Pods-urchinTests.debug.xcconfig */;
+			buildSettings = {
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				MACH_O_TYPE = staticlib;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		9EB645C612834738B99727720210C23E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				ONLY_ACTIVE_ARCH = YES;
+				STRIP_INSTALLED_PRODUCT = NO;
+				SYMROOT = "${SRCROOT}/../build";
+			};
+			name = Debug;
+		};
+		C730C59E5AE1BDA28FCB9AE28AA85112 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2470001A74122CE1EC072B83063842C0 /* Granola.xcconfig */;
+			buildSettings = {
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/Granola/Granola-prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		DA19D6C0D1DCC0E1F9BCA7197EF174BB /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 52533F20269957AE05ED40B44E335D94 /* ObjectiveSugar.xcconfig */;
+			buildSettings = {
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/ObjectiveSugar/ObjectiveSugar-prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		E39CD1E764776175CB82EEC82A6C9948 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PREPROCESSOR_DEFINITIONS = "RELEASE=1";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				STRIP_INSTALLED_PRODUCT = NO;
+				SYMROOT = "${SRCROOT}/../build";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		EB416C274EA13573B203A8782A34AC4F /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 941BD4D6569D0E8F034B21E8902B2ABA /* Pods-urchinTests.release.xcconfig */;
+			buildSettings = {
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				MACH_O_TYPE = staticlib;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2D8E8EC45A3A1A1D94AE762CB5028504 /* Build configuration list for PBXProject "Pods" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9EB645C612834738B99727720210C23E /* Debug */,
+				E39CD1E764776175CB82EEC82A6C9948 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2E5F738E4D8940BF25F2C1C7A275E5DE /* Build configuration list for PBXNativeTarget "Granola" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				317D9AF97E1E0C472C53DF1D3AF2A041 /* Debug */,
+				C730C59E5AE1BDA28FCB9AE28AA85112 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4229B4D5725E866EB141121C3D59E6A0 /* Build configuration list for PBXNativeTarget "ObjectiveSugar" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				67D9E27793281EE0A52E0586448D658E /* Debug */,
+				DA19D6C0D1DCC0E1F9BCA7197EF174BB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		678C7B0D08FD73BF1394BA75B81BB1FC /* Build configuration list for PBXNativeTarget "Pods-urchinTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				78ED268090D2E03AB9306A7FC672C9E9 /* Debug */,
+				EB416C274EA13573B203A8782A34AC4F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C8030390782E933C2330242F4E818F91 /* Build configuration list for PBXNativeTarget "Pods-urchin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				518A7F4723C039FF168BBDFC30DA707F /* Debug */,
+				33FCC0208E63642BC2E26C5FF1E04E44 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
+}

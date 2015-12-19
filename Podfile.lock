@@ -1,0 +1,13 @@
+PODS:
+  - Granola (0.3.0):
+    - ObjectiveSugar (~> 1.1)
+  - ObjectiveSugar (1.1.0)
+
+DEPENDENCIES:
+  - Granola
+
+SPEC CHECKSUMS:
+  Granola: 9363048b8cc0309b43ed1f6b700af47b55b74f35
+  ObjectiveSugar: a6a25f23d657c19df0a0b972466d5b5ca9f5295c
+
+COCOAPODS: 0.39.0
