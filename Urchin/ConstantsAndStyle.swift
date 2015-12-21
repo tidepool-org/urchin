@@ -223,6 +223,11 @@ let appTitle: String = "Blip Notes"
 let allTeamsTitle: String = "All"
 
 /*
+Drop down menu title for HealthKit (NotesVC)
+*/
+let healthKitTitle: String = "Share Health Data"
+
+/*
     Drop down menu title for logging out (NotesVC)
 */
 let logoutTitle: String = "Logout"

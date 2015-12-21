@@ -16,7 +16,7 @@
 import Foundation
 import UIKit
 
-class NotesViewController: UIViewController {
+class NotesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     // All notes
     var notes: [Note] = []
@@ -524,7 +524,10 @@ class NotesViewController: UIViewController {
         self.view.addSubview(opaqueOverlay)
         
         // Configure dropDownMenu, same width as view
-        let additionalCells = groups.count == 1 ? 1 : 3
+        var additionalCells = groups.count == 1 ? 1 : 3
+        if (HealthKitManager.sharedInstance.isHealthDataAvailable) {
+            additionalCells++
+        }
         let proposedDropDownH = CGFloat(groups.count+additionalCells)*userCellHeight + CGFloat(groups.count)*userCellThinSeparator + 2*userCellThickSeparator
         self.dropDownHeight = min(proposedDropDownH, self.view.frame.height)
         let dropDownWidth = self.view.frame.width
@@ -619,5 +622,407 @@ class NotesViewController: UIViewController {
     // Lock in portrait orientation
     override func shouldAutorotate() -> Bool {
         return false
+    }
+    
+    // MARK: - UITableViewDataSource
+
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        if (tableView.isEqual(notesTable)) {
+            
+            // Configure NoteCell
+            
+            let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(NoteCell), forIndexPath: indexPath) as! NoteCell
+            
+            let note = filteredNotes[indexPath.row]
+            
+            // If the note is between different users, need a "to so-and-so" appendage
+            var groupName: String = ""
+            if (note.groupid != note.userid) {
+                for group in groups {
+                    if (group.userid == note.groupid) {
+                        groupName = group.fullName!
+                        break
+                    }
+                }
+            }
+            
+            cell.configureWithNote(note, user: user, groupName: groupName)
+            
+            if (indexPath.row % 2 == 0) {
+                cell.backgroundColor = lightGreyColor
+            } else {
+                cell.backgroundColor = darkestGreyLowAlpha
+            }
+            
+            cell.userInteractionEnabled = true
+            cell.selectionStyle = .None
+            
+            // editButton tag to be indexPath.row so can be used in editPressed notification handling
+            cell.editButton.tag = indexPath.row
+            cell.editButton.addTarget(self, action: "editPressed:", forControlEvents: .TouchUpInside)
+            
+            return cell
+            
+        } else {
+            // Configure UserDropDownCell
+            
+            let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(UserDropDownCell), forIndexPath: indexPath) as! UserDropDownCell
+            
+            
+            cell.userInteractionEnabled = true
+            
+            let customSelection = UIView()
+            customSelection.backgroundColor = tealColor
+            cell.selectedBackgroundView = customSelection
+            
+            if (groups.count == 1) {
+                
+                if (indexPath.section == sectionIndex(TableSection.HealthKit) && indexPath.row == 0) {
+                    cell.configure("healthkit", arrow: false)
+                } else if (indexPath.section == sectionIndex(TableSection.Logout) && indexPath.row == 0) {
+                    cell.configure("logout", arrow: false)
+                } else if (indexPath.section == sectionIndex(TableSection.Version) && indexPath.row == 0) {
+                    cell.configure("version")
+                    cell.userInteractionEnabled = false
+                }
+            } else {
+                if (indexPath.section == sectionIndex(TableSection.Users) && indexPath.row == 0) {
+                    cell.configure("all")
+                } else if (indexPath.section == sectionIndex(TableSection.HealthKit) && indexPath.row == 0) {
+                    cell.configure("healthkit", arrow: false)
+                } else if (indexPath.section == sectionIndex(TableSection.Logout) && indexPath.row == 0) {
+                    cell.configure("logout", arrow: false)
+                } else if (indexPath.section == sectionIndex(TableSection.Version) && indexPath.row == 0) {
+                    cell.configure("version")
+                    cell.userInteractionEnabled = false
+                } else {
+                    // Individual group / filter cell
+                    cell.configure(groups[indexPath.row - 1], last: indexPath.row == groups.count, arrow: true, bold: false)
+                }
+            }
+            
+            return cell
+        }
+    }
+    
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        var numberOfSections = 1
+        
+        if (tableView.isEqual(dropDownMenu)) {
+            if (groups.count == 1) {
+                // Logout, Version
+                numberOfSections = 2
+            } else {
+                // Filters, Logout, Version
+                numberOfSections = 3
+            }
+            
+            if (HealthKitManager.sharedInstance.isHealthDataAvailable) {
+                numberOfSections++
+            }
+        }
+        
+        return numberOfSections
+    }
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        var numberOfRows = 0
+        
+        if (tableView.isEqual(notesTable)) {
+            numberOfRows = filteredNotes.count
+        } else if (tableView.isEqual(dropDownMenu)){
+            if (groups.count == 1) {
+                numberOfRows = 1
+            } else {
+                if (section == sectionIndex(TableSection.Users)) {
+                    // Number of groups + 1 for 'All' / #nofilter
+                    numberOfRows = groups.count + 1
+                } else if (section == sectionIndex(TableSection.HealthKit)) {
+                    numberOfRows = 1
+                } else if (section == sectionIndex(TableSection.Logout)) {
+                    numberOfRows = 1
+                } else if (section == sectionIndex(TableSection.Version)) {
+                    numberOfRows = 1
+                }
+            }
+        }
+        
+        return numberOfRows
+    }
+
+    // MARK: - UITableViewDelegate
+    
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        if (tableView.isEqual(notesTable)) {
+            
+            // NotesTable
+            
+            let note = filteredNotes[indexPath.row]
+            
+            // Create labels that 'determine' height of cell
+            
+            // Configure the username label, with the full name
+            let usernameLabel = UILabel()
+            
+            var usernameWidth = self.view.frame.width - (2 * noteCellInset)
+            if (note.user!.userid == user.userid) {
+                // Compensate for width of edit button
+                usernameWidth -= editButtonWidth
+            }
+            usernameLabel.frame.size = CGSize(width: usernameWidth, height: CGFloat.max)
+            var attrUsernameLabel = NSMutableAttributedString(string: note.user!.fullName!, attributes: [NSForegroundColorAttributeName: noteTextColor, NSFontAttributeName: mediumSemiboldFont])
+            if (note.groupid != note.userid) {
+                for group in groups {
+                    if (group.userid == note.groupid) {
+                        attrUsernameLabel = NSMutableAttributedString(string: "\(note.user!.fullName!) to \(group.fullName!)", attributes: [NSForegroundColorAttributeName: noteTextColor, NSFontAttributeName: mediumSemiboldFont])
+                        break
+                    }
+                }
+            }
+            usernameLabel.attributedText = attrUsernameLabel
+            usernameLabel.adjustsFontSizeToFitWidth = false
+            usernameLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
+            usernameLabel.numberOfLines = 0
+            usernameLabel.sizeToFit()
+            
+            // Configure the date label size using extended dateFormatter
+            let timedateLabel = UILabel()
+            let dateFormatter = NSDateFormatter()
+            timedateLabel.attributedText = dateFormatter.attributedStringFromDate(note.timestamp)
+            timedateLabel.sizeToFit()
+            
+            let messageLabel = UILabel(frame: CGRect(x: 0, y: 0, width: self.view.frame.width - 2*noteCellInset, height: CGFloat.max))
+            let hashtagBolder = HashtagBolder()
+            let attributedText = hashtagBolder.boldHashtags(note.messagetext)
+            messageLabel.attributedText = attributedText
+            messageLabel.adjustsFontSizeToFitWidth = false
+            messageLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
+            messageLabel.numberOfLines = 0
+            messageLabel.sizeToFit()
+            
+            // Calculate the total note cell height
+            let cellHeight: CGFloat = noteCellInset + usernameLabel.frame.height + labelSpacing / 2 + timedateLabel.frame.height + 2 * labelSpacing + messageLabel.frame.height + noteCellInset
+            
+            return cellHeight
+            
+            
+        } else {
+            // DropDownMenu
+            
+            if (groups.count == 1) {
+                
+                if (indexPath.section == sectionIndex(TableSection.HealthKit) && indexPath.row == 0) {
+                    let nameLabel = UILabel()
+                    nameLabel.text = healthKitTitle
+                    nameLabel.font = mediumBoldFont
+                    nameLabel.sizeToFit()
+                    
+                    return userCellInset + nameLabel.frame.height + userCellInset + (userCellThickSeparator - userCellThinSeparator)
+                } else if (indexPath.section == sectionIndex(TableSection.Logout) && indexPath.row == 0) {
+                    let nameLabel = UILabel()
+                    nameLabel.text = logoutTitle
+                    nameLabel.font = mediumBoldFont
+                    nameLabel.sizeToFit()
+                    
+                    return userCellInset + nameLabel.frame.height + userCellInset + (userCellThickSeparator - userCellThinSeparator)
+                } else if (indexPath.section == sectionIndex(TableSection.Version) && indexPath.row == 0) {
+                    let nameLabel = UILabel()
+                    nameLabel.text = UIApplication.versionBuildServer()
+                    nameLabel.font = mediumBoldFont
+                    nameLabel.sizeToFit()
+                    
+                    return userCellInset + nameLabel.frame.height + userCellInset + userCellThickSeparator
+                } else {
+                    return 0
+                }
+                
+            } else {
+                if (indexPath.section == sectionIndex(TableSection.Users) && indexPath.row == 0) {
+                    let nameLabel = UILabel()
+                    nameLabel.text = allTeamsTitle
+                    nameLabel.font = mediumBoldFont
+                    nameLabel.sizeToFit()
+                    
+                    return userCellThickSeparator + userCellInset + nameLabel.frame.height + userCellInset + userCellThinSeparator
+                } else if (indexPath.section == sectionIndex(TableSection.HealthKit) && indexPath.row == 0) {
+                    let nameLabel = UILabel()
+                    nameLabel.text = healthKitTitle
+                    nameLabel.font = mediumBoldFont
+                    nameLabel.sizeToFit()
+                    
+                    return userCellInset + nameLabel.frame.height + userCellInset + (userCellThickSeparator - userCellThinSeparator)
+                } else if (indexPath.section == sectionIndex(TableSection.Logout) && indexPath.row == 0) {
+                    let nameLabel = UILabel()
+                    nameLabel.text = logoutTitle
+                    nameLabel.font = mediumBoldFont
+                    nameLabel.sizeToFit()
+                    
+                    return userCellInset + nameLabel.frame.height + userCellInset + (userCellThickSeparator - userCellThinSeparator)
+                } else if (indexPath.section == sectionIndex(TableSection.Version) && indexPath.row == 0) {
+                    let nameLabel = UILabel()
+                    nameLabel.text = UIApplication.versionBuildServer()
+                    nameLabel.font = mediumBoldFont
+                    nameLabel.sizeToFit()
+                    
+                    return userCellInset + nameLabel.frame.height + userCellInset + userCellThickSeparator
+                    
+                } else {
+                    // Some group / team / filter
+                    
+                    let nameLabel = UILabel()
+                    nameLabel.frame.size = CGSize(width: self.view.frame.width - 2 * labelInset, height: dropDownGroupLabelHeight)
+                    nameLabel.text = groups[indexPath.row - 1].fullName
+                    if (filter === groups[indexPath.row - 1]) {
+                        nameLabel.font = mediumBoldFont
+                    } else {
+                        nameLabel.font = mediumRegularFont
+                    }
+                    nameLabel.sizeToFit()
+                    
+                    return userCellInset + nameLabel.frame.height + userCellInset + userCellThinSeparator
+                }
+            }
+        }
+    }
+    
+    // didSelectRowAtIndexPath
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        // Immediately deselect the row
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        if (tableView.isEqual(dropDownMenu)) {
+            // dropDownMenu
+            
+            if (groups.count == 1) {
+                
+                if (indexPath.section == sectionIndex(TableSection.HealthKit)) {
+                    observeHealthData()
+                } else if (indexPath.section == sectionIndex(TableSection.Logout)) {
+                    self.logout()
+                }
+            } else {
+                if (indexPath.section == sectionIndex(TableSection.Users)) {
+                    // A group or all seleceted
+                    if (indexPath.row == 0) {
+                        if (filter != nil) {
+                            self.apiConnector.trackMetric("Clicked All in Feed")
+                        }
+                        
+                        // 'All' / #nofilter selected
+                        self.configureTitleView(allNotesTitle)
+                        self.filter = nil
+                    } else {
+                        
+                        // Individual group / filter selected
+                        if (filter !== groups[indexPath.row - 1]) {
+                            self.apiConnector.trackMetric("Changed Person in Feed")
+                        }
+                        self.filter = groups[indexPath.row - 1]
+                        self.configureTitleView(filter.fullName!)
+                    }
+                    // filter the notes based upon new filter
+                    filterNotes()
+                    // Scroll notes to top
+                    self.notesTable.setContentOffset(CGPointMake(0, -self.notesTable.contentInset.top), animated: true)
+                    // toggle the dropDownMenu (hides the dropDownMenu)
+                    self.dropDownMenuPressed()
+                } else if (indexPath.section == sectionIndex(TableSection.HealthKit)) {
+                    observeHealthData()
+                } else if (indexPath.section == sectionIndex(TableSection.Logout)) {
+                    self.logout()
+                }
+            }
+        }
+    }
+    
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        if (scrollView.isEqual(notesTable)) {
+            
+            // Determine whether the notesTable is scrolled all the way down
+            let height = scrollView.frame.height
+            let contentYOffset = scrollView.contentOffset.y
+            let distanceFromBottom = scrollView.contentSize.height - contentYOffset
+            
+            // If so, load notes
+            if (distanceFromBottom == height && !loadingNotes) {
+                self.apiConnector.trackMetric("Scrolled Down For More Notes")
+                
+                consecutiveFetches = 0
+                loadNotes()
+            }
+        }
+    }
+    
+    // MARK: - Private util methods
+    
+    private enum TableSection {
+        case Users, HealthKit, Logout, Version
+    }
+    
+    private func sectionIndex(section: TableSection) -> Int {
+        var sectionIndex = -1
+        
+        if (groups.count == 1) {
+            if (HealthKitManager.sharedInstance.isHealthDataAvailable) {
+                switch section {
+                case .HealthKit:
+                    sectionIndex = 0
+                case .Logout:
+                    sectionIndex = 1
+                case .Version:
+                    sectionIndex = 2
+                default:
+                    sectionIndex = -1
+                }
+            } else {
+                switch section {
+                case .Logout:
+                    sectionIndex = 0
+                case .Version:
+                    sectionIndex = 1
+                default:
+                    sectionIndex = -1
+                }
+            }
+        } else {
+            if (HealthKitManager.sharedInstance.isHealthDataAvailable) {
+                switch section {
+                case .Users:
+                    sectionIndex = 0
+                case .HealthKit:
+                    sectionIndex = 1
+                case .Logout:
+                    sectionIndex = 2
+                case .Version:
+                    sectionIndex = 3
+                }
+            } else {
+                switch section {
+                case .Users:
+                    sectionIndex = 0
+                case .Logout:
+                    sectionIndex = 1
+                case .Version:
+                    sectionIndex = 2
+                default:
+                    sectionIndex = -1
+                }
+            }
+        }
+            
+        return sectionIndex;
+    }
+    
+    private func observeHealthData() {
+        if (HealthKitManager.sharedInstance.isHealthDataAvailable) {
+            HealthKitManager.sharedInstance.authorize {
+                success, error -> Void in
+                if (error == nil) {
+                    HealthKitManager.sharedInstance.observe(nil)
+                    HealthKitManager.sharedInstance.enableBackgroundDelivery(nil)
+                } else {
+                    NSLog("Error authorizing health data \(error), \(error!.userInfo)")
+                }
+            }
+        }
     }
 }

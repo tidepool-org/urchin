@@ -17,7 +17,7 @@ import Foundation
 import UIKit
 import CoreData
 
-class EditNoteViewController: UIViewController {
+class EditNoteViewController: UIViewController, UITextViewDelegate, UIAlertViewDelegate {
     
     // UI Elements
     
@@ -55,7 +55,7 @@ class EditNoteViewController: UIViewController {
     
     // Keyboard frame for positioning UI Elements
     var keyboardFrame: CGRect = CGRectZero
-    
+        
     init(apiConnector: APIConnector, note: Note, groupFullName: String) {
         
         self.apiConnector = apiConnector
@@ -84,7 +84,7 @@ class EditNoteViewController: UIViewController {
         super.viewWillAppear(animated)
         
         // Set status bar to light color for dark navigationBar
-        UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.LightContent
+        UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.LightContent        
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -649,5 +649,101 @@ class EditNoteViewController: UIViewController {
     // Lock in portrait orientation
     override func shouldAutorotate() -> Bool {
         return false
+    }
+    
+    // MARK: - UITextViewDelegate
+    
+    func textViewDidChange(textView: UITextView) {
+        if (textView.text != defaultMessage) {
+            // take the cursor position
+            let range = textView.selectedTextRange
+            
+            // use hashtagBolder extension to bold the hashtags
+            let hashtagBolder = HashtagBolder()
+            let attributedText = hashtagBolder.boldHashtags(textView.text)
+            
+            // set textView (messageBox) text to new attributed text
+            textView.attributedText = attributedText
+            
+            // put the cursor back in the same position
+            textView.selectedTextRange = range
+        }
+        if ((note.messagetext != textView.text || note.timestamp != datePicker.date) && textView.text != defaultMessage && !textView.text.isEmpty) {
+            postButton.alpha = 1.0
+        } else {
+            postButton.alpha = 0.5
+        }
+    }
+    
+    // textViewDidBeginEditing, clear the messageBox if default message
+    func textViewDidBeginEditing(textView: UITextView) {
+        self.apiConnector.trackMetric("Clicked On Message Box")
+        
+        if (textView.text == defaultMessage) {
+            textView.text = nil
+        }
+    }
+    
+    // textViewDidEndEditing, if empty set back to default message
+    func textViewDidEndEditing(textView: UITextView) {
+        if textView.text.isEmpty {
+            textView.text = defaultMessage
+            textView.textColor = messageTextColor
+        }
+    }
+
+    // MARK: - UIAlertViewDelegate
+    
+    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
+        
+        if (alertView.title == editAlertTitle && alertView.message == editAlertMessage) {
+            switch buttonIndex {
+            case 0:
+                NSLog("Discard edits from note")
+                
+                let notification = NSNotification(name: "doneEditing", object: nil)
+                NSNotificationCenter.defaultCenter().postNotification(notification)
+                
+                self.view.endEditing(true)
+                self.closeDatePicker(false)
+                self.dismissViewControllerAnimated(true, completion: nil)
+                
+                break
+            case 1:
+                NSLog("Save edited note")
+                
+                self.saveNote()
+                
+                break
+            default:
+                NSLog("Unknown case occurred with alert. Closing alert.")
+                break
+            }
+        } else if (alertView.title == trashAlertTitle && alertView.message == trashAlertMessage) {
+            switch buttonIndex {
+            case 0:
+                NSLog("Do not trash note")
+                
+                break
+            case 1:
+                NSLog("Trash note")
+                
+                // Done editing note
+                let notification = NSNotification(name: "doneEditing", object: nil)
+                NSNotificationCenter.defaultCenter().postNotification(notification)
+                
+                let notificationTwo = NSNotification(name: "deleteNote", object: nil)
+                NSNotificationCenter.defaultCenter().postNotification(notificationTwo)
+                
+                self.view.endEditing(true)
+                self.closeDatePicker(false)
+                self.dismissViewControllerAnimated(true, completion: nil)
+                
+                break
+            default:
+                NSLog("Unknown case occurred with alert. Closing alert.")
+                break
+            }
+        }
     }
 }

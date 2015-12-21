@@ -9,7 +9,11 @@
 import Foundation
 import UIKit
 
-class LogInViewController : UIViewController, UIActionSheetDelegate {
+class LogInViewController :
+        UIViewController,
+        UIActionSheetDelegate,
+        UITextFieldDelegate,
+        UIViewControllerTransitioningDelegate {
     
     // Secret, secret! I got a secret! (Change the server)
     var corners: [CGRect] = []
@@ -112,6 +116,7 @@ class LogInViewController : UIViewController, UIActionSheetDelegate {
     }
     
     private func configureForReachability() {
+        NSLog("configureForReachability")
         let connected = apiConnector.isConnectedToNetwork()
         
         for view in self.view.subviews {
@@ -120,6 +125,10 @@ class LogInViewController : UIViewController, UIActionSheetDelegate {
         reachLabel.hidden = connected
         if (connected) {
             apiConnector.loadServer()
+            
+            // TODO: my - For background query of HealthKit, we are launched but not made active, we need
+            // to make sure that the apiConnector.login doesn't do more than it should in that scenario (e.g. 
+            // don't try to create a new note, present login UI, errors, etc.
             apiConnector.login()
         }
     }
@@ -557,5 +566,55 @@ class LogInViewController : UIViewController, UIActionSheetDelegate {
     // Only vertical orientation supported
     override func shouldAutorotate() -> Bool {
         return false
+    }
+
+    // MARK: - UITextFieldDelegate
+
+    // Change the textField border to blue when textField is being edited
+    func textFieldDidBeginEditing(textField: UITextField) {
+        textField.layer.borderColor = tealColor.CGColor
+    }
+    
+    // Change the textField border to gray when textField is done being edited
+    func textFieldDidEndEditing(textField: UITextField) {
+        textField.layer.borderColor = greyColor.CGColor
+    }
+    
+    func textFieldDidChange(textField: UITextField) {
+        // Change the opacity of the login button based upon whether or not credentials are valid
+        // solid if credentials are good
+        // half weight otherwise
+        if (checkCredentials()) {
+            logInButton.alpha = 1.0
+        } else {
+            logInButton.alpha = 0.5
+        }
+    }
+    
+    // Return actions for textFields
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        if (textField.isEqual(emailField)) {
+            // pass on to passwordField from email field
+            passwordField.becomeFirstResponder()
+        } else {
+            // hide keyboard and animate down from return in passwordField
+            if (!isAnimating) {
+                view.endEditing(true)
+            }
+        }
+        
+        return true
+    }
+
+    // MARK: - UIViewControllerTransitioningDelegate
+
+    func animationControllerForPresentedController(presented: UIViewController, presentingController presenting: UIViewController, sourceController source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        transition.presenting = true
+        return transition
+    }
+    
+    func animationControllerForDismissedController(dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        transition.presenting = false
+        return transition
     }
 }

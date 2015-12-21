@@ -26,7 +26,7 @@ class UserDropDownCell: UITableViewCell {
     // Group for the cell
     var group: User!
     
-    func configure(key: String) {
+    func configure(key: String, arrow: Bool = true) {
         separator.removeFromSuperview()
         
         // Set background color to dark green
@@ -38,10 +38,9 @@ class UserDropDownCell: UITableViewCell {
         
         // Configure right image to a lovely right arrow
         rightView.image = rightArrow
-        rightView.hidden = false
+        rightView.hidden = !arrow
         
         if (key == "all") {
-            // Configure nameLabel to be 'All', or #nofilter
             nameLabel.text = allTeamsTitle
             nameLabel.font = mediumBoldFont
             nameLabel.sizeToFit()
@@ -51,12 +50,18 @@ class UserDropDownCell: UITableViewCell {
             separator.frame = CGRect(x: 2*userCellInset, y: self.frame.height - userCellThinSeparator, width: self.frame.width - 2*userCellInset, height: userCellThinSeparator)
             separator.backgroundColor = whiteQuarterAlpha
             self.addSubview(separator)
+        } else if (key == "healthkit") {
+            self.nameLabel.text = healthKitTitle
+            nameLabel.font = mediumBoldFont
+            nameLabel.sizeToFit()
+            nameLabel.frame.origin.y = userCellThickSeparator + userCellInset
             
+            // Configure the thick separator at the top
+            // take out the height of the thin separator because the cell above has a thin separator at the bottom
+            separator.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: userCellThickSeparator)
+            separator.backgroundColor = whiteQuarterAlpha
+            self.addSubview(separator)
         } else if (key == "logout") {
-            // Per spec, logout cell should not have right arrow
-            rightView.hidden = true
-            
-            // Configure the name label to be 'Logout'... for logging out
             self.nameLabel.text = logoutTitle
             nameLabel.font = mediumBoldFont
             nameLabel.sizeToFit()
@@ -67,7 +72,6 @@ class UserDropDownCell: UITableViewCell {
             separator.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: userCellThickSeparator)
             separator.backgroundColor = whiteQuarterAlpha
             self.addSubview(separator)
-            
         } else if (key == "group") {
             
             // position the nameLabel
@@ -77,12 +81,10 @@ class UserDropDownCell: UITableViewCell {
             separator.frame = CGRect(x: 2*userCellInset, y: self.frame.height - userCellThinSeparator, width: self.frame.width - 2*userCellInset, height: userCellThinSeparator)
             separator.backgroundColor = whiteQuarterAlpha
             self.addSubview(separator)
-            
         } else if (key == "grouplast") {
             
             // position the nameLabel
-            self.nameLabel.frame.origin = CGPoint(x: 3*userCellInset, y: userCellInset)
-            
+            self.nameLabel.frame.origin = CGPoint(x: 3*userCellInset, y: userCellInset)            
         } else if (key == "version") {
             // Configure the name label to contain the version
             self.nameLabel.text = UIApplication.versionBuildServer()
