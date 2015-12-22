@@ -24,17 +24,34 @@ class HealthKitManager {
     }()
     
     let isHealthDataAvailable: Bool = {
-        return HKHealthStore.isHealthDataAvailable()
+        // NOTE: For now we are relying on iOS 9 HealthKit support for better anchor query support, etc, but, Blip Notes
+        // still supports pre-9.0, hence this check. At the time of this writing iOS 9 adoption is 80%, iOS 8 is 15%, and
+        // pre-iOS 8 is 5%: https://mixpanel.com/trends/#report/ios_9
+        if #available(iOS 9.0, *) {
+            return HKHealthStore.isHealthDataAvailable()
+        } else {
+            return false;
+        }
     }()
     
     func authorize(completion: ((success:Bool, error:NSError!) -> Void)!)
     {
+        guard #available(iOS 9, *) else {
+            NSLog("\(__FUNCTION__): Unexpected HealthKitManager call for pre-iOS 9")
+            return
+        }
+        guard isHealthDataAvailable else {
+            NSLog("\(__FUNCTION__): Unexpected HealthKitManager call when health data not available")
+            return
+        }
+        
         let readTypes = Set(arrayLiteral:
                                 HKObjectType.quantityTypeForIdentifier(HKQuantityTypeIdentifierBloodGlucose)!,
                                 HKObjectType.workoutType())
         if (isHealthDataAvailable) {
             healthStore!.requestAuthorizationToShareTypes(nil, readTypes: readTypes) { (success, error) -> Void in
                 NSUserDefaults.standardUserDefaults().setBool(true, forKey: "requestedHealthKitAuthorization");
+                NSUserDefaults.standardUserDefaults().synchronize()
                 if (completion != nil) {
                     completion(success:success, error:error)
                 }
@@ -51,6 +68,15 @@ class HealthKitManager {
     }
     
     func observe(completion: ((success:Bool, error:NSError!) -> Void)!) {
+        guard #available(iOS 9, *) else {
+            NSLog("\(__FUNCTION__): Unexpected HealthKitManager call for pre-iOS 9")
+            return
+        }
+        guard isHealthDataAvailable else {
+            NSLog("\(__FUNCTION__): Unexpected HealthKitManager call when health data not available")
+            return
+        }
+
         if (!bloodGlucoseObservationSuccessful) {
             if (bloodGlucoseObservationQuery != nil) {
                 healthStore?.stopQuery(bloodGlucoseObservationQuery!)
@@ -58,11 +84,10 @@ class HealthKitManager {
             
             let sampleType = HKObjectType.quantityTypeForIdentifier(HKQuantityTypeIdentifierBloodGlucose)!
             bloodGlucoseObservationQuery = HKObserverQuery(sampleType: sampleType, predicate: nil) {
-                query, completionHandler, error in
+                [unowned self](query, observerQueryCompletion, error) in
                 if error == nil {
                     self.bloodGlucoseObservationSuccessful = true
-                    self.readMostRecentSample()
-
+                    self.readBloodGlucoseSamples()
                 } else {
                     NSLog("HealthKit observation error \(error), \(error!.userInfo)")
                 }
@@ -71,7 +96,7 @@ class HealthKitManager {
                     completion(success:error == nil, error:error)
                 }
 
-                completionHandler()
+                observerQueryCompletion()
             }
             healthStore?.executeQuery(bloodGlucoseObservationQuery!)
         } else {
@@ -82,6 +107,15 @@ class HealthKitManager {
     }
     
     func enableBackgroundDelivery(completion: ((success:Bool, error:NSError!) -> Void)!) {
+        guard #available(iOS 9, *) else {
+            NSLog("\(__FUNCTION__): Unexpected HealthKitManager call for pre-iOS 9")
+            return
+        }
+        guard isHealthDataAvailable else {
+            NSLog("\(__FUNCTION__): Unexpected HealthKitManager call when health data not available")
+            return
+        }
+
         if (!bloodGlucoseBackgroundDeliveryEnabled) {
             bloodGlucoseBackgroundDeliveryEnabled = true
             
@@ -106,38 +140,64 @@ class HealthKitManager {
         }
     }
     
-    // TODO: my - 0 - Need to use HKAnchoredObjectQuery
-    func readMostRecentSample()
+    @available(iOS 9, *)
+    private func readBloodGlucoseSamples()
     {
-        let sampleType = HKSampleType.quantityTypeForIdentifier(HKQuantityTypeIdentifierBloodGlucose)
-        let past = NSDate.distantPast()
-        let now   = NSDate()
-        let mostRecentPredicate = HKQuery.predicateForSamplesWithStartDate(past, endDate:now, options: .None)
-        let sortDescriptor = NSSortDescriptor(key:HKSampleSortIdentifierStartDate, ascending: false)
-        let limit = 1
-        let sampleQuery = HKSampleQuery(
-                                sampleType: sampleType!,
-                                predicate: mostRecentPredicate,
-                                limit: limit,
-                                sortDescriptors: [sortDescriptor]) {                                    
-            (sampleQuery, results, error ) -> Void in
-            
-            if (error != nil) {
-                return;
-            }
-            
-            // Get the first sample
-            if let sample = results!.first as? HKQuantitySample {
-                // create and use a serializer instance
-                let serializer = OMHSerializer()
-                let jsonString = try! serializer.jsonForSample(sample)
-                NSLog("Granola sample: \(jsonString)");
-            }
+        guard isHealthDataAvailable else {
+            NSLog("\(__FUNCTION__): Unexpected HealthKitManager call when health data not available")
+            return
         }
+        
+        var bloodGlucoseQueryAnchor: HKQueryAnchor?
+        let bloodGlucoseQueryAnchorData = NSUserDefaults.standardUserDefaults().objectForKey("bloodGlucoseQueryAnchor")
+        if (bloodGlucoseQueryAnchorData != nil) {
+            bloodGlucoseQueryAnchor = NSKeyedUnarchiver.unarchiveObjectWithData(bloodGlucoseQueryAnchorData as! NSData) as? HKQueryAnchor
+        }
+        
+        let sampleType = HKObjectType.quantityTypeForIdentifier(HKQuantityTypeIdentifierBloodGlucose)!
+        let sampleQuery = HKAnchoredObjectQuery(type: sampleType,
+            predicate: nil,
+            anchor: bloodGlucoseQueryAnchor,
+            limit: Int(HKObjectQueryNoLimit)) {
+                [unowned self](query, newSamples, deletedSamples, newAnchor, error) -> Void in
+                
+                guard let samples = newSamples as? [HKQuantitySample], let deleted = deletedSamples else {
+                    print("Unexpectedly unable to query for glucose samples from anchored object query: \(error?.localizedDescription)")
+                    return
+                }
+
+                if (newAnchor != nil) {
+                    let bloodGlucoseQueryAnchorData = NSKeyedArchiver.archivedDataWithRootObject(newAnchor!)
+                    NSUserDefaults.standardUserDefaults().setObject(bloodGlucoseQueryAnchorData, forKey: "bloodGlucoseQueryAnchor")
+                    NSUserDefaults.standardUserDefaults().synchronize()
+                }
+
+                self.processNewBloodGlucoseSamples(samples)
+                self.processDeletedBloodGlucoseSample(deleted)
+            }
         healthStore?.executeQuery(sampleQuery)
+    }
+    
+    @available(iOS 9, *)
+    private func processNewBloodGlucoseSamples(samples: [HKQuantitySample]) {
+        NSLog("********* PROCESSING \(samples.count) new samples ********* ")
+        let serializer = OMHSerializer()
+        for sample in samples {
+            let jsonString = try! serializer.jsonForSample(sample)
+            NSLog("Granola serialized sample: \(jsonString)");
+        }
+    }
+    
+    @available(iOS 9, *)
+    private func processDeletedBloodGlucoseSample(samples: [HKDeletedObject]) {
+        NSLog("********* PROCESSING \(samples.count) deleted samples ********* ")
+        for sample in samples {
+            NSLog("Processed deleted sample with UUID: \(sample.UUID)");
+        }
     }
     
     private var bloodGlucoseObservationSuccessful = false
     private var bloodGlucoseObservationQuery: HKObserverQuery?
     private var bloodGlucoseBackgroundDeliveryEnabled = false
+    private var bloodGlucoseQueryAnchor = Int(HKAnchoredObjectQueryNoAnchor)
 }
