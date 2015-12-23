@@ -34,7 +34,7 @@ class HealthKitManager {
         }
     }()
     
-    func authorize(completion: ((success:Bool, error:NSError!) -> Void)!)
+    func authorize(shouldAuthorizeBloodGlucoseSamples shouldAuthorizeBloodGlucoseSamples: Bool, shouldAuthorizeWorkoutSamples: Bool, completion: ((success:Bool, error:NSError!) -> Void)!)
     {
         guard #available(iOS 9, *) else {
             NSLog("\(__FUNCTION__): Unexpected HealthKitManager call for pre-iOS 9")
@@ -45,9 +45,18 @@ class HealthKitManager {
             return
         }
         
-        let readTypes = Set(arrayLiteral:
-                                HKObjectType.quantityTypeForIdentifier(HKQuantityTypeIdentifierBloodGlucose)!,
-                                HKObjectType.workoutType())
+        var readTypes = Set<HKSampleType>()
+        if (shouldAuthorizeBloodGlucoseSamples) {
+            readTypes.insert(HKObjectType.quantityTypeForIdentifier(HKQuantityTypeIdentifierBloodGlucose)!)
+        }
+        if (shouldAuthorizeWorkoutSamples) {
+            readTypes.insert(HKObjectType.workoutType())
+        }
+        guard readTypes.count > 0 else {
+            NSLog("\(__FUNCTION__): No health data authorization requested, ignoring")
+            return
+        }
+        
         if (isHealthDataAvailable) {
             healthStore!.requestAuthorizationToShareTypes(nil, readTypes: readTypes) { (success, error) -> Void in
                 NSUserDefaults.standardUserDefaults().setBool(true, forKey: "requestedHealthKitAuthorization");
@@ -67,7 +76,7 @@ class HealthKitManager {
         }
     }
     
-    func observe(completion: ((success:Bool, error:NSError!) -> Void)!) {
+    func observeBloodGlucoseSamples(completion: ((success:Bool, error:NSError!) -> Void)!) {
         guard #available(iOS 9, *) else {
             NSLog("\(__FUNCTION__): Unexpected HealthKitManager call for pre-iOS 9")
             return
@@ -89,7 +98,7 @@ class HealthKitManager {
                     self.bloodGlucoseObservationSuccessful = true
                     self.readBloodGlucoseSamples()
                 } else {
-                    NSLog("HealthKit observation error \(error), \(error!.userInfo)")
+                    NSLog("\(__FUNCTION__): HealthKit observation error \(error), \(error!.userInfo)")
                 }
 
                 if (completion != nil) {
@@ -106,7 +115,7 @@ class HealthKitManager {
         }
     }
     
-    func enableBackgroundDelivery(completion: ((success:Bool, error:NSError!) -> Void)!) {
+    func enableBackgroundDeliveryBloodGlucoseSamples(completion: ((success:Bool, error:NSError!) -> Void)!) {
         guard #available(iOS 9, *) else {
             NSLog("\(__FUNCTION__): Unexpected HealthKitManager call for pre-iOS 9")
             return
@@ -124,15 +133,88 @@ class HealthKitManager {
                 frequency: HKUpdateFrequency.Immediate) {
                     success, error -> Void in
                     if (error == nil) {
-                        NSLog("Enabled background delivery of health data")
+                        NSLog("\(__FUNCTION__): Enabled background delivery of health data")
                     } else {
-                        NSLog("Error enabling background delivery of health data \(error), \(error!.userInfo)")
+                        NSLog("\(__FUNCTION__): Error enabling background delivery of health data \(error), \(error!.userInfo)")
                     }
                     
                     if (completion != nil) {
                         completion(success:success, error:error)
                     }
                 }
+        } else {
+            if (completion != nil) {
+                completion(success:true, error:nil)
+            }
+        }
+    }
+    
+    func observeWorkoutSamples(completion: ((success:Bool, error:NSError!) -> Void)!) {
+        guard #available(iOS 9, *) else {
+            NSLog("\(__FUNCTION__): Unexpected HealthKitManager call for pre-iOS 9")
+            return
+        }
+        guard isHealthDataAvailable else {
+            NSLog("\(__FUNCTION__): Unexpected HealthKitManager call when health data not available")
+            return
+        }
+        
+        if (!workoutsObservationSuccessful) {
+            if (workoutsObservationQuery != nil) {
+                healthStore?.stopQuery(workoutsObservationQuery!)
+            }
+            
+            let sampleType = HKObjectType.workoutType()
+            workoutsObservationQuery = HKObserverQuery(sampleType: sampleType, predicate: nil) {
+                [unowned self](query, observerQueryCompletion, error) in
+                if error == nil {
+                    self.workoutsObservationSuccessful = true
+                    self.readWorkoutSamples()
+                } else {
+                    NSLog("\(__FUNCTION__): HealthKit observation error \(error), \(error!.userInfo)")
+                }
+                
+                if (completion != nil) {
+                    completion(success:error == nil, error:error)
+                }
+                
+                observerQueryCompletion()
+            }
+            healthStore?.executeQuery(workoutsObservationQuery!)
+        } else {
+            if (completion != nil) {
+                completion(success:true, error:nil)
+            }
+        }
+    }
+    
+    func enableBackgroundDeliveryWorkoutSamples(completion: ((success:Bool, error:NSError!) -> Void)!) {
+        guard #available(iOS 9, *) else {
+            NSLog("\(__FUNCTION__): Unexpected HealthKitManager call for pre-iOS 9")
+            return
+        }
+        guard isHealthDataAvailable else {
+            NSLog("\(__FUNCTION__): Unexpected HealthKitManager call when health data not available")
+            return
+        }
+        
+        if (!workoutsBackgroundDeliveryEnabled) {
+            workoutsBackgroundDeliveryEnabled = true
+            
+            healthStore?.enableBackgroundDeliveryForType(
+                HKObjectType.workoutType(),
+                frequency: HKUpdateFrequency.Immediate) {
+                    success, error -> Void in
+                    if (error == nil) {
+                        NSLog("\(__FUNCTION__): Enabled background delivery of health data")
+                    } else {
+                        NSLog("\(__FUNCTION__): Error enabling background delivery of health data \(error), \(error!.userInfo)")
+                    }
+                    
+                    if (completion != nil) {
+                        completion(success:success, error:error)
+                    }
+            }
         } else {
             if (completion != nil) {
                 completion(success:true, error:nil)
@@ -148,51 +230,117 @@ class HealthKitManager {
             return
         }
         
-        var bloodGlucoseQueryAnchor: HKQueryAnchor?
-        let bloodGlucoseQueryAnchorData = NSUserDefaults.standardUserDefaults().objectForKey("bloodGlucoseQueryAnchor")
-        if (bloodGlucoseQueryAnchorData != nil) {
-            bloodGlucoseQueryAnchor = NSKeyedUnarchiver.unarchiveObjectWithData(bloodGlucoseQueryAnchorData as! NSData) as? HKQueryAnchor
+        var queryAnchor: HKQueryAnchor?
+        let queryAnchorData = NSUserDefaults.standardUserDefaults().objectForKey("bloodGlucoseQueryAnchor")
+        if (queryAnchorData != nil) {
+            queryAnchor = NSKeyedUnarchiver.unarchiveObjectWithData(queryAnchorData as! NSData) as? HKQueryAnchor
         }
         
         let sampleType = HKObjectType.quantityTypeForIdentifier(HKQuantityTypeIdentifierBloodGlucose)!
         let sampleQuery = HKAnchoredObjectQuery(type: sampleType,
             predicate: nil,
-            anchor: bloodGlucoseQueryAnchor,
+            anchor: queryAnchor,
             limit: Int(HKObjectQueryNoLimit)) {
                 [unowned self](query, newSamples, deletedSamples, newAnchor, error) -> Void in
                 
-                guard let samples = newSamples as? [HKQuantitySample], let deleted = deletedSamples else {
-                    print("Unexpectedly unable to query for glucose samples from anchored object query: \(error?.localizedDescription)")
-                    return
-                }
-
                 if (newAnchor != nil) {
-                    let bloodGlucoseQueryAnchorData = NSKeyedArchiver.archivedDataWithRootObject(newAnchor!)
-                    NSUserDefaults.standardUserDefaults().setObject(bloodGlucoseQueryAnchorData, forKey: "bloodGlucoseQueryAnchor")
+                    let queryAnchorData = NSKeyedArchiver.archivedDataWithRootObject(newAnchor!)
+                    NSUserDefaults.standardUserDefaults().setObject(queryAnchorData, forKey: "bloodGlucoseQueryAnchor")
                     NSUserDefaults.standardUserDefaults().synchronize()
                 }
 
-                self.processNewBloodGlucoseSamples(samples)
-                self.processDeletedBloodGlucoseSample(deleted)
+                self.processNewBloodGlucoseSamples(newSamples)
+                self.processDeletedBloodGlucoseSamples(deletedSamples)
             }
         healthStore?.executeQuery(sampleQuery)
     }
     
     @available(iOS 9, *)
-    private func processNewBloodGlucoseSamples(samples: [HKQuantitySample]) {
-        NSLog("********* PROCESSING \(samples.count) new samples ********* ")
+    private func readWorkoutSamples()
+    {
+        guard isHealthDataAvailable else {
+            NSLog("\(__FUNCTION__): Unexpected HealthKitManager call when health data not available")
+            return
+        }
+        
+        var queryAnchor: HKQueryAnchor?
+        let queryAnchorData = NSUserDefaults.standardUserDefaults().objectForKey("workoutQueryAnchor")
+        if (queryAnchorData != nil) {
+            queryAnchor = NSKeyedUnarchiver.unarchiveObjectWithData(queryAnchorData as! NSData) as? HKQueryAnchor
+        }
+        
+        let sampleType = HKObjectType.workoutType()
+        let sampleQuery = HKAnchoredObjectQuery(type: sampleType,
+            predicate: nil,
+            anchor: queryAnchor,
+            limit: Int(HKObjectQueryNoLimit)) {
+                [unowned self](query, newSamples, deletedSamples, newAnchor, error) -> Void in
+                
+                if (newAnchor != nil) {
+                    let queryAnchorData = NSKeyedArchiver.archivedDataWithRootObject(newAnchor!)
+                    NSUserDefaults.standardUserDefaults().setObject(queryAnchorData, forKey: "workoutQueryAnchor")
+                    NSUserDefaults.standardUserDefaults().synchronize()
+                }
+                
+                self.processNewWorkoutSamples(newSamples)
+                self.processDeletedWorkoutSamples(deletedSamples)
+        }
+        healthStore?.executeQuery(sampleQuery)
+    }
+    
+    @available(iOS 9, *)
+    private func processNewBloodGlucoseSamples(samples: [HKSample]?) {
+        guard samples != nil else {
+            return
+        }
+        
+        let samples = samples!
+        NSLog("********* PROCESSING \(samples.count) new glucose samples ********* ")
         let serializer = OMHSerializer()
         for sample in samples {
             let jsonString = try! serializer.jsonForSample(sample)
-            NSLog("Granola serialized sample: \(jsonString)");
+            NSLog("Granola serialized glucose sample: \(jsonString)");
         }
     }
     
     @available(iOS 9, *)
-    private func processDeletedBloodGlucoseSample(samples: [HKDeletedObject]) {
-        NSLog("********* PROCESSING \(samples.count) deleted samples ********* ")
+    private func processDeletedBloodGlucoseSamples(samples: [HKDeletedObject]?) {
+        guard samples != nil else {
+            return
+        }
+        
+        let samples = samples!
+        NSLog("********* PROCESSING \(samples.count) deleted glucose samples ********* ")
         for sample in samples {
-            NSLog("Processed deleted sample with UUID: \(sample.UUID)");
+            NSLog("Processed deleted glucose sample with UUID: \(sample.UUID)");
+        }
+    }
+    
+    @available(iOS 9, *)
+    private func processNewWorkoutSamples(samples: [HKSample]?) {
+        guard samples != nil else {
+            return
+        }
+        
+        let samples = samples!
+        NSLog("********* PROCESSING \(samples.count) new workout samples ********* ")
+        let serializer = OMHSerializer()
+        for sample in samples {
+            let jsonString = try! serializer.jsonForSample(sample)
+            NSLog("Granola serialized workout sample: \(jsonString)");
+        }
+    }
+    
+    @available(iOS 9, *)
+    private func processDeletedWorkoutSamples(samples: [HKDeletedObject]?) {
+        guard samples != nil else {
+            return
+        }
+        
+        let samples = samples!
+        NSLog("********* PROCESSING \(samples.count) deleted workout samples ********* ")
+        for sample in samples {
+            NSLog("Processed deleted workout sample with UUID: \(sample.UUID)");
         }
     }
     
@@ -200,4 +348,9 @@ class HealthKitManager {
     private var bloodGlucoseObservationQuery: HKObserverQuery?
     private var bloodGlucoseBackgroundDeliveryEnabled = false
     private var bloodGlucoseQueryAnchor = Int(HKAnchoredObjectQueryNoAnchor)
+
+    private var workoutsObservationSuccessful = false
+    private var workoutsObservationQuery: HKObserverQuery?
+    private var workoutsBackgroundDeliveryEnabled = false
+    private var workoutsQueryAnchor = Int(HKAnchoredObjectQueryNoAnchor)
 }

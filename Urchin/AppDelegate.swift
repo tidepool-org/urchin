@@ -46,8 +46,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // do this lazily in HealthKitManager and call it both here, on launch, and after authorization,
         // in settings.
         if (HealthKitManager.sharedInstance.isHealthDataAvailable) {
-            HealthKitManager.sharedInstance.observe(nil)
-            HealthKitManager.sharedInstance.enableBackgroundDelivery(nil)
+            HealthKitManager.sharedInstance.observeBloodGlucoseSamples(nil)
+            HealthKitManager.sharedInstance.observeWorkoutSamples(nil)
+            HealthKitManager.sharedInstance.enableBackgroundDeliveryBloodGlucoseSamples(nil)
+            HealthKitManager.sharedInstance.enableBackgroundDeliveryWorkoutSamples(nil)
         }
 
         NSLog("did finish launching")

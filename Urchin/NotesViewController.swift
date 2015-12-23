@@ -1014,11 +1014,13 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     private func observeHealthData() {
         if (HealthKitManager.sharedInstance.isHealthDataAvailable) {
-            HealthKitManager.sharedInstance.authorize {
+            HealthKitManager.sharedInstance.authorize(shouldAuthorizeBloodGlucoseSamples: true, shouldAuthorizeWorkoutSamples: true) {
                 success, error -> Void in
                 if (error == nil) {
-                    HealthKitManager.sharedInstance.observe(nil)
-                    HealthKitManager.sharedInstance.enableBackgroundDelivery(nil)
+                    HealthKitManager.sharedInstance.observeBloodGlucoseSamples(nil)
+                    HealthKitManager.sharedInstance.observeWorkoutSamples(nil)
+                    HealthKitManager.sharedInstance.enableBackgroundDeliveryBloodGlucoseSamples(nil)
+                    HealthKitManager.sharedInstance.enableBackgroundDeliveryWorkoutSamples(nil)
                 } else {
                     NSLog("Error authorizing health data \(error), \(error!.userInfo)")
                 }
