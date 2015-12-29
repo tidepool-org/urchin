@@ -16,7 +16,7 @@
 
 #import "OMHSerializer.h"
 #import "NSDate+RFC3339.h"
-#import <ObjectiveSugar/ObjectiveSugar.h>
+#import "ObjectiveSugar.h"
 #import "OMHHealthKitConstantsMapper.h"
 
 @interface OMHSerializer()
