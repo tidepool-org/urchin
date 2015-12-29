@@ -105,7 +105,7 @@ class HealthKitDataSync {
                     HealthKitManager.sharedInstance.stopObservingBloodGlucoseSamples()
                     HealthKitManager.sharedInstance.disableBackgroundDeliveryBloodGlucoseSamples()
                 }
-                if (shouldStopSyncingBloodGlucoseSamples) {
+                if (shouldStopSyncingWorkoutSamples) {
                     HealthKitManager.sharedInstance.stopObservingWorkoutSamples()
                     HealthKitManager.sharedInstance.disableBackgroundDeliveryWorkoutSamples()
                 }

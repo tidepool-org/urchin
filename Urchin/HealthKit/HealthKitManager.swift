@@ -138,6 +138,7 @@ class HealthKitManager {
         }
     }
     
+    // NOTE: resultsHandler is called on a separate process queue!
     @available(iOS 9, *)
     func startObservingWorkoutSamples(resultsHandler: (([HKSample]?, [HKDeletedObject]?, NSError?) -> Void)!) {
         guard isHealthDataAvailable else {
@@ -223,7 +224,7 @@ class HealthKitManager {
                     self.bloodGlucoseBackgroundDeliveryEnabled = false
                     NSLog("\(__FUNCTION__): Disabled background delivery of health data")
                 } else {
-                    NSLog("\(__FUNCTION__): Error enabling background delivery of health data \(error), \(error!.userInfo)")
+                    NSLog("\(__FUNCTION__): Error disabling background delivery of health data \(error), \(error!.userInfo)")
                 }
             }
         }
@@ -265,7 +266,7 @@ class HealthKitManager {
                     self.workoutsBackgroundDeliveryEnabled = false
                     NSLog("\(__FUNCTION__): Disabled background delivery of health data")
                 } else {
-                    NSLog("\(__FUNCTION__): Error enabling background delivery of health data \(error), \(error!.userInfo)")
+                    NSLog("\(__FUNCTION__): Error disabling background delivery of health data \(error), \(error!.userInfo)")
                 }
             }
         }
