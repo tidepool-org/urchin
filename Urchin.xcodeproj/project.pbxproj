@@ -10,10 +10,32 @@
 		48E4A4431BEE5879001A7B35 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E4A4421BEE5879001A7B35 /* Reachability.swift */; };
 		48E4A4441BEE5879001A7B35 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E4A4421BEE5879001A7B35 /* Reachability.swift */; };
 		4D47CD7D1C18EC4C00AAA8A9 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D47CD7C1C18EC4C00AAA8A9 /* HealthKit.framework */; };
-		4D4913BA1C26629A00BB733C /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D4913B91C26629A00BB733C /* HealthKitManager.swift */; };
-		4D4913BB1C27467400BB733C /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D4913B91C26629A00BB733C /* HealthKitManager.swift */; };
-		5D6006F624943A95782D3AE6 /* libPods-urchinTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 73A0C1EAC597832538172F5F /* libPods-urchinTests.a */; };
-		8F9DFEB0E7136A0E82C75612 /* libPods-urchin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D6315F54A7CFCD347D0A22B /* libPods-urchin.a */; };
+		4DBC52CB1C2B66A40062FDEA /* OMHSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DBC52C31C2B66A40062FDEA /* OMHSerializer.m */; };
+		4DBC52CC1C2B66A40062FDEA /* OMHHealthKitConstantsMapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DBC52C51C2B66A40062FDEA /* OMHHealthKitConstantsMapper.m */; };
+		4DBC52CD1C2B66A40062FDEA /* OMHError.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DBC52C71C2B66A40062FDEA /* OMHError.m */; };
+		4DBC52CE1C2B66A40062FDEA /* NSDate+RFC3339.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DBC52C91C2B66A40062FDEA /* NSDate+RFC3339.m */; };
+		4DBC52D01C2B66D20062FDEA /* OMHSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DBC52C31C2B66A40062FDEA /* OMHSerializer.m */; };
+		4DBC52D11C2B66D60062FDEA /* OMHHealthKitConstantsMapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DBC52C51C2B66A40062FDEA /* OMHHealthKitConstantsMapper.m */; };
+		4DBC52D21C2B66D90062FDEA /* OMHError.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DBC52C71C2B66A40062FDEA /* OMHError.m */; };
+		4DBC52D31C2B66DC0062FDEA /* NSDate+RFC3339.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DBC52C91C2B66A40062FDEA /* NSDate+RFC3339.m */; };
+		4DBC534C1C30A9230062FDEA /* HealthKitDataSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DBC53481C30A9230062FDEA /* HealthKitDataSync.swift */; };
+		4DBC534D1C30A9230062FDEA /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DBC53491C30A9230062FDEA /* HealthKitManager.swift */; };
+		4DBC534F1C30B3F30062FDEA /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DBC53491C30A9230062FDEA /* HealthKitManager.swift */; };
+		4DBC53501C30B3F60062FDEA /* HealthKitDataSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DBC53481C30A9230062FDEA /* HealthKitDataSync.swift */; };
+		4DBC53521C30B48C0062FDEA /* GranolaData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DBC53511C30B48C0062FDEA /* GranolaData.swift */; };
+		4DBC53531C3105870062FDEA /* GranolaData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DBC53511C30B48C0062FDEA /* GranolaData.swift */; };
+		4DBC53621C3242420062FDEA /* NSArray+ObjectiveSugar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DBC53561C3242420062FDEA /* NSArray+ObjectiveSugar.m */; };
+		4DBC53631C3242420062FDEA /* NSDictionary+ObjectiveSugar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DBC53581C3242420062FDEA /* NSDictionary+ObjectiveSugar.m */; };
+		4DBC53641C3242420062FDEA /* NSMutableArray+ObjectiveSugar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DBC535A1C3242420062FDEA /* NSMutableArray+ObjectiveSugar.m */; };
+		4DBC53651C3242420062FDEA /* NSNumber+ObjectiveSugar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DBC535C1C3242420062FDEA /* NSNumber+ObjectiveSugar.m */; };
+		4DBC53661C3242420062FDEA /* NSSet+ObjectiveSugar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DBC535E1C3242420062FDEA /* NSSet+ObjectiveSugar.m */; };
+		4DBC53671C3242420062FDEA /* NSString+ObjectiveSugar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DBC53601C3242420062FDEA /* NSString+ObjectiveSugar.m */; };
+		4DBC53681C3242500062FDEA /* NSArray+ObjectiveSugar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DBC53561C3242420062FDEA /* NSArray+ObjectiveSugar.m */; };
+		4DBC53691C3242500062FDEA /* NSDictionary+ObjectiveSugar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DBC53581C3242420062FDEA /* NSDictionary+ObjectiveSugar.m */; };
+		4DBC536A1C3242500062FDEA /* NSMutableArray+ObjectiveSugar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DBC535A1C3242420062FDEA /* NSMutableArray+ObjectiveSugar.m */; };
+		4DBC536B1C3242500062FDEA /* NSNumber+ObjectiveSugar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DBC535C1C3242420062FDEA /* NSNumber+ObjectiveSugar.m */; };
+		4DBC536C1C3242500062FDEA /* NSSet+ObjectiveSugar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DBC535E1C3242420062FDEA /* NSSet+ObjectiveSugar.m */; };
+		4DBC536D1C3242500062FDEA /* NSString+ObjectiveSugar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DBC53601C3242420062FDEA /* NSString+ObjectiveSugar.m */; };
 		AA03FB8A1B5848FD001B9435 /* APIConnect.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA03FB891B5848FD001B9435 /* APIConnect.swift */; };
 		AA3484F01B559EA10028C49B /* HashtagsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3484EF1B559EA10028C49B /* HashtagsView.swift */; };
 		AA3484F41B56AED20028C49B /* UIDateFormatterExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3484F31B56AED20028C49B /* UIDateFormatterExtension.swift */; };
@@ -111,6 +133,8 @@
 		AAE778A51B4B408F00949CEE /* note@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AAE778A31B4B408F00949CEE /* note@2x.png */; };
 		AAFBE7DE1B69814B007E480D /* UIApplicationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAFBE7DD1B69814B007E480D /* UIApplicationExtension.swift */; };
 		AAFBE7DF1B698229007E480D /* UIApplicationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAFBE7DD1B69814B007E480D /* UIApplicationExtension.swift */; };
+		AC9866148634B72B97B4B8FB /* Pods_urchinTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92E7D795B176FAC800CA8CA9 /* Pods_urchinTests.framework */; };
+		E7E305F1462CC8EEE84B62B5 /* Pods_urchin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6DFA4ED519BA00A2A7A5667 /* Pods_urchin.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -129,9 +153,31 @@
 		4D47CD7B1C18EC4C00AAA8A9 /* urchin.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = urchin.entitlements; sourceTree = "<group>"; };
 		4D47CD7C1C18EC4C00AAA8A9 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		4D47CD7E1C18F01300AAA8A9 /* urchin-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "urchin-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
-		4D4913B91C26629A00BB733C /* HealthKitManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitManager.swift; path = Urchin/HealthKitManager.swift; sourceTree = SOURCE_ROOT; };
-		6D6315F54A7CFCD347D0A22B /* libPods-urchin.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-urchin.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		73A0C1EAC597832538172F5F /* libPods-urchinTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-urchinTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4DBC52C31C2B66A40062FDEA /* OMHSerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OMHSerializer.m; path = Granola/Pod/Classes/OMHSerializer.m; sourceTree = "<group>"; };
+		4DBC52C41C2B66A40062FDEA /* OMHSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OMHSerializer.h; path = Granola/Pod/Classes/OMHSerializer.h; sourceTree = "<group>"; };
+		4DBC52C51C2B66A40062FDEA /* OMHHealthKitConstantsMapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OMHHealthKitConstantsMapper.m; path = Granola/Pod/Classes/OMHHealthKitConstantsMapper.m; sourceTree = "<group>"; };
+		4DBC52C61C2B66A40062FDEA /* OMHHealthKitConstantsMapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OMHHealthKitConstantsMapper.h; path = Granola/Pod/Classes/OMHHealthKitConstantsMapper.h; sourceTree = "<group>"; };
+		4DBC52C71C2B66A40062FDEA /* OMHError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OMHError.m; path = Granola/Pod/Classes/OMHError.m; sourceTree = "<group>"; };
+		4DBC52C81C2B66A40062FDEA /* OMHError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OMHError.h; path = Granola/Pod/Classes/OMHError.h; sourceTree = "<group>"; };
+		4DBC52C91C2B66A40062FDEA /* NSDate+RFC3339.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSDate+RFC3339.m"; path = "Granola/Pod/Classes/NSDate+RFC3339.m"; sourceTree = "<group>"; };
+		4DBC52CA1C2B66A40062FDEA /* NSDate+RFC3339.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSDate+RFC3339.h"; path = "Granola/Pod/Classes/NSDate+RFC3339.h"; sourceTree = "<group>"; };
+		4DBC53481C30A9230062FDEA /* HealthKitDataSync.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitDataSync.swift; path = Urchin/HealthKit/HealthKitDataSync.swift; sourceTree = SOURCE_ROOT; };
+		4DBC53491C30A9230062FDEA /* HealthKitManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitManager.swift; path = Urchin/HealthKit/HealthKitManager.swift; sourceTree = SOURCE_ROOT; };
+		4DBC53511C30B48C0062FDEA /* GranolaData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GranolaData.swift; path = Urchin/HealthKit/GranolaData.swift; sourceTree = SOURCE_ROOT; };
+		4DBC53551C3242420062FDEA /* NSArray+ObjectiveSugar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSArray+ObjectiveSugar.h"; path = "ObjectiveSugar/Classes/NSArray+ObjectiveSugar.h"; sourceTree = "<group>"; };
+		4DBC53561C3242420062FDEA /* NSArray+ObjectiveSugar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSArray+ObjectiveSugar.m"; path = "ObjectiveSugar/Classes/NSArray+ObjectiveSugar.m"; sourceTree = "<group>"; };
+		4DBC53571C3242420062FDEA /* NSDictionary+ObjectiveSugar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSDictionary+ObjectiveSugar.h"; path = "ObjectiveSugar/Classes/NSDictionary+ObjectiveSugar.h"; sourceTree = "<group>"; };
+		4DBC53581C3242420062FDEA /* NSDictionary+ObjectiveSugar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSDictionary+ObjectiveSugar.m"; path = "ObjectiveSugar/Classes/NSDictionary+ObjectiveSugar.m"; sourceTree = "<group>"; };
+		4DBC53591C3242420062FDEA /* NSMutableArray+ObjectiveSugar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSMutableArray+ObjectiveSugar.h"; path = "ObjectiveSugar/Classes/NSMutableArray+ObjectiveSugar.h"; sourceTree = "<group>"; };
+		4DBC535A1C3242420062FDEA /* NSMutableArray+ObjectiveSugar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSMutableArray+ObjectiveSugar.m"; path = "ObjectiveSugar/Classes/NSMutableArray+ObjectiveSugar.m"; sourceTree = "<group>"; };
+		4DBC535B1C3242420062FDEA /* NSNumber+ObjectiveSugar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSNumber+ObjectiveSugar.h"; path = "ObjectiveSugar/Classes/NSNumber+ObjectiveSugar.h"; sourceTree = "<group>"; };
+		4DBC535C1C3242420062FDEA /* NSNumber+ObjectiveSugar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSNumber+ObjectiveSugar.m"; path = "ObjectiveSugar/Classes/NSNumber+ObjectiveSugar.m"; sourceTree = "<group>"; };
+		4DBC535D1C3242420062FDEA /* NSSet+ObjectiveSugar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSSet+ObjectiveSugar.h"; path = "ObjectiveSugar/Classes/NSSet+ObjectiveSugar.h"; sourceTree = "<group>"; };
+		4DBC535E1C3242420062FDEA /* NSSet+ObjectiveSugar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSSet+ObjectiveSugar.m"; path = "ObjectiveSugar/Classes/NSSet+ObjectiveSugar.m"; sourceTree = "<group>"; };
+		4DBC535F1C3242420062FDEA /* NSString+ObjectiveSugar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+ObjectiveSugar.h"; path = "ObjectiveSugar/Classes/NSString+ObjectiveSugar.h"; sourceTree = "<group>"; };
+		4DBC53601C3242420062FDEA /* NSString+ObjectiveSugar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+ObjectiveSugar.m"; path = "ObjectiveSugar/Classes/NSString+ObjectiveSugar.m"; sourceTree = "<group>"; };
+		4DBC53611C3242420062FDEA /* ObjectiveSugar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ObjectiveSugar.h; path = ObjectiveSugar/Classes/ObjectiveSugar.h; sourceTree = "<group>"; };
+		92E7D795B176FAC800CA8CA9 /* Pods_urchinTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_urchinTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9485591FB1EE6D91767F0C5A /* Pods-urchinTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-urchinTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-urchinTests/Pods-urchinTests.release.xcconfig"; sourceTree = "<group>"; };
 		AA03FB891B5848FD001B9435 /* APIConnect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIConnect.swift; sourceTree = "<group>"; };
 		AA3484EF1B559EA10028C49B /* HashtagsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HashtagsView.swift; sourceTree = "<group>"; };
@@ -192,6 +238,7 @@
 		AAFBE7DD1B69814B007E480D /* UIApplicationExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIApplicationExtension.swift; sourceTree = "<group>"; };
 		AF48E6DCE06AD1511120EDC3 /* Pods-urchin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-urchin.release.xcconfig"; path = "Pods/Target Support Files/Pods-urchin/Pods-urchin.release.xcconfig"; sourceTree = "<group>"; };
 		B68E90E9C8ED3E38B80AC1F5 /* Pods-urchinTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-urchinTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-urchinTests/Pods-urchinTests.debug.xcconfig"; sourceTree = "<group>"; };
+		E6DFA4ED519BA00A2A7A5667 /* Pods_urchin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_urchin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -200,7 +247,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4D47CD7D1C18EC4C00AAA8A9 /* HealthKit.framework in Frameworks */,
-				8F9DFEB0E7136A0E82C75612 /* libPods-urchin.a in Frameworks */,
+				E7E305F1462CC8EEE84B62B5 /* Pods_urchin.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -208,18 +255,62 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5D6006F624943A95782D3AE6 /* libPods-urchinTests.a in Frameworks */,
+				AC9866148634B72B97B4B8FB /* Pods_urchinTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4DBC52CF1C2B66AA0062FDEA /* Granola */ = {
+			isa = PBXGroup;
+			children = (
+				4DBC52C31C2B66A40062FDEA /* OMHSerializer.m */,
+				4DBC52C41C2B66A40062FDEA /* OMHSerializer.h */,
+				4DBC52C51C2B66A40062FDEA /* OMHHealthKitConstantsMapper.m */,
+				4DBC52C61C2B66A40062FDEA /* OMHHealthKitConstantsMapper.h */,
+				4DBC52C71C2B66A40062FDEA /* OMHError.m */,
+				4DBC52C81C2B66A40062FDEA /* OMHError.h */,
+				4DBC52C91C2B66A40062FDEA /* NSDate+RFC3339.m */,
+				4DBC52CA1C2B66A40062FDEA /* NSDate+RFC3339.h */,
+			);
+			name = Granola;
+			sourceTree = "<group>";
+		};
+		4DBC53461C30A6E00062FDEA /* HealthKit */ = {
+			isa = PBXGroup;
+			children = (
+				4DBC53511C30B48C0062FDEA /* GranolaData.swift */,
+				4DBC53481C30A9230062FDEA /* HealthKitDataSync.swift */,
+				4DBC53491C30A9230062FDEA /* HealthKitManager.swift */,
+			);
+			name = HealthKit;
+			sourceTree = "<group>";
+		};
+		4DBC53541C32421F0062FDEA /* ObjectiveSugar */ = {
+			isa = PBXGroup;
+			children = (
+				4DBC53551C3242420062FDEA /* NSArray+ObjectiveSugar.h */,
+				4DBC53561C3242420062FDEA /* NSArray+ObjectiveSugar.m */,
+				4DBC53571C3242420062FDEA /* NSDictionary+ObjectiveSugar.h */,
+				4DBC53581C3242420062FDEA /* NSDictionary+ObjectiveSugar.m */,
+				4DBC53591C3242420062FDEA /* NSMutableArray+ObjectiveSugar.h */,
+				4DBC535A1C3242420062FDEA /* NSMutableArray+ObjectiveSugar.m */,
+				4DBC535B1C3242420062FDEA /* NSNumber+ObjectiveSugar.h */,
+				4DBC535C1C3242420062FDEA /* NSNumber+ObjectiveSugar.m */,
+				4DBC535D1C3242420062FDEA /* NSSet+ObjectiveSugar.h */,
+				4DBC535E1C3242420062FDEA /* NSSet+ObjectiveSugar.m */,
+				4DBC535F1C3242420062FDEA /* NSString+ObjectiveSugar.h */,
+				4DBC53601C3242420062FDEA /* NSString+ObjectiveSugar.m */,
+				4DBC53611C3242420062FDEA /* ObjectiveSugar.h */,
+			);
+			name = ObjectiveSugar;
+			sourceTree = "<group>";
+		};
 		AA03FB881B5848CD001B9435 /* API */ = {
 			isa = PBXGroup;
 			children = (
 				AA03FB891B5848FD001B9435 /* APIConnect.swift */,
-				4D4913B91C26629A00BB733C /* HealthKitManager.swift */,
 				48E4A4421BEE5879001A7B35 /* Reachability.swift */,
 			);
 			name = API;
@@ -324,6 +415,8 @@
 				AABCEF861B3231910064FE49 /* urchin */,
 				AABCEF9C1B3231910064FE49 /* urchinTests */,
 				AABCEF851B3231910064FE49 /* Products */,
+				4DBC52CF1C2B66AA0062FDEA /* Granola */,
+				4DBC53541C32421F0062FDEA /* ObjectiveSugar */,
 				CDA52DF66D30C54C71E7D727 /* Pods */,
 				D229E2E1EC74F7AC0E3C54DF /* Frameworks */,
 			);
@@ -348,6 +441,7 @@
 				AABCEF921B3231910064FE49 /* LaunchScreen.xib */,
 				AABCEF901B3231910064FE49 /* Images.xcassets */,
 				AA03FB881B5848CD001B9435 /* API */,
+				4DBC53461C30A6E00062FDEA /* HealthKit */,
 				AA08280B1B5D7AC80016A7A3 /* Core Data */,
 				AABCEF871B3231910064FE49 /* Supporting Files */,
 				AAEFB1651B5049FC000EF8B4 /* Data */,
@@ -442,8 +536,8 @@
 			isa = PBXGroup;
 			children = (
 				4D47CD7C1C18EC4C00AAA8A9 /* HealthKit.framework */,
-				6D6315F54A7CFCD347D0A22B /* libPods-urchin.a */,
-				73A0C1EAC597832538172F5F /* libPods-urchinTests.a */,
+				E6DFA4ED519BA00A2A7A5667 /* Pods_urchin.framework */,
+				92E7D795B176FAC800CA8CA9 /* Pods_urchinTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -718,19 +812,31 @@
 			files = (
 				AA698EED1B545A07004154E0 /* EditNoteViewController.swift in Sources */,
 				AA6932091B66E8260057F0A0 /* AddNoteVCAlertViewDelegate.swift in Sources */,
+				4DBC53651C3242420062FDEA /* NSNumber+ObjectiveSugar.m in Sources */,
 				AAB6B0531B605C440051472C /* FadeAnimator.swift in Sources */,
 				AA6932141B66EE0C0057F0A0 /* ConstantsAndStyle.swift in Sources */,
+				4DBC52CD1C2B66A40062FDEA /* OMHError.m in Sources */,
 				AAA3F3131B508384000EB344 /* HashtagBolder.swift in Sources */,
 				AA3484F01B559EA10028C49B /* HashtagsView.swift in Sources */,
 				AA993E301B3316C10027804C /* LoginViewController.swift in Sources */,
 				AABCEFAE1B3234360064FE49 /* Note.swift in Sources */,
+				4DBC52CC1C2B66A40062FDEA /* OMHHealthKitConstantsMapper.m in Sources */,
+				4DBC534D1C30A9230062FDEA /* HealthKitManager.swift in Sources */,
 				AA6932061B66E6B60057F0A0 /* AddNoteVCTableViewDelegate.swift in Sources */,
-				4D4913BA1C26629A00BB733C /* HealthKitManager.swift in Sources */,
+				4DBC52CE1C2B66A40062FDEA /* NSDate+RFC3339.m in Sources */,
 				AA3484F41B56AED20028C49B /* UIDateFormatterExtension.swift in Sources */,
+				4DBC52CB1C2B66A40062FDEA /* OMHSerializer.m in Sources */,
+				4DBC53661C3242420062FDEA /* NSSet+ObjectiveSugar.m in Sources */,
 				AA6932031B66E5FB0057F0A0 /* AddNoteVCTableViewDataSource.swift in Sources */,
+				4DBC53621C3242420062FDEA /* NSArray+ObjectiveSugar.m in Sources */,
 				AAFBE7DE1B69814B007E480D /* UIApplicationExtension.swift in Sources */,
+				4DBC53521C30B48C0062FDEA /* GranolaData.swift in Sources */,
+				4DBC53641C3242420062FDEA /* NSMutableArray+ObjectiveSugar.m in Sources */,
+				4DBC53671C3242420062FDEA /* NSString+ObjectiveSugar.m in Sources */,
 				AA3652CC1B34A163001F514D /* Patient.swift in Sources */,
 				AA829BB91B7409E500DFEBA0 /* UrchinData.xcdatamodeld in Sources */,
+				4DBC53631C3242420062FDEA /* NSDictionary+ObjectiveSugar.m in Sources */,
+				4DBC534C1C30A9230062FDEA /* HealthKitDataSync.swift in Sources */,
 				48E4A4431BEE5879001A7B35 /* Reachability.swift in Sources */,
 				AA6932001B66E5450057F0A0 /* AddNoteVCTextViewDelegate.swift in Sources */,
 				AA03FB8A1B5848FD001B9435 /* APIConnect.swift in Sources */,
@@ -750,32 +856,44 @@
 			buildActionMask = 2147483647;
 			files = (
 				AA7920211B62AB5A0046038B /* EditNoteViewController.swift in Sources */,
+				4DBC536A1C3242500062FDEA /* NSMutableArray+ObjectiveSugar.m in Sources */,
+				4DBC536C1C3242500062FDEA /* NSSet+ObjectiveSugar.m in Sources */,
 				AA7920271B62AB920046038B /* FadeAnimator.swift in Sources */,
+				4DBC536D1C3242500062FDEA /* NSString+ObjectiveSugar.m in Sources */,
+				4DBC53681C3242500062FDEA /* NSArray+ObjectiveSugar.m in Sources */,
+				4DBC52D31C2B66DC0062FDEA /* NSDate+RFC3339.m in Sources */,
 				AA6932041B66E6210057F0A0 /* AddNoteVCTableViewDataSource.swift in Sources */,
 				AA6AF8F11B5EA81F0011F246 /* dateFormatterExtensionTests.swift in Sources */,
+				4DBC52D01C2B66D20062FDEA /* OMHSerializer.m in Sources */,
 				AA7920251B62AB790046038B /* NoteCell.swift in Sources */,
 				AA6932071B66E6D30057F0A0 /* AddNoteVCTableViewDelegate.swift in Sources */,
 				AA6932011B66E5910057F0A0 /* AddNoteVCTextViewDelegate.swift in Sources */,
 				AA69320A1B66E8440057F0A0 /* AddNoteVCAlertViewDelegate.swift in Sources */,
+				4DBC534F1C30B3F30062FDEA /* HealthKitManager.swift in Sources */,
+				4DBC53501C30B3F60062FDEA /* HealthKitDataSync.swift in Sources */,
 				AA79201F1B62AB470046038B /* NotesViewController.swift in Sources */,
 				AAFBE7DF1B698229007E480D /* UIApplicationExtension.swift in Sources */,
+				4DBC53531C3105870062FDEA /* GranolaData.swift in Sources */,
 				AA79201D1B62AB330046038B /* Patient.swift in Sources */,
 				AA7920281B62AB9D0046038B /* AppDelegate.swift in Sources */,
 				AA79201B1B62AB2B0046038B /* Note.swift in Sources */,
+				4DBC52D11C2B66D60062FDEA /* OMHHealthKitConstantsMapper.m in Sources */,
 				AA6AF8EF1B5EA2AC0011F246 /* HashtagBolder.swift in Sources */,
 				AA79201C1B62AB2F0046038B /* User.swift in Sources */,
 				AA7920231B62AB630046038B /* LoadingView.swift in Sources */,
+				4DBC536B1C3242500062FDEA /* NSNumber+ObjectiveSugar.m in Sources */,
 				AA6AF8F21B5EA8920011F246 /* UIDateFormatterExtension.swift in Sources */,
 				AA7920201B62AB560046038B /* AddNoteViewController.swift in Sources */,
 				AA6932151B66FAC00057F0A0 /* ConstantsAndStyle.swift in Sources */,
 				AA6931EC1B66D4E90057F0A0 /* HashtagsScrollView.swift in Sources */,
+				4DBC53691C3242500062FDEA /* NSDictionary+ObjectiveSugar.m in Sources */,
 				AABCEFA01B3231910064FE49 /* hashtagBolderTests.swift in Sources */,
 				AA79201E1B62AB430046038B /* LoginViewController.swift in Sources */,
 				AA7920241B62AB760046038B /* UserDropDownCell.swift in Sources */,
 				AA79201A1B62A9070046038B /* APIConnect.swift in Sources */,
 				AA6A7D7A1B62B1A4008215D8 /* apiConnectorTests.swift in Sources */,
-				4D4913BB1C27467400BB733C /* HealthKitManager.swift in Sources */,
 				48E4A4441BEE5879001A7B35 /* Reachability.swift in Sources */,
+				4DBC52D21C2B66D90062FDEA /* OMHError.m in Sources */,
 				AA7920221B62AB5F0046038B /* HashtagsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

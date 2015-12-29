@@ -1,0 +1,6 @@
+framework module Pods_urchin {
+  umbrella header "Pods-urchin-umbrella.h"
+
+  export *
+  module * { export * }
+}

@@ -895,7 +895,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
             if (groups.count == 1) {
                 
                 if (indexPath.section == sectionIndex(TableSection.HealthKit)) {
-                    observeHealthData()
+                    authorizeAndEnableHealthDataSync()
                 } else if (indexPath.section == sectionIndex(TableSection.Logout)) {
                     self.logout()
                 }
@@ -926,7 +926,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
                     // toggle the dropDownMenu (hides the dropDownMenu)
                     self.dropDownMenuPressed()
                 } else if (indexPath.section == sectionIndex(TableSection.HealthKit)) {
-                    observeHealthData()
+                    authorizeAndEnableHealthDataSync()
                 } else if (indexPath.section == sectionIndex(TableSection.Logout)) {
                     self.logout()
                 }
@@ -1012,19 +1012,11 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         return sectionIndex;
     }
     
-    private func observeHealthData() {
+    private func authorizeAndEnableHealthDataSync() {
         if (HealthKitManager.sharedInstance.isHealthDataAvailable) {
-            HealthKitManager.sharedInstance.authorize(shouldAuthorizeBloodGlucoseSamples: true, shouldAuthorizeWorkoutSamples: true) {
-                success, error -> Void in
-                if (error == nil) {
-                    HealthKitManager.sharedInstance.observeBloodGlucoseSamples(nil)
-                    HealthKitManager.sharedInstance.observeWorkoutSamples(nil)
-                    HealthKitManager.sharedInstance.enableBackgroundDeliveryBloodGlucoseSamples(nil)
-                    HealthKitManager.sharedInstance.enableBackgroundDeliveryWorkoutSamples(nil)
-                } else {
-                    NSLog("Error authorizing health data \(error), \(error!.userInfo)")
-                }
-            }
+            HealthKitDataSync.sharedInstance.authorizeAndStartSyncing(
+                shouldSyncBloodGlucoseSamples: true,
+                shouldSyncWorkoutSamples: true)
         }
     }
 }

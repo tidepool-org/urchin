@@ -38,18 +38,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Change status bar item color
         UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.LightContent
-        
-        // Set up HealthKit observation and background query. NOTE: Currently authorization
-        // for sharing HealthKit data is in 'settings' to avoid an initial surprising full
-        // screen modal UI at launch, but, these queries need to be set up at launch, if authorized,
-        // and immediately after authorization, if authorization hasn't yet been attempted. So, we
-        // do this lazily in HealthKitManager and call it both here, on launch, and after authorization,
-        // in settings.
+
         if (HealthKitManager.sharedInstance.isHealthDataAvailable) {
-            HealthKitManager.sharedInstance.observeBloodGlucoseSamples(nil)
-            HealthKitManager.sharedInstance.observeWorkoutSamples(nil)
-            HealthKitManager.sharedInstance.enableBackgroundDeliveryBloodGlucoseSamples(nil)
-            HealthKitManager.sharedInstance.enableBackgroundDeliveryWorkoutSamples(nil)
+            HealthKitDataSync.sharedInstance.startSyncing(
+                shouldSyncBloodGlucoseSamples: true,
+                shouldSyncWorkoutSamples: true)
         }
 
         NSLog("did finish launching")

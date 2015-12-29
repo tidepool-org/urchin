@@ -1,0 +1,6 @@
+[submodule "Granola"]
+	path = Granola
+	url = git@github.com:openmhealth/Granola.git
+[submodule "ObjectiveSugar"]
+	path = ObjectiveSugar
+	url = git@github.com:supermarin/ObjectiveSugar.git

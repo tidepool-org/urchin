@@ -3,9 +3,11 @@ source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '8.1'
 
 target :urchin do
-  pod "Granola"
+  use_frameworks!
+  pod "RealmSwift"
 end
 
 target :urchinTests do
-  pod "Granola"
+  use_frameworks!
+  pod "RealmSwift"
 end
