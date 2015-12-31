@@ -6,25 +6,26 @@ Urchin is an iOS notes client for Type-1 Diabetes (T1D) built on top of the [Tid
 
 ## Requirements:
 
-- XCode 6.0 or higher
+- XCode 7.2 or higher
 - Xcode's Command Line Tools. From Xcode, install via *Xcode → Preferences → Downloads*.
 - xctool. Install using the following command:
 		`brew install xctool`
 
 ## Running the project
 
-Clone this repo to run in the iOS Simulator.
+This project uses CocoaPods. Clone this repo and open Urchin.xcworkspace in Xcode. Build and run in the iOS Simulator.
 
 ### To run tests:
 
 Run the command:
-`xctool test -project Urchin.xcodeproj -scheme Urchin -sdk iphonesimulator clean build CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO`
+`xctool test -workspace Urchin.xcworkspace -scheme Urchin -sdk iphonesimulator clean build CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO`
+
 
 ### To change environment:
 
 In `APIConnect.swift`, change the global state variable 'baseURL' to your preferred environment.
 
-For development, use the dev environment: 'https://devel-api.tidepool.io'. You may need to create an account at [Blip-devel](blip-devel.tidepool.io) to test.
+For development, use the dev environment: 'https://dev-api.tidepool.org'. You may need to create an account to test.
 
 ## Style and Formatting
 
