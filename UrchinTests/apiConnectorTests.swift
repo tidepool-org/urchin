@@ -56,12 +56,18 @@ class apiConnectorTests: XCTestCase {
         
         // To be completed once response has been received. Verify that the proper status code was received.
         let completion = { (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
-            // Parse the response.
-            let jsonResult: NSDictionary = ((try? NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers)) as? NSDictionary)!
-            let code = jsonResult.valueForKey("code") as! Int
-            
-            // Test for invalid login credentials code.
-            XCTAssertEqual(code, 401, "Invalid login")
+            if (error != nil && response == nil && data == nil) {
+                NSLog("\(__FUNCTION__): Login request failed, error: \(error.userInfo)")
+                XCTFail("Error: \(error.userInfo)")
+            } else {
+                // Parse the response.
+                let jsonResult: NSDictionary = ((try? NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers)) as? NSDictionary)!
+                let code = jsonResult.valueForKey("code") as! Int
+                
+                // Test for invalid login credentials code.
+                XCTAssertEqual(code, 401, "Invalid login")
+            }
+
             // Fulfill the expectation so test passes time constraint.
             expectation.fulfill()
         }

@@ -106,6 +106,19 @@ class APIConnector {
         }
         
         let completion = { (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
+            defer {
+                // If there is a loginVC, remove the loading view from it
+                if (loginVC != nil) {
+                    loading.removeFromSuperview()
+                }
+            }
+            
+            if (error != nil && response == nil && data == nil) {
+                NSLog("\(__FUNCTION__): Could not login, error: \(error.userInfo)")
+                self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
+                return
+            }
+            
             let jsonResult: NSDictionary = ((try? NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers)) as? NSDictionary)!
             
             if let code = jsonResult.valueForKey("code") as? Int {
@@ -182,10 +195,6 @@ class APIConnector {
                     
                     self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
                 }
-            }
-            // If there is a loginVC, remove the loading view from it
-            if (loginVC != nil) {
-                loading.removeFromSuperview()
             }
         }
         
@@ -346,6 +355,12 @@ class APIConnector {
         }
         
         let completion = { (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
+            if (error != nil && response == nil && data == nil) {
+                NSLog("\(__FUNCTION__): Could not refresh session token, error: \(error.userInfo)")
+                self.tryLoginFromRefreshToken()
+                return
+            }
+            
             let jsonResult: NSDictionary = ((try? NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers)) as? NSDictionary)!
             
             if let code = jsonResult.valueForKey("code") as? Int {
@@ -390,7 +405,6 @@ class APIConnector {
         
         // Post the request.
         self.request("GET", urlExtension: urlExtension, headerDict: headerDict, body: nil, preRequest: preRequest, completion: completion)
-        
     }
     
     func tryLoginFromRefreshToken() {
