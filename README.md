@@ -6,7 +6,7 @@ Urchin is an iOS notes client for Type-1 Diabetes (T1D) built on top of the [Tid
 
 ## Requirements:
 
-- XCode 7.2 or higher
+- Xcode 7.2 or higher
 - Xcode's Command Line Tools. From Xcode, install via *Xcode → Preferences → Downloads*.
 - xctool. Install using the following command:
 		`brew install xctool`
