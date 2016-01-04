@@ -22,8 +22,8 @@
 		4DBC534D1C30A9230062FDEA /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DBC53491C30A9230062FDEA /* HealthKitManager.swift */; };
 		4DBC534F1C30B3F30062FDEA /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DBC53491C30A9230062FDEA /* HealthKitManager.swift */; };
 		4DBC53501C30B3F60062FDEA /* HealthKitDataSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DBC53481C30A9230062FDEA /* HealthKitDataSync.swift */; };
-		4DBC53521C30B48C0062FDEA /* GranolaData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DBC53511C30B48C0062FDEA /* GranolaData.swift */; };
-		4DBC53531C3105870062FDEA /* GranolaData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DBC53511C30B48C0062FDEA /* GranolaData.swift */; };
+		4DBC53521C30B48C0062FDEA /* HealthKitData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DBC53511C30B48C0062FDEA /* HealthKitData.swift */; };
+		4DBC53531C3105870062FDEA /* HealthKitData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DBC53511C30B48C0062FDEA /* HealthKitData.swift */; };
 		4DBC53621C3242420062FDEA /* NSArray+ObjectiveSugar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DBC53561C3242420062FDEA /* NSArray+ObjectiveSugar.m */; };
 		4DBC53631C3242420062FDEA /* NSDictionary+ObjectiveSugar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DBC53581C3242420062FDEA /* NSDictionary+ObjectiveSugar.m */; };
 		4DBC53641C3242420062FDEA /* NSMutableArray+ObjectiveSugar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DBC535A1C3242420062FDEA /* NSMutableArray+ObjectiveSugar.m */; };
@@ -163,7 +163,7 @@
 		4DBC52CA1C2B66A40062FDEA /* NSDate+RFC3339.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSDate+RFC3339.h"; path = "Granola/Pod/Classes/NSDate+RFC3339.h"; sourceTree = "<group>"; };
 		4DBC53481C30A9230062FDEA /* HealthKitDataSync.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitDataSync.swift; path = Urchin/HealthKit/HealthKitDataSync.swift; sourceTree = SOURCE_ROOT; };
 		4DBC53491C30A9230062FDEA /* HealthKitManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitManager.swift; path = Urchin/HealthKit/HealthKitManager.swift; sourceTree = SOURCE_ROOT; };
-		4DBC53511C30B48C0062FDEA /* GranolaData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GranolaData.swift; path = Urchin/HealthKit/GranolaData.swift; sourceTree = SOURCE_ROOT; };
+		4DBC53511C30B48C0062FDEA /* HealthKitData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitData.swift; path = Urchin/HealthKit/HealthKitData.swift; sourceTree = SOURCE_ROOT; };
 		4DBC53551C3242420062FDEA /* NSArray+ObjectiveSugar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSArray+ObjectiveSugar.h"; path = "ObjectiveSugar/Classes/NSArray+ObjectiveSugar.h"; sourceTree = "<group>"; };
 		4DBC53561C3242420062FDEA /* NSArray+ObjectiveSugar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSArray+ObjectiveSugar.m"; path = "ObjectiveSugar/Classes/NSArray+ObjectiveSugar.m"; sourceTree = "<group>"; };
 		4DBC53571C3242420062FDEA /* NSDictionary+ObjectiveSugar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSDictionary+ObjectiveSugar.h"; path = "ObjectiveSugar/Classes/NSDictionary+ObjectiveSugar.h"; sourceTree = "<group>"; };
@@ -280,7 +280,7 @@
 		4DBC53461C30A6E00062FDEA /* HealthKit */ = {
 			isa = PBXGroup;
 			children = (
-				4DBC53511C30B48C0062FDEA /* GranolaData.swift */,
+				4DBC53511C30B48C0062FDEA /* HealthKitData.swift */,
 				4DBC53481C30A9230062FDEA /* HealthKitDataSync.swift */,
 				4DBC53491C30A9230062FDEA /* HealthKitManager.swift */,
 			);
@@ -830,7 +830,7 @@
 				AA6932031B66E5FB0057F0A0 /* AddNoteVCTableViewDataSource.swift in Sources */,
 				4DBC53621C3242420062FDEA /* NSArray+ObjectiveSugar.m in Sources */,
 				AAFBE7DE1B69814B007E480D /* UIApplicationExtension.swift in Sources */,
-				4DBC53521C30B48C0062FDEA /* GranolaData.swift in Sources */,
+				4DBC53521C30B48C0062FDEA /* HealthKitData.swift in Sources */,
 				4DBC53641C3242420062FDEA /* NSMutableArray+ObjectiveSugar.m in Sources */,
 				4DBC53671C3242420062FDEA /* NSString+ObjectiveSugar.m in Sources */,
 				AA3652CC1B34A163001F514D /* Patient.swift in Sources */,
@@ -873,7 +873,7 @@
 				4DBC53501C30B3F60062FDEA /* HealthKitDataSync.swift in Sources */,
 				AA79201F1B62AB470046038B /* NotesViewController.swift in Sources */,
 				AAFBE7DF1B698229007E480D /* UIApplicationExtension.swift in Sources */,
-				4DBC53531C3105870062FDEA /* GranolaData.swift in Sources */,
+				4DBC53531C3105870062FDEA /* HealthKitData.swift in Sources */,
 				AA79201D1B62AB330046038B /* Patient.swift in Sources */,
 				AA7920281B62AB9D0046038B /* AppDelegate.swift in Sources */,
 				AA79201B1B62AB2B0046038B /* Note.swift in Sources */,

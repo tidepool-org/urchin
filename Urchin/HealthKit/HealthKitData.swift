@@ -16,7 +16,7 @@
 import HealthKit
 import RealmSwift
 
-class GranolaData: Object {
+class HealthKitData: Object {
     enum Action: Int {
         case Unknown = 0, Added, Deleted
     }
@@ -24,5 +24,6 @@ class GranolaData: Object {
     dynamic var id = ""
     dynamic var action = Action.Unknown.rawValue
     dynamic var createdAt = NSDate()
+    dynamic var timeZoneOffset = NSCalendar.currentCalendar().timeZone.secondsFromGMT / 60
     dynamic var granolaJson = ""
 }

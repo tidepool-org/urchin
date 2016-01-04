@@ -139,18 +139,17 @@ class HealthKitDataSync {
             realm.beginWrite()
             
             for sample in samples {
-                let granolaData = GranolaData()
-                granolaData.id = sample.UUID.UUIDString
-                granolaData.action = GranolaData.Action.Added.rawValue
-                granolaData.createdAt = NSDate()
+                let healthKitData = HealthKitData()
+                healthKitData.id = sample.UUID.UUIDString
+                healthKitData.action = HealthKitData.Action.Added.rawValue
                 
                 let serializer = OMHSerializer()
-                granolaData.granolaJson = try serializer.jsonForSample(sample)
+                healthKitData.granolaJson = try serializer.jsonForSample(sample)
                 
-                NSLog("Granola sample: \(granolaData.granolaJson)");
+                NSLog("Granola sample: \(healthKitData.granolaJson)");
 
                 // TODO: my - Confirm that composite key of id + action does not exist before attempting to add to avoid dups?
-                realm.add(granolaData)
+                realm.add(healthKitData)
             }
             
             try realm.commitWrite()
@@ -166,16 +165,15 @@ class HealthKitDataSync {
             
             try realm.write() {
                 for sample in deletedSamples {
-                    let granolaData = GranolaData()
-                    granolaData.id = sample.UUID.UUIDString
-                    granolaData.action = GranolaData.Action.Deleted.rawValue
-                    granolaData.createdAt = NSDate()
-                    granolaData.granolaJson = ""
+                    let healthKitData = HealthKitData()
+                    healthKitData.id = sample.UUID.UUIDString
+                    healthKitData.action = HealthKitData.Action.Deleted.rawValue
+                    healthKitData.granolaJson = ""
 
-                    NSLog("Deleted sample: \(granolaData.id)");
+                    NSLog("Deleted sample: \(healthKitData.id)");
 
                     // TODO: my - Confirm that composite key of id + action does not exist before attempting to add to avoid dups?
-                    realm.add(granolaData)
+                    realm.add(healthKitData)
                 }
             }
         } catch let error as NSError! {
