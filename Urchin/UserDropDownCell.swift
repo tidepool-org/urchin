@@ -51,25 +51,40 @@ class UserDropDownCell: UITableViewCell {
             separator.backgroundColor = whiteQuarterAlpha
             self.addSubview(separator)
         } else if (key == "healthkit") {
-            self.nameLabel.text = healthKitTitle
+            nameLabel.text = healthKitTitle
             nameLabel.font = mediumBoldFont
             nameLabel.sizeToFit()
             nameLabel.frame.origin.y = userCellThickSeparator + userCellInset
             
-            // Configure the thick separator at the top
-            // take out the height of the thin separator because the cell above has a thin separator at the bottom
-            separator.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: userCellThickSeparator)
+            // Configure the separator at the top
+            separator.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: userCellThinSeparator)
+            separator.backgroundColor = whiteQuarterAlpha
+            self.addSubview(separator)
+        } else if (key == "healthkit-sync") {
+            let lastSyncCount = HealthKitDataSync.sharedInstance.lastSyncCount
+            let lastSyncTime = NSDateFormatter.localizedStringFromDate(HealthKitDataSync.sharedInstance.lastSyncTime, dateStyle: .ShortStyle, timeStyle: .ShortStyle)
+            if (lastSyncCount == 1) {
+                nameLabel.text = String(format: healthKitSyncStatusSingularFormat, HealthKitDataSync.sharedInstance.lastSyncCount, lastSyncTime)
+                
+            } else if (lastSyncCount > 1) {
+                nameLabel.text = String(format: healthKitSyncStatusPluralFormat, HealthKitDataSync.sharedInstance.lastSyncCount, lastSyncTime)
+            }
+            nameLabel.font = smallRegularFont
+            nameLabel.sizeToFit()
+            nameLabel.frame.origin = CGPoint(x: 3 * userCellInset, y: userCellThinSeparator + userCellHealthKitSampleInset)
+            
+            // Configure the separator
+            separator.frame = CGRect(x: 2 * userCellInset, y: 0, width: self.frame.width - 2 * userCellInset, height: userCellThinSeparator)
             separator.backgroundColor = whiteQuarterAlpha
             self.addSubview(separator)
         } else if (key == "logout") {
-            self.nameLabel.text = logoutTitle
+            nameLabel.text = logoutTitle
             nameLabel.font = mediumBoldFont
             nameLabel.sizeToFit()
             nameLabel.frame.origin.y = userCellThickSeparator + userCellInset
             
-            // Configure the thick separator at the top
-            // take out the height of the thin separator because the cell above has a thin separator at the bottom
-            separator.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: userCellThickSeparator)
+            // Configure the thin separator at the top
+            separator.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: userCellThinSeparator)
             separator.backgroundColor = whiteQuarterAlpha
             self.addSubview(separator)
         } else if (key == "group") {
@@ -87,7 +102,7 @@ class UserDropDownCell: UITableViewCell {
             self.nameLabel.frame.origin = CGPoint(x: 3*userCellInset, y: userCellInset)            
         } else if (key == "version") {
             // Configure the name label to contain the version
-            self.nameLabel.text = UIApplication.versionBuildServer()
+            nameLabel.text = UIApplication.versionBuildServer()
             nameLabel.font = smallRegularFont
             nameLabel.sizeToFit()
             nameLabel.frame.origin.x = self.frame.width / 2 - nameLabel.frame.width / 2
@@ -115,7 +130,7 @@ class UserDropDownCell: UITableViewCell {
         self.group = group
         
         // configure the name label with the group name
-        self.nameLabel.text = group.fullName
+        nameLabel.text = group.fullName
         if (bold) {
             nameLabel.font = mediumBoldFont
         } else {

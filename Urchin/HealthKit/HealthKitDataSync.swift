@@ -34,8 +34,56 @@ class HealthKitDataSync {
         
         // Set this as the configuration used for the default Realm
         Realm.Configuration.defaultConfiguration = config
+
+        var syncTime = NSUserDefaults.standardUserDefaults().objectForKey("lastSyncTimeBloodGlucoseSamples")
+        if (syncTime != nil) {
+            lastSyncTimeBloodGlucoseSamples = syncTime as! NSDate
+            lastSyncCountBloodGlucoseSamples = NSUserDefaults.standardUserDefaults().integerForKey("lastSyncCountBloodGlucoseSamples")
+        }
+        
+        syncTime = NSUserDefaults.standardUserDefaults().objectForKey("lastSyncTimeWorkoutSamples")
+        if (syncTime != nil) {
+            lastSyncTimeWorkoutSamples = syncTime as! NSDate
+            lastSyncCountWorkoutSamples = NSUserDefaults.standardUserDefaults().integerForKey("lastSyncCountWorkoutSamples")
+        }
     }
- 
+    
+    internal(set) var lastSyncCountBloodGlucoseSamples = -1
+    internal(set) var lastSyncTimeBloodGlucoseSamples = NSDate.distantPast()
+
+    internal(set) var lastSyncCountWorkoutSamples = -1
+    internal(set) var lastSyncTimeWorkoutSamples = NSDate.distantPast()
+    
+    var lastSyncCount: Int {
+        get {
+            let time = lastSyncTime
+            var count = 0
+            if (lastSyncCountBloodGlucoseSamples > 0 && fabs(lastSyncTimeBloodGlucoseSamples.timeIntervalSinceDate(time)) < 60) {
+                count += lastSyncCountBloodGlucoseSamples
+            }
+            if (lastSyncCountWorkoutSamples > 0 && fabs(lastSyncTimeWorkoutSamples.timeIntervalSinceDate(time)) < 60) {
+                count += lastSyncCountWorkoutSamples
+            }
+            return count
+        }
+    }
+    
+    var lastSyncTime: NSDate {
+        get {
+            var time = NSDate.distantPast()
+            if (lastSyncCountBloodGlucoseSamples > 0 && time.compare(lastSyncTimeBloodGlucoseSamples) == .OrderedAscending) {
+                time = lastSyncTimeBloodGlucoseSamples
+            }
+            if (lastSyncCountWorkoutSamples > 0 && time.compare(lastSyncTimeWorkoutSamples) == .OrderedAscending) {
+                time = lastSyncTimeWorkoutSamples
+            }
+            return time
+        }
+    }
+
+    let observedBloodGlucoseSamplesNotification = "HealthKitDataSync-observed-\(HKWorkoutTypeIdentifier)"
+    let observedWorkoutSamplesNotification = "HealthKitDataSync-observed-\(HKWorkoutTypeIdentifier)"
+
     func authorizeAndStartSyncing(
             shouldSyncBloodGlucoseSamples shouldSyncBloodGlucoseSamples: Bool,
             shouldSyncWorkoutSamples: Bool)
@@ -73,8 +121,10 @@ class HealthKitDataSync {
                         if (deletedSamples != nil) {
                             NSLog("********* PROCESSING \(deletedSamples!.count) deleted blood glucose samples ********* ")
                         }
-
+                        
                         self.writeSamples(newSamples: newSamples, deletedSamples: deletedSamples, error: error)
+                        
+                        self.updateLastSyncBloodGlucoseSamples(newSamples: newSamples, deletedSamples: deletedSamples)
                     }
                     HealthKitManager.sharedInstance.enableBackgroundDeliveryBloodGlucoseSamples()
                 }
@@ -91,6 +141,8 @@ class HealthKitDataSync {
                         }
 
                         self.writeSamples(newSamples: newSamples, deletedSamples: deletedSamples, error: error)
+                        
+                        self.updateLastSyncWorkoutSamples(newSamples: newSamples, deletedSamples: deletedSamples)
                     }
                     HealthKitManager.sharedInstance.enableBackgroundDeliveryWorkoutSamples()
                 }
@@ -178,6 +230,50 @@ class HealthKitDataSync {
             }
         } catch let error as NSError! {
             NSLog("\(__FUNCTION__): Error writing deleted samples \(error), \(error.userInfo)")
+        }
+    }
+    
+    @available(iOS 9, *)
+    private func updateLastSyncBloodGlucoseSamples(newSamples newSamples: [HKSample]?, deletedSamples: [HKDeletedObject]?) {
+        var totalCount = 0
+        if (newSamples != nil) {
+            totalCount += newSamples!.count
+        }
+        if (deletedSamples != nil) {
+            totalCount += deletedSamples!.count
+        }
+        if (totalCount > 0) {
+            lastSyncCountBloodGlucoseSamples = totalCount
+            lastSyncTimeBloodGlucoseSamples = NSDate()
+            NSUserDefaults.standardUserDefaults().setObject(lastSyncTimeBloodGlucoseSamples, forKey: "lastSyncTimeBloodGlucoseSamples")
+            NSUserDefaults.standardUserDefaults().setInteger(lastSyncCountBloodGlucoseSamples, forKey: "lastSyncCountBloodGlucoseSamples")
+            NSUserDefaults.standardUserDefaults().synchronize()
+            
+            dispatch_async(dispatch_get_main_queue()) {
+                NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: self.observedBloodGlucoseSamplesNotification, object: nil))
+            }
+        }
+    }
+    
+    @available(iOS 9, *)
+    private func updateLastSyncWorkoutSamples(newSamples newSamples: [HKSample]?, deletedSamples: [HKDeletedObject]?) {
+        var totalCount = 0
+        if (newSamples != nil) {
+            totalCount += newSamples!.count
+        }
+        if (deletedSamples != nil) {
+            totalCount += deletedSamples!.count
+        }
+        if (totalCount > 0) {
+            lastSyncCountWorkoutSamples = totalCount
+            lastSyncTimeWorkoutSamples = NSDate()
+            NSUserDefaults.standardUserDefaults().setObject(lastSyncTimeWorkoutSamples, forKey: "lastSyncTimeWorkoutSamples")
+            NSUserDefaults.standardUserDefaults().setInteger(lastSyncCountWorkoutSamples, forKey: "lastSyncCountWorkoutSamples")
+            NSUserDefaults.standardUserDefaults().synchronize()
+            
+            dispatch_async(dispatch_get_main_queue()) {
+                NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: self.observedWorkoutSamplesNotification, object: nil))
+            }
         }
     }
 }

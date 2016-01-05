@@ -226,6 +226,8 @@ let allTeamsTitle: String = "All"
 Drop down menu title for HealthKit (NotesVC)
 */
 let healthKitTitle: String = "Share Health Data"
+let healthKitSyncStatusSingularFormat: String = "Shared %d sample, %@"
+let healthKitSyncStatusPluralFormat: String = "Shared %d samples, %@"
 
 /*
     Drop down menu title for logging out (NotesVC)
@@ -526,6 +528,7 @@ let userCellHeight: CGFloat = 56.0
 let userCellInset: CGFloat = labelInset
 let userCellThickSeparator: CGFloat = 1
 let userCellThinSeparator: CGFloat = 1
+let userCellHealthKitSampleInset: CGFloat = 20
 
 // ------------ NoteCell ------------
 
