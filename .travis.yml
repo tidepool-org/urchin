@@ -12,5 +12,4 @@ before_install:
 - git submodule update --init --recursive
 
 script:
-- xctool -workspace Urchin.xcworkspace -scheme Urchin -sdk iphonesimulator clean build CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
 - xctool test -workspace Urchin.xcworkspace -scheme Urchin -sdk iphonesimulator clean build CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
