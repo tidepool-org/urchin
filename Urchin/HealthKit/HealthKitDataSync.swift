@@ -48,11 +48,11 @@ class HealthKitDataSync {
         }
     }
     
-    internal(set) var lastSyncCountBloodGlucoseSamples = -1
-    internal(set) var lastSyncTimeBloodGlucoseSamples = NSDate.distantPast()
+    private(set) var lastSyncCountBloodGlucoseSamples = -1
+    private(set) var lastSyncTimeBloodGlucoseSamples = NSDate.distantPast()
 
-    internal(set) var lastSyncCountWorkoutSamples = -1
-    internal(set) var lastSyncTimeWorkoutSamples = NSDate.distantPast()
+    private(set) var lastSyncCountWorkoutSamples = -1
+    private(set) var lastSyncTimeWorkoutSamples = NSDate.distantPast()
     
     var lastSyncCount: Int {
         get {
