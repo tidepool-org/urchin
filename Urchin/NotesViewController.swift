@@ -191,8 +191,8 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         notificationCenter.addObserver(self, selector: "forcedLogout:", name: "forcedLogout", object: nil)
 
         // Handle HealthKitDataSync notifications
-        notificationCenter.addObserver(self, selector: "handleObservedHealthKitDataSyncNotification:", name: HealthKitDataSync.sharedInstance.observedBloodGlucoseSamplesNotification, object: nil)
-        notificationCenter.addObserver(self, selector: "handleObservedHealthKitDataSyncNotification:", name: HealthKitDataSync.sharedInstance.observedWorkoutSamplesNotification, object: nil)
+        notificationCenter.addObserver(self, selector: "handleObservedHealthKitDataSyncNotification:", name: HealthKitDataSync.Notifications.ObservedBloodGlucoseSamples, object: nil)
+        notificationCenter.addObserver(self, selector: "handleObservedHealthKitDataSyncNotification:", name: HealthKitDataSync.Notifications.ObservedWorkoutSamples, object: nil)
     }
     
     override func viewDidAppear(animated: Bool) {

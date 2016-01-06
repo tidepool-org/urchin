@@ -80,9 +80,11 @@ class HealthKitDataSync {
             return time
         }
     }
-
-    let observedBloodGlucoseSamplesNotification = "HealthKitDataSync-observed-\(HKWorkoutTypeIdentifier)"
-    let observedWorkoutSamplesNotification = "HealthKitDataSync-observed-\(HKWorkoutTypeIdentifier)"
+    
+    enum Notifications {
+        static let ObservedBloodGlucoseSamples = "HealthKitDataSync-observed-\(HKWorkoutTypeIdentifier)"
+        static let ObservedWorkoutSamples = "HealthKitDataSync-observed-\(HKWorkoutTypeIdentifier)"
+    }
 
     func authorizeAndStartSyncing(
             shouldSyncBloodGlucoseSamples shouldSyncBloodGlucoseSamples: Bool,
@@ -250,7 +252,7 @@ class HealthKitDataSync {
             NSUserDefaults.standardUserDefaults().synchronize()
             
             dispatch_async(dispatch_get_main_queue()) {
-                NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: self.observedBloodGlucoseSamplesNotification, object: nil))
+                NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: Notifications.ObservedBloodGlucoseSamples, object: nil))
             }
         }
     }
@@ -272,7 +274,7 @@ class HealthKitDataSync {
             NSUserDefaults.standardUserDefaults().synchronize()
             
             dispatch_async(dispatch_get_main_queue()) {
-                NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: self.observedWorkoutSamplesNotification, object: nil))
+                NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: Notifications.ObservedWorkoutSamples, object: nil))
             }
         }
     }
