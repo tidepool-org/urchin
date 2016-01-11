@@ -39,20 +39,37 @@ class HealthKitDataSync {
         if (syncTime != nil) {
             lastSyncTimeBloodGlucoseSamples = syncTime as! NSDate
             lastSyncCountBloodGlucoseSamples = NSUserDefaults.standardUserDefaults().integerForKey("lastSyncCountBloodGlucoseSamples")
+            totalSyncCountBloodGlucoseSamples = NSUserDefaults.standardUserDefaults().integerForKey("totalSyncCountBloodGlucoseSamples")
         }
         
         syncTime = NSUserDefaults.standardUserDefaults().objectForKey("lastSyncTimeWorkoutSamples")
         if (syncTime != nil) {
             lastSyncTimeWorkoutSamples = syncTime as! NSDate
             lastSyncCountWorkoutSamples = NSUserDefaults.standardUserDefaults().integerForKey("lastSyncCountWorkoutSamples")
+            totalSyncCountWorkoutSamples = NSUserDefaults.standardUserDefaults().integerForKey("totalSyncCountWorkoutSamples")
         }
     }
     
+    private(set) var totalSyncCountBloodGlucoseSamples = -1
     private(set) var lastSyncCountBloodGlucoseSamples = -1
     private(set) var lastSyncTimeBloodGlucoseSamples = NSDate.distantPast()
 
+    private(set) var totalSyncCountWorkoutSamples = -1
     private(set) var lastSyncCountWorkoutSamples = -1
     private(set) var lastSyncTimeWorkoutSamples = NSDate.distantPast()
+    
+    var totalSyncCount: Int {
+        get {
+            var count = 0
+            if (lastSyncCountBloodGlucoseSamples > 0) {
+                count += lastSyncCountBloodGlucoseSamples
+            }
+            if (lastSyncCountWorkoutSamples > 0) {
+                count += lastSyncCountWorkoutSamples
+            }
+            return count
+        }
+    }
     
     var lastSyncCount: Int {
         get {
@@ -249,6 +266,9 @@ class HealthKitDataSync {
             lastSyncTimeBloodGlucoseSamples = NSDate()
             NSUserDefaults.standardUserDefaults().setObject(lastSyncTimeBloodGlucoseSamples, forKey: "lastSyncTimeBloodGlucoseSamples")
             NSUserDefaults.standardUserDefaults().setInteger(lastSyncCountBloodGlucoseSamples, forKey: "lastSyncCountBloodGlucoseSamples")
+            NSUserDefaults.standardUserDefaults().setObject(lastSyncTimeBloodGlucoseSamples, forKey: "lastSyncTimeBloodGlucoseSamples")
+            let totalSyncCountBloodGlucoseSamples = NSUserDefaults.standardUserDefaults().integerForKey("totalSyncCountBloodGlucoseSamples") + lastSyncCountBloodGlucoseSamples
+            NSUserDefaults.standardUserDefaults().setObject(totalSyncCountBloodGlucoseSamples, forKey: "totalSyncCountBloodGlucoseSamples")
             NSUserDefaults.standardUserDefaults().synchronize()
             
             dispatch_async(dispatch_get_main_queue()) {
@@ -271,6 +291,8 @@ class HealthKitDataSync {
             lastSyncTimeWorkoutSamples = NSDate()
             NSUserDefaults.standardUserDefaults().setObject(lastSyncTimeWorkoutSamples, forKey: "lastSyncTimeWorkoutSamples")
             NSUserDefaults.standardUserDefaults().setInteger(lastSyncCountWorkoutSamples, forKey: "lastSyncCountWorkoutSamples")
+            let totalSyncCountWorkoutSamples = NSUserDefaults.standardUserDefaults().integerForKey("totalSyncCountWorkoutSamples") + lastSyncCountBloodGlucoseSamples
+            NSUserDefaults.standardUserDefaults().setObject(totalSyncCountWorkoutSamples, forKey: "totalSyncCountWorkoutSamples")
             NSUserDefaults.standardUserDefaults().synchronize()
             
             dispatch_async(dispatch_get_main_queue()) {

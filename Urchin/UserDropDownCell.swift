@@ -64,10 +64,10 @@ class UserDropDownCell: UITableViewCell {
             let lastSyncCount = HealthKitDataSync.sharedInstance.lastSyncCount
             let lastSyncTime = NSDateFormatter.localizedStringFromDate(HealthKitDataSync.sharedInstance.lastSyncTime, dateStyle: .ShortStyle, timeStyle: .ShortStyle)
             if (lastSyncCount == 1) {
-                nameLabel.text = String(format: healthKitSyncStatusSingularFormat, HealthKitDataSync.sharedInstance.lastSyncCount, lastSyncTime)
+                nameLabel.text = String(format: healthKitSyncStatusSingularFormat, lastSyncCount, lastSyncTime)
                 
             } else if (lastSyncCount > 1) {
-                nameLabel.text = String(format: healthKitSyncStatusPluralFormat, HealthKitDataSync.sharedInstance.lastSyncCount, lastSyncTime)
+                nameLabel.text = String(format: healthKitSyncStatusPluralFormat, lastSyncCount, lastSyncTime)
             }
             nameLabel.font = smallRegularFont
             nameLabel.sizeToFit()
