@@ -107,18 +107,16 @@ class HealthKitDataSync {
             shouldSyncBloodGlucoseSamples shouldSyncBloodGlucoseSamples: Bool,
             shouldSyncWorkoutSamples: Bool)
     {
-        if #available(iOS 9.0, *) {
-            HealthKitManager.sharedInstance.authorize(
-                shouldAuthorizeBloodGlucoseSamples: shouldSyncBloodGlucoseSamples,
-                shouldAuthorizeWorkoutSamples: shouldSyncWorkoutSamples) {
-                success, error -> Void in
-                if (error == nil) {
-                    self.startSyncing(
-                        shouldSyncBloodGlucoseSamples: shouldSyncBloodGlucoseSamples,
-                        shouldSyncWorkoutSamples: shouldSyncWorkoutSamples)
-                } else {
-                    NSLog("\(__FUNCTION__): Error authorizing health data \(error), \(error!.userInfo)")
-                }
+        HealthKitManager.sharedInstance.authorize(
+            shouldAuthorizeBloodGlucoseSamples: shouldSyncBloodGlucoseSamples,
+            shouldAuthorizeWorkoutSamples: shouldSyncWorkoutSamples) {
+            success, error -> Void in
+            if (error == nil) {
+                self.startSyncing(
+                    shouldSyncBloodGlucoseSamples: shouldSyncBloodGlucoseSamples,
+                    shouldSyncWorkoutSamples: shouldSyncWorkoutSamples)
+            } else {
+                NSLog("\(__FUNCTION__): Error authorizing health data \(error), \(error!.userInfo)")
             }
         }
     }
@@ -128,65 +126,60 @@ class HealthKitDataSync {
     func startSyncing(shouldSyncBloodGlucoseSamples shouldSyncBloodGlucoseSamples: Bool, shouldSyncWorkoutSamples: Bool)
     {
         if (HealthKitManager.sharedInstance.isHealthDataAvailable) {
-            if #available(iOS 9.0, *) {
-                if (shouldSyncBloodGlucoseSamples) {
-                    HealthKitManager.sharedInstance.startObservingBloodGlucoseSamples() {
-                        (newSamples: [HKSample]?, deletedSamples: [HKDeletedObject]?, error: NSError?) in
-                        
-                        if (newSamples != nil) {
-                            NSLog("********* PROCESSING \(newSamples!.count) new blood glucose samples ********* ")
-                        }
-                        
-                        if (deletedSamples != nil) {
-                            NSLog("********* PROCESSING \(deletedSamples!.count) deleted blood glucose samples ********* ")
-                        }
-                        
-                        self.writeSamples(newSamples: newSamples, deletedSamples: deletedSamples, error: error)
-                        
-                        self.updateLastSyncBloodGlucoseSamples(newSamples: newSamples, deletedSamples: deletedSamples)
+            if (shouldSyncBloodGlucoseSamples) {
+                HealthKitManager.sharedInstance.startObservingBloodGlucoseSamples() {
+                    (newSamples: [HKSample]?, deletedSamples: [HKDeletedObject]?, error: NSError?) in
+                    
+                    if (newSamples != nil) {
+                        NSLog("********* PROCESSING \(newSamples!.count) new blood glucose samples ********* ")
                     }
-                    HealthKitManager.sharedInstance.enableBackgroundDeliveryBloodGlucoseSamples()
-                }
-                if (shouldSyncWorkoutSamples) {
-                    HealthKitManager.sharedInstance.startObservingWorkoutSamples() {
-                        (newSamples: [HKSample]?, deletedSamples: [HKDeletedObject]?, error: NSError?) in
-
-                        if (newSamples != nil) {
-                            NSLog("********* PROCESSING \(newSamples!.count) new workout samples ********* ")
-                        }
-                        
-                        if (deletedSamples != nil) {
-                            NSLog("********* PROCESSING \(deletedSamples!.count) deleted workout samples ********* ")
-                        }
-
-                        self.writeSamples(newSamples: newSamples, deletedSamples: deletedSamples, error: error)
-                        
-                        self.updateLastSyncWorkoutSamples(newSamples: newSamples, deletedSamples: deletedSamples)
+                    
+                    if (deletedSamples != nil) {
+                        NSLog("********* PROCESSING \(deletedSamples!.count) deleted blood glucose samples ********* ")
                     }
-                    HealthKitManager.sharedInstance.enableBackgroundDeliveryWorkoutSamples()
+                    
+                    self.writeSamples(newSamples: newSamples, deletedSamples: deletedSamples, error: error)
+                    
+                    self.updateLastSyncBloodGlucoseSamples(newSamples: newSamples, deletedSamples: deletedSamples)
                 }
+                HealthKitManager.sharedInstance.enableBackgroundDeliveryBloodGlucoseSamples()
+            }
+            if (shouldSyncWorkoutSamples) {
+                HealthKitManager.sharedInstance.startObservingWorkoutSamples() {
+                    (newSamples: [HKSample]?, deletedSamples: [HKDeletedObject]?, error: NSError?) in
+
+                    if (newSamples != nil) {
+                        NSLog("********* PROCESSING \(newSamples!.count) new workout samples ********* ")
+                    }
+                    
+                    if (deletedSamples != nil) {
+                        NSLog("********* PROCESSING \(deletedSamples!.count) deleted workout samples ********* ")
+                    }
+
+                    self.writeSamples(newSamples: newSamples, deletedSamples: deletedSamples, error: error)
+                    
+                    self.updateLastSyncWorkoutSamples(newSamples: newSamples, deletedSamples: deletedSamples)
+                }
+                HealthKitManager.sharedInstance.enableBackgroundDeliveryWorkoutSamples()
             }
         }
     }
     
     func stopSyncing(shouldStopSyncingBloodGlucoseSamples shouldStopSyncingBloodGlucoseSamples: Bool, shouldStopSyncingWorkoutSamples: Bool) {
         if (HealthKitManager.sharedInstance.isHealthDataAvailable) {
-            if #available(iOS 9.0, *) {
-                if (shouldStopSyncingBloodGlucoseSamples) {
-                    HealthKitManager.sharedInstance.stopObservingBloodGlucoseSamples()
-                    HealthKitManager.sharedInstance.disableBackgroundDeliveryBloodGlucoseSamples()
-                }
-                if (shouldStopSyncingWorkoutSamples) {
-                    HealthKitManager.sharedInstance.stopObservingWorkoutSamples()
-                    HealthKitManager.sharedInstance.disableBackgroundDeliveryWorkoutSamples()
-                }
+            if (shouldStopSyncingBloodGlucoseSamples) {
+                HealthKitManager.sharedInstance.stopObservingBloodGlucoseSamples()
+                HealthKitManager.sharedInstance.disableBackgroundDeliveryBloodGlucoseSamples()
+            }
+            if (shouldStopSyncingWorkoutSamples) {
+                HealthKitManager.sharedInstance.stopObservingWorkoutSamples()
+                HealthKitManager.sharedInstance.disableBackgroundDeliveryWorkoutSamples()
             }
         }
     }
     
     // MARK: Private
     
-    @available(iOS 9, *)
     private func writeSamples(newSamples newSamples: [HKSample]?, deletedSamples: [HKDeletedObject]?, error: NSError?) {
         guard error == nil else {
             NSLog("\(__FUNCTION__): Error processing samples \(error), \(error!.userInfo)")
@@ -202,7 +195,6 @@ class HealthKitDataSync {
         }
     }
     
-    @available(iOS 9, *)
     private func writeNewSamples(samples: [HKSample]) {
         do {
             let realm = try Realm()
@@ -229,7 +221,6 @@ class HealthKitDataSync {
         }
     }
     
-    @available(iOS 9, *)
     private func writeDeletedSamples(deletedSamples: [HKDeletedObject]) {
         do {
             let realm = try Realm()
@@ -252,7 +243,6 @@ class HealthKitDataSync {
         }
     }
     
-    @available(iOS 9, *)
     private func updateLastSyncBloodGlucoseSamples(newSamples newSamples: [HKSample]?, deletedSamples: [HKDeletedObject]?) {
         var totalCount = 0
         if (newSamples != nil) {
@@ -277,7 +267,6 @@ class HealthKitDataSync {
         }
     }
     
-    @available(iOS 9, *)
     private func updateLastSyncWorkoutSamples(newSamples newSamples: [HKSample]?, deletedSamples: [HKDeletedObject]?) {
         var totalCount = 0
         if (newSamples != nil) {

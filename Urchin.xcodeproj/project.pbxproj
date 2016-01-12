@@ -64,8 +64,6 @@
 		AA6932041B66E6210057F0A0 /* AddNoteVCTableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6932021B66E5FB0057F0A0 /* AddNoteVCTableViewDataSource.swift */; };
 		AA6932061B66E6B60057F0A0 /* AddNoteVCTableViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6932051B66E6B60057F0A0 /* AddNoteVCTableViewDelegate.swift */; };
 		AA6932071B66E6D30057F0A0 /* AddNoteVCTableViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6932051B66E6B60057F0A0 /* AddNoteVCTableViewDelegate.swift */; };
-		AA6932091B66E8260057F0A0 /* AddNoteVCAlertViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6932081B66E8260057F0A0 /* AddNoteVCAlertViewDelegate.swift */; };
-		AA69320A1B66E8440057F0A0 /* AddNoteVCAlertViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6932081B66E8260057F0A0 /* AddNoteVCAlertViewDelegate.swift */; };
 		AA6932141B66EE0C0057F0A0 /* ConstantsAndStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6932131B66EE0C0057F0A0 /* ConstantsAndStyle.swift */; };
 		AA6932151B66FAC00057F0A0 /* ConstantsAndStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6932131B66EE0C0057F0A0 /* ConstantsAndStyle.swift */; };
 		AA698EED1B545A07004154E0 /* EditNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA698EEC1B545A07004154E0 /* EditNoteViewController.swift */; };
@@ -204,7 +202,6 @@
 		AA6931FF1B66E5450057F0A0 /* AddNoteVCTextViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddNoteVCTextViewDelegate.swift; sourceTree = "<group>"; };
 		AA6932021B66E5FB0057F0A0 /* AddNoteVCTableViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddNoteVCTableViewDataSource.swift; sourceTree = "<group>"; };
 		AA6932051B66E6B60057F0A0 /* AddNoteVCTableViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddNoteVCTableViewDelegate.swift; sourceTree = "<group>"; };
-		AA6932081B66E8260057F0A0 /* AddNoteVCAlertViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddNoteVCAlertViewDelegate.swift; sourceTree = "<group>"; };
 		AA6932131B66EE0C0057F0A0 /* ConstantsAndStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConstantsAndStyle.swift; sourceTree = "<group>"; };
 		AA698EEC1B545A07004154E0 /* EditNoteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditNoteViewController.swift; sourceTree = "<group>"; };
 		AA6A7D791B62B1A4008215D8 /* apiConnectorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = apiConnectorTests.swift; sourceTree = "<group>"; };
@@ -402,7 +399,6 @@
 			isa = PBXGroup;
 			children = (
 				AA6931FF1B66E5450057F0A0 /* AddNoteVCTextViewDelegate.swift */,
-				AA6932081B66E8260057F0A0 /* AddNoteVCAlertViewDelegate.swift */,
 				AA6932051B66E6B60057F0A0 /* AddNoteVCTableViewDelegate.swift */,
 				AA6932021B66E5FB0057F0A0 /* AddNoteVCTableViewDataSource.swift */,
 			);
@@ -811,7 +807,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				AA698EED1B545A07004154E0 /* EditNoteViewController.swift in Sources */,
-				AA6932091B66E8260057F0A0 /* AddNoteVCAlertViewDelegate.swift in Sources */,
 				4DBC53651C3242420062FDEA /* NSNumber+ObjectiveSugar.m in Sources */,
 				AAB6B0531B605C440051472C /* FadeAnimator.swift in Sources */,
 				AA6932141B66EE0C0057F0A0 /* ConstantsAndStyle.swift in Sources */,
@@ -868,7 +863,6 @@
 				AA7920251B62AB790046038B /* NoteCell.swift in Sources */,
 				AA6932071B66E6D30057F0A0 /* AddNoteVCTableViewDelegate.swift in Sources */,
 				AA6932011B66E5910057F0A0 /* AddNoteVCTextViewDelegate.swift in Sources */,
-				AA69320A1B66E8440057F0A0 /* AddNoteVCAlertViewDelegate.swift in Sources */,
 				4DBC534F1C30B3F30062FDEA /* HealthKitManager.swift in Sources */,
 				4DBC53501C30B3F60062FDEA /* HealthKitDataSync.swift in Sources */,
 				AA79201F1B62AB470046038B /* NotesViewController.swift in Sources */,
@@ -965,7 +959,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -1004,7 +998,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1023,7 +1017,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = urchin/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MACH_O_TYPE = mh_execute;
 				PRODUCT_BUNDLE_IDENTIFIER = org.tidepool.blipnotes;
@@ -1046,7 +1040,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = urchin/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MACH_O_TYPE = mh_execute;
 				PRODUCT_BUNDLE_IDENTIFIER = org.tidepool.blipnotes;

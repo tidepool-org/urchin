@@ -169,12 +169,6 @@ class LogInViewController :
         self.presentViewController(actionSheet, animated: true, completion: nil)
     }
     
-    func actionSheet(actionSheet: UIActionSheet, clickedButtonAtIndex buttonIndex: Int) {
-        
-        self.selectServer(actionSheet.buttonTitleAtIndex(buttonIndex)!)
-        
-    }
-    
     func directLoginAttempt() {
         directLogin = false
         

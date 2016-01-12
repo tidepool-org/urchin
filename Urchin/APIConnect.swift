@@ -45,9 +45,15 @@ class APIConnector {
                 }
                 request.HTTPBody = body
                 
-                NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) { (response, data, error) -> Void in
-                    completion(response: response, data: data, error: error)
-                }
+                let task = NSURLSession.sharedSession().dataTaskWithRequest(
+                    request,
+                    completionHandler: {
+                        (data, response, error) -> Void in                        
+                        dispatch_async(dispatch_get_main_queue(), {
+                            completion(response: response, data: data, error: error)
+                        })
+                    })
+                task.resume()
             } else {
                 NSLog("Not connected to network")
                 self.alertWithOkayButton("Not Connected to Network", message: "Please restart Blip notes when you are connected to a network.")
