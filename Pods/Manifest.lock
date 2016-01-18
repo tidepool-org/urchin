@@ -4,12 +4,15 @@ PODS:
   - Realm/Headers (0.97.0)
   - RealmSwift (0.97.0):
     - Realm (= 0.97.0)
+  - twitter-text (1.13.0)
 
 DEPENDENCIES:
   - RealmSwift
+  - twitter-text
 
 SPEC CHECKSUMS:
   Realm: b498a6fb9d288b171ff98d0e2d4384c295be8990
   RealmSwift: d014810dec75c9a3f1a33926d2dabfed855c582c
+  twitter-text: 60d0816a5b1ae7331bdda54ba15f0da974286177
 
 COCOAPODS: 0.39.0
