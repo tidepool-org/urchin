@@ -16,6 +16,7 @@
 import HealthKit
 import RealmSwift
 import CocoaLumberjack
+import Granola
 
 // TODO: my - Need to set up a periodic task to perodically drain the Realm db and upload those events to service, this should be able to be done as background task even when app is not active, and periodically when active
 

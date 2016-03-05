@@ -6,6 +6,9 @@ PODS:
     - CocoaLumberjack/Default
   - CocoaLumberjack/Swift (2.2.0):
     - CocoaLumberjack/Extensions
+  - Granola (0.4.1):
+    - ObjectiveSugar (~> 1.1)
+  - ObjectiveSugar (1.1.0)
   - Realm (0.98.3):
     - Realm/Headers (= 0.98.3)
   - Realm/Headers (0.98.3)
@@ -15,11 +18,14 @@ PODS:
 
 DEPENDENCIES:
   - CocoaLumberjack/Swift (~> 2.2.0)
+  - Granola (~> 0.4.1)
   - RealmSwift (~> 0.98.3)
   - twitter-text (~> 1.13.4)
 
 SPEC CHECKSUMS:
   CocoaLumberjack: 17fe8581f84914d5d7e6360f7c70022b173c3ae0
+  Granola: 07d8cc4bdf005228118161eb182cd34eaf169a03
+  ObjectiveSugar: a6a25f23d657c19df0a0b972466d5b5ca9f5295c
   Realm: c6a7d00221a2d5177810a674aebd40c5e0b70b0f
   RealmSwift: d6ecad6e4c2a645d6ac956c2c7e9efb375f39c31
   twitter-text: 66e7b9925534ade86cb3cb2751788073de8f2fec

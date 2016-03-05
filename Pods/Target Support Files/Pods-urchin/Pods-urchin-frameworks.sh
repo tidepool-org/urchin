@@ -85,12 +85,16 @@ strip_invalid_archs() {
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "Pods-urchin/CocoaLumberjack.framework"
+  install_framework "Pods-urchin/Granola.framework"
+  install_framework "Pods-urchin/ObjectiveSugar.framework"
   install_framework "Pods-urchin/Realm.framework"
   install_framework "Pods-urchin/RealmSwift.framework"
   install_framework "Pods-urchin/twitter_text.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "Pods-urchin/CocoaLumberjack.framework"
+  install_framework "Pods-urchin/Granola.framework"
+  install_framework "Pods-urchin/ObjectiveSugar.framework"
   install_framework "Pods-urchin/Realm.framework"
   install_framework "Pods-urchin/RealmSwift.framework"
   install_framework "Pods-urchin/twitter_text.framework"

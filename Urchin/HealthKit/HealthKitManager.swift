@@ -15,6 +15,7 @@
 
 import HealthKit
 import CocoaLumberjack
+import Granola
 
 class HealthKitManager {
     
