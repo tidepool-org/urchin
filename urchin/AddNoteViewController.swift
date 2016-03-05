@@ -16,6 +16,7 @@
 import Foundation
 import UIKit
 import CoreData
+import CocoaLumberjack
 
 class AddNoteViewController: UIViewController {
     
@@ -340,10 +341,10 @@ class AddNoteViewController: UIViewController {
             let alert = UIAlertController(title: addAlertTitle, message: addAlertMessage, preferredStyle: .Alert)
             
             alert.addAction(UIAlertAction(title: addAlertCancel, style: .Cancel, handler: { Void in
-                NSLog("Cancel alert and return to note")
+                DDLogVerbose("Cancel alert and return to note")
             }))
             alert.addAction(UIAlertAction(title: addAlertOkay, style: .Default, handler: { Void in
-                NSLog("Do not add note and close view controller")
+                DDLogVerbose("Do not add note and close view controller")
                 
                 let notification = NSNotification(name: "doneAdding", object: nil)
                 NSNotificationCenter.defaultCenter().postNotification(notification)

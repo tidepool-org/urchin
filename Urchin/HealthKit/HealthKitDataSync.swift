@@ -15,6 +15,7 @@
 
 import HealthKit
 import RealmSwift
+import CocoaLumberjack
 
 // TODO: my - Need to set up a periodic task to perodically drain the Realm db and upload those events to service, this should be able to be done as background task even when app is not active, and periodically when active
 
@@ -23,14 +24,27 @@ class HealthKitDataSync {
     
     static let sharedInstance = HealthKitDataSync()
     private init() {
-        var config = Realm.Configuration()
+        var config = Realm.Configuration(
+            schemaVersion: 1,
+
+            migrationBlock: { migration, oldSchemaVersion in
+                // We haven’t migrated anything yet, so oldSchemaVersion == 0
+                if (oldSchemaVersion < 1) {
+                    // Nothing to do!
+                    // Realm will automatically detect new properties and removed properties
+                    // And will update the schema on disk automatically
+
+                    DDLogInfo("Migrating Realm from 0 to 1")
+                }
+            }
+        )
         
-        // Use the default directory, but replace the filename with the username
+        // Append nosync to avoid iCloud backup of realm db
         config.path = NSURL.fileURLWithPath(config.path!)
             .URLByAppendingPathExtension("nosync")
             .path
         
-        NSLog("\(__FUNCTION__): Realm path: \(config.path)")
+        DDLogInfo("Realm path: \(config.path)")
         
         // Set this as the configuration used for the default Realm
         Realm.Configuration.defaultConfiguration = config
@@ -116,7 +130,7 @@ class HealthKitDataSync {
                     shouldSyncBloodGlucoseSamples: shouldSyncBloodGlucoseSamples,
                     shouldSyncWorkoutSamples: shouldSyncWorkoutSamples)
             } else {
-                NSLog("\(__FUNCTION__): Error authorizing health data \(error), \(error!.userInfo)")
+                DDLogError("Error authorizing health data \(error), \(error!.userInfo)")
             }
         }
     }
@@ -131,11 +145,11 @@ class HealthKitDataSync {
                     (newSamples: [HKSample]?, deletedSamples: [HKDeletedObject]?, error: NSError?) in
                     
                     if (newSamples != nil) {
-                        NSLog("********* PROCESSING \(newSamples!.count) new blood glucose samples ********* ")
+                        DDLogInfo("********* PROCESSING \(newSamples!.count) new blood glucose samples ********* ")
                     }
                     
                     if (deletedSamples != nil) {
-                        NSLog("********* PROCESSING \(deletedSamples!.count) deleted blood glucose samples ********* ")
+                        DDLogInfo("********* PROCESSING \(deletedSamples!.count) deleted blood glucose samples ********* ")
                     }
                     
                     self.writeSamples(newSamples: newSamples, deletedSamples: deletedSamples, error: error)
@@ -149,11 +163,11 @@ class HealthKitDataSync {
                     (newSamples: [HKSample]?, deletedSamples: [HKDeletedObject]?, error: NSError?) in
 
                     if (newSamples != nil) {
-                        NSLog("********* PROCESSING \(newSamples!.count) new workout samples ********* ")
+                        DDLogInfo("********* PROCESSING \(newSamples!.count) new workout samples ********* ")
                     }
                     
                     if (deletedSamples != nil) {
-                        NSLog("********* PROCESSING \(deletedSamples!.count) deleted workout samples ********* ")
+                        DDLogInfo("********* PROCESSING \(deletedSamples!.count) deleted workout samples ********* ")
                     }
 
                     self.writeSamples(newSamples: newSamples, deletedSamples: deletedSamples, error: error)
@@ -182,7 +196,7 @@ class HealthKitDataSync {
     
     private func writeSamples(newSamples newSamples: [HKSample]?, deletedSamples: [HKDeletedObject]?, error: NSError?) {
         guard error == nil else {
-            NSLog("\(__FUNCTION__): Error processing samples \(error), \(error!.userInfo)")
+            DDLogError("Error processing samples \(error), \(error!.userInfo)")
             return
         }
         
@@ -209,7 +223,7 @@ class HealthKitDataSync {
                 let serializer = OMHSerializer()
                 healthKitData.granolaJson = try serializer.jsonForSample(sample)
                 
-                NSLog("Granola sample: \(healthKitData.granolaJson)");
+                DDLogInfo("Granola sample: \(healthKitData.granolaJson)");
 
                 // TODO: my - Confirm that composite key of id + action does not exist before attempting to add to avoid dups?
                 realm.add(healthKitData)
@@ -217,7 +231,7 @@ class HealthKitDataSync {
             
             try realm.commitWrite()
         } catch let error as NSError! {
-            NSLog("\(__FUNCTION__): Error writing new samples \(error), \(error!.userInfo)")
+            DDLogError("Error writing new samples \(error), \(error!.userInfo)")
         }
     }
     
@@ -232,14 +246,14 @@ class HealthKitDataSync {
                     healthKitData.action = HealthKitData.Action.Deleted.rawValue
                     healthKitData.granolaJson = ""
 
-                    NSLog("Deleted sample: \(healthKitData.id)");
+                    DDLogInfo("Deleted sample: \(healthKitData.id)");
 
                     // TODO: my - Confirm that composite key of id + action does not exist before attempting to add to avoid dups?
                     realm.add(healthKitData)
                 }
             }
         } catch let error as NSError! {
-            NSLog("\(__FUNCTION__): Error writing deleted samples \(error), \(error.userInfo)")
+            DDLogError("Error writing deleted samples \(error), \(error.userInfo)")
         }
     }
     

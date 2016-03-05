@@ -18,6 +18,15 @@
 #import "NSDate+RFC3339.h"
 #import "ObjectiveSugar.h"
 #import "OMHHealthKitConstantsMapper.h"
+#import "CocoaLumberjack.h"
+
+// TODO: my - For now we are manually adding ddLogLevel for logs in this ObjC file. This isn't needed for
+// Swift. And should be fixed in 2.3 per this issue: https://github.com/CocoaLumberjack/CocoaLumberjack/issues/648
+#if DEBUG
+static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
+#else
+static const DDLogLevel ddLogLevel = DDLogLevelWarning;
+#endif
 
 @interface OMHSerializer()
 @property (nonatomic, retain) HKSample* sample;
@@ -774,7 +783,7 @@
                 [quantitySampleArray addObject:serializedQuantitySample];
             }
             else{
-                NSLog(@"%@",[error localizedDescription]);
+                DDLogError(@"%@",[error localizedDescription]);
             }
         }
         else if ([sample isKindOfClass:[HKCategorySample class]]){
@@ -786,7 +795,7 @@
                 [quantitySampleArray addObject:serializedCategorySample];
             }
             else{
-                NSLog(@"%@",[error localizedDescription]);
+                DDLogError(@"%@",[error localizedDescription]);
             }
         }
         else {

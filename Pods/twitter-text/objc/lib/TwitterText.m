@@ -60,7 +60,7 @@
 #define TWUCtrlChars                                    @"\\x00-\\x1F\\x7F"
 
 #define TWHashtagAlpha                          @"[\\p{L}\\p{M}]"
-#define TWHashtagSpecialChars                   @"_\\u200c\\u200d\\ua67e\\u05be\\u05f3\\u05f4\\u309b\\u309c\\u30a0\\u30fb\\u3003\\u0f0b\\u0f0c\\u00b7"
+#define TWHashtagSpecialChars                   @"_\\u200c\\u200d\\ua67e\\u05be\\u05f3\\u05f4\\uff5e\\u301c\\u309b\\u309c\\u30a0\\u30fb\\u3003\\u0f0b\\u0f0c\\u00b7"
 #define TWUHashtagAlphanumeric                  @"[\\p{L}\\p{M}\\p{Nd}" TWHashtagSpecialChars @"]"
 #define TWUHashtagBoundaryInvalidChars          @"&\\p{L}\\p{M}\\p{Nd}" TWHashtagSpecialChars
 
@@ -70,7 +70,7 @@
 @"]"
 
 #define TWUValidHashtag \
-    @"(?:" TWUHashtagBoundary @")([#＃]" TWUHashtagAlphanumeric @"*" TWHashtagAlpha TWUHashtagAlphanumeric @"*)"
+    @"(?:" TWUHashtagBoundary @")([#＃](?!\ufe0f|\u20e3)" TWUHashtagAlphanumeric @"*" TWHashtagAlpha TWUHashtagAlphanumeric @"*)"
 
 #define TWUEndHashTagMatch      @"\\A(?:[#＃]|://)"
 
@@ -240,7 +240,7 @@
 #define TWUValidSpecialShortDomain      @"\\A" TWUValidDomainName TWUValidSpecialCCTLD @"\\z"
 
 #define TWUValidPortNumber              @"[0-9]+"
-#define TWUValidGeneralURLPathChars     @"[a-zA-Z0-9!\\*';:=+,.$/%#\\[\\]\\-_~&|@" TWULatinAccents @"]"
+#define TWUValidGeneralURLPathChars     @"[a-zA-Z\\p{Cyrillic}0-9!\\*';:=+,.$/%#\\[\\]\\-_~&|@" TWULatinAccents @"]"
 
 #define TWUValidURLBalancedParens \
 @"\\(" \
@@ -255,7 +255,7 @@
     @")" \
 @"\\)"
 
-#define TWUValidURLPathEndingChars      @"[a-zA-Z0-9=_#/+\\-" TWULatinAccents @"]|(?:" TWUValidURLBalancedParens @")"
+#define TWUValidURLPathEndingChars      @"[a-zA-Z\\p{Cyrillic}0-9=_#/+\\-" TWULatinAccents @"]|(?:" TWUValidURLBalancedParens @")"
 
 #define TWUValidURLPath \
 @"(?:" \

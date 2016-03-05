@@ -30,9 +30,8 @@ public final class RLMGenerator<T: Object>: GeneratorType {
         generatorBase = NSFastGenerator(collection)
     }
 
-    /// Advance to the next element and return it, or `nil` if no next element
-    /// exists.
-    public func next() -> T? {
+    /// Advance to the next element and return it, or `nil` if no next element exists.
+    public func next() -> T? { // swiftlint:disable:this valid_docs
         let accessor = generatorBase.next() as! T?
         if let accessor = accessor {
             RLMInitializeSwiftAccessorGenerics(accessor)
@@ -203,6 +202,17 @@ public protocol RealmCollectionType: CollectionType, CustomStringConvertible {
     func valueForKey(key: String) -> AnyObject?
 
     /**
+     Returns an Array containing the results of invoking `valueForKeyPath(_:)` using keyPath on each of the
+     collection's objects.
+
+     - parameter keyPath: The key path to the property.
+
+     - returns: Array containing the results of invoking `valueForKeyPath(_:)` using keyPath on each of the
+     collection's objects.
+     */
+    func valueForKeyPath(keyPath: String) -> AnyObject?
+
+    /**
     Invokes `setValue(_:forKey:)` on each of the collection's objects using the specified value and key.
 
     - warning: This method can only be called during a write transaction.
@@ -211,6 +221,11 @@ public protocol RealmCollectionType: CollectionType, CustomStringConvertible {
     - parameter key:   The name of the property.
     */
     func setValue(value: AnyObject?, forKey key: String)
+
+    // MARK: Notifications
+
+    /// :nodoc:
+    func _addNotificationBlock(block: (AnyRealmCollection<Element>?, NSError?) -> ()) -> NotificationToken
 }
 
 private class _AnyRealmCollectionBase<T: Object>: RealmCollectionType {
@@ -236,7 +251,11 @@ private class _AnyRealmCollectionBase<T: Object>: RealmCollectionType {
     var startIndex: Int { fatalError() }
     var endIndex: Int { fatalError() }
     func valueForKey(key: String) -> AnyObject? { fatalError() }
+    func valueForKeyPath(keyPath: String) -> AnyObject? { fatalError() }
     func setValue(value: AnyObject?, forKey key: String) { fatalError() }
+    func _addNotificationBlock(block: (AnyRealmCollection<Element>?, NSError?) -> ()) -> NotificationToken {
+        fatalError()
+    }
 }
 
 private final class _AnyRealmCollection<C: RealmCollectionType>: _AnyRealmCollectionBase<C.Element> {
@@ -444,6 +463,17 @@ private final class _AnyRealmCollection<C: RealmCollectionType>: _AnyRealmCollec
     override func valueForKey(key: String) -> AnyObject? { return base.valueForKey(key) }
 
     /**
+     Returns an Array containing the results of invoking `valueForKeyPath(_:)` using keyPath on each of the
+     collection's objects.
+
+     - parameter keyPath: The key path to the property.
+
+     - returns: Array containing the results of invoking `valueForKeyPath(_:)` using keyPath on each of the
+       collection's objects.
+     */
+    override func valueForKeyPath(keyPath: String) -> AnyObject? { return base.valueForKeyPath(keyPath) }
+
+    /**
     Invokes `setValue(_:forKey:)` on each of the collection's objects using the specified value and key.
 
     - warning: This method can only be called during a write transaction.
@@ -452,6 +482,13 @@ private final class _AnyRealmCollection<C: RealmCollectionType>: _AnyRealmCollec
     - parameter key:   The name of the property.
     */
     override func setValue(value: AnyObject?, forKey key: String) { base.setValue(value, forKey: key) }
+
+    // MARK: Notifications
+
+    /// :nodoc:
+    override func _addNotificationBlock(block: (AnyRealmCollection<Element>?, NSError?) -> ()) -> NotificationToken {
+        return base._addNotificationBlock(block)
+    }
 }
 
 /**
@@ -658,6 +695,17 @@ public final class AnyRealmCollection<T: Object>: RealmCollectionType {
     public func valueForKey(key: String) -> AnyObject? { return base.valueForKey(key) }
 
     /**
+     Returns an Array containing the results of invoking `valueForKeyPath(_:)` using keyPath on each of the
+     collection's objects.
+
+     - parameter keyPath: The key path to the property.
+
+     - returns: Array containing the results of invoking `valueForKeyPath(_:)` using keyPath on each of the
+     collection's objects.
+     */
+    public func valueForKeyPath(keyPath: String) -> AnyObject? { return base.valueForKeyPath(keyPath) }
+
+    /**
     Invokes `setValue(_:forKey:)` on each of the collection's objects using the specified value and key.
 
     - warning: This method can only be called during a write transaction.
@@ -666,4 +714,28 @@ public final class AnyRealmCollection<T: Object>: RealmCollectionType {
     - parameter key:   The name of the property.
     */
     public func setValue(value: AnyObject?, forKey key: String) { base.setValue(value, forKey: key) }
+
+    // MARK: Notifications
+
+    /**
+    Register a block to be called each time the collection changes.
+
+    The block will be asynchronously called with the initial collection, and
+    then called again after each write transaction which changes the collection
+    or any of the items in the collection. You must retain the returned token for
+    as long as you want updates to continue to be sent to the block. To stop
+    receiving updates, call stop() on the token.
+
+    - parameter block: The block to be called each time the collection changes.
+    - returns: A token which must be held for as long as you want notifications to be delivered.
+    */
+    @warn_unused_result(message="You must hold on to the NotificationToken returned from addNotificationBlock")
+    public func addNotificationBlock(block: (AnyRealmCollection<Element>?, NSError?) -> ()) -> NotificationToken {
+        return base._addNotificationBlock(block)
+    }
+
+    /// :nodoc:
+    public func _addNotificationBlock(block: (AnyRealmCollection<Element>?, NSError?) -> ()) -> NotificationToken {
+        return base._addNotificationBlock(block)
+    }
 }

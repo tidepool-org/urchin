@@ -15,6 +15,7 @@
 
 import UIKit
 import CoreData
+import CocoaLumberjack
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -25,6 +26,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
         
+        // Set up logging
+        DDTTYLogger.sharedInstance().logFormatter = LogFormatter()
+        DDLog.addLogger(DDTTYLogger.sharedInstance())
+#if DEBUG
+        defaultDebugLevel = DDLogLevel.Verbose
+#else
+        defaultDebugLevel = DDLogLevel.Off
+#endif
+        
+        DDLogVerbose("trace")
+
         // Change navigation bar colors
         let navigationBarAppearace = UINavigationBar.appearance()
         navigationBarAppearace.tintColor = navBarTint
@@ -44,8 +56,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 shouldSyncBloodGlucoseSamples: true,
                 shouldSyncWorkoutSamples: true)
         }
-
-        NSLog("did finish launching")
         
         return true
     }
@@ -53,18 +63,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillResignActive(application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
-        NSLog("will resign active")
+        DDLogVerbose("trace")
     }
 
     func applicationDidEnterBackground(application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
-        NSLog("did enter background")
+        DDLogVerbose("trace")
     }
 
     func applicationWillEnterForeground(application: UIApplication) {
         // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
-        NSLog("will enter foreground")
+        DDLogVerbose("trace")
     }
 
     func applicationDidBecomeActive(application: UIApplication) {
@@ -73,12 +83,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let notification = NSNotification(name: "refreshSessionToken", object: nil)
         NSNotificationCenter.defaultCenter().postNotification(notification)
         
-        NSLog("did become active")
+        DDLogVerbose("trace")
     }
 
     func applicationWillTerminate(application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
-        NSLog("will terminate")
+        DDLogVerbose("trace")
     }
     
     // MARK: - Core Data stack
@@ -116,7 +126,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             
             var alert = UIAlertController(title: "Unrecoverable Error Occurred", message: "An unrecoverable error occurred. The application will terminate shortly. Please contact the developer to determine the cause of the issue.", preferredStyle: .Alert)
             alert.addAction(UIAlertAction(title: "Okay", style: .Default, handler: { Void in
-                NSLog("Cancel alert and return to note")
+                DDLogVerbose("Cancel alert and return to note")
             }))
             if var topController = UIApplication.sharedApplication().keyWindow?.rootViewController {
                 while let presentedViewController = topController.presentedViewController {
@@ -126,7 +136,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 topController.presentViewController(alert, animated: true, completion: nil)
             }
             
-            NSLog("Unresolved error \(error), \(error!.userInfo)")
+            DDLogError("Unresolved error \(error), \(error!.userInfo)")
             abort()
         } catch {
             fatalError()
@@ -160,7 +170,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     let alert = UIAlertController(title: "Unrecoverable Error Occurred", message: "An unrecoverable error occurred. The application will terminate shortly. Please contact the developer to determine the cause of the issue.", preferredStyle: .Alert)
                     
                     alert.addAction(UIAlertAction(title: "Okay", style: .Default, handler: { Void in
-                        NSLog("Cancel alert and return to note")
+                        DDLogVerbose("Cancel alert and return to note")
                     }))
                     if var topController = UIApplication.sharedApplication().keyWindow?.rootViewController {
                         while let presentedViewController = topController.presentedViewController {
@@ -170,7 +180,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         topController.presentViewController(alert, animated: true, completion: nil)
                     }
                 
-                    NSLog("Unresolved error \(error), \(error!.userInfo)")
+                    DDLogError("Unresolved error \(error), \(error!.userInfo)")
                     abort()
                 }
             }

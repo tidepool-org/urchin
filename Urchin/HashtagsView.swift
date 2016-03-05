@@ -16,6 +16,7 @@
 import Foundation
 import UIKit
 import CoreData
+import CocoaLumberjack
 
 class HashtagsView: UIView {
     
@@ -74,7 +75,7 @@ class HashtagsView: UIView {
                         try managedContext.save()
                     } catch let error as NSError {
                         errorTwo = error
-                        NSLog("Couldn't increase number of usages for hashtag \(text): \(errorTwo), \(errorTwo?.userInfo)")
+                        DDLogError("Couldn't increase number of usages for hashtag \(text): \(errorTwo), \(errorTwo?.userInfo)")
                     }
                     
                     break
@@ -104,11 +105,11 @@ class HashtagsView: UIView {
                     try managedContext.save()
                 } catch let error as NSError {
                     errorTwo = error
-                    NSLog("Could not save new hashtag \(text): \(errorTwo), \(errorTwo?.userInfo)")
+                    DDLogError("Could not save new hashtag \(text): \(errorTwo), \(errorTwo?.userInfo)")
                 }
             }
         } catch let error as NSError {
-            NSLog("Could not fetch hashtags to handle hashtag \(text): \(error), \(error.userInfo)")
+            DDLogError("Could not fetch hashtags to handle hashtag \(text): \(error), \(error.userInfo)")
         }
     }
     
@@ -136,7 +137,7 @@ class HashtagsView: UIView {
             // Let hashtags be the results
             self.hashtags = results!
         } catch let error as NSError {
-            NSLog("Could not fetch hashtags: \(error), \(error.userInfo)")
+            DDLogError("Could not fetch hashtags: \(error), \(error.userInfo)")
         }
         
         // If it didn't find any hashtags (first time using app)
@@ -181,7 +182,7 @@ class HashtagsView: UIView {
                 try managedContext.save()
             } catch let error1 as NSError {
                 error = error1
-                NSLog("Could not save default hashtag \(text): \(error), \(error?.userInfo)")
+                DDLogError("Could not save default hashtag \(text): \(error), \(error?.userInfo)")
             }
             
             // Append the hashtag to the list of hashtags

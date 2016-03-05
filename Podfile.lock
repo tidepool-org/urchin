@@ -1,18 +1,27 @@
 PODS:
-  - Realm (0.97.0):
-    - Realm/Headers (= 0.97.0)
-  - Realm/Headers (0.97.0)
-  - RealmSwift (0.97.0):
-    - Realm (= 0.97.0)
-  - twitter-text (1.13.0)
+  - CocoaLumberjack/Core (2.2.0)
+  - CocoaLumberjack/Default (2.2.0):
+    - CocoaLumberjack/Core
+  - CocoaLumberjack/Extensions (2.2.0):
+    - CocoaLumberjack/Default
+  - CocoaLumberjack/Swift (2.2.0):
+    - CocoaLumberjack/Extensions
+  - Realm (0.98.3):
+    - Realm/Headers (= 0.98.3)
+  - Realm/Headers (0.98.3)
+  - RealmSwift (0.98.3):
+    - Realm (= 0.98.3)
+  - twitter-text (1.13.4)
 
 DEPENDENCIES:
-  - RealmSwift
-  - twitter-text
+  - CocoaLumberjack/Swift (~> 2.2.0)
+  - RealmSwift (~> 0.98.3)
+  - twitter-text (~> 1.13.4)
 
 SPEC CHECKSUMS:
-  Realm: b498a6fb9d288b171ff98d0e2d4384c295be8990
-  RealmSwift: d014810dec75c9a3f1a33926d2dabfed855c582c
-  twitter-text: 60d0816a5b1ae7331bdda54ba15f0da974286177
+  CocoaLumberjack: 17fe8581f84914d5d7e6360f7c70022b173c3ae0
+  Realm: c6a7d00221a2d5177810a674aebd40c5e0b70b0f
+  RealmSwift: d6ecad6e4c2a645d6ac956c2c7e9efb375f39c31
+  twitter-text: 66e7b9925534ade86cb3cb2751788073de8f2fec
 
 COCOAPODS: 0.39.0

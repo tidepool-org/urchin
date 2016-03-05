@@ -15,6 +15,7 @@
 
 import Foundation
 import UIKit
+import CocoaLumberjack
 
 class NotesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
@@ -232,7 +233,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
             self.refreshControl.addTarget(self, action: "refresh", forControlEvents: UIControlEvents.ValueChanged)
             self.notesTable.addSubview(refreshControl)
         } else {
-            NSLog("No data storage accounts")
+            DDLogInfo("No data storage accounts")
             let errorLabel: UILabel = UILabel()
             errorLabel.text = "Looks like you don't have access to any data yet. Please ask people to invite you to see their data in Blip so you can post notes for them."
             errorLabel.font = mediumSemiboldFont
@@ -342,7 +343,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     // Fetch notes
     func loadNotes() {
-        NSLog("Loading notes")
+        DDLogVerbose("trace")
         
         if (!loadingNotes) {
             // Shift back three months for fetching
@@ -360,7 +361,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     func refresh() {
-        NSLog("Refreshing notes table")
+        DDLogVerbose("trace)")
         
         if (!loadingNotes) {
             

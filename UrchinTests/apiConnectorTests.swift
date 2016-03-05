@@ -14,6 +14,7 @@
 */
 
 import XCTest
+import CocoaLumberjack
 
 class apiConnectorTests: XCTestCase {
     
@@ -57,7 +58,7 @@ class apiConnectorTests: XCTestCase {
         // To be completed once response has been received. Verify that the proper status code was received.
         let completion = { (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
             if (error != nil && response == nil && data == nil) {
-                NSLog("\(__FUNCTION__): Login request failed, error: \(error.userInfo)")
+                DDLogError("Login request failed, error: \(error.userInfo)")
                 XCTFail("Error: \(error.userInfo)")
             } else {
                 // Parse the response.

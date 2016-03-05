@@ -14,6 +14,7 @@
 */
 
 import HealthKit
+import CocoaLumberjack
 
 class HealthKitManager {
     
@@ -41,7 +42,7 @@ class HealthKitManager {
     func authorize(shouldAuthorizeBloodGlucoseSamples shouldAuthorizeBloodGlucoseSamples: Bool, shouldAuthorizeWorkoutSamples: Bool, completion: ((success:Bool, error:NSError!) -> Void)!)
     {
         guard isHealthDataAvailable else {
-            NSLog("\(__FUNCTION__): Unexpected HealthKitManager call when health data not available")
+            DDLogError("Unexpected HealthKitManager call when health data not available")
             return
         }
         
@@ -53,7 +54,7 @@ class HealthKitManager {
             readTypes.insert(HKObjectType.workoutType())
         }
         guard readTypes.count > 0 else {
-            NSLog("\(__FUNCTION__): No health data authorization requested, ignoring")
+            DDLogVerbose("No health data authorization requested, ignoring")
             return
         }
         
@@ -86,7 +87,7 @@ class HealthKitManager {
     
     func startObservingBloodGlucoseSamples(resultsHandler: (([HKSample]?, [HKDeletedObject]?, NSError?) -> Void)!) {
         guard isHealthDataAvailable else {
-            NSLog("\(__FUNCTION__): Unexpected HealthKitManager call when health data not available")
+            DDLogError("Unexpected HealthKitManager call when health data not available")
             return
         }
         
@@ -102,7 +103,7 @@ class HealthKitManager {
                     self.bloodGlucoseObservationSuccessful = true
                     self.readBloodGlucoseSamples(resultsHandler)
                 } else {
-                    NSLog("\(__FUNCTION__): HealthKit observation error \(error), \(error!.userInfo)")
+                    DDLogError("HealthKit observation error \(error), \(error!.userInfo)")
                     if (resultsHandler != nil) {
                         resultsHandler(nil, nil, error);
                     }
@@ -116,7 +117,7 @@ class HealthKitManager {
     
     func stopObservingBloodGlucoseSamples() {
         guard isHealthDataAvailable else {
-            NSLog("\(__FUNCTION__): Unexpected HealthKitManager call when health data not available")
+            DDLogError("Unexpected HealthKitManager call when health data not available")
             return
         }
         
@@ -132,7 +133,7 @@ class HealthKitManager {
     // NOTE: resultsHandler is called on a separate process queue!
     func startObservingWorkoutSamples(resultsHandler: (([HKSample]?, [HKDeletedObject]?, NSError?) -> Void)!) {
         guard isHealthDataAvailable else {
-            NSLog("\(__FUNCTION__): Unexpected HealthKitManager call when health data not available")
+            DDLogError("Unexpected HealthKitManager call when health data not available")
             return
         }
         
@@ -148,7 +149,7 @@ class HealthKitManager {
                     self.workoutsObservationSuccessful = true
                     self.readWorkoutSamples(resultsHandler)
                 } else {
-                    NSLog("\(__FUNCTION__): HealthKit observation error \(error), \(error!.userInfo)")
+                    DDLogError("HealthKit observation error \(error), \(error!.userInfo)")
                     if (resultsHandler != nil) {
                         resultsHandler(nil, nil, error);
                     }
@@ -162,7 +163,7 @@ class HealthKitManager {
     
     func stopObservingWorkoutSamples() {
         guard isHealthDataAvailable else {
-            NSLog("\(__FUNCTION__): Unexpected HealthKitManager call when health data not available")
+            DDLogError("Unexpected HealthKitManager call when health data not available")
             return
         }
         
@@ -179,7 +180,7 @@ class HealthKitManager {
     
     func enableBackgroundDeliveryBloodGlucoseSamples() {
         guard isHealthDataAvailable else {
-            NSLog("\(__FUNCTION__): Unexpected HealthKitManager call when health data not available")
+            DDLogError("Unexpected HealthKitManager call when health data not available")
             return
         }
         
@@ -190,9 +191,9 @@ class HealthKitManager {
                     success, error -> Void in
                     if (error == nil) {
                         self.bloodGlucoseBackgroundDeliveryEnabled = true
-                        NSLog("\(__FUNCTION__): Enabled background delivery of health data")
+                        DDLogError("Enabled background delivery of health data")
                     } else {
-                        NSLog("\(__FUNCTION__): Error enabling background delivery of health data \(error), \(error!.userInfo)")
+                        DDLogError("Error enabling background delivery of health data \(error), \(error!.userInfo)")
                     }
             }
         }
@@ -200,7 +201,7 @@ class HealthKitManager {
     
     func disableBackgroundDeliveryBloodGlucoseSamples() {
         guard isHealthDataAvailable else {
-            NSLog("\(__FUNCTION__): Unexpected HealthKitManager call when health data not available")
+            DDLogError("Unexpected HealthKitManager call when health data not available")
             return
         }
         
@@ -209,9 +210,9 @@ class HealthKitManager {
                 success, error -> Void in
                 if (error == nil) {
                     self.bloodGlucoseBackgroundDeliveryEnabled = false
-                    NSLog("\(__FUNCTION__): Disabled background delivery of health data")
+                    DDLogError("Disabled background delivery of health data")
                 } else {
-                    NSLog("\(__FUNCTION__): Error disabling background delivery of health data \(error), \(error!.userInfo)")
+                    DDLogError("Error disabling background delivery of health data \(error), \(error!.userInfo)")
                 }
             }
         }
@@ -219,7 +220,7 @@ class HealthKitManager {
     
     func enableBackgroundDeliveryWorkoutSamples() {
         guard isHealthDataAvailable else {
-            NSLog("\(__FUNCTION__): Unexpected HealthKitManager call when health data not available")
+            DDLogError("Unexpected HealthKitManager call when health data not available")
             return
         }
         
@@ -230,9 +231,9 @@ class HealthKitManager {
                     success, error -> Void in
                     if (error == nil) {
                         self.workoutsBackgroundDeliveryEnabled = true
-                        NSLog("\(__FUNCTION__): Enabled background delivery of health data")
+                        DDLogError("Enabled background delivery of health data")
                     } else {
-                        NSLog("\(__FUNCTION__): Error enabling background delivery of health data \(error), \(error!.userInfo)")
+                        DDLogError("Error enabling background delivery of health data \(error), \(error!.userInfo)")
                     }
             }
         }
@@ -240,7 +241,7 @@ class HealthKitManager {
     
     func disableBackgroundDeliveryWorkoutSamples() {
         guard isHealthDataAvailable else {
-            NSLog("\(__FUNCTION__): Unexpected HealthKitManager call when health data not available")
+            DDLogError("Unexpected HealthKitManager call when health data not available")
             return
         }
         
@@ -249,9 +250,9 @@ class HealthKitManager {
                 success, error -> Void in
                 if (error == nil) {
                     self.workoutsBackgroundDeliveryEnabled = false
-                    NSLog("\(__FUNCTION__): Disabled background delivery of health data")
+                    DDLogError("Disabled background delivery of health data")
                 } else {
-                    NSLog("\(__FUNCTION__): Error disabling background delivery of health data \(error), \(error!.userInfo)")
+                    DDLogError("Error disabling background delivery of health data \(error), \(error!.userInfo)")
                 }
             }
         }
@@ -262,7 +263,7 @@ class HealthKitManager {
     private func readBloodGlucoseSamples(resultsHandler: (([HKSample]?, [HKDeletedObject]?, NSError?) -> Void)!)
     {
         guard isHealthDataAvailable else {
-            NSLog("\(__FUNCTION__): Unexpected HealthKitManager call when health data not available")
+            DDLogError("Unexpected HealthKitManager call when health data not available")
             return
         }
         
@@ -302,7 +303,7 @@ class HealthKitManager {
     private func readWorkoutSamples(resultsHandler: (([HKSample]?, [HKDeletedObject]?, NSError?) -> Void)!)
     {
         guard isHealthDataAvailable else {
-            NSLog("\(__FUNCTION__): Unexpected HealthKitManager call when health data not available")
+            DDLogError("Unexpected HealthKitManager call when health data not available")
             return
         }
         
@@ -344,11 +345,11 @@ class HealthKitManager {
         }
         
         let samples = samples!
-        NSLog("********* PROCESSING \(samples.count) new glucose samples ********* ")
+        DDLogInfo("********* PROCESSING \(samples.count) new glucose samples ********* ")
         let serializer = OMHSerializer()
         for sample in samples {
             let jsonString = try! serializer.jsonForSample(sample)
-            NSLog("Granola serialized glucose sample: \(jsonString)");
+            DDLogInfo("Granola serialized glucose sample: \(jsonString)");
         }
     }
     
@@ -358,9 +359,9 @@ class HealthKitManager {
         }
         
         let samples = samples!
-        NSLog("********* PROCESSING \(samples.count) deleted glucose samples ********* ")
+        DDLogInfo("********* PROCESSING \(samples.count) deleted glucose samples ********* ")
         for sample in samples {
-            NSLog("Processed deleted glucose sample with UUID: \(sample.UUID)");
+            DDLogInfo("Processed deleted glucose sample with UUID: \(sample.UUID)");
         }
     }
     
@@ -370,11 +371,11 @@ class HealthKitManager {
         }
         
         let samples = samples!
-        NSLog("********* PROCESSING \(samples.count) new workout samples ********* ")
+        DDLogInfo("********* PROCESSING \(samples.count) new workout samples ********* ")
         let serializer = OMHSerializer()
         for sample in samples {
             let jsonString = try! serializer.jsonForSample(sample)
-            NSLog("Granola serialized workout sample: \(jsonString)");
+            DDLogInfo("Granola serialized workout sample: \(jsonString)");
         }
     }
     
@@ -384,9 +385,9 @@ class HealthKitManager {
         }
         
         let samples = samples!
-        NSLog("********* PROCESSING \(samples.count) deleted workout samples ********* ")
+        DDLogInfo("********* PROCESSING \(samples.count) deleted workout samples ********* ")
         for sample in samples {
-            NSLog("Processed deleted workout sample with UUID: \(sample.UUID)");
+            DDLogInfo("Processed deleted workout sample with UUID: \(sample.UUID)");
         }
     }
     

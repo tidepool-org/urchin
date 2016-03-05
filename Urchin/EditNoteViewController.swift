@@ -16,6 +16,7 @@
 import Foundation
 import UIKit
 import CoreData
+import CocoaLumberjack
 
 class EditNoteViewController: UIViewController, UITextViewDelegate {
     
@@ -257,7 +258,7 @@ class EditNoteViewController: UIViewController, UITextViewDelegate {
             let alert = UIAlertController(title: editAlertTitle, message: editAlertMessage, preferredStyle: .Alert)
             
             alert.addAction(UIAlertAction(title: editAlertDiscard, style: .Cancel, handler: { Void in
-                NSLog("Discard edits from note")
+                DDLogVerbose("Discard edits from note")
                 
                 let notification = NSNotification(name: "doneEditing", object: nil)
                 NSNotificationCenter.defaultCenter().postNotification(notification)
@@ -267,7 +268,7 @@ class EditNoteViewController: UIViewController, UITextViewDelegate {
                 self.dismissViewControllerAnimated(true, completion: nil)
             }))
             alert.addAction(UIAlertAction(title: editAlertSave, style: .Default, handler: { Void in
-                NSLog("Save edited note")
+                DDLogVerbose("Save edited note")
                 
                 self.saveNote()
             }))
@@ -291,12 +292,12 @@ class EditNoteViewController: UIViewController, UITextViewDelegate {
         
         alert.addAction(UIAlertAction(title: trashAlertCancel, style: .Cancel, handler: { Void in
             
-            NSLog("Do not trash note")
+            DDLogVerbose("Do not trash note")
             
         }))
         alert.addAction(UIAlertAction(title: trashAlertOkay, style: .Destructive, handler: { Void in
             
-            NSLog("Trash note")
+            DDLogVerbose("Trash note")
             
             // Done editing note
             let notification = NSNotification(name: "doneEditing", object: nil)

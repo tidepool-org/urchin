@@ -686,25 +686,26 @@ static RLMAccessorCode accessorCodeForType(char objcTypeCode, RLMPropertyType rl
     }
 }
 
-static void RLMReplaceShouldIncludeInDefaultSchemaMethod(Class cls, bool shouldInclude) {
-    Class metaClass = objc_getMetaClass(class_getName(cls));
-    IMP imp = imp_implementationWithBlock(^(Class){ return shouldInclude; });
-    class_addMethod(metaClass, @selector(shouldIncludeInDefaultSchema), imp, "b@:");
-}
-
 // implement the class method className on accessors to return the className of the
 // base object
 void RLMReplaceClassNameMethod(Class accessorClass, NSString *className) {
-    Class metaClass = objc_getMetaClass(class_getName(accessorClass));
+    Class metaClass = object_getClass(accessorClass);
     IMP imp = imp_implementationWithBlock(^(Class){ return className; });
     class_addMethod(metaClass, @selector(className), imp, "@@:");
 }
 
 // implement the shared schema method
 void RLMReplaceSharedSchemaMethod(Class accessorClass, RLMObjectSchema *schema) {
-    Class metaClass = objc_getMetaClass(class_getName(accessorClass));
-    IMP imp = imp_implementationWithBlock(^(Class){ return schema; });
-    class_replaceMethod(metaClass, @selector(sharedSchema), imp, "@@:");
+    Class metaClass = object_getClass(accessorClass);
+    IMP imp = imp_implementationWithBlock(^(Class cls) {
+        // This can be called on a subclass of the class that we overrode it on
+        // if that class hasn't been initialized yet
+        if (cls == accessorClass) {
+            return schema;
+        }
+        return [RLMSchema sharedSchemaForClass:cls];
+    });
+    class_addMethod(metaClass, @selector(sharedSchema), imp, "@@:");
 }
 
 static NSMutableSet *s_generatedClasses = [NSMutableSet new];
@@ -718,12 +719,6 @@ bool RLMIsGeneratedClass(Class cls) {
     @synchronized (s_generatedClasses) {
         return [s_generatedClasses containsObject:cls];
     }
-}
-
-void RLMReplaceSharedSchemaMethodWithBlock(Class accessorClass, RLMObjectSchema *(^method)(Class)) {
-    Class metaClass = objc_getMetaClass(class_getName(accessorClass));
-    IMP imp = imp_implementationWithBlock(method);
-    class_replaceMethod(metaClass, @selector(sharedSchema), imp, "@@:");
 }
 
 static Class RLMCreateAccessorClass(Class objectClass,
@@ -765,37 +760,13 @@ static Class RLMCreateAccessorClass(Class objectClass,
         }
     }
 
-    // implement className for accessor to return base className
-    RLMReplaceClassNameMethod(accClass, schema.className);
-    RLMReplaceShouldIncludeInDefaultSchemaMethod(accClass, false);
     RLMMarkClassAsGenerated(accClass);
 
     return accClass;
 }
 
 Class RLMAccessorClassForObjectClass(Class objectClass, RLMObjectSchema *schema, NSString *prefix) {
-    Class cls = RLMCreateAccessorClass(objectClass, schema, prefix, RLMAccessorGetter, RLMAccessorSetter);
-    Class metaCls = object_getClass(cls);
-    IMP imp = imp_implementationWithBlock(^{ return NO; });
-
-    // Tell KVO not to override our setters to send notifications, as we cover
-    // that ourselves
-#define RLM_SEL_PREFIX "automaticallyNotifiesObserversOf"
-    const size_t prefixLen = sizeof(RLM_SEL_PREFIX) - 1;
-    char selName[prefixLen + realm::Descriptor::max_column_name_length + 1] = RLM_SEL_PREFIX;
-#undef RLM_SEL_PREFIX
-
-    for (RLMProperty *prop in schema.properties) {
-        NSUInteger usedBytes = 0;
-        [prop.name getBytes:selName+prefixLen
-                  maxLength:realm::Descriptor::max_column_name_length
-                 usedLength:&usedBytes encoding:NSUTF8StringEncoding
-                    options:0 range:{0, prop.name.length} remainingRange:nullptr];
-        selName[prefixLen] = toupper(selName[prefixLen]);
-        selName[prefixLen + usedBytes] = 0;
-        class_addMethod(metaCls, sel_registerName(selName), imp, "B:@");
-    }
-    return cls;
+    return RLMCreateAccessorClass(objectClass, schema, prefix, RLMAccessorGetter, RLMAccessorSetter);
 }
 
 Class RLMStandaloneAccessorClassForObjectClass(Class objectClass, RLMObjectSchema *schema) {

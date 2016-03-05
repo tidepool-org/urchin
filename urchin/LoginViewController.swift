@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import CocoaLumberjack
 
 class LogInViewController :
         UIViewController,
@@ -116,7 +117,7 @@ class LogInViewController :
     }
     
     private func configureForReachability() {
-        NSLog("configureForReachability")
+        DDLogInfo("configureForReachability")
         let connected = apiConnector.isConnectedToNetwork()
         
         for view in self.view.subviews {
@@ -150,7 +151,7 @@ class LogInViewController :
         version.sizeToFit()
         version.frame.origin.x = self.view.frame.width / 2 - version.frame.width / 2
         
-        NSLog("Switched to \(serverName) server")
+        DDLogInfo("Switched to \(serverName) server")
     }
     
     func showServerActionSheet() {
@@ -180,7 +181,7 @@ class LogInViewController :
             notesScene.transitioningDelegate = self
             self.presentViewController(notesScene, animated: true, completion: nil)
         } else {
-            NSLog("Session token is empty or user was not created")
+            DDLogInfo("Session token is empty or user was not created")
             prepareLogin()
         }
     }
@@ -190,7 +191,7 @@ class LogInViewController :
         if (!loginPrepared) {
             loginPrepared = true
             
-            NSLog("Preparing log in")
+            DDLogInfo("Preparing log in")
             
             let notificationCenter = NSNotificationCenter.defaultCenter()
             
@@ -398,7 +399,7 @@ class LogInViewController :
             
             self.presentViewController(notesScene, animated: true, completion: nil)
         } else {
-            NSLog("Session token is empty or user was not created")
+            DDLogInfo("Session token is empty or user was not created")
         }
     }
     

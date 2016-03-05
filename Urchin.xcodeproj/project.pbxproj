@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		48E4A4431BEE5879001A7B35 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E4A4421BEE5879001A7B35 /* Reachability.swift */; };
 		48E4A4441BEE5879001A7B35 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E4A4421BEE5879001A7B35 /* Reachability.swift */; };
+		4D01F7971C88D7D8006ABE5E /* LogFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D01F7961C88D7D8006ABE5E /* LogFormatter.swift */; };
+		4D01F7981C88D809006ABE5E /* LogFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D01F7961C88D7D8006ABE5E /* LogFormatter.swift */; };
 		4D47CD7D1C18EC4C00AAA8A9 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D47CD7C1C18EC4C00AAA8A9 /* HealthKit.framework */; };
 		4DBC52CB1C2B66A40062FDEA /* OMHSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DBC52C31C2B66A40062FDEA /* OMHSerializer.m */; };
 		4DBC52CC1C2B66A40062FDEA /* OMHHealthKitConstantsMapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DBC52C51C2B66A40062FDEA /* OMHHealthKitConstantsMapper.m */; };
@@ -148,6 +150,7 @@
 /* Begin PBXFileReference section */
 		3CBC42BABB0DC09AD9454918 /* Pods-urchin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-urchin.debug.xcconfig"; path = "Pods/Target Support Files/Pods-urchin/Pods-urchin.debug.xcconfig"; sourceTree = "<group>"; };
 		48E4A4421BEE5879001A7B35 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
+		4D01F7961C88D7D8006ABE5E /* LogFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LogFormatter.swift; path = Urchin/LogFormatter.swift; sourceTree = SOURCE_ROOT; };
 		4D47CD7B1C18EC4C00AAA8A9 /* urchin.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = urchin.entitlements; sourceTree = "<group>"; };
 		4D47CD7C1C18EC4C00AAA8A9 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		4D47CD7E1C18F01300AAA8A9 /* urchin-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "urchin-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
@@ -433,6 +436,7 @@
 				4D47CD7B1C18EC4C00AAA8A9 /* urchin.entitlements */,
 				4D47CD7E1C18F01300AAA8A9 /* urchin-Bridging-Header.h */,
 				AABCEF891B3231910064FE49 /* AppDelegate.swift */,
+				4D01F7961C88D7D8006ABE5E /* LogFormatter.swift */,
 				AABCEF8D1B3231910064FE49 /* Main.storyboard */,
 				AABCEF921B3231910064FE49 /* LaunchScreen.xib */,
 				AABCEF901B3231910064FE49 /* Images.xcassets */,
@@ -819,6 +823,7 @@
 				4DBC534D1C30A9230062FDEA /* HealthKitManager.swift in Sources */,
 				AA6932061B66E6B60057F0A0 /* AddNoteVCTableViewDelegate.swift in Sources */,
 				4DBC52CE1C2B66A40062FDEA /* NSDate+RFC3339.m in Sources */,
+				4D01F7971C88D7D8006ABE5E /* LogFormatter.swift in Sources */,
 				AA3484F41B56AED20028C49B /* UIDateFormatterExtension.swift in Sources */,
 				4DBC52CB1C2B66A40062FDEA /* OMHSerializer.m in Sources */,
 				4DBC53661C3242420062FDEA /* NSSet+ObjectiveSugar.m in Sources */,
@@ -861,6 +866,7 @@
 				AA6AF8F11B5EA81F0011F246 /* dateFormatterExtensionTests.swift in Sources */,
 				4DBC52D01C2B66D20062FDEA /* OMHSerializer.m in Sources */,
 				AA7920251B62AB790046038B /* NoteCell.swift in Sources */,
+				4D01F7981C88D809006ABE5E /* LogFormatter.swift in Sources */,
 				AA6932071B66E6D30057F0A0 /* AddNoteVCTableViewDelegate.swift in Sources */,
 				AA6932011B66E5910057F0A0 /* AddNoteVCTextViewDelegate.swift in Sources */,
 				4DBC534F1C30B3F30062FDEA /* HealthKitManager.swift in Sources */,
@@ -1020,6 +1026,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MACH_O_TYPE = mh_execute;
+				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\" -DDEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = org.tidepool.blipnotes;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -1043,6 +1050,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MACH_O_TYPE = mh_execute;
+				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\" -DRELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = org.tidepool.blipnotes;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -1063,6 +1071,7 @@
 				);
 				INFOPLIST_FILE = urchinTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\" -DDEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.tidepool.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "urchin-Bridging-Header.h";
@@ -1078,6 +1087,7 @@
 				FRAMEWORK_SEARCH_PATHS = "";
 				INFOPLIST_FILE = urchinTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\" -DRELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.tidepool.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "urchin-Bridging-Header.h";

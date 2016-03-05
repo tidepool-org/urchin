@@ -17,6 +17,7 @@ import Foundation
 import UIKit
 import CoreData
 import SystemConfiguration
+import CocoaLumberjack
 
 class APIConnector {
     
@@ -55,7 +56,7 @@ class APIConnector {
                     })
                 task.resume()
             } else {
-                NSLog("Not connected to network")
+                DDLogInfo("Not connected to network")
                 self.alertWithOkayButton("Not Connected to Network", message: "Please restart Blip notes when you are connected to a network.")
             }
     }
@@ -73,12 +74,12 @@ class APIConnector {
         let completion = { (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
             if let httpResponse = response as? NSHTTPURLResponse {
                 if (httpResponse.statusCode == 200) {
-                    NSLog("Tracked metric: \(metricName)")
+                    DDLogInfo("Tracked metric: \(metricName)")
                 } else {
-                    NSLog("Invalid status code: \(httpResponse.statusCode) for tracking metric: \(metricName)")
+                    DDLogError("Invalid status code: \(httpResponse.statusCode) for tracking metric: \(metricName)")
                 }
             } else {
-                NSLog("Invalid response for tracking metric")
+                DDLogError("Invalid response for tracking metric")
             }
         }
         
@@ -120,7 +121,7 @@ class APIConnector {
             }
             
             if (error != nil && response == nil && data == nil) {
-                NSLog("\(__FUNCTION__): Could not login, error: \(error.userInfo)")
+                DDLogError("Could not login, error: \(error.userInfo)")
                 self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
                 return
             }
@@ -129,14 +130,14 @@ class APIConnector {
             
             if let code = jsonResult.valueForKey("code") as? Int {
                 if (code == 401) {
-                    NSLog("Invalid login request: \(code)")
+                    DDLogError("Invalid login request: \(code)")
                     
                     let notification = NSNotification(name: "prepareLogin", object: nil)
                     NSNotificationCenter.defaultCenter().postNotification(notification)
                     
                     self.alertWithOkayButton(invalidLogin, message: invalidLoginMessage)
                 } else {
-                    NSLog("Invalid login request: \(code)")
+                    DDLogError("Invalid login request: \(code)")
                     
                     let notification = NSNotification(name: "prepareLogin", object: nil)
                     NSNotificationCenter.defaultCenter().postNotification(notification)
@@ -147,7 +148,7 @@ class APIConnector {
                 if let httpResponse = response as? NSHTTPURLResponse {
                     
                     if (httpResponse.statusCode == 200) {
-                        NSLog("Logged in")
+                        DDLogInfo("Logged in")
                         
                         let jsonResult: NSDictionary = ((try? NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers)) as? NSDictionary)!
                         
@@ -171,7 +172,7 @@ class APIConnector {
                             let notificationTwo = NSNotification(name: "directLogin", object: nil)
                             NSNotificationCenter.defaultCenter().postNotification(notificationTwo)
                         } else {
-                            NSLog("Invalid login: \(httpResponse.statusCode)")
+                            DDLogError("Invalid login: \(httpResponse.statusCode)")
                             
                             let notification = NSNotification(name: "prepareLogin", object: nil)
                             NSNotificationCenter.defaultCenter().postNotification(notification)
@@ -180,7 +181,7 @@ class APIConnector {
                             NSNotificationCenter.defaultCenter().postNotification(notificationTwo)
                         }
                     } else {
-                        NSLog("Invalid status code: \(httpResponse.statusCode) for logging in")
+                        DDLogError("Invalid status code: \(httpResponse.statusCode) for logging in")
                         
                         let notification = NSNotification(name: "prepareLogin", object: nil)
                         NSNotificationCenter.defaultCenter().postNotification(notification)
@@ -191,7 +192,7 @@ class APIConnector {
                         self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
                     }
                 } else {
-                    NSLog("Invalid response for logging in")
+                    DDLogError("Invalid response for logging in")
                     
                     let notification = NSNotification(name: "prepareLogin", object: nil)
                     NSNotificationCenter.defaultCenter().postNotification(notification)
@@ -246,7 +247,7 @@ class APIConnector {
                         try managedContext.save()
                     } catch let error1 as NSError {
                         error = error1
-                        NSLog("Could not save log in remember me: \(error), \(error?.userInfo)")
+                        DDLogError("Could not save log in remember me: \(error), \(error?.userInfo)")
                     }
                 }
                 let base64LoginString = results![0].valueForKey("login") as! String
@@ -274,7 +275,7 @@ class APIConnector {
                 NSNotificationCenter.defaultCenter().postNotification(notificationTwo)
             }
         } catch let error as NSError {
-            NSLog("Could not fetch remember me information: \(error), \(error.userInfo)")
+            DDLogError("Could not fetch remember me information: \(error), \(error.userInfo)")
         }
     }
 
@@ -323,7 +324,7 @@ class APIConnector {
                     try managedContext.save()
                 } catch let error as NSError {
                     errorTwo = error
-                    NSLog("Could not save new remember me info: \(errorTwo), \(errorTwo?.userInfo)")
+                    DDLogError("Could not save new remember me info: \(errorTwo), \(errorTwo?.userInfo)")
                 }
             } else if (results!.count == 1) {
                 // Set the value to the new saved login
@@ -342,11 +343,11 @@ class APIConnector {
                     try managedContext.save()
                 } catch let error as NSError {
                     errorTwo = error
-                    NSLog("Could not save edited remember me info: \(errorTwo), \(errorTwo?.userInfo)")
+                    DDLogError("Could not save edited remember me info: \(errorTwo), \(errorTwo?.userInfo)")
                 }
             }
         } catch let error as NSError {
-            NSLog("Could not fetch remember me info: \(error), \(error.userInfo)")
+            DDLogError("Could not fetch remember me info: \(error), \(error.userInfo)")
         }
     }
     
@@ -362,7 +363,7 @@ class APIConnector {
         
         let completion = { (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
             if (error != nil && response == nil && data == nil) {
-                NSLog("\(__FUNCTION__): Could not refresh session token, error: \(error.userInfo)")
+                DDLogError("Could not refresh session token, error: \(error.userInfo)")
                 self.tryLoginFromRefreshToken()
                 return
             }
@@ -371,12 +372,12 @@ class APIConnector {
             
             if let code = jsonResult.valueForKey("code") as? Int {
                 if (code == 401) {
-                    NSLog("Could not refresh session token: \(code)")
+                    DDLogError("Could not refresh session token: \(code)")
                     
                     self.tryLoginFromRefreshToken()
                     
                 } else {
-                    NSLog("Could not refresh session token: \(code)")
+                    DDLogError("Could not refresh session token: \(code)")
                     
                     self.tryLoginFromRefreshToken()
                 }
@@ -384,7 +385,7 @@ class APIConnector {
                 if let httpResponse = response as? NSHTTPURLResponse {
                     
                     if (httpResponse.statusCode == 200) {
-                        NSLog("Refreshed session token")
+                        DDLogInfo("Refreshed session token")
                         
                         // Store the session token for further use.
                         self.x_tidepool_session_token = httpResponse.allHeaderFields["x-tidepool-session-token"] as! String
@@ -395,13 +396,13 @@ class APIConnector {
                         
                         
                     } else {
-                        NSLog("Could not refresh session token - invalid status code \(httpResponse.statusCode)")
+                        DDLogError("Could not refresh session token - invalid status code \(httpResponse.statusCode)")
                         
                         self.tryLoginFromRefreshToken()
                     }
                     
                 } else {
-                    NSLog("Could not refresh session token - response could not be parsed")
+                    DDLogError("Could not refresh session token - response could not be parsed")
                     
                     self.tryLoginFromRefreshToken()
                 }
@@ -432,7 +433,7 @@ class APIConnector {
         let completion = { (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
             if let httpResponse = response as? NSHTTPURLResponse {
                 if (httpResponse.statusCode == 200) {
-                    NSLog("Logged out")
+                    DDLogInfo("Logged out")
                     let notification = NSNotification(name: "prepareLogin", object: nil)
                     NSNotificationCenter.defaultCenter().postNotification(notification)
                     
@@ -443,11 +444,11 @@ class APIConnector {
                         self.groupsToFetchFor = 0
                     })
                 } else {
-                    NSLog("Did not log out - invalid status code \(httpResponse.statusCode)")
+                    DDLogError("Did not log out - invalid status code \(httpResponse.statusCode)")
                     self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
                 }
             } else {
-                NSLog("Did not log out - response could not be parsed")
+                DDLogError("Did not log out - response could not be parsed")
                 self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
             }
         }
@@ -468,7 +469,7 @@ class APIConnector {
         let completion = { (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
             if let httpResponse = response as? NSHTTPURLResponse {
                 if (httpResponse.statusCode == 200) {
-                    NSLog("Profile found: \(otherUser.userid)")
+                    DDLogInfo("Profile found: \(otherUser.userid)")
                     
                     let userDict: NSDictionary = ((try? NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers)) as? NSDictionary)!
                     
@@ -491,11 +492,11 @@ class APIConnector {
                     
                     
                 } else {
-                    NSLog("Did not find profile - invalid status code \(httpResponse.statusCode)")
+                    DDLogError("Did not find profile - invalid status code \(httpResponse.statusCode)")
                     self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
                 }
             } else {
-                NSLog("Did not find profile - response could not be parsed")
+                DDLogError("Did not find profile - response could not be parsed")
                 self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
             }
         }
@@ -516,7 +517,7 @@ class APIConnector {
         let completion = { (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
             if let httpResponse = response as? NSHTTPURLResponse {
                 if (httpResponse.statusCode == 200) {
-                    NSLog("Found viewable users for user: \(self.user?.userid)")
+                    DDLogInfo("Found viewable users for user: \(self.user?.userid)")
                     let jsonResult: NSDictionary = ((try? NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers)) as? NSDictionary)!
                                         
                     var i = 0
@@ -526,11 +527,11 @@ class APIConnector {
                     }
                     self.groupsToFetchFor = i
                 } else {
-                    NSLog("Did not find viewable users - invalid status code \(httpResponse.statusCode)")
+                    DDLogError("Did not find viewable users - invalid status code \(httpResponse.statusCode)")
                     self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
                 }
             } else {
-                NSLog("Did not find viewable users - response could not be parsed")
+                DDLogError("Did not find viewable users - response could not be parsed")
                 self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
             }
         }
@@ -557,7 +558,7 @@ class APIConnector {
             
             if let httpResponse = response as? NSHTTPURLResponse {
                 if (httpResponse.statusCode == 200) {
-                    NSLog("Got notes for user (\(userid)) in given date range: \(dateFormatter.isoStringFromDate(start, zone: nil)) to \(dateFormatter.isoStringFromDate(end, zone: nil))")
+                    DDLogInfo("Got notes for user (\(userid)) in given date range: \(dateFormatter.isoStringFromDate(start, zone: nil)) to \(dateFormatter.isoStringFromDate(end, zone: nil))")
                     
                     var notes: [Note] = []
                     
@@ -592,9 +593,9 @@ class APIConnector {
                     notesVC.filterNotes()
                     notesVC.notesTable.reloadData()
                 } else if (httpResponse.statusCode == 404) {
-                    NSLog("No notes retrieved, status code: \(httpResponse.statusCode), userid: \(userid)")
+                    DDLogError("No notes retrieved, status code: \(httpResponse.statusCode), userid: \(userid)")
                 } else {
-                    NSLog("No notes retrieved - invalid status code \(httpResponse.statusCode)")
+                    DDLogError("No notes retrieved - invalid status code \(httpResponse.statusCode)")
                     self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
                 }
                 
@@ -605,7 +606,7 @@ class APIConnector {
                     NSNotificationCenter.defaultCenter().postNotification(notification)
                 }
             } else {
-                NSLog("No notes retrieved - could not parse response")
+                DDLogError("No notes retrieved - could not parse response")
                 self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
             }
         }
@@ -635,7 +636,7 @@ class APIConnector {
             if let httpResponse = response as? NSHTTPURLResponse {
                 
                 if (httpResponse.statusCode == 201) {
-                    NSLog("Sent note for groupid: \(note.groupid)")
+                    DDLogInfo("Sent note for groupid: \(note.groupid)")
                     
                     let jsonResult: NSDictionary = ((try? NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers)) as? NSDictionary)!
                     
@@ -647,11 +648,11 @@ class APIConnector {
                     notesVC.notesTable.reloadData()
                     
                 } else {
-                    NSLog("Did not send note for groupid \(note.groupid) - invalid status code \(httpResponse.statusCode)")
+                    DDLogError("Did not send note for groupid \(note.groupid) - invalid status code \(httpResponse.statusCode)")
                     self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
                 }
             } else {
-                NSLog("Did not send note for groupid \(note.groupid) - could not parse response")
+                DDLogError("Did not send note for groupid \(note.groupid) - could not parse response")
                 self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
             }
         }
@@ -680,7 +681,7 @@ class APIConnector {
         let completion = { (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
             if let httpResponse = response as? NSHTTPURLResponse {
                 if (httpResponse.statusCode == 200) {
-                    NSLog("Edited note with id \(originalNote.id)")
+                    DDLogInfo("Edited note with id \(originalNote.id)")
                     
                     originalNote.messagetext = editedNote.messagetext
                     originalNote.timestamp = editedNote.timestamp
@@ -689,11 +690,11 @@ class APIConnector {
                     notesVC.filterNotes()
                     notesVC.notesTable.reloadData()
                 } else {
-                    NSLog("Did not edit note with id \(originalNote.id) - invalid status code \(httpResponse.statusCode)")
+                    DDLogError("Did not edit note with id \(originalNote.id) - invalid status code \(httpResponse.statusCode)")
                     self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
                 }
             } else {
-                NSLog("Did not edit note with id \(originalNote.id) - could not parse response")
+                DDLogError("Did not edit note with id \(originalNote.id) - could not parse response")
                 self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
             }
         }
@@ -713,7 +714,7 @@ class APIConnector {
         let completion = { (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
             if let httpResponse = response as? NSHTTPURLResponse {
                 if (httpResponse.statusCode == 202) {
-                    NSLog("Deleted note with id \(noteToDelete.id)")
+                    DDLogInfo("Deleted note with id \(noteToDelete.id)")
                     
                     var i = 0
                     for note in notesVC.notes {
@@ -730,11 +731,11 @@ class APIConnector {
                     notesVC.filterNotes()
                     notesVC.notesTable.reloadData()
                 } else {
-                    NSLog("Did not delete note with id \(noteToDelete.id) - invalid status code \(httpResponse.statusCode)")
+                    DDLogError("Did not delete note with id \(noteToDelete.id) - invalid status code \(httpResponse.statusCode)")
                     self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
                 }
             } else {
-                NSLog("Did not delete note with id \(noteToDelete.id) - could not parse response")
+                DDLogError("Did not delete note with id \(noteToDelete.id) - could not parse response")
                 self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
             }
         }
@@ -789,10 +790,10 @@ class APIConnector {
                 baseURL = servers[serverName]!
             } catch let error as NSError {
                 errorTwo = error
-                NSLog("Could not save edited remember me info: \(errorTwo), \(errorTwo?.userInfo)")
+                DDLogError("Could not save edited remember me info: \(errorTwo), \(errorTwo?.userInfo)")
             }
         } catch let error as NSError {
-            NSLog("Could not fetch server information: \(error), \(error.userInfo)")
+            DDLogError("Could not fetch server information: \(error), \(error.userInfo)")
         }
     }
     
@@ -823,7 +824,7 @@ class APIConnector {
                 }
             }
         } catch let error as NSError {
-            NSLog("Could not fetch server information: \(error), \(error.userInfo)")
+            DDLogError("Could not fetch server information: \(error), \(error.userInfo)")
         }
         
      }
@@ -853,10 +854,10 @@ class APIConnector {
             let reachability = try Reachability.reachabilityForInternetConnection()
             return reachability.isReachable()
         } catch ReachabilityError.FailedToCreateWithAddress(let address) {
-            NSLog("Unable to create\nReachability with address:\n\(address)")
+            DDLogError("Unable to create\nReachability with address:\n\(address)")
             return true
         } catch {
-            NSLog("Other reachability error!")
+            DDLogError("Other reachability error!")
             return true
         }
     }
