@@ -538,7 +538,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         var additionalCells = groups.count == 1 ? 1 : 3
         if (HealthKitManager.sharedInstance.isHealthDataAvailable) {
             additionalCells++
-            if (HealthKitDataSync.sharedInstance.lastSyncCount > 0) {
+            if (HealthKitDataSync.sharedInstance.lastDbSyncCount > 0) {
                 additionalCells++
             }
         }
@@ -753,14 +753,14 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         } else if (tableView.isEqual(dropDownMenu)){
             if (groups.count == 1) {
                 if section == sectionIndex(TableSection.HealthKit) {
-                    numberOfRows = HealthKitDataSync.sharedInstance.lastSyncCount > 0 ? 2 : 1
+                    numberOfRows = HealthKitDataSync.sharedInstance.lastDbSyncCount > 0 ? 2 : 1
                 }
             } else {
                 if (section == sectionIndex(TableSection.Users)) {
                     // Number of groups + 1 for 'All' / #nofilter
                     numberOfRows = groups.count + 1
                 } else if (section == sectionIndex(TableSection.HealthKit)) {
-                    numberOfRows = HealthKitDataSync.sharedInstance.lastSyncCount > 0 ? 2 : 1
+                    numberOfRows = HealthKitDataSync.sharedInstance.lastDbSyncCount > 0 ? 2 : 1
                 } else if (section == sectionIndex(TableSection.Logout)) {
                     numberOfRows = 1
                 } else if (section == sectionIndex(TableSection.Version)) {

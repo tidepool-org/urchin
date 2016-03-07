@@ -61,13 +61,13 @@ class UserDropDownCell: UITableViewCell {
             separator.backgroundColor = whiteQuarterAlpha
             self.addSubview(separator)
         } else if (key == "healthkit-sync") {
-            let lastSyncCount = HealthKitDataSync.sharedInstance.lastSyncCount
-            let lastSyncTime = NSDateFormatter.localizedStringFromDate(HealthKitDataSync.sharedInstance.lastSyncTime, dateStyle: .ShortStyle, timeStyle: .ShortStyle)
-            if (lastSyncCount == 1) {
-                nameLabel.text = String(format: healthKitSyncStatusSingularFormat, lastSyncCount, lastSyncTime)
+            let lastDbSyncCount = HealthKitDataSync.sharedInstance.lastDbSyncCount
+            let lastDbSyncTime = NSDateFormatter.localizedStringFromDate(HealthKitDataSync.sharedInstance.lastDbSyncTime, dateStyle: .ShortStyle, timeStyle: .ShortStyle)
+            if (lastDbSyncCount == 1) {
+                nameLabel.text = String(format: healthKitSyncStatusSingularFormat, lastDbSyncCount, lastDbSyncTime)
                 
-            } else if (lastSyncCount > 1) {
-                nameLabel.text = String(format: healthKitSyncStatusPluralFormat, lastSyncCount, lastSyncTime)
+            } else if (lastDbSyncCount > 1) {
+                nameLabel.text = String(format: healthKitSyncStatusPluralFormat, lastDbSyncCount, lastDbSyncTime)
             }
             nameLabel.font = smallRegularFont
             nameLabel.sizeToFit()

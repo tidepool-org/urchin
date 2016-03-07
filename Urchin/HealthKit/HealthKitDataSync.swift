@@ -50,64 +50,64 @@ class HealthKitDataSync {
         // Set this as the configuration used for the default Realm
         Realm.Configuration.defaultConfiguration = config
 
-        var syncTime = NSUserDefaults.standardUserDefaults().objectForKey("lastSyncTimeBloodGlucoseSamples")
+        var syncTime = NSUserDefaults.standardUserDefaults().objectForKey("lastDbSyncTimeBloodGlucoseSamples")
         if (syncTime != nil) {
-            lastSyncTimeBloodGlucoseSamples = syncTime as! NSDate
-            lastSyncCountBloodGlucoseSamples = NSUserDefaults.standardUserDefaults().integerForKey("lastSyncCountBloodGlucoseSamples")
-            totalSyncCountBloodGlucoseSamples = NSUserDefaults.standardUserDefaults().integerForKey("totalSyncCountBloodGlucoseSamples")
+            lastDbSyncTimeBloodGlucoseSamples = syncTime as! NSDate
+            lastDbSyncCountBloodGlucoseSamples = NSUserDefaults.standardUserDefaults().integerForKey("lastDbSyncCountBloodGlucoseSamples")
+            totalDbSyncCountBloodGlucoseSamples = NSUserDefaults.standardUserDefaults().integerForKey("totalDbSyncCountBloodGlucoseSamples")
         }
         
-        syncTime = NSUserDefaults.standardUserDefaults().objectForKey("lastSyncTimeWorkoutSamples")
+        syncTime = NSUserDefaults.standardUserDefaults().objectForKey("lastDbSyncTimeWorkoutSamples")
         if (syncTime != nil) {
-            lastSyncTimeWorkoutSamples = syncTime as! NSDate
-            lastSyncCountWorkoutSamples = NSUserDefaults.standardUserDefaults().integerForKey("lastSyncCountWorkoutSamples")
-            totalSyncCountWorkoutSamples = NSUserDefaults.standardUserDefaults().integerForKey("totalSyncCountWorkoutSamples")
+            lastDbSyncTimeWorkoutSamples = syncTime as! NSDate
+            lastDbSyncCountWorkoutSamples = NSUserDefaults.standardUserDefaults().integerForKey("lastDbSyncCountWorkoutSamples")
+            totalDbSyncCountWorkoutSamples = NSUserDefaults.standardUserDefaults().integerForKey("totalDbSyncCountWorkoutSamples")
         }
     }
     
-    private(set) var totalSyncCountBloodGlucoseSamples = -1
-    private(set) var lastSyncCountBloodGlucoseSamples = -1
-    private(set) var lastSyncTimeBloodGlucoseSamples = NSDate.distantPast()
+    private(set) var totalDbSyncCountBloodGlucoseSamples = -1
+    private(set) var lastDbSyncCountBloodGlucoseSamples = -1
+    private(set) var lastDbSyncTimeBloodGlucoseSamples = NSDate.distantPast()
 
-    private(set) var totalSyncCountWorkoutSamples = -1
-    private(set) var lastSyncCountWorkoutSamples = -1
-    private(set) var lastSyncTimeWorkoutSamples = NSDate.distantPast()
+    private(set) var totalDbSyncCountWorkoutSamples = -1
+    private(set) var lastDbSyncCountWorkoutSamples = -1
+    private(set) var lastDbSyncTimeWorkoutSamples = NSDate.distantPast()
     
-    var totalSyncCount: Int {
+    var totalDbSyncCount: Int {
         get {
             var count = 0
-            if (lastSyncCountBloodGlucoseSamples > 0) {
-                count += lastSyncCountBloodGlucoseSamples
+            if (lastDbSyncCountBloodGlucoseSamples > 0) {
+                count += lastDbSyncCountBloodGlucoseSamples
             }
-            if (lastSyncCountWorkoutSamples > 0) {
-                count += lastSyncCountWorkoutSamples
+            if (lastDbSyncCountWorkoutSamples > 0) {
+                count += lastDbSyncCountWorkoutSamples
             }
             return count
         }
     }
     
-    var lastSyncCount: Int {
+    var lastDbSyncCount: Int {
         get {
-            let time = lastSyncTime
+            let time = lastDbSyncTime
             var count = 0
-            if (lastSyncCountBloodGlucoseSamples > 0 && fabs(lastSyncTimeBloodGlucoseSamples.timeIntervalSinceDate(time)) < 60) {
-                count += lastSyncCountBloodGlucoseSamples
+            if (lastDbSyncCountBloodGlucoseSamples > 0 && fabs(lastDbSyncTimeBloodGlucoseSamples.timeIntervalSinceDate(time)) < 60) {
+                count += lastDbSyncCountBloodGlucoseSamples
             }
-            if (lastSyncCountWorkoutSamples > 0 && fabs(lastSyncTimeWorkoutSamples.timeIntervalSinceDate(time)) < 60) {
-                count += lastSyncCountWorkoutSamples
+            if (lastDbSyncCountWorkoutSamples > 0 && fabs(lastDbSyncTimeWorkoutSamples.timeIntervalSinceDate(time)) < 60) {
+                count += lastDbSyncCountWorkoutSamples
             }
             return count
         }
     }
     
-    var lastSyncTime: NSDate {
+    var lastDbSyncTime: NSDate {
         get {
             var time = NSDate.distantPast()
-            if (lastSyncCountBloodGlucoseSamples > 0 && time.compare(lastSyncTimeBloodGlucoseSamples) == .OrderedAscending) {
-                time = lastSyncTimeBloodGlucoseSamples
+            if (lastDbSyncCountBloodGlucoseSamples > 0 && time.compare(lastDbSyncTimeBloodGlucoseSamples) == .OrderedAscending) {
+                time = lastDbSyncTimeBloodGlucoseSamples
             }
-            if (lastSyncCountWorkoutSamples > 0 && time.compare(lastSyncTimeWorkoutSamples) == .OrderedAscending) {
-                time = lastSyncTimeWorkoutSamples
+            if (lastDbSyncCountWorkoutSamples > 0 && time.compare(lastDbSyncTimeWorkoutSamples) == .OrderedAscending) {
+                time = lastDbSyncTimeWorkoutSamples
             }
             return time
         }
@@ -153,9 +153,9 @@ class HealthKitDataSync {
                         DDLogInfo("********* PROCESSING \(deletedSamples!.count) deleted blood glucose samples ********* ")
                     }
                     
-                    self.writeSamples(newSamples: newSamples, deletedSamples: deletedSamples, error: error)
+                    self.writeSamplesToDb(newSamples: newSamples, deletedSamples: deletedSamples, error: error)
                     
-                    self.updateLastSyncBloodGlucoseSamples(newSamples: newSamples, deletedSamples: deletedSamples)
+                    self.updateLastDbSyncBloodGlucoseSamples(newSamples: newSamples, deletedSamples: deletedSamples)
                 }
                 HealthKitManager.sharedInstance.enableBackgroundDeliveryBloodGlucoseSamples()
             }
@@ -171,9 +171,9 @@ class HealthKitDataSync {
                         DDLogInfo("********* PROCESSING \(deletedSamples!.count) deleted workout samples ********* ")
                     }
 
-                    self.writeSamples(newSamples: newSamples, deletedSamples: deletedSamples, error: error)
+                    self.writeSamplesToDb(newSamples: newSamples, deletedSamples: deletedSamples, error: error)
                     
-                    self.updateLastSyncWorkoutSamples(newSamples: newSamples, deletedSamples: deletedSamples)
+                    self.updateLastDbSyncWorkoutSamples(newSamples: newSamples, deletedSamples: deletedSamples)
                 }
                 HealthKitManager.sharedInstance.enableBackgroundDeliveryWorkoutSamples()
             }
@@ -195,22 +195,22 @@ class HealthKitDataSync {
     
     // MARK: Private
     
-    private func writeSamples(newSamples newSamples: [HKSample]?, deletedSamples: [HKDeletedObject]?, error: NSError?) {
+    private func writeSamplesToDb(newSamples newSamples: [HKSample]?, deletedSamples: [HKDeletedObject]?, error: NSError?) {
         guard error == nil else {
             DDLogError("Error processing samples \(error), \(error!.userInfo)")
             return
         }
         
         if (newSamples != nil) {
-            writeNewSamples(newSamples!)
+            writeNewSamplesToDb(newSamples!)
         }
         
         if (deletedSamples != nil) {
-            writeDeletedSamples(deletedSamples!)
+            writeDeletedSamplesToDb(deletedSamples!)
         }
     }
     
-    private func writeNewSamples(samples: [HKSample]) {
+    private func writeNewSamplesToDb(samples: [HKSample]) {
         do {
             let realm = try Realm()
 
@@ -236,7 +236,7 @@ class HealthKitDataSync {
         }
     }
     
-    private func writeDeletedSamples(deletedSamples: [HKDeletedObject]) {
+    private func writeDeletedSamplesToDb(deletedSamples: [HKDeletedObject]) {
         do {
             let realm = try Realm()
             
@@ -258,7 +258,7 @@ class HealthKitDataSync {
         }
     }
     
-    private func updateLastSyncBloodGlucoseSamples(newSamples newSamples: [HKSample]?, deletedSamples: [HKDeletedObject]?) {
+    private func updateLastDbSyncBloodGlucoseSamples(newSamples newSamples: [HKSample]?, deletedSamples: [HKDeletedObject]?) {
         var totalCount = 0
         if (newSamples != nil) {
             totalCount += newSamples!.count
@@ -267,13 +267,13 @@ class HealthKitDataSync {
             totalCount += deletedSamples!.count
         }
         if (totalCount > 0) {
-            lastSyncCountBloodGlucoseSamples = totalCount
-            lastSyncTimeBloodGlucoseSamples = NSDate()
-            NSUserDefaults.standardUserDefaults().setObject(lastSyncTimeBloodGlucoseSamples, forKey: "lastSyncTimeBloodGlucoseSamples")
-            NSUserDefaults.standardUserDefaults().setInteger(lastSyncCountBloodGlucoseSamples, forKey: "lastSyncCountBloodGlucoseSamples")
-            NSUserDefaults.standardUserDefaults().setObject(lastSyncTimeBloodGlucoseSamples, forKey: "lastSyncTimeBloodGlucoseSamples")
-            let totalSyncCountBloodGlucoseSamples = NSUserDefaults.standardUserDefaults().integerForKey("totalSyncCountBloodGlucoseSamples") + lastSyncCountBloodGlucoseSamples
-            NSUserDefaults.standardUserDefaults().setObject(totalSyncCountBloodGlucoseSamples, forKey: "totalSyncCountBloodGlucoseSamples")
+            lastDbSyncCountBloodGlucoseSamples = totalCount
+            lastDbSyncTimeBloodGlucoseSamples = NSDate()
+            NSUserDefaults.standardUserDefaults().setObject(lastDbSyncTimeBloodGlucoseSamples, forKey: "lastDbSyncTimeBloodGlucoseSamples")
+            NSUserDefaults.standardUserDefaults().setInteger(lastDbSyncCountBloodGlucoseSamples, forKey: "lastDbSyncCountBloodGlucoseSamples")
+            NSUserDefaults.standardUserDefaults().setObject(lastDbSyncTimeBloodGlucoseSamples, forKey: "lastDbSyncTimeBloodGlucoseSamples")
+            let totalDbSyncCountBloodGlucoseSamples = NSUserDefaults.standardUserDefaults().integerForKey("totalDbSyncCountBloodGlucoseSamples") + lastDbSyncCountBloodGlucoseSamples
+            NSUserDefaults.standardUserDefaults().setObject(totalDbSyncCountBloodGlucoseSamples, forKey: "totalDbSyncCountBloodGlucoseSamples")
             NSUserDefaults.standardUserDefaults().synchronize()
             
             dispatch_async(dispatch_get_main_queue()) {
@@ -282,7 +282,7 @@ class HealthKitDataSync {
         }
     }
     
-    private func updateLastSyncWorkoutSamples(newSamples newSamples: [HKSample]?, deletedSamples: [HKDeletedObject]?) {
+    private func updateLastDbSyncWorkoutSamples(newSamples newSamples: [HKSample]?, deletedSamples: [HKDeletedObject]?) {
         var totalCount = 0
         if (newSamples != nil) {
             totalCount += newSamples!.count
@@ -291,12 +291,12 @@ class HealthKitDataSync {
             totalCount += deletedSamples!.count
         }
         if (totalCount > 0) {
-            lastSyncCountWorkoutSamples = totalCount
-            lastSyncTimeWorkoutSamples = NSDate()
-            NSUserDefaults.standardUserDefaults().setObject(lastSyncTimeWorkoutSamples, forKey: "lastSyncTimeWorkoutSamples")
-            NSUserDefaults.standardUserDefaults().setInteger(lastSyncCountWorkoutSamples, forKey: "lastSyncCountWorkoutSamples")
-            let totalSyncCountWorkoutSamples = NSUserDefaults.standardUserDefaults().integerForKey("totalSyncCountWorkoutSamples") + lastSyncCountBloodGlucoseSamples
-            NSUserDefaults.standardUserDefaults().setObject(totalSyncCountWorkoutSamples, forKey: "totalSyncCountWorkoutSamples")
+            lastDbSyncCountWorkoutSamples = totalCount
+            lastDbSyncTimeWorkoutSamples = NSDate()
+            NSUserDefaults.standardUserDefaults().setObject(lastDbSyncTimeWorkoutSamples, forKey: "lastDbSyncTimeWorkoutSamples")
+            NSUserDefaults.standardUserDefaults().setInteger(lastDbSyncCountWorkoutSamples, forKey: "lastDbSyncCountWorkoutSamples")
+            let totalDbSyncCountWorkoutSamples = NSUserDefaults.standardUserDefaults().integerForKey("totalDbSyncCountWorkoutSamples") + lastDbSyncCountBloodGlucoseSamples
+            NSUserDefaults.standardUserDefaults().setObject(totalDbSyncCountWorkoutSamples, forKey: "totalDbSyncCountWorkoutSamples")
             NSUserDefaults.standardUserDefaults().synchronize()
             
             dispatch_async(dispatch_get_main_queue()) {
