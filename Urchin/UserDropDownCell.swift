@@ -26,8 +26,10 @@ class UserDropDownCell: UITableViewCell {
     // Group for the cell
     var group: User!
     
-    func configure(key: String, arrow: Bool = true) {
+    func configure(key: String, arrow: Bool = true, group: User? = nil) {
         separator.removeFromSuperview()
+        
+        self.group = group
         
         // Set background color to dark green
         self.backgroundColor = UIColor(red: 0/255, green: 54/255, blue: 62/255, alpha: 1)
@@ -61,14 +63,13 @@ class UserDropDownCell: UITableViewCell {
             separator.backgroundColor = whiteQuarterAlpha
             self.addSubview(separator)
         } else if (key == "healthkit-status") {
-            let lastCacheCount = HealthKitDataCache.sharedInstance.lastCacheCount
-            let lastCacheTime = NSDateFormatter.localizedStringFromDate(HealthKitDataCache.sharedInstance.lastCacheTime, dateStyle: .ShortStyle, timeStyle: .ShortStyle)
-            if (lastCacheCount == 1) {
-                nameLabel.text = String(format: healthKitCacheStatusSingularFormat, lastCacheCount, lastCacheTime)
-                
-            } else if (lastCacheCount > 1) {
-                nameLabel.text = String(format: healthKitCacheStatusPluralFormat, lastCacheCount, lastCacheTime)
+            let lastCacheDateAndTime = NSDateFormatter.localizedStringFromDate(HealthKitDataCache.sharedInstance.lastCacheTime, dateStyle: .ShortStyle, timeStyle: .ShortStyle)
+            if group != nil && group?.fullName != nil {
+                nameLabel.text = String(format: healthKitStatusFormat, group!.fullName!, lastCacheDateAndTime)
+            } else {
+                nameLabel.text = lastCacheDateAndTime
             }
+            
             nameLabel.font = smallRegularFont
             nameLabel.sizeToFit()
             nameLabel.frame.origin = CGPoint(x: 3 * userCellInset, y: userCellThinSeparator + userCellHealthKitSampleInset)
@@ -140,9 +141,9 @@ class UserDropDownCell: UITableViewCell {
         nameLabel.frame.size.width = min(nameLabel.frame.width, contentView.frame.width - 6 * userCellInset)
         
         if last {
-            configure("grouplast")
+            configure("grouplast", group: group)
         } else {
-            configure("group")
+            configure("group", group: group)
         }
         
         // hide the right arrow if necessary

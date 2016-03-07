@@ -225,9 +225,8 @@ let allTeamsTitle: String = "All"
 /*
 Drop down menu title for HealthKit (NotesVC)
 */
-let healthKitTitle: String = "Share Health Data"
-let healthKitCacheStatusSingularFormat: String = "Shared %d sample, %@"
-let healthKitCacheStatusPluralFormat: String = "Shared %d samples, %@"
+let healthKitTitle: String = "Connect to Health"
+let healthKitStatusFormat: String = "%@, %@"
 
 /*
     Drop down menu title for logging out (NotesVC)

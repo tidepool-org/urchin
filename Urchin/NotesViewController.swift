@@ -694,7 +694,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
                 if (indexPath.section == sectionIndex(TableSection.HealthKit) && indexPath.row == 0) {
                     cell.configure("healthkit", arrow: false)
                 } else if (indexPath.section == sectionIndex(TableSection.HealthKit) && indexPath.row == 1) {
-                    cell.configure("healthkit-status", arrow: false)
+                    cell.configure("healthkit-status", arrow: false, group: groups[0])
                     cell.userInteractionEnabled = false
                 } else if (indexPath.section == sectionIndex(TableSection.Logout) && indexPath.row == 0) {
                     cell.configure("logout", arrow: false)
@@ -708,7 +708,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
                 } else if (indexPath.section == sectionIndex(TableSection.HealthKit) && indexPath.row == 0) {
                     cell.configure("healthkit", arrow: false)
                 } else if (indexPath.section == sectionIndex(TableSection.HealthKit) && indexPath.row == 1) {
-                    cell.configure("healthkit-status", arrow: false)
+                    cell.configure("healthkit-status", arrow: false, group: groups[0])
                     cell.userInteractionEnabled = false
                 } else if (indexPath.section == sectionIndex(TableSection.Logout) && indexPath.row == 0) {
                     cell.configure("logout", arrow: false)
