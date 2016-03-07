@@ -191,9 +191,9 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         // Listen for when force a logout
         notificationCenter.addObserver(self, selector: "forcedLogout:", name: "forcedLogout", object: nil)
 
-        // Handle HealthKitDataSync notifications
-        notificationCenter.addObserver(self, selector: "handleObservedHealthKitDataSyncNotification:", name: HealthKitDataSync.Notifications.ObservedBloodGlucoseSamples, object: nil)
-        notificationCenter.addObserver(self, selector: "handleObservedHealthKitDataSyncNotification:", name: HealthKitDataSync.Notifications.ObservedWorkoutSamples, object: nil)
+        // Handle HealthKitDataCache notifications
+        notificationCenter.addObserver(self, selector: "handleObservedHealthKitDataCacheNotification:", name: HealthKitDataCache.Notifications.ObservedBloodGlucoseSamples, object: nil)
+        notificationCenter.addObserver(self, selector: "handleObservedHealthKitDataCacheNotification:", name: HealthKitDataCache.Notifications.ObservedWorkoutSamples, object: nil)
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -517,7 +517,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         }
     }
     
-    func handleObservedHealthKitDataSyncNotification(notification: NSNotification) {
+    func handleObservedHealthKitDataCacheNotification(notification: NSNotification) {
         if (dropDownMenu != nil) {
             dropDownMenu.reloadData()
         }
@@ -538,7 +538,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         var additionalCells = groups.count == 1 ? 1 : 3
         if (HealthKitManager.sharedInstance.isHealthDataAvailable) {
             additionalCells++
-            if (HealthKitDataSync.sharedInstance.lastDbSyncCount > 0) {
+            if (HealthKitDataCache.sharedInstance.lastCacheCount > 0) {
                 additionalCells++
             }
         }
@@ -694,7 +694,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
                 if (indexPath.section == sectionIndex(TableSection.HealthKit) && indexPath.row == 0) {
                     cell.configure("healthkit", arrow: false)
                 } else if (indexPath.section == sectionIndex(TableSection.HealthKit) && indexPath.row == 1) {
-                    cell.configure("healthkit-sync", arrow: false)
+                    cell.configure("healthkit-status", arrow: false)
                     cell.userInteractionEnabled = false
                 } else if (indexPath.section == sectionIndex(TableSection.Logout) && indexPath.row == 0) {
                     cell.configure("logout", arrow: false)
@@ -708,7 +708,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
                 } else if (indexPath.section == sectionIndex(TableSection.HealthKit) && indexPath.row == 0) {
                     cell.configure("healthkit", arrow: false)
                 } else if (indexPath.section == sectionIndex(TableSection.HealthKit) && indexPath.row == 1) {
-                    cell.configure("healthkit-sync", arrow: false)
+                    cell.configure("healthkit-status", arrow: false)
                     cell.userInteractionEnabled = false
                 } else if (indexPath.section == sectionIndex(TableSection.Logout) && indexPath.row == 0) {
                     cell.configure("logout", arrow: false)
@@ -753,14 +753,14 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         } else if (tableView.isEqual(dropDownMenu)){
             if (groups.count == 1) {
                 if section == sectionIndex(TableSection.HealthKit) {
-                    numberOfRows = HealthKitDataSync.sharedInstance.lastDbSyncCount > 0 ? 2 : 1
+                    numberOfRows = HealthKitDataCache.sharedInstance.lastCacheCount > 0 ? 2 : 1
                 }
             } else {
                 if (section == sectionIndex(TableSection.Users)) {
                     // Number of groups + 1 for 'All' / #nofilter
                     numberOfRows = groups.count + 1
                 } else if (section == sectionIndex(TableSection.HealthKit)) {
-                    numberOfRows = HealthKitDataSync.sharedInstance.lastDbSyncCount > 0 ? 2 : 1
+                    numberOfRows = HealthKitDataCache.sharedInstance.lastCacheCount > 0 ? 2 : 1
                 } else if (section == sectionIndex(TableSection.Logout)) {
                     numberOfRows = 1
                 } else if (section == sectionIndex(TableSection.Version)) {
@@ -931,7 +931,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
             if (groups.count == 1) {
                 
                 if (indexPath.section == sectionIndex(TableSection.HealthKit)) {
-                    authorizeAndEnableHealthDataSync()
+                    authorizeAndEnableHealthDataCache()
                 } else if (indexPath.section == sectionIndex(TableSection.Logout)) {
                     self.logout()
                 }
@@ -962,7 +962,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
                     // toggle the dropDownMenu (hides the dropDownMenu)
                     self.dropDownMenuPressed()
                 } else if (indexPath.section == sectionIndex(TableSection.HealthKit)) {
-                    authorizeAndEnableHealthDataSync()
+                    authorizeAndEnableHealthDataCache()
                 } else if (indexPath.section == sectionIndex(TableSection.Logout)) {
                     self.logout()
                 }
@@ -1048,11 +1048,11 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         return sectionIndex;
     }
     
-    private func authorizeAndEnableHealthDataSync() {
+    private func authorizeAndEnableHealthDataCache() {
         if (HealthKitManager.sharedInstance.isHealthDataAvailable) {
-            HealthKitDataSync.sharedInstance.authorizeAndStartSyncing(
-                shouldSyncBloodGlucoseSamples: true,
-                shouldSyncWorkoutSamples: true)
+            HealthKitDataCache.sharedInstance.authorizeAndStartCaching(
+                shouldCacheBloodGlucoseSamples: true,
+                shouldCacheWorkoutSamples: true)
         }
     }
 }

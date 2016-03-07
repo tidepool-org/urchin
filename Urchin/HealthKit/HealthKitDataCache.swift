@@ -20,10 +20,10 @@ import Granola
 
 // TODO: my - Need to set up a periodic task to perodically drain the Realm db and upload those events to service, this should be able to be done as background task even when app is not active, and periodically when active
 
-class HealthKitDataSync {
+class HealthKitDataCache {
     // MARK: Access, authorization
     
-    static let sharedInstance = HealthKitDataSync()
+    static let sharedInstance = HealthKitDataCache()
     private init() {
         var config = Realm.Configuration(
             schemaVersion: 1,
@@ -50,98 +50,98 @@ class HealthKitDataSync {
         // Set this as the configuration used for the default Realm
         Realm.Configuration.defaultConfiguration = config
 
-        var syncTime = NSUserDefaults.standardUserDefaults().objectForKey("lastDbSyncTimeBloodGlucoseSamples")
-        if (syncTime != nil) {
-            lastDbSyncTimeBloodGlucoseSamples = syncTime as! NSDate
-            lastDbSyncCountBloodGlucoseSamples = NSUserDefaults.standardUserDefaults().integerForKey("lastDbSyncCountBloodGlucoseSamples")
-            totalDbSyncCountBloodGlucoseSamples = NSUserDefaults.standardUserDefaults().integerForKey("totalDbSyncCountBloodGlucoseSamples")
+        var cacheTime = NSUserDefaults.standardUserDefaults().objectForKey("lastCacheTimeBloodGlucoseSamples")
+        if (cacheTime != nil) {
+            lastCacheTimeBloodGlucoseSamples = cacheTime as! NSDate
+            lastCacheCountBloodGlucoseSamples = NSUserDefaults.standardUserDefaults().integerForKey("lastCacheCountBloodGlucoseSamples")
+            totalCacheCountBloodGlucoseSamples = NSUserDefaults.standardUserDefaults().integerForKey("totalCacheCountBloodGlucoseSamples")
         }
         
-        syncTime = NSUserDefaults.standardUserDefaults().objectForKey("lastDbSyncTimeWorkoutSamples")
-        if (syncTime != nil) {
-            lastDbSyncTimeWorkoutSamples = syncTime as! NSDate
-            lastDbSyncCountWorkoutSamples = NSUserDefaults.standardUserDefaults().integerForKey("lastDbSyncCountWorkoutSamples")
-            totalDbSyncCountWorkoutSamples = NSUserDefaults.standardUserDefaults().integerForKey("totalDbSyncCountWorkoutSamples")
+        cacheTime = NSUserDefaults.standardUserDefaults().objectForKey("lastCacheTimeWorkoutSamples")
+        if (cacheTime != nil) {
+            lastCacheTimeWorkoutSamples = cacheTime as! NSDate
+            lastCacheCountWorkoutSamples = NSUserDefaults.standardUserDefaults().integerForKey("lastCacheCountWorkoutSamples")
+            totalCacheCountWorkoutSamples = NSUserDefaults.standardUserDefaults().integerForKey("totalCacheCountWorkoutSamples")
         }
     }
     
-    private(set) var totalDbSyncCountBloodGlucoseSamples = -1
-    private(set) var lastDbSyncCountBloodGlucoseSamples = -1
-    private(set) var lastDbSyncTimeBloodGlucoseSamples = NSDate.distantPast()
+    private(set) var totalCacheCountBloodGlucoseSamples = -1
+    private(set) var lastCacheCountBloodGlucoseSamples = -1
+    private(set) var lastCacheTimeBloodGlucoseSamples = NSDate.distantPast()
 
-    private(set) var totalDbSyncCountWorkoutSamples = -1
-    private(set) var lastDbSyncCountWorkoutSamples = -1
-    private(set) var lastDbSyncTimeWorkoutSamples = NSDate.distantPast()
+    private(set) var totalCacheCountWorkoutSamples = -1
+    private(set) var lastCacheCountWorkoutSamples = -1
+    private(set) var lastCacheTimeWorkoutSamples = NSDate.distantPast()
     
-    var totalDbSyncCount: Int {
+    var totalCacheCount: Int {
         get {
             var count = 0
-            if (lastDbSyncCountBloodGlucoseSamples > 0) {
-                count += lastDbSyncCountBloodGlucoseSamples
+            if (lastCacheCountBloodGlucoseSamples > 0) {
+                count += lastCacheCountBloodGlucoseSamples
             }
-            if (lastDbSyncCountWorkoutSamples > 0) {
-                count += lastDbSyncCountWorkoutSamples
+            if (lastCacheCountWorkoutSamples > 0) {
+                count += lastCacheCountWorkoutSamples
             }
             return count
         }
     }
     
-    var lastDbSyncCount: Int {
+    var lastCacheCount: Int {
         get {
-            let time = lastDbSyncTime
+            let time = lastCacheTime
             var count = 0
-            if (lastDbSyncCountBloodGlucoseSamples > 0 && fabs(lastDbSyncTimeBloodGlucoseSamples.timeIntervalSinceDate(time)) < 60) {
-                count += lastDbSyncCountBloodGlucoseSamples
+            if (lastCacheCountBloodGlucoseSamples > 0 && fabs(lastCacheTimeBloodGlucoseSamples.timeIntervalSinceDate(time)) < 60) {
+                count += lastCacheCountBloodGlucoseSamples
             }
-            if (lastDbSyncCountWorkoutSamples > 0 && fabs(lastDbSyncTimeWorkoutSamples.timeIntervalSinceDate(time)) < 60) {
-                count += lastDbSyncCountWorkoutSamples
+            if (lastCacheCountWorkoutSamples > 0 && fabs(lastCacheTimeWorkoutSamples.timeIntervalSinceDate(time)) < 60) {
+                count += lastCacheCountWorkoutSamples
             }
             return count
         }
     }
     
-    var lastDbSyncTime: NSDate {
+    var lastCacheTime: NSDate {
         get {
             var time = NSDate.distantPast()
-            if (lastDbSyncCountBloodGlucoseSamples > 0 && time.compare(lastDbSyncTimeBloodGlucoseSamples) == .OrderedAscending) {
-                time = lastDbSyncTimeBloodGlucoseSamples
+            if (lastCacheCountBloodGlucoseSamples > 0 && time.compare(lastCacheTimeBloodGlucoseSamples) == .OrderedAscending) {
+                time = lastCacheTimeBloodGlucoseSamples
             }
-            if (lastDbSyncCountWorkoutSamples > 0 && time.compare(lastDbSyncTimeWorkoutSamples) == .OrderedAscending) {
-                time = lastDbSyncTimeWorkoutSamples
+            if (lastCacheCountWorkoutSamples > 0 && time.compare(lastCacheTimeWorkoutSamples) == .OrderedAscending) {
+                time = lastCacheTimeWorkoutSamples
             }
             return time
         }
     }
     
     enum Notifications {
-        static let ObservedBloodGlucoseSamples = "HealthKitDataSync-observed-\(HKWorkoutTypeIdentifier)"
-        static let ObservedWorkoutSamples = "HealthKitDataSync-observed-\(HKWorkoutTypeIdentifier)"
+        static let ObservedBloodGlucoseSamples = "HealthKitDataCache-observed-\(HKWorkoutTypeIdentifier)"
+        static let ObservedWorkoutSamples = "HealthKitDataCache-observed-\(HKWorkoutTypeIdentifier)"
     }
 
-    func authorizeAndStartSyncing(
-            shouldSyncBloodGlucoseSamples shouldSyncBloodGlucoseSamples: Bool,
-            shouldSyncWorkoutSamples: Bool)
+    func authorizeAndStartCaching(
+            shouldCacheBloodGlucoseSamples shouldCacheBloodGlucoseSamples: Bool,
+            shouldCacheWorkoutSamples: Bool)
     {
         HealthKitManager.sharedInstance.authorize(
-            shouldAuthorizeBloodGlucoseSamples: shouldSyncBloodGlucoseSamples,
-            shouldAuthorizeWorkoutSamples: shouldSyncWorkoutSamples) {
+            shouldAuthorizeBloodGlucoseSamples: shouldCacheBloodGlucoseSamples,
+            shouldAuthorizeWorkoutSamples: shouldCacheWorkoutSamples) {
             success, error -> Void in
             if (error == nil) {
-                self.startSyncing(
-                    shouldSyncBloodGlucoseSamples: shouldSyncBloodGlucoseSamples,
-                    shouldSyncWorkoutSamples: shouldSyncWorkoutSamples)
+                self.startCaching(
+                    shouldCacheBloodGlucoseSamples: shouldCacheBloodGlucoseSamples,
+                    shouldCacheWorkoutSamples: shouldCacheWorkoutSamples)
             } else {
                 DDLogError("Error authorizing health data \(error), \(error!.userInfo)")
             }
         }
     }
     
-    // MARK: Sync control
+    // MARK: Cache control
     
-    func startSyncing(shouldSyncBloodGlucoseSamples shouldSyncBloodGlucoseSamples: Bool, shouldSyncWorkoutSamples: Bool)
+    func startCaching(shouldCacheBloodGlucoseSamples shouldCacheBloodGlucoseSamples: Bool, shouldCacheWorkoutSamples: Bool)
     {
         if (HealthKitManager.sharedInstance.isHealthDataAvailable) {
-            if (shouldSyncBloodGlucoseSamples) {
+            if (shouldCacheBloodGlucoseSamples) {
                 HealthKitManager.sharedInstance.startObservingBloodGlucoseSamples() {
                     (newSamples: [HKSample]?, deletedSamples: [HKDeletedObject]?, error: NSError?) in
                     
@@ -155,11 +155,11 @@ class HealthKitDataSync {
                     
                     self.writeSamplesToDb(newSamples: newSamples, deletedSamples: deletedSamples, error: error)
                     
-                    self.updateLastDbSyncBloodGlucoseSamples(newSamples: newSamples, deletedSamples: deletedSamples)
+                    self.updateLastCacheBloodGlucoseSamples(newSamples: newSamples, deletedSamples: deletedSamples)
                 }
                 HealthKitManager.sharedInstance.enableBackgroundDeliveryBloodGlucoseSamples()
             }
-            if (shouldSyncWorkoutSamples) {
+            if (shouldCacheWorkoutSamples) {
                 HealthKitManager.sharedInstance.startObservingWorkoutSamples() {
                     (newSamples: [HKSample]?, deletedSamples: [HKDeletedObject]?, error: NSError?) in
 
@@ -173,20 +173,20 @@ class HealthKitDataSync {
 
                     self.writeSamplesToDb(newSamples: newSamples, deletedSamples: deletedSamples, error: error)
                     
-                    self.updateLastDbSyncWorkoutSamples(newSamples: newSamples, deletedSamples: deletedSamples)
+                    self.updateLastCacheWorkoutSamples(newSamples: newSamples, deletedSamples: deletedSamples)
                 }
                 HealthKitManager.sharedInstance.enableBackgroundDeliveryWorkoutSamples()
             }
         }
     }
     
-    func stopSyncing(shouldStopSyncingBloodGlucoseSamples shouldStopSyncingBloodGlucoseSamples: Bool, shouldStopSyncingWorkoutSamples: Bool) {
+    func stopCaching(shouldStopCachingBloodGlucoseSamples shouldStopCachingBloodGlucoseSamples: Bool, shouldStopCachingWorkoutSamples: Bool) {
         if (HealthKitManager.sharedInstance.isHealthDataAvailable) {
-            if (shouldStopSyncingBloodGlucoseSamples) {
+            if (shouldStopCachingBloodGlucoseSamples) {
                 HealthKitManager.sharedInstance.stopObservingBloodGlucoseSamples()
                 HealthKitManager.sharedInstance.disableBackgroundDeliveryBloodGlucoseSamples()
             }
-            if (shouldStopSyncingWorkoutSamples) {
+            if (shouldStopCachingWorkoutSamples) {
                 HealthKitManager.sharedInstance.stopObservingWorkoutSamples()
                 HealthKitManager.sharedInstance.disableBackgroundDeliveryWorkoutSamples()
             }
@@ -258,7 +258,7 @@ class HealthKitDataSync {
         }
     }
     
-    private func updateLastDbSyncBloodGlucoseSamples(newSamples newSamples: [HKSample]?, deletedSamples: [HKDeletedObject]?) {
+    private func updateLastCacheBloodGlucoseSamples(newSamples newSamples: [HKSample]?, deletedSamples: [HKDeletedObject]?) {
         var totalCount = 0
         if (newSamples != nil) {
             totalCount += newSamples!.count
@@ -267,13 +267,13 @@ class HealthKitDataSync {
             totalCount += deletedSamples!.count
         }
         if (totalCount > 0) {
-            lastDbSyncCountBloodGlucoseSamples = totalCount
-            lastDbSyncTimeBloodGlucoseSamples = NSDate()
-            NSUserDefaults.standardUserDefaults().setObject(lastDbSyncTimeBloodGlucoseSamples, forKey: "lastDbSyncTimeBloodGlucoseSamples")
-            NSUserDefaults.standardUserDefaults().setInteger(lastDbSyncCountBloodGlucoseSamples, forKey: "lastDbSyncCountBloodGlucoseSamples")
-            NSUserDefaults.standardUserDefaults().setObject(lastDbSyncTimeBloodGlucoseSamples, forKey: "lastDbSyncTimeBloodGlucoseSamples")
-            let totalDbSyncCountBloodGlucoseSamples = NSUserDefaults.standardUserDefaults().integerForKey("totalDbSyncCountBloodGlucoseSamples") + lastDbSyncCountBloodGlucoseSamples
-            NSUserDefaults.standardUserDefaults().setObject(totalDbSyncCountBloodGlucoseSamples, forKey: "totalDbSyncCountBloodGlucoseSamples")
+            lastCacheCountBloodGlucoseSamples = totalCount
+            lastCacheTimeBloodGlucoseSamples = NSDate()
+            NSUserDefaults.standardUserDefaults().setObject(lastCacheTimeBloodGlucoseSamples, forKey: "lastCacheTimeBloodGlucoseSamples")
+            NSUserDefaults.standardUserDefaults().setInteger(lastCacheCountBloodGlucoseSamples, forKey: "lastCacheCountBloodGlucoseSamples")
+            NSUserDefaults.standardUserDefaults().setObject(lastCacheTimeBloodGlucoseSamples, forKey: "lastCacheTimeBloodGlucoseSamples")
+            let totalCacheCountBloodGlucoseSamples = NSUserDefaults.standardUserDefaults().integerForKey("totalCacheCountBloodGlucoseSamples") + lastCacheCountBloodGlucoseSamples
+            NSUserDefaults.standardUserDefaults().setObject(totalCacheCountBloodGlucoseSamples, forKey: "totalCacheCountBloodGlucoseSamples")
             NSUserDefaults.standardUserDefaults().synchronize()
             
             dispatch_async(dispatch_get_main_queue()) {
@@ -282,7 +282,7 @@ class HealthKitDataSync {
         }
     }
     
-    private func updateLastDbSyncWorkoutSamples(newSamples newSamples: [HKSample]?, deletedSamples: [HKDeletedObject]?) {
+    private func updateLastCacheWorkoutSamples(newSamples newSamples: [HKSample]?, deletedSamples: [HKDeletedObject]?) {
         var totalCount = 0
         if (newSamples != nil) {
             totalCount += newSamples!.count
@@ -291,12 +291,12 @@ class HealthKitDataSync {
             totalCount += deletedSamples!.count
         }
         if (totalCount > 0) {
-            lastDbSyncCountWorkoutSamples = totalCount
-            lastDbSyncTimeWorkoutSamples = NSDate()
-            NSUserDefaults.standardUserDefaults().setObject(lastDbSyncTimeWorkoutSamples, forKey: "lastDbSyncTimeWorkoutSamples")
-            NSUserDefaults.standardUserDefaults().setInteger(lastDbSyncCountWorkoutSamples, forKey: "lastDbSyncCountWorkoutSamples")
-            let totalDbSyncCountWorkoutSamples = NSUserDefaults.standardUserDefaults().integerForKey("totalDbSyncCountWorkoutSamples") + lastDbSyncCountBloodGlucoseSamples
-            NSUserDefaults.standardUserDefaults().setObject(totalDbSyncCountWorkoutSamples, forKey: "totalDbSyncCountWorkoutSamples")
+            lastCacheCountWorkoutSamples = totalCount
+            lastCacheTimeWorkoutSamples = NSDate()
+            NSUserDefaults.standardUserDefaults().setObject(lastCacheTimeWorkoutSamples, forKey: "lastCacheTimeWorkoutSamples")
+            NSUserDefaults.standardUserDefaults().setInteger(lastCacheCountWorkoutSamples, forKey: "lastCacheCountWorkoutSamples")
+            let totalCacheCountWorkoutSamples = NSUserDefaults.standardUserDefaults().integerForKey("totalCacheCountWorkoutSamples") + lastCacheCountBloodGlucoseSamples
+            NSUserDefaults.standardUserDefaults().setObject(totalCacheCountWorkoutSamples, forKey: "totalCacheCountWorkoutSamples")
             NSUserDefaults.standardUserDefaults().synchronize()
             
             dispatch_async(dispatch_get_main_queue()) {

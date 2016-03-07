@@ -52,9 +52,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.LightContent
 
         if (HealthKitManager.sharedInstance.isHealthDataAvailable) {
-            HealthKitDataSync.sharedInstance.startSyncing(
-                shouldSyncBloodGlucoseSamples: true,
-                shouldSyncWorkoutSamples: true)
+            HealthKitDataCache.sharedInstance.startCaching(
+                shouldCacheBloodGlucoseSamples: true,
+                shouldCacheWorkoutSamples: true)
         }
         
         return true

@@ -12,10 +12,10 @@
 		4D01F7971C88D7D8006ABE5E /* LogFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D01F7961C88D7D8006ABE5E /* LogFormatter.swift */; };
 		4D01F7981C88D809006ABE5E /* LogFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D01F7961C88D7D8006ABE5E /* LogFormatter.swift */; };
 		4D47CD7D1C18EC4C00AAA8A9 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D47CD7C1C18EC4C00AAA8A9 /* HealthKit.framework */; };
-		4DBC534C1C30A9230062FDEA /* HealthKitDataSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DBC53481C30A9230062FDEA /* HealthKitDataSync.swift */; };
+		4DBC534C1C30A9230062FDEA /* HealthKitDataCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DBC53481C30A9230062FDEA /* HealthKitDataCache.swift */; };
 		4DBC534D1C30A9230062FDEA /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DBC53491C30A9230062FDEA /* HealthKitManager.swift */; };
 		4DBC534F1C30B3F30062FDEA /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DBC53491C30A9230062FDEA /* HealthKitManager.swift */; };
-		4DBC53501C30B3F60062FDEA /* HealthKitDataSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DBC53481C30A9230062FDEA /* HealthKitDataSync.swift */; };
+		4DBC53501C30B3F60062FDEA /* HealthKitDataCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DBC53481C30A9230062FDEA /* HealthKitDataCache.swift */; };
 		4DBC53521C30B48C0062FDEA /* HealthKitData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DBC53511C30B48C0062FDEA /* HealthKitData.swift */; };
 		4DBC53531C3105870062FDEA /* HealthKitData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DBC53511C30B48C0062FDEA /* HealthKitData.swift */; };
 		AA03FB8A1B5848FD001B9435 /* APIConnect.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA03FB891B5848FD001B9435 /* APIConnect.swift */; };
@@ -133,7 +133,7 @@
 		4D01F7961C88D7D8006ABE5E /* LogFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LogFormatter.swift; path = Urchin/LogFormatter.swift; sourceTree = SOURCE_ROOT; };
 		4D47CD7B1C18EC4C00AAA8A9 /* urchin.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = urchin.entitlements; sourceTree = "<group>"; };
 		4D47CD7C1C18EC4C00AAA8A9 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
-		4DBC53481C30A9230062FDEA /* HealthKitDataSync.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitDataSync.swift; path = Urchin/HealthKit/HealthKitDataSync.swift; sourceTree = SOURCE_ROOT; };
+		4DBC53481C30A9230062FDEA /* HealthKitDataCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitDataCache.swift; path = Urchin/HealthKit/HealthKitDataCache.swift; sourceTree = SOURCE_ROOT; };
 		4DBC53491C30A9230062FDEA /* HealthKitManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitManager.swift; path = Urchin/HealthKit/HealthKitManager.swift; sourceTree = SOURCE_ROOT; };
 		4DBC53511C30B48C0062FDEA /* HealthKitData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitData.swift; path = Urchin/HealthKit/HealthKitData.swift; sourceTree = SOURCE_ROOT; };
 		92E7D795B176FAC800CA8CA9 /* Pods_urchinTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_urchinTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -224,7 +224,7 @@
 			isa = PBXGroup;
 			children = (
 				4DBC53511C30B48C0062FDEA /* HealthKitData.swift */,
-				4DBC53481C30A9230062FDEA /* HealthKitDataSync.swift */,
+				4DBC53481C30A9230062FDEA /* HealthKitDataCache.swift */,
 				4DBC53491C30A9230062FDEA /* HealthKitManager.swift */,
 			);
 			name = HealthKit;
@@ -746,7 +746,7 @@
 				4DBC53521C30B48C0062FDEA /* HealthKitData.swift in Sources */,
 				AA3652CC1B34A163001F514D /* Patient.swift in Sources */,
 				AA829BB91B7409E500DFEBA0 /* UrchinData.xcdatamodeld in Sources */,
-				4DBC534C1C30A9230062FDEA /* HealthKitDataSync.swift in Sources */,
+				4DBC534C1C30A9230062FDEA /* HealthKitDataCache.swift in Sources */,
 				48E4A4431BEE5879001A7B35 /* Reachability.swift in Sources */,
 				AA6932001B66E5450057F0A0 /* AddNoteVCTextViewDelegate.swift in Sources */,
 				AA03FB8A1B5848FD001B9435 /* APIConnect.swift in Sources */,
@@ -774,7 +774,7 @@
 				AA6932071B66E6D30057F0A0 /* AddNoteVCTableViewDelegate.swift in Sources */,
 				AA6932011B66E5910057F0A0 /* AddNoteVCTextViewDelegate.swift in Sources */,
 				4DBC534F1C30B3F30062FDEA /* HealthKitManager.swift in Sources */,
-				4DBC53501C30B3F60062FDEA /* HealthKitDataSync.swift in Sources */,
+				4DBC53501C30B3F60062FDEA /* HealthKitDataCache.swift in Sources */,
 				AA79201F1B62AB470046038B /* NotesViewController.swift in Sources */,
 				AAFBE7DF1B698229007E480D /* UIApplicationExtension.swift in Sources */,
 				4DBC53531C3105870062FDEA /* HealthKitData.swift in Sources */,
