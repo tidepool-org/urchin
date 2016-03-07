@@ -217,14 +217,46 @@ class HealthKitDataCache {
             realm.beginWrite()
             
             for sample in samples {
+                if defaultDebugLevel != DDLogLevel.Off {
+                    let sourceRevision = sample.sourceRevision
+                    let source = sourceRevision.source
+                    let sourceName = source.name
+                    let sourceBundleIdentifier = source.bundleIdentifier
+                    let sourceVersion = sourceRevision.version
+                    let device = sample.device
+                    let deviceName = device?.name
+                    let deviceManufacturer = device?.manufacturer
+                    let deviceModel = device?.model
+                    let deviceHardwareVersion = device?.hardwareVersion
+                    let deviceFirmwareVersion = device?.firmwareVersion
+                    let deviceSoftwareVersion = device?.softwareVersion
+                    let deviceLocalIdentifier = device?.localIdentifier
+                    let deviceUDIDeviceIdentifier = device?.UDIDeviceIdentifier
+                    
+                    DDLogInfo("Source:")
+                    DDLogInfo("\tName: \(sourceName)")
+                    DDLogInfo("\tBundleIdentifier: \(sourceBundleIdentifier)")
+                    DDLogInfo("\tVersion: \(sourceVersion)")
+                    
+                    DDLogInfo("Device:")
+                    DDLogInfo("\tName: \(deviceName)")
+                    DDLogInfo("\tManufacturer: \(deviceManufacturer)")
+                    DDLogInfo("\tModel: \(deviceModel)")
+                    DDLogInfo("\tHardwareVersion: \(deviceHardwareVersion)")
+                    DDLogInfo("\tFirmwareVersion: \(deviceFirmwareVersion)")
+                    DDLogInfo("\tSoftwareVersion: \(deviceSoftwareVersion)")
+                    DDLogInfo("\tLocalIdentifier: \(deviceLocalIdentifier)")
+                    DDLogInfo("\tUDIDeviceIdentifier: \(deviceUDIDeviceIdentifier)")
+                }
+
                 let healthKitData = HealthKitData()
                 healthKitData.id = sample.UUID.UUIDString
                 healthKitData.action = HealthKitData.Action.Added.rawValue
                 
                 let serializer = OMHSerializer()
                 healthKitData.granolaJson = try serializer.jsonForSample(sample)
-                
-                DDLogInfo("Granola sample: \(healthKitData.granolaJson)");
+
+                DDLogInfo("Granola sample:\n\(healthKitData.granolaJson)");
 
                 // TODO: my - Confirm that composite key of id + action does not exist before attempting to add to avoid dups?
                 realm.add(healthKitData)
