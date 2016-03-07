@@ -141,7 +141,7 @@ class LogInViewController :
             }
         }
         
-        showServerActionSheet()
+        showSettingsActionSheet()
     }
     
     func selectServer(serverName: String) {
@@ -154,18 +154,26 @@ class LogInViewController :
         DDLogInfo("Switched to \(serverName) server")
     }
     
-    func showServerActionSheet() {
+    func showSettingsActionSheet() {
         for (var i = 0; i < corners.count; i++) {
             cornersBool[i] = false
         }
         
-        // use dialog to confirm delete with user!
-        let actionSheet = UIAlertController(title: "Server", message: "", preferredStyle: .ActionSheet)
+        let actionSheet = UIAlertController(title: "Settings", message: "", preferredStyle: .ActionSheet)
         
         for server in servers {
             actionSheet.addAction(UIAlertAction(title: server.0, style: .Default, handler: { Void in
                 self.selectServer(server.0)
             }))
+        }
+        if defaultDebugLevel == DDLogLevel.Off {
+            actionSheet.addAction(UIAlertAction(title: "Enable logging until next launch", style: .Default, handler: { Void in
+                defaultDebugLevel = DDLogLevel.Verbose
+            }))
+        } else {
+            actionSheet.addAction(UIAlertAction(title: "Disable logging", style: .Default, handler: { Void in
+                defaultDebugLevel = DDLogLevel.Off
+            }))            
         }
         self.presentViewController(actionSheet, animated: true, completion: nil)
     }
