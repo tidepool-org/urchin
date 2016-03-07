@@ -752,6 +752,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
             numberOfRows = filteredNotes.count
         } else if (tableView.isEqual(dropDownMenu)){
             if (groups.count == 1) {
+                numberOfRows = 1
                 if section == sectionIndex(TableSection.HealthKit) {
                     numberOfRows = HealthKitDataCache.sharedInstance.lastCacheCount > 0 ? 2 : 1
                 }
