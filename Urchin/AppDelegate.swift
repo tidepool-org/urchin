@@ -38,7 +38,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 #if DEBUG
         defaultDebugLevel = DDLogLevel.Verbose
 #else
-        defaultDebugLevel = DDLogLevel.Off
+        if NSUserDefaults.standardUserDefaults().boolForKey("LoggingEnabled") {
+            defaultDebugLevel = DDLogLevel.Verbose
+        } else {
+            defaultDebugLevel = DDLogLevel.Off
+        }
 #endif
         DDLogVerbose("trace")
 

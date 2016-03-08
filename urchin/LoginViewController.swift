@@ -174,15 +174,22 @@ class LogInViewController :
                 self.selectServer(server.0)
             }))
         }
+#if RELEASE
         if defaultDebugLevel == DDLogLevel.Off {
-            actionSheet.addAction(UIAlertAction(title: "Enable logging until next launch", style: .Default, handler: { Void in
+            actionSheet.addAction(UIAlertAction(title: "Enable logging", style: .Default, handler: { Void in
                 defaultDebugLevel = DDLogLevel.Verbose
+                NSUserDefaults.standardUserDefaults().setBool(true, forKey: "LoggingEnabled");
+                NSUserDefaults.standardUserDefaults().synchronize()
+                
             }))
         } else {
             actionSheet.addAction(UIAlertAction(title: "Disable logging", style: .Default, handler: { Void in
                 defaultDebugLevel = DDLogLevel.Off
-            }))            
+                NSUserDefaults.standardUserDefaults().setBool(false, forKey: "LoggingEnabled");
+                NSUserDefaults.standardUserDefaults().synchronize()
+            }))
         }
+#endif
         actionSheet.addAction(UIAlertAction(title: "Email logs", style: .Default, handler: { Void in
             let logFilePaths = fileLogger.logFileManager.sortedLogFilePaths() as! [String]
             var logFileDataArray = [NSData]()
