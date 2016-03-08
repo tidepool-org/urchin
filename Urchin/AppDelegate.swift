@@ -17,11 +17,12 @@ import UIKit
 import CoreData
 import CocoaLumberjack
 
+var fileLogger: DDFileLogger!
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
@@ -29,12 +30,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Set up logging
         DDTTYLogger.sharedInstance().logFormatter = LogFormatter()
         DDLog.addLogger(DDTTYLogger.sharedInstance())
+        fileLogger = DDFileLogger()
+        fileLogger.logFormatter = LogFormatter()
+        fileLogger.rollingFrequency = 60 * 60 * 4; // 2 hour rolling
+        fileLogger.logFileManager.maximumNumberOfLogFiles = 12;
+        DDLog.addLogger(fileLogger);
 #if DEBUG
         defaultDebugLevel = DDLogLevel.Verbose
 #else
         defaultDebugLevel = DDLogLevel.Off
 #endif
-        
         DDLogVerbose("trace")
 
         // Change navigation bar colors

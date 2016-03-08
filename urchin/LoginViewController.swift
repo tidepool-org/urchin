@@ -9,12 +9,14 @@
 import Foundation
 import UIKit
 import CocoaLumberjack
+import MessageUI
 
 class LogInViewController :
         UIViewController,
         UIActionSheetDelegate,
         UITextFieldDelegate,
-        UIViewControllerTransitioningDelegate {
+        UIViewControllerTransitioningDelegate,
+        MFMailComposeViewControllerDelegate {
     
     // Secret, secret! I got a secret! (Change the server)
     var corners: [CGRect] = []
@@ -154,6 +156,12 @@ class LogInViewController :
         DDLogInfo("Switched to \(serverName) server")
     }
     
+    func mailComposeController(controller: MFMailComposeViewController,
+                               didFinishWithResult result: MFMailComposeResult,
+                               error: NSError?) {
+        controller.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
     func showSettingsActionSheet() {
         for (var i = 0; i < corners.count; i++) {
             cornersBool[i] = false
@@ -175,6 +183,32 @@ class LogInViewController :
                 defaultDebugLevel = DDLogLevel.Off
             }))            
         }
+        actionSheet.addAction(UIAlertAction(title: "Email logs", style: .Default, handler: { Void in
+            let logFilePaths = fileLogger.logFileManager.sortedLogFilePaths() as! [String]
+            var logFileDataArray = [NSData]()
+            for logFilePath in logFilePaths {
+                let fileURL = NSURL(fileURLWithPath: logFilePath)
+                if let logFileData = try? NSData(contentsOfURL: fileURL, options: NSDataReadingOptions.DataReadingMappedIfSafe) {
+                    // Insert at front to reverse the order, so that oldest logs appear first.
+                    logFileDataArray.insert(logFileData, atIndex: 0)
+                }
+            }
+            
+            if MFMailComposeViewController.canSendMail() {
+                let appName = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleName") as! String
+                let composeVC = MFMailComposeViewController()
+                composeVC.mailComposeDelegate = self
+                composeVC.setSubject("Logs for \(appName)")
+                composeVC.setMessageBody("", isHTML: false)
+                
+                let attachmentData = NSMutableData()
+                for logFileData in logFileDataArray {
+                    attachmentData.appendData(logFileData)
+                }
+                composeVC.addAttachmentData(attachmentData, mimeType: "text/plain", fileName: "\(appName).txt")
+                self.presentViewController(composeVC, animated: true, completion: nil)
+            }
+        }))
         self.presentViewController(actionSheet, animated: true, completion: nil)
     }
     
