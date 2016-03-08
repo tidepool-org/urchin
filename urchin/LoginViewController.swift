@@ -191,6 +191,7 @@ class LogInViewController :
         }
 #endif
         actionSheet.addAction(UIAlertAction(title: "Email logs", style: .Default, handler: { Void in
+            fileLogger.flush()
             let logFilePaths = fileLogger.logFileManager.sortedLogFilePaths() as! [String]
             var logFileDataArray = [NSData]()
             for logFilePath in logFilePaths {
