@@ -232,7 +232,7 @@ class HealthKitDataUploader {
                         DDLogInfo("Samples to upload JSON: \(postBodyString)")
                     }
 
-                    uploadHandler(postBody: NSData(), sampleCount: samplesToUploadCount, remainingSampleCount: remainingSamplesToUploadCount, completion: completion)
+                    uploadHandler(postBody: postBody!, sampleCount: samplesToUploadCount, remainingSampleCount: remainingSamplesToUploadCount, completion: completion)
                 }
             } catch let error as NSError! {
                 DDLogError("Error gathering samples to upload \(error), \(error.userInfo)")
