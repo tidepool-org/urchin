@@ -55,14 +55,14 @@ public extension NSDateFormatter {
         }
     }
     
-    func isoStringFromDate(date: NSDate, zone: NSTimeZone?) -> String {
+    func isoStringFromDate(date: NSDate, zone: NSTimeZone? = nil, dateFormat: String = iso8601dateOne) -> String {
         self.locale = NSLocale(localeIdentifier: "en_US_POSIX")
         if (zone != nil) {
             self.timeZone = zone
         } else {
             self.timeZone = NSTimeZone.localTimeZone()
         }
-        self.dateFormat = iso8601dateOne
+        self.dateFormat = dateFormat
         return self.stringFromDate(date)
     }
     

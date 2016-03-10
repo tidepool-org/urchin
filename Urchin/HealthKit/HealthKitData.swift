@@ -21,9 +21,22 @@ class HealthKitData: Object {
         case Unknown = 0, Added, Deleted
     }
 
-    dynamic var id = ""
-    dynamic var action = Action.Unknown.rawValue
     dynamic var createdAt = NSDate()
     dynamic var timeZoneOffset = NSCalendar.currentCalendar().timeZone.secondsFromGMT / 60
+    dynamic var action = Action.Unknown.rawValue
+    dynamic var id = ""
+    dynamic var healthKitTypeIdentifier = ""
+    dynamic var sourceName = ""
+    dynamic var sourceBundleIdentifier = ""
+    dynamic var sourceVersion = ""
+    dynamic var value: Double = 0
+    dynamic var units = ""
+    dynamic var startDate = NSDate()
+    dynamic var endDate = NSDate()
+
     dynamic var granolaJson = ""
+
+    override static func indexedProperties() -> [String] {
+        return ["id", "createdAt", "healthKitTypeIdentifier"]
+    }
 }

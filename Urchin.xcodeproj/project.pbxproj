@@ -12,6 +12,8 @@
 		4D01F7971C88D7D8006ABE5E /* LogFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D01F7961C88D7D8006ABE5E /* LogFormatter.swift */; };
 		4D01F7981C88D809006ABE5E /* LogFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D01F7961C88D7D8006ABE5E /* LogFormatter.swift */; };
 		4D47CD7D1C18EC4C00AAA8A9 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D47CD7C1C18EC4C00AAA8A9 /* HealthKit.framework */; };
+		4D9135431C8F164A00BE2090 /* HealthKitDataUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D9135421C8F164A00BE2090 /* HealthKitDataUploader.swift */; };
+		4D9135441C8F1ADB00BE2090 /* HealthKitDataUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D9135421C8F164A00BE2090 /* HealthKitDataUploader.swift */; };
 		4DBC534C1C30A9230062FDEA /* HealthKitDataCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DBC53481C30A9230062FDEA /* HealthKitDataCache.swift */; };
 		4DBC534D1C30A9230062FDEA /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DBC53491C30A9230062FDEA /* HealthKitManager.swift */; };
 		4DBC534F1C30B3F30062FDEA /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DBC53491C30A9230062FDEA /* HealthKitManager.swift */; };
@@ -133,6 +135,7 @@
 		4D01F7961C88D7D8006ABE5E /* LogFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LogFormatter.swift; path = Urchin/LogFormatter.swift; sourceTree = SOURCE_ROOT; };
 		4D47CD7B1C18EC4C00AAA8A9 /* urchin.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = urchin.entitlements; sourceTree = "<group>"; };
 		4D47CD7C1C18EC4C00AAA8A9 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
+		4D9135421C8F164A00BE2090 /* HealthKitDataUploader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitDataUploader.swift; path = Urchin/HealthKit/HealthKitDataUploader.swift; sourceTree = SOURCE_ROOT; };
 		4DBC53481C30A9230062FDEA /* HealthKitDataCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitDataCache.swift; path = Urchin/HealthKit/HealthKitDataCache.swift; sourceTree = SOURCE_ROOT; };
 		4DBC53491C30A9230062FDEA /* HealthKitManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitManager.swift; path = Urchin/HealthKit/HealthKitManager.swift; sourceTree = SOURCE_ROOT; };
 		4DBC53511C30B48C0062FDEA /* HealthKitData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitData.swift; path = Urchin/HealthKit/HealthKitData.swift; sourceTree = SOURCE_ROOT; };
@@ -225,6 +228,7 @@
 			children = (
 				4DBC53511C30B48C0062FDEA /* HealthKitData.swift */,
 				4DBC53481C30A9230062FDEA /* HealthKitDataCache.swift */,
+				4D9135421C8F164A00BE2090 /* HealthKitDataUploader.swift */,
 				4DBC53491C30A9230062FDEA /* HealthKitManager.swift */,
 			);
 			name = HealthKit;
@@ -753,6 +757,7 @@
 				AABCEF8A1B3231910064FE49 /* AppDelegate.swift in Sources */,
 				AA3652CE1B34A8E4001F514D /* UserDropDownCell.swift in Sources */,
 				AA3652C41B338525001F514D /* NotesViewController.swift in Sources */,
+				4D9135431C8F164A00BE2090 /* HealthKitDataUploader.swift in Sources */,
 				AA8301001B4D986300F8ADE6 /* AddNoteViewController.swift in Sources */,
 				AABCEFAC1B3232C60064FE49 /* NoteCell.swift in Sources */,
 				AA3652C21B33847A001F514D /* User.swift in Sources */,
@@ -774,6 +779,7 @@
 				AA6932071B66E6D30057F0A0 /* AddNoteVCTableViewDelegate.swift in Sources */,
 				AA6932011B66E5910057F0A0 /* AddNoteVCTextViewDelegate.swift in Sources */,
 				4DBC534F1C30B3F30062FDEA /* HealthKitManager.swift in Sources */,
+				4D9135441C8F1ADB00BE2090 /* HealthKitDataUploader.swift in Sources */,
 				4DBC53501C30B3F60062FDEA /* HealthKitDataCache.swift in Sources */,
 				AA79201F1B62AB470046038B /* NotesViewController.swift in Sources */,
 				AAFBE7DF1B698229007E480D /* UIApplicationExtension.swift in Sources */,

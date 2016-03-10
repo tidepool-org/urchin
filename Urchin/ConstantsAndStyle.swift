@@ -604,6 +604,10 @@ let loadingNotes: String = "Loading notes..."
         Regular date format for birthdays, diagnosis date, etc.
 */
 let uniformDateFormat: String = "EEEE M/d/yy h:mma"
+
 let iso8601dateOne: String = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
 let iso8601dateTwo: String = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+let iso8601dateZuluTime: String = "yyyy-MM-dd'T'HH:mm:ss'Z'"
+let iso8601dateNoTimeZone: String = "yyyy-MM-dd'T'HH:mm:ss"
+
 let regularDateFormat: String = "yyyy-MM-dd"

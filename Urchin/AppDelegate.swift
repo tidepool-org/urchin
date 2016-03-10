@@ -63,7 +63,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if (HealthKitManager.sharedInstance.isHealthDataAvailable) {
             HealthKitDataCache.sharedInstance.startCaching(
                 shouldCacheBloodGlucoseSamples: true,
-                shouldCacheWorkoutSamples: true)
+                shouldCacheWorkoutSamples: false)
         }
         
         return true

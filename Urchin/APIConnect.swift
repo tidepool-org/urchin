@@ -30,13 +30,13 @@ class APIConnector {
     
     private var isShowingAlert = false
     
-    func request(method: String, urlExtension: String, headerDict: [String: String], body: NSData?, preRequest: () -> Void,
-        completion: (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void) {
+    func request(method: String, urlExtension: String, headerDict: [String: String], body: NSData?, preRequest: () -> Void, subdomainRootOverride: String = "api", completion: (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void) {
         
             if (self.isConnectedToNetwork()) {
                 preRequest()
                 
-                var urlString = baseURL + urlExtension
+                let baseUrlWithSubdomainRootOverride = baseURL.stringByReplacingOccurrencesOfString("api", withString: subdomainRootOverride)
+                var urlString = baseUrlWithSubdomainRootOverride + urlExtension
                 urlString = urlString.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
                 let url = NSURL(string: urlString)
                 let request = NSMutableURLRequest(URL: url!)
@@ -658,6 +658,40 @@ class APIConnector {
         }
         
         request("POST", urlExtension: urlExtension, headerDict: headerDict, body: body, preRequest: preRequest, completion: completion)
+    }
+    
+    func doUpload(body: NSData, completion: (NSError?) -> (Void)) {
+        guard let currentUser = self.user else {
+            DDLogError("No logged in user, unable to upload")
+            return
+        }
+
+        let urlExtension = "/data/" + currentUser.userid
+        
+        let headerDict = ["x-tidepool-session-token":"\(x_tidepool_session_token)", "Content-Type":"application/json"]
+        
+        let preRequest = { () -> Void in
+            // nothing to do in prerequest
+        }
+        
+        let handleRequestCompletion = { (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
+            // TODO: my - 0 - remove this, just testing
+            if let httpResponse = response as? NSHTTPURLResponse {
+                if data != nil {
+                    let statusCode = httpResponse.statusCode
+                    let dataString = NSString(data: data!, encoding: NSUTF8StringEncoding)! as String
+                    DDLogInfo("status Code: \(statusCode), response data: \(dataString)")
+                }
+            }
+            
+            if error != nil {
+                DDLogError("Upload failed: \(error), \(error?.userInfo)")
+            }
+            
+            completion(error)
+        }
+        
+        request("POST", urlExtension: urlExtension, headerDict: headerDict, body: body, preRequest: preRequest, subdomainRootOverride: "uploads", completion: handleRequestCompletion)
     }
     
     func editNote(notesVC: NotesViewController, editedNote: Note, originalNote: Note) {

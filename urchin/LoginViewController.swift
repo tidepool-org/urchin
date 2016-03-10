@@ -133,8 +133,39 @@ class LogInViewController :
             // to make sure that the apiConnector.login doesn't do more than it should in that scenario (e.g. 
             // don't try to create a new note, present login UI, errors, etc.
             apiConnector.login()
+
+            let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(5 * Double(NSEC_PER_SEC)))
+            dispatch_after(delayTime, dispatch_get_main_queue()) {
+                if self.apiConnector.user != nil {
+                    // TODO: my - 0 - do this in background fetch, and periodically when app is running
+                    if HealthKitDataUploader.sharedInstance.hasSamplesToUpload {
+                        HealthKitDataUploader.sharedInstance.startBatchUpload(userId: self.apiConnector.user!.userid) {
+                            (postBody: NSData, remainingSampleCount: Int) -> Void in
+
+                            // Do the initial upload to start the batch
+                            self.apiConnector.doUpload(postBody) {
+                                (error: NSError?) -> Void in
+
+                                if error == nil {
+                                    // TODO: my - 0 - do more than just one upload call, maybe up to ten at a time? (batches of 100)
+                                    // Upload a batch of data
+                                    HealthKitDataUploader.sharedInstance.uploadNextForBatch({ (postBody: NSData, sampleCount: Int, remainingSampleCount: Int, completion: (NSError?) -> (Void)) -> Void in
+
+                                        self.apiConnector.doUpload(postBody) {
+                                            (error: NSError?) -> Void in
+
+                                            completion(error)
+                                        }
+                                    })
+                                }
+                            }
+                        }
+                    }
+                }                
+            }
         }
     }
+    
     
     func checkCorners() {
         for cornerBool in cornersBool {

@@ -26,16 +26,16 @@ class HealthKitDataCache {
     static let sharedInstance = HealthKitDataCache()
     private init() {
         var config = Realm.Configuration(
-            schemaVersion: 1,
+            schemaVersion: 4,
 
             migrationBlock: { migration, oldSchemaVersion in
                 // We haven’t migrated anything yet, so oldSchemaVersion == 0
-                if (oldSchemaVersion < 1) {
+                if (oldSchemaVersion < 4) {
                     // Nothing to do!
                     // Realm will automatically detect new properties and removed properties
                     // And will update the schema on disk automatically
 
-                    DDLogInfo("Migrating Realm from 0 to 1")
+                    DDLogInfo("Migrating Realm from 0 to 4")
                 }
             }
         )
@@ -114,8 +114,8 @@ class HealthKitDataCache {
     }
     
     enum Notifications {
-        static let ObservedBloodGlucoseSamples = "HealthKitDataCache-observed-\(HKWorkoutTypeIdentifier)"
-        static let ObservedWorkoutSamples = "HealthKitDataCache-observed-\(HKWorkoutTypeIdentifier)"
+        static let CachedBloodGlucoseSamples = "HealthKitDataCache-observed-\(HKQuantityTypeIdentifierBloodGlucose)"
+        static let CachedWorkoutSamples = "HealthKitDataCache-observed-\(HKWorkoutTypeIdentifier)"
     }
 
     func authorizeAndStartCaching(
@@ -153,7 +153,7 @@ class HealthKitDataCache {
                         DDLogInfo("********* PROCESSING \(deletedSamples!.count) deleted blood glucose samples ********* ")
                     }
                     
-                    self.writeSamplesToDb(newSamples: newSamples, deletedSamples: deletedSamples, error: error)
+                    self.writeSamplesToDb(typeIdentifier: HKQuantityTypeIdentifierBloodGlucose, samples: newSamples, deletedSamples: deletedSamples, error: error)
                     
                     self.updateLastCacheBloodGlucoseSamples(newSamples: newSamples, deletedSamples: deletedSamples)
                 }
@@ -171,7 +171,7 @@ class HealthKitDataCache {
                         DDLogInfo("********* PROCESSING \(deletedSamples!.count) deleted workout samples ********* ")
                     }
 
-                    self.writeSamplesToDb(newSamples: newSamples, deletedSamples: deletedSamples, error: error)
+                    self.writeSamplesToDb(typeIdentifier: HKWorkoutTypeIdentifier, samples: newSamples, deletedSamples: deletedSamples, error: error)
                     
                     self.updateLastCacheWorkoutSamples(newSamples: newSamples, deletedSamples: deletedSamples)
                 }
@@ -195,14 +195,14 @@ class HealthKitDataCache {
     
     // MARK: Private
     
-    private func writeSamplesToDb(newSamples newSamples: [HKSample]?, deletedSamples: [HKDeletedObject]?, error: NSError?) {
+    private func writeSamplesToDb(typeIdentifier typeIdentifier: String, samples: [HKSample]?, deletedSamples: [HKDeletedObject]?, error: NSError?) {
         guard error == nil else {
             DDLogError("Error processing samples \(error), \(error!.userInfo)")
             return
         }
         
-        if (newSamples != nil) {
-            writeNewSamplesToDb(newSamples!)
+        if (samples != nil) {
+            writeNewSamplesToDb(typeIdentifier: typeIdentifier, samples: samples!)
         }
         
         if (deletedSamples != nil) {
@@ -210,54 +210,73 @@ class HealthKitDataCache {
         }
     }
     
-    private func writeNewSamplesToDb(samples: [HKSample]) {
+    private func writeNewSamplesToDb(typeIdentifier typeIdentifier: String, samples: [HKSample]) {
         do {
             let realm = try Realm()
 
             realm.beginWrite()
             
             for sample in samples {
-                if defaultDebugLevel != DDLogLevel.Off {
-                    let sourceRevision = sample.sourceRevision
-                    let source = sourceRevision.source
-                    let sourceName = source.name
-                    let sourceBundleIdentifier = source.bundleIdentifier
-                    let sourceVersion = sourceRevision.version
-                    let device = sample.device
-                    let deviceName = device?.name
-                    let deviceManufacturer = device?.manufacturer
-                    let deviceModel = device?.model
-                    let deviceHardwareVersion = device?.hardwareVersion
-                    let deviceFirmwareVersion = device?.firmwareVersion
-                    let deviceSoftwareVersion = device?.softwareVersion
-                    let deviceLocalIdentifier = device?.localIdentifier
-                    let deviceUDIDeviceIdentifier = device?.UDIDeviceIdentifier
-                    
-                    DDLogInfo("Source:")
-                    DDLogInfo("\tName: \(sourceName)")
-                    DDLogInfo("\tBundleIdentifier: \(sourceBundleIdentifier)")
-                    DDLogInfo("\tVersion: \(sourceVersion)")
-                    
-                    DDLogInfo("Device:")
-                    DDLogInfo("\tName: \(deviceName)")
-                    DDLogInfo("\tManufacturer: \(deviceManufacturer)")
-                    DDLogInfo("\tModel: \(deviceModel)")
-                    DDLogInfo("\tHardwareVersion: \(deviceHardwareVersion)")
-                    DDLogInfo("\tFirmwareVersion: \(deviceFirmwareVersion)")
-                    DDLogInfo("\tSoftwareVersion: \(deviceSoftwareVersion)")
-                    DDLogInfo("\tLocalIdentifier: \(deviceLocalIdentifier)")
-                    DDLogInfo("\tUDIDeviceIdentifier: \(deviceUDIDeviceIdentifier)")
+                let sourceRevision = sample.sourceRevision
+                let source = sourceRevision.source
+                let sourceName = source.name
+                let sourceBundleIdentifier = source.bundleIdentifier
+                let sourceVersion = sourceRevision.version
+                
+                DDLogInfo("Source:")
+                DDLogInfo("\tName: \(sourceName)")
+                DDLogInfo("\tBundleIdentifier: \(sourceBundleIdentifier)")
+                DDLogInfo("\tVersion: \(sourceVersion)")
+
+                if typeIdentifier == HKQuantityTypeIdentifierBloodGlucose &&
+                   sourceName.lowercaseString.rangeOfString("dexcom") == nil {
+                    DDLogInfo("Ignoring non-Dexcom glucose data")
+                    continue
                 }
 
+                let device = sample.device
+                let deviceName = device?.name
+                let deviceManufacturer = device?.manufacturer
+                let deviceModel = device?.model
+                let deviceHardwareVersion = device?.hardwareVersion
+                let deviceFirmwareVersion = device?.firmwareVersion
+                let deviceSoftwareVersion = device?.softwareVersion
+                let deviceLocalIdentifier = device?.localIdentifier
+                let deviceUDIDeviceIdentifier = device?.UDIDeviceIdentifier
+                
+                DDLogInfo("Device:")
+                DDLogInfo("\tName: \(deviceName)")
+                DDLogInfo("\tManufacturer: \(deviceManufacturer)")
+                DDLogInfo("\tModel: \(deviceModel)")
+                DDLogInfo("\tHardwareVersion: \(deviceHardwareVersion)")
+                DDLogInfo("\tFirmwareVersion: \(deviceFirmwareVersion)")
+                DDLogInfo("\tSoftwareVersion: \(deviceSoftwareVersion)")
+                DDLogInfo("\tLocalIdentifier: \(deviceLocalIdentifier)")
+                DDLogInfo("\tUDIDeviceIdentifier: \(deviceUDIDeviceIdentifier)")
+
                 let healthKitData = HealthKitData()
+
                 healthKitData.id = sample.UUID.UUIDString
+                healthKitData.healthKitTypeIdentifier = typeIdentifier
                 healthKitData.action = HealthKitData.Action.Added.rawValue
+
+                healthKitData.sourceName = sourceName
+                healthKitData.sourceBundleIdentifier = sourceBundleIdentifier
+                healthKitData.sourceVersion = sourceVersion ?? ""
+                healthKitData.startDate = sample.startDate
+                healthKitData.endDate = sample.endDate
+                
+                if let quantitySample = sample as? HKQuantitySample {
+                    healthKitData.units = "mg/dL"
+                    let unit = HKUnit(fromString: healthKitData.units)
+                    healthKitData.value = quantitySample.quantity.doubleValueForUnit(unit)
+                }
                 
                 let serializer = OMHSerializer()
                 healthKitData.granolaJson = try serializer.jsonForSample(sample)
 
                 DDLogInfo("Granola sample:\n\(healthKitData.granolaJson)");
-
+                
                 // TODO: my - Confirm that composite key of id + action does not exist before attempting to add to avoid dups?
                 realm.add(healthKitData)
             }
@@ -303,13 +322,12 @@ class HealthKitDataCache {
             lastCacheTimeBloodGlucoseSamples = NSDate()
             NSUserDefaults.standardUserDefaults().setObject(lastCacheTimeBloodGlucoseSamples, forKey: "lastCacheTimeBloodGlucoseSamples")
             NSUserDefaults.standardUserDefaults().setInteger(lastCacheCountBloodGlucoseSamples, forKey: "lastCacheCountBloodGlucoseSamples")
-            NSUserDefaults.standardUserDefaults().setObject(lastCacheTimeBloodGlucoseSamples, forKey: "lastCacheTimeBloodGlucoseSamples")
             let totalCacheCountBloodGlucoseSamples = NSUserDefaults.standardUserDefaults().integerForKey("totalCacheCountBloodGlucoseSamples") + lastCacheCountBloodGlucoseSamples
             NSUserDefaults.standardUserDefaults().setObject(totalCacheCountBloodGlucoseSamples, forKey: "totalCacheCountBloodGlucoseSamples")
             NSUserDefaults.standardUserDefaults().synchronize()
             
             dispatch_async(dispatch_get_main_queue()) {
-                NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: Notifications.ObservedBloodGlucoseSamples, object: nil))
+                NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: Notifications.CachedBloodGlucoseSamples, object: nil))
             }
         }
     }
@@ -332,7 +350,7 @@ class HealthKitDataCache {
             NSUserDefaults.standardUserDefaults().synchronize()
             
             dispatch_async(dispatch_get_main_queue()) {
-                NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: Notifications.ObservedWorkoutSamples, object: nil))
+                NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: Notifications.CachedWorkoutSamples, object: nil))
             }
         }
     }

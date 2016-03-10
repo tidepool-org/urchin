@@ -63,7 +63,7 @@ class UserDropDownCell: UITableViewCell {
             separator.backgroundColor = whiteQuarterAlpha
             self.addSubview(separator)
         } else if (key == "healthkit-status") {
-            let lastCacheDateAndTime = NSDateFormatter.localizedStringFromDate(HealthKitDataCache.sharedInstance.lastCacheTime, dateStyle: .ShortStyle, timeStyle: .ShortStyle)
+            let lastCacheDateAndTime = NSDateFormatter.localizedStringFromDate(HealthKitDataUploader.sharedInstance.lastUploadTime, dateStyle: .ShortStyle, timeStyle: .ShortStyle)
             if group != nil && group?.fullName != nil {
                 nameLabel.text = String(format: healthKitStatusFormat, group!.fullName!, lastCacheDateAndTime)
             } else {

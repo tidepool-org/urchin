@@ -192,8 +192,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         notificationCenter.addObserver(self, selector: "forcedLogout:", name: "forcedLogout", object: nil)
 
         // Handle HealthKitDataCache notifications
-        notificationCenter.addObserver(self, selector: "handleObservedHealthKitDataCacheNotification:", name: HealthKitDataCache.Notifications.ObservedBloodGlucoseSamples, object: nil)
-        notificationCenter.addObserver(self, selector: "handleObservedHealthKitDataCacheNotification:", name: HealthKitDataCache.Notifications.ObservedWorkoutSamples, object: nil)
+        notificationCenter.addObserver(self, selector: "handleUploadedHealthKitDataCacheNotification:", name: HealthKitDataUploader.Notifications.UploadedBloodGlucoseSamples, object: nil)
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -517,7 +516,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         }
     }
     
-    func handleObservedHealthKitDataCacheNotification(notification: NSNotification) {
+    func handleUploadedHealthKitDataCacheNotification(notification: NSNotification) {
         if (dropDownMenu != nil) {
             dropDownMenu.reloadData()
         }
@@ -538,7 +537,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         var additionalCells = groups.count == 1 ? 1 : 3
         if (HealthKitManager.sharedInstance.isHealthDataAvailable) {
             additionalCells++
-            if (HealthKitDataCache.sharedInstance.lastCacheCount > 0) {
+            if (HealthKitDataUploader.sharedInstance.lastUploadCount > 0) {
                 additionalCells++
             }
         }
@@ -754,14 +753,14 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
             if (groups.count == 1) {
                 numberOfRows = 1
                 if section == sectionIndex(TableSection.HealthKit) {
-                    numberOfRows = HealthKitDataCache.sharedInstance.lastCacheCount > 0 ? 2 : 1
+                    numberOfRows = HealthKitDataUploader.sharedInstance.lastUploadCount > 0 ? 2 : 1
                 }
             } else {
                 if (section == sectionIndex(TableSection.Users)) {
                     // Number of groups + 1 for 'All' / #nofilter
                     numberOfRows = groups.count + 1
                 } else if (section == sectionIndex(TableSection.HealthKit)) {
-                    numberOfRows = HealthKitDataCache.sharedInstance.lastCacheCount > 0 ? 2 : 1
+                    numberOfRows = HealthKitDataUploader.sharedInstance.lastUploadCount > 0 ? 2 : 1
                 } else if (section == sectionIndex(TableSection.Logout)) {
                     numberOfRows = 1
                 } else if (section == sectionIndex(TableSection.Version)) {
@@ -1053,7 +1052,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         if (HealthKitManager.sharedInstance.isHealthDataAvailable) {
             HealthKitDataCache.sharedInstance.authorizeAndStartCaching(
                 shouldCacheBloodGlucoseSamples: true,
-                shouldCacheWorkoutSamples: true)
+                shouldCacheWorkoutSamples: false)
         }
     }
 }
