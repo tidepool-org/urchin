@@ -675,7 +675,6 @@ class APIConnector {
         }
         
         let handleRequestCompletion = { (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
-            // TODO: my - 0 - remove this, just testing
             if let httpResponse = response as? NSHTTPURLResponse {
                 if data != nil {
                     let statusCode = httpResponse.statusCode

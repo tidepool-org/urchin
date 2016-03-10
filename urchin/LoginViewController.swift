@@ -136,36 +136,49 @@ class LogInViewController :
 
             let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(5 * Double(NSEC_PER_SEC)))
             dispatch_after(delayTime, dispatch_get_main_queue()) {
-                if self.apiConnector.user != nil {
-                    // TODO: my - 0 - do this in background fetch, and periodically when app is running
-                    if HealthKitDataUploader.sharedInstance.hasSamplesToUpload {
-                        HealthKitDataUploader.sharedInstance.startBatchUpload(userId: self.apiConnector.user!.userid) {
-                            (postBody: NSData, remainingSampleCount: Int) -> Void in
-
-                            // Do the initial upload to start the batch
-                            self.apiConnector.doUpload(postBody) {
-                                (error: NSError?) -> Void in
-
-                                if error == nil {
-                                    // TODO: my - 0 - do more than just one upload call, maybe up to ten at a time? (batches of 100)
-                                    // Upload a batch of data
-                                    HealthKitDataUploader.sharedInstance.uploadNextForBatch({ (postBody: NSData, sampleCount: Int, remainingSampleCount: Int, completion: (NSError?) -> (Void)) -> Void in
-
-                                        self.apiConnector.doUpload(postBody) {
-                                            (error: NSError?) -> Void in
-
-                                            completion(error)
-                                        }
-                                    })
-                                }
-                            }
-                        }
-                    }
-                }                
+                self.doUploadIfNecessary()
             }
         }
     }
     
+    func doUploadIfNecessary() {
+        if self.apiConnector.user != nil && HealthKitDataUploader.sharedInstance.hasSamplesToUpload{
+            // TODO: my - 0 - do this in background fetch
+            HealthKitDataUploader.sharedInstance.startBatchUpload(userId: self.apiConnector.user!.userid) {
+                (postBody: NSData, remainingSampleCount: Int) -> Void in
+                
+                // Do the initial upload to start the batch
+                self.apiConnector.doUpload(postBody) {
+                    (error: NSError?) -> Void in
+                    
+                    if error == nil {
+                        self.uploadNextForBatch(remainingSampleCount)
+                    }
+                }
+            }
+        } else {
+            let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(120 * Double(NSEC_PER_SEC)))
+            dispatch_after(delayTime, dispatch_get_main_queue()) {
+                self.doUploadIfNecessary()
+            }
+        }
+    }
+
+    func uploadNextForBatch(remainingSampleCount: Int) {
+        HealthKitDataUploader.sharedInstance.uploadNextForBatch({ (postBody: NSData, sampleCount: Int, remainingSampleCount: Int, completion: (NSError?) -> (Void)) -> Void in
+            
+            self.apiConnector.doUpload(postBody) {
+                (error: NSError?) -> Void in
+                
+                completion(error)
+                
+                // Upload next batch of data
+                if HealthKitDataUploader.sharedInstance.hasSamplesToUpload {
+                    self.uploadNextForBatch(remainingSampleCount)
+                }
+            }
+        })
+    }
     
     func checkCorners() {
         for cornerBool in cornersBool {

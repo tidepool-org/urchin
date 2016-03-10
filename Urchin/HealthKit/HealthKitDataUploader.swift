@@ -163,7 +163,7 @@ class HealthKitDataUploader {
                 // Determine which samples to upload
                 let samples = realm.objects(HealthKitData).filter("healthKitTypeIdentifier = '\(HKQuantityTypeIdentifierBloodGlucose)'").sorted("createdAt")
                 let samplesCount = samples.count
-                let samplesToUploadCount = min(1, samples.count) // TODO: my - 0 - This should be 100, just 1 for now for testing
+                let samplesToUploadCount = min(100, samples.count)
                 let remainingSamplesToUploadCount = samples.count - samplesToUploadCount
                 var samplesToUpload = [HealthKitData]()
                 for i in 0..<samplesToUploadCount {
