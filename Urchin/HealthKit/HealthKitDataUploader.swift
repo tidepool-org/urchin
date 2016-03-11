@@ -26,7 +26,7 @@ class HealthKitDataUploader {
         let totalUploadCountBloodGlucoseSamples = NSUserDefaults.standardUserDefaults().integerForKey("totalUploadCountBloodGlucoseSamples")
         if totalUploadCountBloodGlucoseSamples > 0 {
             self.totalUploadCountBloodGlucoseSamples = totalUploadCountBloodGlucoseSamples
-            self.lastUploadCountBloodGlucoseSamples = NSUserDefaults.standardUserDefaults().integerForKey("totalUploadCountBloodGlucoseSamples")
+            self.lastUploadCountBloodGlucoseSamples = NSUserDefaults.standardUserDefaults().integerForKey("lastUploadCountBloodGlucoseSamples")
             let lastUploadTimeBloodGlucoseSamples = NSUserDefaults.standardUserDefaults().objectForKey("lastUploadTimeBloodGlucoseSamples")
             if (lastUploadTimeBloodGlucoseSamples != nil) {
                 self.lastUploadTimeBloodGlucoseSamples = lastUploadTimeBloodGlucoseSamples as! NSDate
