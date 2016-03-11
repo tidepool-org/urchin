@@ -23,6 +23,15 @@ class HealthKitDataUploader {
     
     static let sharedInstance = HealthKitDataUploader()
     private init() {
+        let totalUploadCountBloodGlucoseSamples = NSUserDefaults.standardUserDefaults().integerForKey("totalUploadCountBloodGlucoseSamples")
+        if totalUploadCountBloodGlucoseSamples > 0 {
+            self.totalUploadCountBloodGlucoseSamples = totalUploadCountBloodGlucoseSamples
+            self.lastUploadCountBloodGlucoseSamples = NSUserDefaults.standardUserDefaults().integerForKey("totalUploadCountBloodGlucoseSamples")
+            let lastUploadTimeBloodGlucoseSamples = NSUserDefaults.standardUserDefaults().objectForKey("lastUploadTimeBloodGlucoseSamples")
+            if (lastUploadTimeBloodGlucoseSamples != nil) {
+                self.lastUploadTimeBloodGlucoseSamples = lastUploadTimeBloodGlucoseSamples as! NSDate
+            }
+        }
     }
     
     private(set) var totalUploadCountBloodGlucoseSamples = -1
@@ -247,7 +256,6 @@ class HealthKitDataUploader {
             lastUploadTimeBloodGlucoseSamples = NSDate()
             NSUserDefaults.standardUserDefaults().setObject(lastUploadTimeBloodGlucoseSamples, forKey: "lastUploadTimeBloodGlucoseSamples")
             NSUserDefaults.standardUserDefaults().setInteger(lastUploadCountBloodGlucoseSamples, forKey: "lastUploadCountBloodGlucoseSamples")
-            NSUserDefaults.standardUserDefaults().setObject(lastUploadTimeBloodGlucoseSamples, forKey: "lastUploadTimeBloodGlucoseSamples")
             let totalUploadCountBloodGlucoseSamples = NSUserDefaults.standardUserDefaults().integerForKey("totalUploadCountBloodGlucoseSamples") + lastUploadCountBloodGlucoseSamples
             NSUserDefaults.standardUserDefaults().setObject(totalUploadCountBloodGlucoseSamples, forKey: "totalUploadCountBloodGlucoseSamples")
             NSUserDefaults.standardUserDefaults().synchronize()
