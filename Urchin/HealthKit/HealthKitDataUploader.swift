@@ -116,9 +116,8 @@ class HealthKitDataUploader {
                 lastBatchUploadDict["computerTime"] = dateFormatter.isoStringFromDate(now, zone: NSTimeZone(forSecondsFromGMT: 0), dateFormat: iso8601dateNoTimeZone)
                 lastBatchUploadDict["time"] = time
                 lastBatchUploadDict["timezoneOffset"] = timeZoneOffset
-                lastBatchUploadDict["conversionOffset"] = 0
                 lastBatchUploadDict["timezone"] = NSTimeZone.localTimeZone().name
-                lastBatchUploadDict["timeProcessing"] = ""
+                lastBatchUploadDict["timeProcessing"] = "none"
                 lastBatchUploadDict["version"] = version
                 lastBatchUploadDict["guid"] = NSUUID().UUIDString
                 lastBatchUploadDict["uploadId"] = uploadId
@@ -203,10 +202,8 @@ class HealthKitDataUploader {
 
                     var sampleToUploadDict = [String: AnyObject]()
                     sampleToUploadDict["time"] = dateFormatter.isoStringFromDate(sample.startDate, zone: NSTimeZone(forSecondsFromGMT: 0), dateFormat: iso8601dateZuluTime)
-                    sampleToUploadDict["timezoneOffset"] = sample.timeZoneOffset
-                    sampleToUploadDict["clockDriftOffset"] = 0
-                    sampleToUploadDict["conversionOffset"] = 0
-                    sampleToUploadDict["deviceTime"] = dateFormatter.isoStringFromDate(sample.startDate, zone: NSTimeZone.localTimeZone(), dateFormat: iso8601dateNoTimeZone)
+                    // sampleToUploadDict["timezoneOffset"] = sample.timeZoneOffset // Don't include this since really sourced from local time of phone at time sample is cached
+                    // sampleToUploadDict["deviceTime"] = dateFormatter.isoStringFromDate(sample.startDate, zone: NSTimeZone.localTimeZone(), dateFormat: iso8601dateNoTimeZone) // TODO: my - consider adding this back if we have "receiver display time" metadata (e.g. from Dexcom Share / G4)
                     sampleToUploadDict["deviceId"] = deviceId
                     sampleToUploadDict["type"] = "cbg"
                     sampleToUploadDict["value"] = sample.value
