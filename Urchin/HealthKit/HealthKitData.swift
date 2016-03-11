@@ -15,6 +15,7 @@
 
 import HealthKit
 import RealmSwift
+import CocoaLumberjack
 
 class HealthKitData: Object {
     enum Action: Int {
@@ -34,9 +35,48 @@ class HealthKitData: Object {
     dynamic var startDate = NSDate()
     dynamic var endDate = NSDate()
 
-    dynamic var granolaJson = ""
-
+    private dynamic var metadata: NSData?
+    var metadataDict: [String: AnyObject]? {
+        get {
+            do {
+                if self.metadata != nil {
+                    let metadataDict = try NSJSONSerialization.JSONObjectWithData(metadata!, options: []) as? [String: AnyObject]
+                    return metadataDict
+                } else {
+                    return nil
+                }
+            } catch {
+                DDLogError("Error creating JSON object from data")
+                return nil
+            }
+        }
+        
+        set {
+            do {
+                if var metadataDict = newValue {
+                    let dateFormatter = NSDateFormatter()
+                    for (key, value) in newValue! {
+                        if let dateValue = value as? NSDate {
+                            metadataDict[key] = dateFormatter.isoStringFromDate(dateValue, zone: NSTimeZone(forSecondsFromGMT: 0), dateFormat: iso8601dateZuluTime)
+                        }
+                    }
+                    let metadata = try NSJSONSerialization.dataWithJSONObject(metadataDict, options: [])
+                    self.metadata = metadata
+                } else {
+                    self.metadata = nil
+                }
+            } catch {
+                DDLogError("Error creating data from JSON object")
+                self.metadata = nil
+            }
+        }
+    }
+    
     override static func indexedProperties() -> [String] {
-        return ["id", "createdAt", "healthKitTypeIdentifier"]
+        return ["id", "createdAt", "healthKitTypeIdentifier", "action", "sourceBundleIdentifier", "startDate", "endDate"]
+    }
+    
+    override static func ignoredProperties() -> [String] {
+        return ["metadataDict"]
     }
 }

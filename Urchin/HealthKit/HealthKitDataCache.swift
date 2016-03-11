@@ -16,7 +16,6 @@
 import HealthKit
 import RealmSwift
 import CocoaLumberjack
-import Granola
 
 // TODO: my - Need to set up a periodic task to perodically drain the Realm db and upload those events to service, this should be able to be done as background task even when app is not active, and periodically when active
 
@@ -26,16 +25,16 @@ class HealthKitDataCache {
     static let sharedInstance = HealthKitDataCache()
     private init() {
         var config = Realm.Configuration(
-            schemaVersion: 4,
+            schemaVersion: 5,
 
             migrationBlock: { migration, oldSchemaVersion in
                 // We haven’t migrated anything yet, so oldSchemaVersion == 0
-                if (oldSchemaVersion < 4) {
+                if (oldSchemaVersion < 5) {
                     // Nothing to do!
                     // Realm will automatically detect new properties and removed properties
                     // And will update the schema on disk automatically
 
-                    DDLogInfo("Migrating Realm from 0 to 4")
+                    DDLogInfo("Migrating Realm from 0 to 5")
                 }
             }
         )
@@ -223,17 +222,6 @@ class HealthKitDataCache {
                 let sourceBundleIdentifier = source.bundleIdentifier
                 let sourceVersion = sourceRevision.version
                 
-                DDLogInfo("Source:")
-                DDLogInfo("\tName: \(sourceName)")
-                DDLogInfo("\tBundleIdentifier: \(sourceBundleIdentifier)")
-                DDLogInfo("\tVersion: \(sourceVersion)")
-
-                if typeIdentifier == HKQuantityTypeIdentifierBloodGlucose &&
-                   sourceName.lowercaseString.rangeOfString("dexcom") == nil {
-                    DDLogInfo("Ignoring non-Dexcom glucose data")
-                    continue
-                }
-
                 let device = sample.device
                 let deviceName = device?.name
                 let deviceManufacturer = device?.manufacturer
@@ -244,38 +232,59 @@ class HealthKitDataCache {
                 let deviceLocalIdentifier = device?.localIdentifier
                 let deviceUDIDeviceIdentifier = device?.UDIDeviceIdentifier
                 
-                DDLogInfo("Device:")
-                DDLogInfo("\tName: \(deviceName)")
-                DDLogInfo("\tManufacturer: \(deviceManufacturer)")
-                DDLogInfo("\tModel: \(deviceModel)")
-                DDLogInfo("\tHardwareVersion: \(deviceHardwareVersion)")
-                DDLogInfo("\tFirmwareVersion: \(deviceFirmwareVersion)")
-                DDLogInfo("\tSoftwareVersion: \(deviceSoftwareVersion)")
-                DDLogInfo("\tLocalIdentifier: \(deviceLocalIdentifier)")
-                DDLogInfo("\tUDIDeviceIdentifier: \(deviceUDIDeviceIdentifier)")
-
                 let healthKitData = HealthKitData()
 
+                switch typeIdentifier {
+                case HKQuantityTypeIdentifierBloodGlucose:
+                    if sourceName.lowercaseString.rangeOfString("dexcom") == nil {
+                        DDLogInfo("Ignoring non-Dexcom glucose data")
+                        continue
+                    }
+                    
+                    if let quantitySample = sample as? HKQuantitySample {
+                        healthKitData.units = "mg/dL"
+                        let unit = HKUnit(fromString: healthKitData.units)
+                        healthKitData.value = quantitySample.quantity.doubleValueForUnit(unit)
+                    }
+                case HKWorkoutTypeIdentifier:
+                    DDLogError("TODO: HKWorkoutTypeIdentifier not yet fully implemented, need to add some workout data to the cache if we're going to support uploading workout data to service")
+                    continue
+                default:
+                    DDLogError("Unsupported HealthKit type: \(typeIdentifier)")
+                    continue
+                }
+                
                 healthKitData.id = sample.UUID.UUIDString
                 healthKitData.healthKitTypeIdentifier = typeIdentifier
                 healthKitData.action = HealthKitData.Action.Added.rawValue
-
                 healthKitData.sourceName = sourceName
                 healthKitData.sourceBundleIdentifier = sourceBundleIdentifier
                 healthKitData.sourceVersion = sourceVersion ?? ""
                 healthKitData.startDate = sample.startDate
                 healthKitData.endDate = sample.endDate
-                
-                if let quantitySample = sample as? HKQuantitySample {
-                    healthKitData.units = "mg/dL"
-                    let unit = HKUnit(fromString: healthKitData.units)
-                    healthKitData.value = quantitySample.quantity.doubleValueForUnit(unit)
-                }
-                
-                let serializer = OMHSerializer()
-                healthKitData.granolaJson = try serializer.jsonForSample(sample)
+                healthKitData.metadataDict = sample.metadata
 
-                DDLogInfo("Granola sample:\n\(healthKitData.granolaJson)");
+                DDLogInfo("Writing new sample to cache:")
+                
+                DDLogInfo("\tSource:")
+                DDLogInfo("\t\tName: \(sourceName)")
+                DDLogInfo("\t\tBundleIdentifier: \(sourceBundleIdentifier)")
+                DDLogInfo("\t\tVersion: \(sourceVersion)")
+                
+                DDLogInfo("\tDevice:")
+                DDLogInfo("\t\tName: \(deviceName)")
+                DDLogInfo("\t\tManufacturer: \(deviceManufacturer)")
+                DDLogInfo("\t\tModel: \(deviceModel)")
+                DDLogInfo("\t\tHardwareVersion: \(deviceHardwareVersion)")
+                DDLogInfo("\t\tFirmwareVersion: \(deviceFirmwareVersion)")
+                DDLogInfo("\t\tSoftwareVersion: \(deviceSoftwareVersion)")
+                DDLogInfo("\t\tLocalIdentifier: \(deviceLocalIdentifier)")
+                DDLogInfo("\t\tUDIDeviceIdentifier: \(deviceUDIDeviceIdentifier)")
+
+                DDLogInfo("\tHealthKitData:")
+                DDLogInfo("\t\t\(healthKitData)")
+                DDLogInfo("\tHealthKitData metadata:")
+                DDLogInfo("\t\t\(healthKitData.metadataDict)")
                 
                 // TODO: my - Confirm that composite key of id + action does not exist before attempting to add to avoid dups?
                 realm.add(healthKitData)
@@ -296,7 +305,6 @@ class HealthKitDataCache {
                     let healthKitData = HealthKitData()
                     healthKitData.id = sample.UUID.UUIDString
                     healthKitData.action = HealthKitData.Action.Deleted.rawValue
-                    healthKitData.granolaJson = ""
 
                     DDLogInfo("Deleted sample: \(healthKitData.id)");
 

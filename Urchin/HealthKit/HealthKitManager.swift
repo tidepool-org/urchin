@@ -15,7 +15,6 @@
 
 import HealthKit
 import CocoaLumberjack
-import Granola
 
 class HealthKitManager {
     
@@ -279,7 +278,7 @@ class HealthKitManager {
             predicate: nil,
             anchor: queryAnchor,
             limit: Int(HKObjectQueryNoLimit)) {
-                [unowned self](query, newSamples, deletedSamples, newAnchor, error) -> Void in
+                (query, newSamples, deletedSamples, newAnchor, error) -> Void in
                 
                 if (newAnchor != nil) {
                     let queryAnchorData = NSKeyedArchiver.archivedDataWithRootObject(newAnchor!)
@@ -293,9 +292,6 @@ class HealthKitManager {
 
                 if (resultsHandler != nil) {
                     resultsHandler(newSamples, deletedSamples, error)
-                } else {
-                     self.logNewBloodGlucoseSamples(newSamples)
-                     self.logDeletedBloodGlucoseSamples(deletedSamples)
                 }
             }
         healthStore?.executeQuery(sampleQuery)
@@ -319,7 +315,7 @@ class HealthKitManager {
             predicate: nil,
             anchor: queryAnchor,
             limit: Int(HKObjectQueryNoLimit)) {
-                [unowned self](query, newSamples, deletedSamples, newAnchor, error) -> Void in
+                (query, newSamples, deletedSamples, newAnchor, error) -> Void in
                 
                 if (newAnchor != nil) {
                     let queryAnchorData = NSKeyedArchiver.archivedDataWithRootObject(newAnchor!)
@@ -332,64 +328,9 @@ class HealthKitManager {
                 
                 if (resultsHandler != nil) {
                      resultsHandler(newSamples, deletedSamples, error)
-                } else {
-                    self.logNewWorkoutSamples(newSamples)
-                    self.logDeletedWorkoutSamples(deletedSamples)
                 }
         }
         healthStore?.executeQuery(sampleQuery)
-    }
-    
-    private func logNewBloodGlucoseSamples(samples: [HKSample]?) {
-        guard samples != nil else {
-            return
-        }
-        
-        let samples = samples!
-        DDLogInfo("********* PROCESSING \(samples.count) new glucose samples ********* ")
-        let serializer = OMHSerializer()
-        for sample in samples {
-            let jsonString = try! serializer.jsonForSample(sample)
-            DDLogInfo("Granola serialized glucose sample: \(jsonString)");
-        }
-    }
-    
-    private func logDeletedBloodGlucoseSamples(samples: [HKDeletedObject]?) {
-        guard samples != nil else {
-            return
-        }
-        
-        let samples = samples!
-        DDLogInfo("********* PROCESSING \(samples.count) deleted glucose samples ********* ")
-        for sample in samples {
-            DDLogInfo("Processed deleted glucose sample with UUID: \(sample.UUID)");
-        }
-    }
-    
-    private func logNewWorkoutSamples(samples: [HKSample]?) {
-        guard samples != nil else {
-            return
-        }
-        
-        let samples = samples!
-        DDLogInfo("********* PROCESSING \(samples.count) new workout samples ********* ")
-        let serializer = OMHSerializer()
-        for sample in samples {
-            let jsonString = try! serializer.jsonForSample(sample)
-            DDLogInfo("Granola serialized workout sample: \(jsonString)");
-        }
-    }
-    
-    private func logDeletedWorkoutSamples(samples: [HKDeletedObject]?) {
-        guard samples != nil else {
-            return
-        }
-        
-        let samples = samples!
-        DDLogInfo("********* PROCESSING \(samples.count) deleted workout samples ********* ")
-        for sample in samples {
-            DDLogInfo("Processed deleted workout sample with UUID: \(sample.UUID)");
-        }
     }
     
     private var bloodGlucoseObservationSuccessful = false

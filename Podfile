@@ -6,9 +6,8 @@ use_frameworks!
 
 def available_pods
   pod 'CocoaLumberjack/Swift', '~> 2.2.0'
-  pod 'RealmSwift', '~> 0.98.3'
+  pod 'RealmSwift', '~> 0.98.4'
   pod 'twitter-text', '~> 1.13.4'
-  pod 'Granola', '~> 0.4.1'
 end
 
 target :urchin do

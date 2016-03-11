@@ -16,7 +16,6 @@
 import HealthKit
 import RealmSwift
 import CocoaLumberjack
-import Granola
 
 class HealthKitDataUploader {
     // MARK: Access, authorization
@@ -217,9 +216,9 @@ class HealthKitDataUploader {
                     sampleToUploadDict["type"] = "cbg"
                     sampleToUploadDict["value"] = sample.value
                     sampleToUploadDict["units"] = sample.units
-                    sampleToUploadDict["payload"] = [String: AnyObject]()
                     sampleToUploadDict["uploadId"] = self.lastBatchUploadDict["uploadId"]
                     sampleToUploadDict["guid"] = sample.id
+                    sampleToUploadDict["payload"] = sample.metadataDict
                     
                     samplesToUploadDictArray.append(sampleToUploadDict)
                 }
