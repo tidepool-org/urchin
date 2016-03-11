@@ -53,14 +53,14 @@ class HealthKitData: Object {
         
         set {
             do {
-                if var metadataDict = newValue {
+                if var newValueDict = newValue {
                     let dateFormatter = NSDateFormatter()
                     for (key, value) in newValue! {
                         if let dateValue = value as? NSDate {
-                            metadataDict[key] = dateFormatter.isoStringFromDate(dateValue, zone: NSTimeZone(forSecondsFromGMT: 0), dateFormat: iso8601dateZuluTime)
+                            newValueDict[key] = dateFormatter.isoStringFromDate(dateValue, zone: NSTimeZone(forSecondsFromGMT: 0), dateFormat: iso8601dateZuluTime)
                         }
                     }
-                    let metadata = try NSJSONSerialization.dataWithJSONObject(metadataDict, options: [])
+                    let metadata = try NSJSONSerialization.dataWithJSONObject(newValueDict, options: [])
                     self.metadata = metadata
                 } else {
                     self.metadata = nil
