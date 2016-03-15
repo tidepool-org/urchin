@@ -47,10 +47,10 @@ class HealthKitManager {
         }
         
         var readTypes = Set<HKSampleType>()
-        if (shouldAuthorizeBloodGlucoseSamples) {
+        if shouldAuthorizeBloodGlucoseSamples {
             readTypes.insert(HKObjectType.quantityTypeForIdentifier(HKQuantityTypeIdentifierBloodGlucose)!)
         }
-        if (shouldAuthorizeWorkoutSamples) {
+        if shouldAuthorizeWorkoutSamples {
             readTypes.insert(HKObjectType.workoutType())
         }
         guard readTypes.count > 0 else {
@@ -58,17 +58,17 @@ class HealthKitManager {
             return
         }
         
-        if (isHealthDataAvailable) {
+        if isHealthDataAvailable {
             healthStore!.requestAuthorizationToShareTypes(nil, readTypes: readTypes) { (success, error) -> Void in
-                if (shouldAuthorizeBloodGlucoseSamples) {
+                if shouldAuthorizeBloodGlucoseSamples {
                     NSUserDefaults.standardUserDefaults().setBool(true, forKey: "authorizationRequestedForBloodGlucoseSamples");
                 }
-                if (shouldAuthorizeWorkoutSamples) {
+                if shouldAuthorizeWorkoutSamples {
                     NSUserDefaults.standardUserDefaults().setBool(true, forKey: "authorizationRequestedForWorkoutSamples");
                 }
                 NSUserDefaults.standardUserDefaults().synchronize()
                 
-                if (completion != nil) {
+                if completion != nil {
                     completion(success:success, error:error)
                 }
             }
@@ -77,7 +77,7 @@ class HealthKitManager {
                             domain: "HealthKitManager",
                             code: -1,
                             userInfo: [NSLocalizedDescriptionKey:"HealthKit is not available on this device"])
-            if (completion != nil) {
+            if completion != nil {
                 completion(success:false, error:error)
             }
         }
@@ -91,8 +91,8 @@ class HealthKitManager {
             return
         }
         
-        if (!bloodGlucoseObservationSuccessful) {
-            if (bloodGlucoseObservationQuery != nil) {
+        if !bloodGlucoseObservationSuccessful {
+            if bloodGlucoseObservationQuery != nil {
                 healthStore?.stopQuery(bloodGlucoseObservationQuery!)
             }
             
@@ -104,7 +104,7 @@ class HealthKitManager {
                     self.readBloodGlucoseSamples(resultsHandler)
                 } else {
                     DDLogError("HealthKit observation error \(error), \(error!.userInfo)")
-                    if (resultsHandler != nil) {
+                    if resultsHandler != nil {
                         resultsHandler(nil, nil, error);
                     }
                 }
@@ -121,8 +121,8 @@ class HealthKitManager {
             return
         }
         
-        if (bloodGlucoseObservationSuccessful) {
-            if (bloodGlucoseObservationQuery != nil) {
+        if bloodGlucoseObservationSuccessful {
+            if bloodGlucoseObservationQuery != nil {
                 healthStore?.stopQuery(bloodGlucoseObservationQuery!)
                 bloodGlucoseObservationQuery = nil
             }
@@ -137,8 +137,8 @@ class HealthKitManager {
             return
         }
         
-        if (!workoutsObservationSuccessful) {
-            if (workoutsObservationQuery != nil) {
+        if !workoutsObservationSuccessful {
+            if workoutsObservationQuery != nil {
                 healthStore?.stopQuery(workoutsObservationQuery!)
             }
             
@@ -150,7 +150,7 @@ class HealthKitManager {
                     self.readWorkoutSamples(resultsHandler)
                 } else {
                     DDLogError("HealthKit observation error \(error), \(error!.userInfo)")
-                    if (resultsHandler != nil) {
+                    if resultsHandler != nil {
                         resultsHandler(nil, nil, error);
                     }
                 }
@@ -167,8 +167,8 @@ class HealthKitManager {
             return
         }
         
-        if (workoutsObservationSuccessful) {
-            if (workoutsObservationQuery != nil) {
+        if workoutsObservationSuccessful {
+            if workoutsObservationQuery != nil {
                 healthStore?.stopQuery(workoutsObservationQuery!)
                 workoutsObservationQuery = nil
             }
@@ -184,12 +184,12 @@ class HealthKitManager {
             return
         }
         
-        if (!bloodGlucoseBackgroundDeliveryEnabled) {
+        if !bloodGlucoseBackgroundDeliveryEnabled {
             healthStore?.enableBackgroundDeliveryForType(
                 HKObjectType.quantityTypeForIdentifier(HKQuantityTypeIdentifierBloodGlucose)!,
                 frequency: HKUpdateFrequency.Immediate) {
                     success, error -> Void in
-                    if (error == nil) {
+                    if error == nil {
                         self.bloodGlucoseBackgroundDeliveryEnabled = true
                         DDLogError("Enabled background delivery of health data")
                     } else {
@@ -205,10 +205,10 @@ class HealthKitManager {
             return
         }
         
-        if (bloodGlucoseBackgroundDeliveryEnabled) {
+        if bloodGlucoseBackgroundDeliveryEnabled {
             healthStore?.disableBackgroundDeliveryForType(HKObjectType.quantityTypeForIdentifier(HKQuantityTypeIdentifierBloodGlucose)!) {
                 success, error -> Void in
-                if (error == nil) {
+                if error == nil {
                     self.bloodGlucoseBackgroundDeliveryEnabled = false
                     DDLogError("Disabled background delivery of health data")
                 } else {
@@ -224,12 +224,12 @@ class HealthKitManager {
             return
         }
         
-        if (!workoutsBackgroundDeliveryEnabled) {
+        if !workoutsBackgroundDeliveryEnabled {
             healthStore?.enableBackgroundDeliveryForType(
                 HKObjectType.workoutType(),
                 frequency: HKUpdateFrequency.Immediate) {
                     success, error -> Void in
-                    if (error == nil) {
+                    if error == nil {
                         self.workoutsBackgroundDeliveryEnabled = true
                         DDLogError("Enabled background delivery of health data")
                     } else {
@@ -245,10 +245,10 @@ class HealthKitManager {
             return
         }
         
-        if (workoutsBackgroundDeliveryEnabled) {
+        if workoutsBackgroundDeliveryEnabled {
             healthStore?.disableBackgroundDeliveryForType(HKObjectType.workoutType()) {
                 success, error -> Void in
-                if (error == nil) {
+                if error == nil {
                     self.workoutsBackgroundDeliveryEnabled = false
                     DDLogError("Disabled background delivery of health data")
                 } else {
@@ -269,7 +269,7 @@ class HealthKitManager {
         
         var queryAnchor: HKQueryAnchor?
         let queryAnchorData = NSUserDefaults.standardUserDefaults().objectForKey("bloodGlucoseQueryAnchor")
-        if (queryAnchorData != nil) {
+        if queryAnchorData != nil {
             queryAnchor = NSKeyedUnarchiver.unarchiveObjectWithData(queryAnchorData as! NSData) as? HKQueryAnchor
         }
         
@@ -277,23 +277,20 @@ class HealthKitManager {
         let sampleQuery = HKAnchoredObjectQuery(type: sampleType,
             predicate: nil,
             anchor: queryAnchor,
-            limit: Int(HKObjectQueryNoLimit)) {
-                (query, newSamples, deletedSamples, newAnchor, error) -> Void in
+            limit: Int(HKObjectQueryNoLimit)) { // TODO: my - 0 - review, use HKObjectQueryNoLimit? or 10000? or ?
+
+            (query, newSamples, deletedSamples, newAnchor, error) -> Void in
+
+            if resultsHandler != nil {
+               resultsHandler(newSamples, deletedSamples, error)
                 
-                if (newAnchor != nil) {
+                if error == nil && newAnchor != nil {
                     let queryAnchorData = NSKeyedArchiver.archivedDataWithRootObject(newAnchor!)
-                    // TODO: my - We should allow caller control of this in case caller, which provides resultsHandler,
-                    // might do something atomically, as a transaction, with the batch data, and might need to avoid
-                    // updating the anchor if the batch processing fails.
                     NSUserDefaults.standardUserDefaults().setObject(queryAnchorData, forKey: "bloodGlucoseQueryAnchor")
                     NSUserDefaults.standardUserDefaults().synchronize()
                 }
-                
-
-                if (resultsHandler != nil) {
-                    resultsHandler(newSamples, deletedSamples, error)
-                }
             }
+        }
         healthStore?.executeQuery(sampleQuery)
     }
     
@@ -306,7 +303,7 @@ class HealthKitManager {
         
         var queryAnchor: HKQueryAnchor?
         let queryAnchorData = NSUserDefaults.standardUserDefaults().objectForKey("workoutQueryAnchor")
-        if (queryAnchorData != nil) {
+        if queryAnchorData != nil {
             queryAnchor = NSKeyedUnarchiver.unarchiveObjectWithData(queryAnchorData as! NSData) as? HKQueryAnchor
         }
         
@@ -314,21 +311,19 @@ class HealthKitManager {
         let sampleQuery = HKAnchoredObjectQuery(type: sampleType,
             predicate: nil,
             anchor: queryAnchor,
-            limit: Int(HKObjectQueryNoLimit)) {
-                (query, newSamples, deletedSamples, newAnchor, error) -> Void in
+            limit: Int(HKObjectQueryNoLimit)) { // TODO: my - 0 - review, use HKObjectQueryNoLimit? or 10000? or ?
                 
-                if (newAnchor != nil) {
+            (query, newSamples, deletedSamples, newAnchor, error) -> Void in
+            
+            if resultsHandler != nil {
+                resultsHandler(newSamples, deletedSamples, error)
+
+                if error == nil && newAnchor != nil {
                     let queryAnchorData = NSKeyedArchiver.archivedDataWithRootObject(newAnchor!)
-                    // TODO: my - We should allow caller control of this in case caller, which provides resultsHandler,
-                    // might do something atomically, as a transaction, with the batch data, and might need to avoid
-                    // updating the anchor if the batch processing fails.
                     NSUserDefaults.standardUserDefaults().setObject(queryAnchorData, forKey: "workoutQueryAnchor")
                     NSUserDefaults.standardUserDefaults().synchronize()
                 }
-                
-                if (resultsHandler != nil) {
-                     resultsHandler(newSamples, deletedSamples, error)
-                }
+            }
         }
         healthStore?.executeQuery(sampleQuery)
     }
