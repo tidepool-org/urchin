@@ -537,7 +537,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         var additionalCells = groups.count == 1 ? 1 : 3
         if (HealthKitManager.sharedInstance.isHealthDataAvailable) {
             additionalCells++
-            if (HealthKitDataUploader.sharedInstance.lastUploadCount > 0) {
+            if (HealthKitDataUploader.sharedInstance.lastUploadCountBloodGlucoseSamples > 0) {
                 additionalCells++
             }
         }
@@ -753,14 +753,14 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
             if (groups.count == 1) {
                 numberOfRows = 1
                 if section == sectionIndex(TableSection.HealthKit) {
-                    numberOfRows = HealthKitDataUploader.sharedInstance.lastUploadCount > 0 ? 2 : 1
+                    numberOfRows = HealthKitDataUploader.sharedInstance.lastUploadCountBloodGlucoseSamples > 0 ? 2 : 1
                 }
             } else {
                 if (section == sectionIndex(TableSection.Users)) {
                     // Number of groups + 1 for 'All' / #nofilter
                     numberOfRows = groups.count + 1
                 } else if (section == sectionIndex(TableSection.HealthKit)) {
-                    numberOfRows = HealthKitDataUploader.sharedInstance.lastUploadCount > 0 ? 2 : 1
+                    numberOfRows = HealthKitDataUploader.sharedInstance.lastUploadCountBloodGlucoseSamples > 0 ? 2 : 1
                 } else if (section == sectionIndex(TableSection.Logout)) {
                     numberOfRows = 1
                 } else if (section == sectionIndex(TableSection.Version)) {

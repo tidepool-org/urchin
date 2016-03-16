@@ -60,6 +60,9 @@ class LogInViewController :
     // Instantiate the fade animation for transitioning VCs
     let transition = FadeAnimator()
     
+    // Upload timer
+    var uploadTimer: NSTimer?
+    
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -112,6 +115,9 @@ class LogInViewController :
         for (var i = 0; i < corners.count; i++) {
             cornersBool.append(false)
         }
+        
+        // Start upload after every notification of new cached blood glucose samples
+        notificationCenter.addObserver(self, selector: "startUploadIfNecessary", name: HealthKitDataCache.Notifications.CachedBloodGlucoseSamples, object: nil)
     }
     
     func reachabilityChanged(note: NSNotification) {
@@ -133,53 +139,9 @@ class LogInViewController :
             // to make sure that the apiConnector.login doesn't do more than it should in that scenario (e.g. 
             // don't try to create a new note, present login UI, errors, etc.
             apiConnector.login()
-
-            let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(5 * Double(NSEC_PER_SEC)))
-            dispatch_after(delayTime, dispatch_get_main_queue()) {
-                self.doUploadIfNecessary()
-            }
-        }
-    }
-    
-    func doUploadIfNecessary() {
-        if self.apiConnector.user != nil && HealthKitDataUploader.sharedInstance.hasSamplesToUpload{
-            // TODO: my - 0 - do this in background fetch
-            HealthKitDataUploader.sharedInstance.startBatchUpload(userId: self.apiConnector.user!.userid) {
-                (postBody: NSData, remainingSampleCount: Int) -> Void in
-                
-                // Do the initial upload to start the batch
-                self.apiConnector.doUpload(postBody) {
-                    (error: NSError?) -> Void in
-                    
-                    if error == nil {
-                        self.uploadNextForBatch(remainingSampleCount)
-                    }
-                }
-            }
-        } else {
-            let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(120 * Double(NSEC_PER_SEC)))
-            dispatch_after(delayTime, dispatch_get_main_queue()) {
-                self.doUploadIfNecessary()
-            }
         }
     }
 
-    func uploadNextForBatch(remainingSampleCount: Int) {
-        HealthKitDataUploader.sharedInstance.uploadNextForBatch({ (postBody: NSData, sampleCount: Int, remainingSampleCount: Int, completion: (NSError?) -> (Void)) -> Void in
-            
-            self.apiConnector.doUpload(postBody) {
-                (error: NSError?) -> Void in
-                
-                completion(error)
-                
-                // Upload next batch of data
-                if HealthKitDataUploader.sharedInstance.hasSamplesToUpload {
-                    self.uploadNextForBatch(remainingSampleCount)
-                }
-            }
-        })
-    }
-    
     func checkCorners() {
         for cornerBool in cornersBool {
             if (!cornerBool) {
@@ -275,6 +237,8 @@ class LogInViewController :
             let notesScene = UINavigationController(rootViewController: NotesViewController(apiConnector: apiConnector))
             notesScene.transitioningDelegate = self
             self.presentViewController(notesScene, animated: true, completion: nil)
+            
+            startUploadIfNecessary()
         } else {
             DDLogInfo("Session token is empty or user was not created")
             prepareLogin()
@@ -282,6 +246,7 @@ class LogInViewController :
     }
     
     func prepareLogin() {
+        stopUploadIfNecessary()
         
         if (!loginPrepared) {
             loginPrepared = true
@@ -706,5 +671,75 @@ class LogInViewController :
     func animationControllerForDismissedController(dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         transition.presenting = false
         return transition
+    }
+    
+    // MARK: - HealthKit upload 
+
+    // TODO: my - 0 - Ideally we should also do upload in background after processing background delivered samples from HealthKit and to complete any initial upload
+    func startUploadIfNecessary() {
+        guard self.apiConnector.user != nil && !HealthKitDataUploader.sharedInstance.isUploading else {
+            return
+        }
+        
+        // Start upload timer to check for new samples every minute
+        if uploadTimer == nil {
+            uploadTimer = NSTimer.scheduledTimerWithTimeInterval(
+                60,
+                target: self,
+                selector: Selector("startUploadIfNecessary"),
+                userInfo: nil,
+                repeats: true)
+        }
+        
+        guard HealthKitDataUploader.sharedInstance.hasSamplesToUpload else {
+            return
+        }
+
+        HealthKitDataUploader.sharedInstance.startBatchUpload(userId: self.apiConnector.user!.userid) {
+            (postBody: NSData, remainingSamplesCount: Int) -> Void in
+            
+            self.apiConnector.doUpload(postBody) {
+                (error: NSError?) -> Void in
+                
+                self.uploadNextOrFinishBatch(error: error, remainingSamplesCount: remainingSamplesCount)
+            }
+        }
+    }
+
+    func uploadNextOrFinishBatch(error error: NSError?, remainingSamplesCount: Int) {
+        guard error == nil &&
+                remainingSamplesCount > 0 &&
+                self.apiConnector.user != nil else {
+            HealthKitDataUploader.sharedInstance.finishBatchUpload()
+            return
+        }
+    
+        HealthKitDataUploader.sharedInstance.uploadNextForBatch({ (error: NSError?, postBody: NSData?, samplesToUploadCount: Int, remainingSamplesCount: Int, completion: (NSError?) -> (Void)) -> Void in
+            
+            if error == nil && samplesToUploadCount > 0 {
+                self.apiConnector.doUpload(postBody!) {
+                    (error: NSError?) -> Void in
+                    
+                    completion(error)
+                    
+                    dispatch_async(dispatch_get_main_queue()) {
+                        self.uploadNextOrFinishBatch(error: error, remainingSamplesCount: remainingSamplesCount)
+                    }
+                }                
+            } else {
+                HealthKitDataUploader.sharedInstance.finishBatchUpload()
+            }
+        })
+    }
+    
+    private func stopUploadIfNecessary() {
+        if uploadTimer != nil {
+            uploadTimer!.invalidate()
+            uploadTimer = nil
+        }
+        
+        if HealthKitDataUploader.sharedInstance.isUploading {
+            HealthKitDataUploader.sharedInstance.finishBatchUpload()
+        }
     }
 }

@@ -63,9 +63,12 @@ class UserDropDownCell: UITableViewCell {
             separator.backgroundColor = whiteQuarterAlpha
             self.addSubview(separator)
         } else if (key == "healthkit-status") {
-            let lastCacheDateAndTime = NSDateFormatter.localizedStringFromDate(HealthKitDataUploader.sharedInstance.lastUploadTime, dateStyle: .ShortStyle, timeStyle: .ShortStyle)
+            let lastCacheDateAndTime = NSDateFormatter.localizedStringFromDate(HealthKitDataUploader.sharedInstance.lastUploadTimeBloodGlucoseSamples, dateStyle: .ShortStyle, timeStyle: .ShortStyle)
             if group != nil && group?.fullName != nil {
                 nameLabel.text = String(format: healthKitStatusFormat, group!.fullName!, lastCacheDateAndTime)
+                
+                // TODO: my - 0 - This is just temporary for debugging, not to spec, we should eventually remove this
+                nameLabel.text = "\(group!.fullName!), \(lastCacheDateAndTime), \(HealthKitDataUploader.sharedInstance.totalUploadCountBloodGlucoseSamples) samples"
             } else {
                 nameLabel.text = lastCacheDateAndTime
             }

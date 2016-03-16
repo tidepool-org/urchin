@@ -661,25 +661,43 @@ class APIConnector {
     }
     
     func doUpload(body: NSData, completion: (NSError?) -> (Void)) {
-        guard let currentUser = self.user else {
-            DDLogError("No logged in user, unable to upload")
+        DDLogVerbose("trace")
+
+        var error: NSError?
+
+        defer {
+            if error != nil {
+                DDLogError("Upload failed: \(error), \(error?.userInfo)")
+                
+                completion(error)
+            }
+        }
+        
+        guard self.isConnectedToNetwork() else {
+            error = NSError(domain: "APIConnect-doUpload", code: -1, userInfo: [NSLocalizedDescriptionKey:"Unable to upload, not connected to network"])
             return
         }
 
-        let urlExtension = "/data/" + currentUser.userid
-        
-        let headerDict = ["x-tidepool-session-token":"\(x_tidepool_session_token)", "Content-Type":"application/json"]
-        
-        let preRequest = { () -> Void in
-            // nothing to do in prerequest
+        guard let currentUser = self.user else {
+            error = NSError(domain: "APIConnect-doUpload", code: -2, userInfo: [NSLocalizedDescriptionKey:"Unable to upload, no user is logged in"])
+            return
         }
         
-        let handleRequestCompletion = { (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
-            if let httpResponse = response as? NSHTTPURLResponse {
-                if data != nil {
-                    let statusCode = httpResponse.statusCode
-                    let dataString = NSString(data: data!, encoding: NSUTF8StringEncoding)! as String
-                    DDLogInfo("status Code: \(statusCode), response data: \(dataString)")
+        let urlExtension = "/data/" + currentUser.userid
+        let headerDict = ["x-tidepool-session-token":"\(x_tidepool_session_token)", "Content-Type":"application/json"]
+        let preRequest = { () -> Void in }
+        
+        let handleRequestCompletion = { (response: NSURLResponse!, data: NSData!, requestError: NSError!) -> Void in
+            var error = requestError
+            if error == nil {
+                if let httpResponse = response as? NSHTTPURLResponse {
+                    if data != nil {
+                        let statusCode = httpResponse.statusCode
+                        let dataString = NSString(data: data!, encoding: NSUTF8StringEncoding)! as String
+                        if statusCode >= 400 && statusCode < 600 {
+                            error = NSError(domain: "APIConnect-doUpload", code: -2, userInfo: [NSLocalizedDescriptionKey:"Upload failed with status code: \(statusCode), error message: \(dataString)"])
+                        }
+                    }
                 }
             }
             

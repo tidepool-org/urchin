@@ -21,7 +21,9 @@ class HealthKitManager {
     // MARK: Access, availability, authorization
 
     static let sharedInstance = HealthKitManager()
-    private init() {}
+    private init() {
+        DDLogVerbose("trace")
+    }
     
     let healthStore: HKHealthStore? = {
         return HKHealthStore.isHealthDataAvailable() ? HKHealthStore() : nil
@@ -41,8 +43,23 @@ class HealthKitManager {
     
     func authorize(shouldAuthorizeBloodGlucoseSamples shouldAuthorizeBloodGlucoseSamples: Bool, shouldAuthorizeWorkoutSamples: Bool, completion: ((success:Bool, error:NSError!) -> Void)!)
     {
+        DDLogVerbose("trace")
+
+        var success = false
+        var error: NSError?
+        
+        defer {
+            if error != nil {
+                DDLogInfo("authorization error: \(error)")
+                
+                if completion != nil {
+                    completion(success:success, error:error)
+                }
+            }
+        }
+        
         guard isHealthDataAvailable else {
-            DDLogError("Unexpected HealthKitManager call when health data not available")
+            error = NSError(domain: "HealthKitManager", code: -1, userInfo: [NSLocalizedDescriptionKey:"HealthKit is not available on this device"])
             return
         }
         
@@ -54,12 +71,12 @@ class HealthKitManager {
             readTypes.insert(HKObjectType.workoutType())
         }
         guard readTypes.count > 0 else {
-            DDLogVerbose("No health data authorization requested, ignoring")
+            error = NSError(domain: "HealthKitManager", code: -2, userInfo: [NSLocalizedDescriptionKey:"No health data authorization requested, ignoring"])
             return
         }
         
-        if isHealthDataAvailable {
-            healthStore!.requestAuthorizationToShareTypes(nil, readTypes: readTypes) { (success, error) -> Void in
+        healthStore!.requestAuthorizationToShareTypes(nil, readTypes: readTypes) { (success, error) -> Void in
+            if error == nil {
                 if shouldAuthorizeBloodGlucoseSamples {
                     NSUserDefaults.standardUserDefaults().setBool(true, forKey: "authorizationRequestedForBloodGlucoseSamples");
                 }
@@ -67,18 +84,12 @@ class HealthKitManager {
                     NSUserDefaults.standardUserDefaults().setBool(true, forKey: "authorizationRequestedForWorkoutSamples");
                 }
                 NSUserDefaults.standardUserDefaults().synchronize()
-                
-                if completion != nil {
-                    completion(success:success, error:error)
-                }
             }
-        } else {
-            let error = NSError(
-                            domain: "HealthKitManager",
-                            code: -1,
-                            userInfo: [NSLocalizedDescriptionKey:"HealthKit is not available on this device"])
+
+            DDLogInfo("authorization success: \(success), error: \(error)")
+            
             if completion != nil {
-                completion(success:false, error:error)
+                completion(success:success, error:error)
             }
         }
     }
@@ -86,6 +97,8 @@ class HealthKitManager {
     // MARK: Observation
     
     func startObservingBloodGlucoseSamples(resultsHandler: (([HKSample]?, [HKDeletedObject]?, NSError?) -> Void)!) {
+        DDLogVerbose("trace")
+
         guard isHealthDataAvailable else {
             DDLogError("Unexpected HealthKitManager call when health data not available")
             return
@@ -116,6 +129,8 @@ class HealthKitManager {
     }
     
     func stopObservingBloodGlucoseSamples() {
+        DDLogVerbose("trace")
+
         guard isHealthDataAvailable else {
             DDLogError("Unexpected HealthKitManager call when health data not available")
             return
@@ -132,6 +147,8 @@ class HealthKitManager {
     
     // NOTE: resultsHandler is called on a separate process queue!
     func startObservingWorkoutSamples(resultsHandler: (([HKSample]?, [HKDeletedObject]?, NSError?) -> Void)!) {
+        DDLogVerbose("trace")
+
         guard isHealthDataAvailable else {
             DDLogError("Unexpected HealthKitManager call when health data not available")
             return
@@ -162,6 +179,8 @@ class HealthKitManager {
     }
     
     func stopObservingWorkoutSamples() {
+        DDLogVerbose("trace")
+
         guard isHealthDataAvailable else {
             DDLogError("Unexpected HealthKitManager call when health data not available")
             return
@@ -179,6 +198,8 @@ class HealthKitManager {
     // MARK: Background delivery
     
     func enableBackgroundDeliveryBloodGlucoseSamples() {
+        DDLogVerbose("trace")
+
         guard isHealthDataAvailable else {
             DDLogError("Unexpected HealthKitManager call when health data not available")
             return
@@ -200,6 +221,8 @@ class HealthKitManager {
     }
     
     func disableBackgroundDeliveryBloodGlucoseSamples() {
+        DDLogVerbose("trace")
+
         guard isHealthDataAvailable else {
             DDLogError("Unexpected HealthKitManager call when health data not available")
             return
@@ -219,6 +242,8 @@ class HealthKitManager {
     }
     
     func enableBackgroundDeliveryWorkoutSamples() {
+        DDLogVerbose("trace")
+
         guard isHealthDataAvailable else {
             DDLogError("Unexpected HealthKitManager call when health data not available")
             return
@@ -240,6 +265,8 @@ class HealthKitManager {
     }
     
     func disableBackgroundDeliveryWorkoutSamples() {
+        DDLogVerbose("trace")
+
         guard isHealthDataAvailable else {
             DDLogError("Unexpected HealthKitManager call when health data not available")
             return
@@ -258,10 +285,10 @@ class HealthKitManager {
         }
     }
     
-    // MARK: Private
-    
-    private func readBloodGlucoseSamples(resultsHandler: (([HKSample]?, [HKDeletedObject]?, NSError?) -> Void)!)
+    func readBloodGlucoseSamples(resultsHandler: (([HKSample]?, [HKDeletedObject]?, NSError?) -> Void)!)
     {
+        DDLogVerbose("trace")
+        
         guard isHealthDataAvailable else {
             DDLogError("Unexpected HealthKitManager call when health data not available")
             return
@@ -277,25 +304,26 @@ class HealthKitManager {
         let sampleQuery = HKAnchoredObjectQuery(type: sampleType,
             predicate: nil,
             anchor: queryAnchor,
-            limit: Int(HKObjectQueryNoLimit)) { // TODO: my - 0 - review, use HKObjectQueryNoLimit? or 10000? or ?
-
-            (query, newSamples, deletedSamples, newAnchor, error) -> Void in
-
-            if resultsHandler != nil {
-               resultsHandler(newSamples, deletedSamples, error)
+            limit: 100) {
+                (query, newSamples, deletedSamples, newAnchor, error) -> Void in
                 
-                if error == nil && newAnchor != nil {
-                    let queryAnchorData = NSKeyedArchiver.archivedDataWithRootObject(newAnchor!)
-                    NSUserDefaults.standardUserDefaults().setObject(queryAnchorData, forKey: "bloodGlucoseQueryAnchor")
-                    NSUserDefaults.standardUserDefaults().synchronize()
+                if resultsHandler != nil {
+                    resultsHandler(newSamples, deletedSamples, error)
+                    
+                    if error == nil && newAnchor != nil {
+                        let queryAnchorData = NSKeyedArchiver.archivedDataWithRootObject(newAnchor!)
+                        NSUserDefaults.standardUserDefaults().setObject(queryAnchorData, forKey: "bloodGlucoseQueryAnchor")
+                        NSUserDefaults.standardUserDefaults().synchronize()
+                    }
                 }
-            }
         }
         healthStore?.executeQuery(sampleQuery)
     }
     
-    private func readWorkoutSamples(resultsHandler: (([HKSample]?, [HKDeletedObject]?, NSError?) -> Void)!)
+    func readWorkoutSamples(resultsHandler: (([HKSample]?, [HKDeletedObject]?, NSError?) -> Void)!)
     {
+        DDLogVerbose("trace")
+        
         guard isHealthDataAvailable else {
             DDLogError("Unexpected HealthKitManager call when health data not available")
             return
@@ -311,22 +339,24 @@ class HealthKitManager {
         let sampleQuery = HKAnchoredObjectQuery(type: sampleType,
             predicate: nil,
             anchor: queryAnchor,
-            limit: Int(HKObjectQueryNoLimit)) { // TODO: my - 0 - review, use HKObjectQueryNoLimit? or 10000? or ?
+            limit: Int(HKObjectQueryNoLimit /* 100 */)) { // TODO: my - 0 - need to limit to like 100 or so once clients are properly handling the "more" case like we do for observing/caching blood glucose data
                 
-            (query, newSamples, deletedSamples, newAnchor, error) -> Void in
-            
-            if resultsHandler != nil {
-                resultsHandler(newSamples, deletedSamples, error)
-
-                if error == nil && newAnchor != nil {
-                    let queryAnchorData = NSKeyedArchiver.archivedDataWithRootObject(newAnchor!)
-                    NSUserDefaults.standardUserDefaults().setObject(queryAnchorData, forKey: "workoutQueryAnchor")
-                    NSUserDefaults.standardUserDefaults().synchronize()
+                (query, newSamples, deletedSamples, newAnchor, error) -> Void in
+                
+                if resultsHandler != nil {
+                    resultsHandler(newSamples, deletedSamples, error)
+                    
+                    if error == nil && newAnchor != nil {
+                        let queryAnchorData = NSKeyedArchiver.archivedDataWithRootObject(newAnchor!)
+                        NSUserDefaults.standardUserDefaults().setObject(queryAnchorData, forKey: "workoutQueryAnchor")
+                        NSUserDefaults.standardUserDefaults().synchronize()
+                    }
                 }
-            }
         }
         healthStore?.executeQuery(sampleQuery)
     }
+    
+    // MARK: Private
     
     private var bloodGlucoseObservationSuccessful = false
     private var bloodGlucoseObservationQuery: HKObserverQuery?
