@@ -27,16 +27,24 @@ class HealthKitDataCache {
         DDLogVerbose("trace")
         
         var config = Realm.Configuration(
-            schemaVersion: 5,
+            schemaVersion: 6,
 
             migrationBlock: { migration, oldSchemaVersion in
-                // We haven’t migrated anything yet, so oldSchemaVersion == 0
-                if oldSchemaVersion < 5 {
-                    // Nothing to do!
-                    // Realm will automatically detect new properties and removed properties
-                    // And will update the schema on disk automatically
-
-                    DDLogInfo("Migrating Realm from 0 to 5")
+                if oldSchemaVersion < 6 {
+                    DDLogInfo("Migrating Realm to schema version 6")
+                    
+                    migration.deleteData("HealthKitData")
+                    DDLogInfo("Deleted all realm objects during migration")
+                
+                    NSUserDefaults.standardUserDefaults().removeObjectForKey("bloodGlucoseQueryAnchor")
+                    NSUserDefaults.standardUserDefaults().removeObjectForKey("workoutQueryAnchor")
+                    NSUserDefaults.standardUserDefaults().removeObjectForKey("lastCacheTimeBloodGlucoseSamples")
+                    NSUserDefaults.standardUserDefaults().removeObjectForKey("lastCacheCountBloodGlucoseSamples")
+                    NSUserDefaults.standardUserDefaults().removeObjectForKey("totalCacheCountBloodGlucoseSamples")
+                    NSUserDefaults.standardUserDefaults().removeObjectForKey("lastUploadTimeBloodGlucoseSamples")
+                    NSUserDefaults.standardUserDefaults().removeObjectForKey("lastUploadCountBloodGlucoseSamples")
+                    NSUserDefaults.standardUserDefaults().removeObjectForKey("totalUploadCountBloodGlucoseSamples")
+                    DDLogInfo("Reset cache and upload stats and HealthKit query anchors during migration")
                 }
             }
         )
@@ -50,6 +58,13 @@ class HealthKitDataCache {
         
         // Set this as the configuration used for the default Realm
         Realm.Configuration.defaultConfiguration = config
+
+        // Force early migration (if needed)
+        do {
+            let _ = try Realm()
+        } catch let error as NSError {
+            DDLogError("Failed initializing realm: \(error)")
+        }
 
         var cacheTime = NSUserDefaults.standardUserDefaults().objectForKey("lastCacheTimeBloodGlucoseSamples")
         if cacheTime != nil {
@@ -421,7 +436,7 @@ class HealthKitDataCache {
             
             NSUserDefaults.standardUserDefaults().setObject(lastCacheTimeBloodGlucoseSamples, forKey: "lastCacheTimeBloodGlucoseSamples")
             NSUserDefaults.standardUserDefaults().setInteger(lastCacheCountBloodGlucoseSamples, forKey: "lastCacheCountBloodGlucoseSamples")
-            NSUserDefaults.standardUserDefaults().setObject(totalCacheCountBloodGlucoseSamples, forKey: "totalCacheCountBloodGlucoseSamples")
+            NSUserDefaults.standardUserDefaults().setInteger(totalCacheCountBloodGlucoseSamples, forKey: "totalCacheCountBloodGlucoseSamples")
             NSUserDefaults.standardUserDefaults().synchronize()
             
             dispatch_async(dispatch_get_main_queue()) {
