@@ -27,23 +27,29 @@ class HealthKitDataCache {
         DDLogVerbose("trace")
         
         var config = Realm.Configuration(
-            schemaVersion: 6,
+            schemaVersion: 7,
 
             migrationBlock: { migration, oldSchemaVersion in
-                if oldSchemaVersion < 6 {
-                    DDLogInfo("Migrating Realm to schema version 6")
+                if oldSchemaVersion < 7 {
+                    DDLogInfo("Migrating Realm to schema version 7")
                     
                     migration.deleteData("HealthKitData")
                     DDLogInfo("Deleted all realm objects during migration")
-                
-                    NSUserDefaults.standardUserDefaults().removeObjectForKey("bloodGlucoseQueryAnchor")
-                    NSUserDefaults.standardUserDefaults().removeObjectForKey("workoutQueryAnchor")
-                    NSUserDefaults.standardUserDefaults().removeObjectForKey("lastCacheTimeBloodGlucoseSamples")
-                    NSUserDefaults.standardUserDefaults().removeObjectForKey("lastCacheCountBloodGlucoseSamples")
-                    NSUserDefaults.standardUserDefaults().removeObjectForKey("totalCacheCountBloodGlucoseSamples")
+                    
                     NSUserDefaults.standardUserDefaults().removeObjectForKey("lastUploadTimeBloodGlucoseSamples")
                     NSUserDefaults.standardUserDefaults().removeObjectForKey("lastUploadCountBloodGlucoseSamples")
                     NSUserDefaults.standardUserDefaults().removeObjectForKey("totalUploadCountBloodGlucoseSamples")
+                
+                    NSUserDefaults.standardUserDefaults().removeObjectForKey("bloodGlucoseQueryAnchor")
+                    NSUserDefaults.standardUserDefaults().removeObjectForKey("lastCacheTimeBloodGlucoseSamples")
+                    NSUserDefaults.standardUserDefaults().removeObjectForKey("lastCacheCountBloodGlucoseSamples")
+                    NSUserDefaults.standardUserDefaults().removeObjectForKey("totalCacheCountBloodGlucoseSamples")
+
+                    NSUserDefaults.standardUserDefaults().removeObjectForKey("workoutQueryAnchor")
+                    NSUserDefaults.standardUserDefaults().removeObjectForKey("lastCacheTimeWorkoutSamples")
+                    NSUserDefaults.standardUserDefaults().removeObjectForKey("lastCacheCountWorkoutSamples")
+                    NSUserDefaults.standardUserDefaults().removeObjectForKey("totalCacheCountWorkoutSamples")
+
                     DDLogInfo("Reset cache and upload stats and HealthKit query anchors during migration")
                 }
             }
@@ -97,14 +103,10 @@ class HealthKitDataCache {
             
             if newSamplesCount > 0 {
                 self.writeSamplesToDb(typeIdentifier: HKQuantityTypeIdentifierBloodGlucose, samples: newSamples, deletedSamples: nil, error: error)
-                
-                dispatch_async(dispatch_get_main_queue(), {
-                    self.updateLastCacheBloodGlucoseSamples(newSamplesCount: newSamplesCount, deletedSamplesCount: deletedSamplesCount)
-                    
-                    if !self.isInitialBloodGlucoseCacheComplete {
-                        self.readAndCacheInitialBloodGlucoseSamples()
-                    }
-                })
+                self.updateLastCacheBloodGlucoseSamples(newSamplesCount: newSamplesCount, deletedSamplesCount: deletedSamplesCount)
+                if !self.isInitialBloodGlucoseCacheComplete {
+                    self.readAndCacheInitialBloodGlucoseSamples()
+                }
             } else {
                 if !self.isInitialBloodGlucoseCacheComplete {
                     self.isInitialBloodGlucoseCacheComplete = true
@@ -128,14 +130,10 @@ class HealthKitDataCache {
             
             if newSamplesCount > 0 {
                 self.writeSamplesToDb(typeIdentifier: HKWorkoutTypeIdentifier, samples: newSamples, deletedSamples: nil, error: error)
-                
-                dispatch_async(dispatch_get_main_queue(), {
-                    self.updateLastCacheWorkoutSamples(newSamplesCount: newSamplesCount, deletedSamplesCount: deletedSamplesCount)
-                    
-                    if !self.isInitialWorkoutCacheComplete {
-                        self.readAndCacheInitialWorkoutSamples()
-                    }
-                })
+                self.updateLastCacheWorkoutSamples(newSamplesCount: newSamplesCount, deletedSamplesCount: deletedSamplesCount)                
+                if !self.isInitialWorkoutCacheComplete {
+                    self.readAndCacheInitialWorkoutSamples()
+                }
             } else {
                 if !self.isInitialWorkoutCacheComplete {
                     self.isInitialWorkoutCacheComplete = true
