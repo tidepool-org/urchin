@@ -87,14 +87,14 @@ class HealthKitDataCache {
                     self.updateLastCacheBloodGlucoseSamples(newSamplesCount: newSamplesCount, deletedSamplesCount: deletedSamplesCount)
                     
                     if !self.isInitialBloodGlucoseCacheComplete {
-                        if newSamplesCount == 0 && deletedSamplesCount == 0 {
-                            self.isInitialBloodGlucoseCacheComplete = true
-                            self.startObservingBloodGlucoseSamples()
-                        } else {
-                            self.readAndCacheInitialBloodGlucoseSamples()
-                        }
+                        self.readAndCacheInitialBloodGlucoseSamples()
                     }
                 })
+            } else {
+                if !self.isInitialBloodGlucoseCacheComplete {
+                    self.isInitialBloodGlucoseCacheComplete = true
+                    self.startObservingBloodGlucoseSamples()
+                }
             }
         }
         workoutResultHandler = {
@@ -118,14 +118,14 @@ class HealthKitDataCache {
                     self.updateLastCacheWorkoutSamples(newSamplesCount: newSamplesCount, deletedSamplesCount: deletedSamplesCount)
                     
                     if !self.isInitialWorkoutCacheComplete {
-                        if newSamplesCount == 0 && deletedSamplesCount == 0 {
-                            self.isInitialWorkoutCacheComplete = true
-                            self.startObservingWorkoutSamples()
-                        } else {
-                            self.readAndCacheInitialWorkoutSamples()
-                        }
+                        self.readAndCacheInitialWorkoutSamples()
                     }
                 })
+            } else {
+                if !self.isInitialWorkoutCacheComplete {
+                    self.isInitialWorkoutCacheComplete = true
+                    self.startObservingWorkoutSamples()
+                }
             }
         }
     }
