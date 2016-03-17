@@ -37,14 +37,18 @@ class HealthKitManager {
         return NSUserDefaults.standardUserDefaults().boolForKey("authorizationRequestedForBloodGlucoseSamples")
     }
     
+    func authorizationRequestedForBloodGlucoseSampleWrites() -> Bool {
+        return NSUserDefaults.standardUserDefaults().boolForKey("authorizationRequestedForBloodGlucoseSampleWrites")
+    }
+    
     func authorizationRequestedForWorkoutSamples() -> Bool {
         return NSUserDefaults.standardUserDefaults().boolForKey("authorizationRequestedForWorkoutSamples")
     }
     
-    func authorize(shouldAuthorizeBloodGlucoseSamples shouldAuthorizeBloodGlucoseSamples: Bool, shouldAuthorizeWorkoutSamples: Bool, completion: ((success:Bool, error:NSError!) -> Void)!)
+    func authorize(shouldAuthorizeBloodGlucoseSampleReads shouldAuthorizeBloodGlucoseSampleReads: Bool, shouldAuthorizeBloodGlucoseSampleWrites: Bool, shouldAuthorizeWorkoutSamples: Bool, completion: ((success:Bool, error:NSError!) -> Void)!)
     {
         DDLogVerbose("trace")
-
+        
         var success = false
         var error: NSError?
         
@@ -63,29 +67,41 @@ class HealthKitManager {
             return
         }
         
-        var readTypes = Set<HKSampleType>()
-        if shouldAuthorizeBloodGlucoseSamples {
-            readTypes.insert(HKObjectType.quantityTypeForIdentifier(HKQuantityTypeIdentifierBloodGlucose)!)
+        var readTypes: Set<HKSampleType>?
+        var writeTypes: Set<HKSampleType>?
+        if (shouldAuthorizeBloodGlucoseSampleReads) {
+            readTypes = Set<HKSampleType>()
+            readTypes!.insert(HKObjectType.quantityTypeForIdentifier(HKQuantityTypeIdentifierBloodGlucose)!)
         }
-        if shouldAuthorizeWorkoutSamples {
-            readTypes.insert(HKObjectType.workoutType())
+        if (shouldAuthorizeBloodGlucoseSampleWrites) {
+            writeTypes = Set<HKSampleType>()
+            writeTypes!.insert(HKObjectType.quantityTypeForIdentifier(HKQuantityTypeIdentifierBloodGlucose)!)
         }
-        guard readTypes.count > 0 else {
-            error = NSError(domain: "HealthKitManager", code: -2, userInfo: [NSLocalizedDescriptionKey:"No health data authorization requested, ignoring"])
+        if (shouldAuthorizeWorkoutSamples) {
+            if readTypes == nil {
+                readTypes = Set<HKSampleType>()
+            }
+            readTypes!.insert(HKObjectType.workoutType())
+        }
+        guard readTypes != nil || writeTypes != nil else {
+            DDLogVerbose("No health data authorization requested, ignoring")
             return
         }
         
-        healthStore!.requestAuthorizationToShareTypes(nil, readTypes: readTypes) { (success, error) -> Void in
-            if error == nil {
-                if shouldAuthorizeBloodGlucoseSamples {
+        if (isHealthDataAvailable) {
+            healthStore!.requestAuthorizationToShareTypes(writeTypes, readTypes: readTypes) { (success, error) -> Void in
+                if (shouldAuthorizeBloodGlucoseSampleReads) {
                     NSUserDefaults.standardUserDefaults().setBool(true, forKey: "authorizationRequestedForBloodGlucoseSamples");
+                }
+                if (shouldAuthorizeBloodGlucoseSampleWrites) {
+                    NSUserDefaults.standardUserDefaults().setBool(true, forKey: "authorizationRequestedForBloodGlucoseSampleWrites");
                 }
                 if shouldAuthorizeWorkoutSamples {
                     NSUserDefaults.standardUserDefaults().setBool(true, forKey: "authorizationRequestedForWorkoutSamples");
                 }
                 NSUserDefaults.standardUserDefaults().synchronize()
             }
-
+            
             DDLogInfo("authorization success: \(success), error: \(error)")
             
             if completion != nil {

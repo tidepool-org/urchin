@@ -66,7 +66,7 @@ class HealthKitDataUploader {
         DDLogVerbose("trace")
         
         HealthKitManager.sharedInstance.authorize(
-            shouldAuthorizeBloodGlucoseSamples: true,
+            shouldAuthorizeBloodGlucoseSampleReads: true, shouldAuthorizeBloodGlucoseSampleWrites: false,
             shouldAuthorizeWorkoutSamples: false) {
                 success, error -> Void in
                 
