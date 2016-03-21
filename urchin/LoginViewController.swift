@@ -228,7 +228,7 @@ class LogInViewController :
             notesScene.transitioningDelegate = self
             self.presentViewController(notesScene, animated: true, completion: nil)
             
-            startBloodGlucoseUpload()
+            HealthKitDataUploader.sharedInstance.startUploading(currentUserId: self.apiConnector.user!.userid)
         } else {
             DDLogInfo("Session token is empty or user was not created")
             prepareLogin()
@@ -236,7 +236,7 @@ class LogInViewController :
     }
     
     func prepareLogin() {
-        stopBloodGlocuseUpload()
+        HealthKitDataUploader.sharedInstance.stopUploading()
         
         if (!loginPrepared) {
             loginPrepared = true
@@ -661,15 +661,5 @@ class LogInViewController :
     func animationControllerForDismissedController(dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         transition.presenting = false
         return transition
-    }
-    
-    // MARK: - HealthKit upload 
-
-    private func startBloodGlucoseUpload() {
-        HealthKitDataUploader.sharedInstance.startUploading(currentUserId: self.apiConnector.user!.userid)
-    }
-    
-    private func stopBloodGlocuseUpload() {
-        HealthKitDataUploader.sharedInstance.stopUploading()
     }
 }
