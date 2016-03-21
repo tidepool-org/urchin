@@ -6,22 +6,17 @@ PODS:
     - CocoaLumberjack/Default
   - CocoaLumberjack/Swift (2.2.0):
     - CocoaLumberjack/Extensions
-  - Realm (0.98.4):
-    - Realm/Headers (= 0.98.4)
-  - Realm/Headers (0.98.4)
-  - RealmSwift (0.98.4):
-    - Realm (= 0.98.4)
+  - CryptoSwift (0.2.3)
   - twitter-text (1.13.4)
 
 DEPENDENCIES:
   - CocoaLumberjack/Swift (~> 2.2.0)
-  - RealmSwift (~> 0.98.4)
+  - CryptoSwift (~> 0.2.3)
   - twitter-text (~> 1.13.4)
 
 SPEC CHECKSUMS:
   CocoaLumberjack: 17fe8581f84914d5d7e6360f7c70022b173c3ae0
-  Realm: 7745674cb1b7cb2a84a655bfd420b86efdaad36e
-  RealmSwift: 18742f4f13f98117aeec53b92058918ac93bf38f
+  CryptoSwift: b2bf37b8e7cc6d682ef3365cb966bc5ae5174aa5
   twitter-text: 66e7b9925534ade86cb3cb2751788073de8f2fec
 
 COCOAPODS: 0.39.0

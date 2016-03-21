@@ -1050,9 +1050,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     private func authorizeAndEnableHealthDataCache() {
         if (HealthKitManager.sharedInstance.isHealthDataAvailable) {
-            HealthKitDataCache.sharedInstance.authorizeAndStartCaching(
-                shouldCacheBloodGlucoseSamples: true,
-                shouldCacheWorkoutSamples: false)
+            HealthKitDataUploader.sharedInstance.authorizeAndStartUploading(currentUserId: self.user.userid)
         }
     }
 }

@@ -62,6 +62,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             defaultDebugLevel = DDLogLevel.Off
         }
 #endif
+        defaultDebugLevel = DDLogLevel.Verbose
         DDLogVerbose("trace")
 
         // Change navigation bar colors
@@ -78,11 +79,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Change status bar item color
         UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.LightContent
 
-        if (HealthKitManager.sharedInstance.isHealthDataAvailable) {
-            HealthKitDataCache.sharedInstance.startCaching(
-                shouldCacheBloodGlucoseSamples: true,
-                shouldCacheWorkoutSamples: false)
-        }
+        // TODO: my - Handle background query / background upload
+//        if (HealthKitManager.sharedInstance.isHealthDataAvailable) {
+//            HealthKitDataUploader.sharedInstance.startUploading(currentUserId: nil)
+//        }
         
         return true
     }
@@ -109,7 +109,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         let notification = NSNotification(name: "refreshSessionToken", object: nil)
         NSNotificationCenter.defaultCenter().postNotification(notification)
-        
+
         DDLogVerbose("trace")
     }
 

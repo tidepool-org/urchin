@@ -67,7 +67,7 @@ class UserDropDownCell: UITableViewCell {
             if group != nil && group?.fullName != nil {
                 nameLabel.text = String(format: healthKitStatusFormat, group!.fullName!, lastCacheDateAndTime)
                 
-                // TODO: my - 0 - This is just temporary for debugging, not to spec, we should eventually remove this
+                // TODO: This is just temporary for debugging, not to spec, we should probably remove the totalUploadCountBloodGlucoseSamples stats
                 nameLabel.text = "\(group!.fullName!), \(lastCacheDateAndTime), \(HealthKitDataUploader.sharedInstance.totalUploadCountBloodGlucoseSamples) samples"
             } else {
                 nameLabel.text = lastCacheDateAndTime

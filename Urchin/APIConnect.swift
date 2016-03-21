@@ -30,6 +30,10 @@ class APIConnector {
     
     private var isShowingAlert = false
     
+    init() {
+        HealthKitDataUploader.sharedInstance.uploadHandler = self.doUpload
+    }
+    
     func request(method: String, urlExtension: String, headerDict: [String: String], body: NSData?, preRequest: () -> Void, subdomainRootOverride: String = "api", completion: (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void) {
         
             if (self.isConnectedToNetwork()) {
@@ -394,7 +398,10 @@ class APIConnector {
                         let notification = NSNotification(name: "newNote", object: nil)
                         NSNotificationCenter.defaultCenter().postNotification(notification)
                         
-                        
+                        // Start uploading
+                        if (HealthKitManager.sharedInstance.isHealthDataAvailable) {
+                            HealthKitDataUploader.sharedInstance.startUploading(currentUserId: self.user?.userid)
+                        }
                     } else {
                         DDLogError("Could not refresh session token - invalid status code \(httpResponse.statusCode)")
                         
