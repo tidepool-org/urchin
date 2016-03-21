@@ -62,7 +62,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             defaultDebugLevel = DDLogLevel.Off
         }
 #endif
-        defaultDebugLevel = DDLogLevel.Verbose
         DDLogVerbose("trace")
 
         // Change navigation bar colors
