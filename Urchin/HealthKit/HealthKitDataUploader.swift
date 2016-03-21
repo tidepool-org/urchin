@@ -102,6 +102,7 @@ class HealthKitDataUploader {
         // enable read permissions, then switching back to app, should start reading and uploading available 
         // glucose data
         if self.isUploading {
+            DDLogInfo("start reading samples - start uploading")
             self.startReadingBloodGlucoseSamples()
         }
     }
@@ -123,11 +124,8 @@ class HealthKitDataUploader {
     // MARK: Private
     
     private func startReadingBloodGlucoseSamples() {
-        DDLogVerbose("trace")
-
         dispatch_async(dispatch_get_main_queue(), {
             if !self.isReadingBloodGlucoseSamples {
-                DDLogVerbose("Start reading samples")
                 self.isReadingBloodGlucoseSamples = true
                 HealthKitManager.sharedInstance.readBloodGlucoseSamples(self.bloodGlucoseResultHandler)
             } else {
@@ -137,10 +135,7 @@ class HealthKitDataUploader {
     }
 
     private func stopReadingBloodGlucoseSamples(completion completion: (NSError?) -> (Void), error: NSError?) {
-        DDLogVerbose("trace")
-
         dispatch_async(dispatch_get_main_queue(), {
-            DDLogVerbose("Stop reading samples")
             completion(error)
             self.isReadingBloodGlucoseSamples = false
         })
@@ -151,6 +146,7 @@ class HealthKitDataUploader {
         if error == nil {
             self.isUploading = true
             HealthKitManager.sharedInstance.enableBackgroundDeliveryBloodGlucoseSamples()
+            DDLogInfo("start reading samples - observe samples")
             self.startReadingBloodGlucoseSamples()
         }
     }
@@ -162,8 +158,7 @@ class HealthKitDataUploader {
         
         defer {
             if !samplesAvailableToUpload {
-                DDLogInfo("No new samples available to upload")
-
+                DDLogInfo("stop reading samples - no new samples available to upload")
                 self.stopReadingBloodGlucoseSamples(completion: completion, error: nil)
             }
         }
@@ -234,12 +229,12 @@ class HealthKitDataUploader {
                 if error == nil {
                     self.uploadSamplesForBatch(samples: samples, completion: completion)
                 } else {
-                    DDLogError("Error starting batch upload of samples: \(error)")
+                    DDLogError("stop reading samples - error starting batch upload of samples: \(error)")
                     self.stopReadingBloodGlucoseSamples(completion: completion, error: error)
                 }
             }
         } catch let error as NSError! {
-            DDLogError("Error creating post body for start of batch upload: \(error)")
+            DDLogError("stop reading samples - error creating post body for start of batch upload: \(error)")
             self.stopReadingBloodGlucoseSamples(completion: completion, error: error)
         }
     }
@@ -307,18 +302,20 @@ class HealthKitDataUploader {
                         self.startBatchUpload(samples: samples, completion: completion)
                     } else {
                         // Stop reading
+                        DDLogInfo("stop reading samples - finished uploading batch")
                         self.stopReadingBloodGlucoseSamples(completion: completion, error: error)
 
                         // Try to read more samples    
+                        DDLogInfo("start reading samples - finished uploading batch - check for more samples")
                         self.startReadingBloodGlucoseSamples()
                     }
                 } else {
-                    DDLogError("Error uploading samples: \(error)")
+                    DDLogError("stop reading samples - error uploading samples: \(error)")
                     self.stopReadingBloodGlucoseSamples(completion: completion, error: error)
                 }
             }
         } catch let error as NSError! {
-            DDLogError("Error creating post body for start of batch upload: \(error.userInfo)")
+            DDLogError("stop reading samples - error creating post body for start of batch upload: \(error)")
             self.stopReadingBloodGlucoseSamples(completion: completion, error: error)
         }
     }
