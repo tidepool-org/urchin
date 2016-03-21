@@ -252,13 +252,40 @@ class HealthKitDataUploader {
             sampleToUploadDict["type"] = "cbg"
             sampleToUploadDict["deviceId"] = self.currentBatchUploadDict["deviceId"]
             sampleToUploadDict["guid"] = sample.UUID.UUIDString
+            sampleToUploadDict["time"] = dateFormatter.isoStringFromDate(sample.startDate, zone: NSTimeZone(forSecondsFromGMT: 0), dateFormat: iso8601dateZuluTime)
+            
             if let quantitySample = sample as? HKQuantitySample {
                 let units = "mg/dL"
                 sampleToUploadDict["units"] = units
                 let unit = HKUnit(fromString: units)
-                sampleToUploadDict["value"] = quantitySample.quantity.doubleValueForUnit(unit)
+                let value = quantitySample.quantity.doubleValueForUnit(unit)
+                sampleToUploadDict["value"] = value
+                
+                // Add out-of-range annotation if needed
+                var annotationCode: String?
+                var annotationValue: String?
+                var annotationThreshold = 0
+                if (value < 40) {
+                    annotationCode = "bg/out-of-range"
+                    annotationValue = "low"
+                    annotationThreshold = 40
+                } else if (value > 400) {
+                    annotationCode = "bg/out-of-range"
+                    annotationValue = "high"
+                    annotationThreshold = 400
+                }
+                if let annotationCode = annotationCode,
+                       annotationValue = annotationValue {
+                    let annotations = [
+                        [
+                            "annotationCode": annotationCode,
+                            "annotationValue": annotationValue,
+                            "annotationThreshold": annotationThreshold
+                        ]
+                    ]
+                    sampleToUploadDict["annotations"] = annotations
+                }
             }
-            sampleToUploadDict["time"] = dateFormatter.isoStringFromDate(sample.startDate, zone: NSTimeZone(forSecondsFromGMT: 0), dateFormat: iso8601dateZuluTime)
             
             // Add sample metadata payload props
             if var metadata = sample.metadata {
