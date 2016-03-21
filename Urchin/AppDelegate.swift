@@ -78,11 +78,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Change status bar item color
         UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.LightContent
-
-        // TODO: my - Handle background query / background upload
-//        if (HealthKitManager.sharedInstance.isHealthDataAvailable) {
-//            HealthKitDataUploader.sharedInstance.startUploading(currentUserId: nil)
-//        }
         
         return true
     }
