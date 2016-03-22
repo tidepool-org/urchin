@@ -278,9 +278,9 @@ class HealthKitDataUploader {
                        annotationValue = annotationValue {
                     let annotations = [
                         [
-                            "annotationCode": annotationCode,
-                            "annotationValue": annotationValue,
-                            "annotationThreshold": annotationThreshold
+                            "code": annotationCode,
+                            "value": annotationValue,
+                            "threshold": annotationThreshold
                         ]
                     ]
                     sampleToUploadDict["annotations"] = annotations
