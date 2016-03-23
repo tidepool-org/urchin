@@ -32,7 +32,7 @@ public extension NSDateFormatter {
             if (char == " ") {
                 break
             } else {
-                count++
+                count += 1
             }
         }
 

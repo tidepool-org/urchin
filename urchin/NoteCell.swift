@@ -111,11 +111,11 @@ class NoteCell: UITableViewCell {
         
         messageLabel.userInteractionEnabled = true
         
-        let doubleTap = UITapGestureRecognizer(target: self, action: "copyToClipboard")
+        let doubleTap = UITapGestureRecognizer(target: self, action: #selector(NoteCell.copyToClipboard))
         doubleTap.numberOfTapsRequired = 2
         messageLabel.addGestureRecognizer(doubleTap)
         
-        let longPress = UILongPressGestureRecognizer(target: self, action: "copyToClipboard")
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(NoteCell.copyToClipboard))
         messageLabel.addGestureRecognizer(longPress)
         
         contentView.addSubview(usernameLabel)

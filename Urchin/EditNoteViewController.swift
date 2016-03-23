@@ -111,10 +111,10 @@ class EditNoteViewController: UIViewController, UITextViewDelegate {
         self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: navBarTitleColor, NSFontAttributeName: mediumRegularFont]
         
         // Configure close button (always present)
-        let closeButton: UIBarButtonItem = UIBarButtonItem(image: closeX, style: .Plain, target: self, action: "closeVC:")
+        let closeButton: UIBarButtonItem = UIBarButtonItem(image: closeX, style: .Plain, target: self, action: #selector(EditNoteViewController.closeVC(_:)))
         self.navigationItem.setLeftBarButtonItem(closeButton, animated: true)
         
-        let deleteButton: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Trash, target: self, action: "deleteNote:")
+        let deleteButton: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Trash, target: self, action: #selector(EditNoteViewController.deleteNote(_:)))
         self.navigationItem.setRightBarButtonItem(deleteButton, animated: true)
         
         // configure date label
@@ -138,7 +138,7 @@ class EditNoteViewController: UIViewController, UITextViewDelegate {
         let changeDateView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: changeDateH))
         changeDateView.backgroundColor = UIColor.clearColor()
         // tapGesture triggers animation
-        let tap = UITapGestureRecognizer(target: self, action: "changeDatePressed:")
+        let tap = UITapGestureRecognizer(target: self, action: #selector(EditNoteViewController.changeDatePressed(_:)))
         changeDateView.addGestureRecognizer(tap)
         // add labels to view
         changeDateView.addSubview(timedateLabel)
@@ -152,7 +152,7 @@ class EditNoteViewController: UIViewController, UITextViewDelegate {
         datePicker.frame.origin.x = 0
         datePicker.frame.origin.y = timedateLabel.frame.maxY + labelInset / 2
         datePicker.hidden = true
-        datePicker.addTarget(self, action: "datePickerAction:", forControlEvents: .ValueChanged)
+        datePicker.addTarget(self, action: #selector(EditNoteViewController.datePickerAction(_:)), forControlEvents: .ValueChanged)
         
         self.view.addSubview(datePicker)
         
@@ -185,7 +185,7 @@ class EditNoteViewController: UIViewController, UITextViewDelegate {
             attributes:[NSForegroundColorAttributeName: postButtonTextColor, NSFontAttributeName: mediumRegularFont]), forState: UIControlState.Normal)
         postButton.backgroundColor = tealColor
         postButton.alpha = 0.5
-        postButton.addTarget(self, action: "saveNote", forControlEvents: .TouchUpInside)
+        postButton.addTarget(self, action: #selector(EditNoteViewController.saveNote), forControlEvents: .TouchUpInside)
         postButton.frame.size = CGSize(width: postButtonW, height: postButtonH)
         postButton.frame.origin.x = self.view.frame.size.width - (labelInset + postButton.frame.width)
         let navBarH = self.navigationController!.navigationBar.frame.size.height
@@ -219,7 +219,7 @@ class EditNoteViewController: UIViewController, UITextViewDelegate {
         
         // configure camera button
         cameraButton.setImage(cameraImage, forState: .Normal)
-        cameraButton.addTarget(self, action: "cameraPressed:", forControlEvents: .TouchUpInside)
+        cameraButton.addTarget(self, action: #selector(EditNoteViewController.cameraPressed(_:)), forControlEvents: .TouchUpInside)
         cameraButton.frame.size = cameraImage.size
         let cameraX = 2 * labelInset
         let cameraY = postButton.frame.midY - cameraButton.frame.height / 2
@@ -230,7 +230,7 @@ class EditNoteViewController: UIViewController, UITextViewDelegate {
         
         // configure location button
         locationButton.setImage(locationImage, forState: .Normal)
-        locationButton.addTarget(self, action: "locationPressed:", forControlEvents: .TouchUpInside)
+        locationButton.addTarget(self, action: #selector(EditNoteViewController.locationPressed(_:)), forControlEvents: .TouchUpInside)
         locationButton.frame.size = locationImage.size
         let locationX = cameraButton.frame.maxX + 2 * labelInset
         let locationY = postButton.frame.midY - locationButton.frame.height / 2
@@ -241,11 +241,11 @@ class EditNoteViewController: UIViewController, UITextViewDelegate {
         
         // Add observers for notificationCenter to handle keyboard events
         let notificationCenter = NSNotificationCenter.defaultCenter()
-        notificationCenter.addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
-        notificationCenter.addObserver(self, selector: "keyboardDidShow:", name: UIKeyboardDidShowNotification, object: nil)
-        notificationCenter.addObserver(self, selector: Selector("keyboardWillHide:"), name:UIKeyboardWillHideNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(EditNoteViewController.keyboardWillShow(_:)), name: UIKeyboardWillShowNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(EditNoteViewController.keyboardDidShow(_:)), name: UIKeyboardDidShowNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(EditNoteViewController.keyboardWillHide(_:)), name:UIKeyboardWillHideNotification, object: nil)
         // Add an observer to notificationCenter to handle hashtagPress events from HashtagsView
-        notificationCenter.addObserver(self, selector: "hashtagPressed:", name: "hashtagPressed", object: nil)
+        notificationCenter.addObserver(self, selector: #selector(EditNoteViewController.hashtagPressed(_:)), name: "hashtagPressed", object: nil)
     }
 
     // close the VC on button press from leftBarButtonItem
@@ -545,11 +545,11 @@ class EditNoteViewController: UIViewController, UITextViewDelegate {
                     let punctuation = NSCharacterSet.punctuationCharacterSet()
                     for char in word.unicodeScalars {
                         if (char == "#" && charsInHashtag == 0) {
-                            charsInHashtag++
+                            charsInHashtag += 1
                             continue
                         }
                         if (!punctuation.longCharacterIsMember(char.value) && !symbols.longCharacterIsMember(char.value)) {
-                            charsInHashtag++
+                            charsInHashtag += 1
                         } else {
                             break
                         }

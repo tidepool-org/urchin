@@ -129,7 +129,7 @@ class AddNoteViewController: UIViewController {
         closeButton.image = closeX
         closeButton.style = .Plain
         closeButton.target = self
-        closeButton.action = "closeVC:"
+        closeButton.action = #selector(AddNoteViewController.closeVC(_:))
         // navigationBar begins with leftBarButtonItem to close VC
         self.navigationItem.setLeftBarButtonItem(closeButton, animated: true)
         
@@ -138,7 +138,7 @@ class AddNoteViewController: UIViewController {
             configureTitleView(group.fullName!)
             
             // Configure rightDropDownMenuButton to trigger dropDownMenu toggle
-            let rightDropDownMenuButton: UIBarButtonItem = UIBarButtonItem(image: downArrow, style: .Plain, target: self, action: "dropDownMenuPressed")
+            let rightDropDownMenuButton: UIBarButtonItem = UIBarButtonItem(image: downArrow, style: .Plain, target: self, action: #selector(AddNoteViewController.dropDownMenuPressed))
             self.navigationItem.setRightBarButtonItem(rightDropDownMenuButton, animated: true)
         } else {
             let titleView = UILabel()
@@ -171,7 +171,7 @@ class AddNoteViewController: UIViewController {
         let changeDateView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: changeDateH))
         changeDateView.backgroundColor = UIColor.clearColor()
         // tapGesture in view triggers animation
-        let tap = UITapGestureRecognizer(target: self, action: "changeDatePressed:")
+        let tap = UITapGestureRecognizer(target: self, action: #selector(AddNoteViewController.changeDatePressed(_:)))
         changeDateView.addGestureRecognizer(tap)
         // add labels to view
         changeDateView.addSubview(timedateLabel)
@@ -184,7 +184,7 @@ class AddNoteViewController: UIViewController {
         datePicker.frame.origin.x = 0
         datePicker.frame.origin.y = timedateLabel.frame.maxY + labelInset / 2
         datePicker.hidden = true
-        datePicker.addTarget(self, action: "datePickerAction:", forControlEvents: .ValueChanged)
+        datePicker.addTarget(self, action: #selector(AddNoteViewController.datePickerAction(_:)), forControlEvents: .ValueChanged)
         
         self.view.addSubview(datePicker)
         
@@ -217,7 +217,7 @@ class AddNoteViewController: UIViewController {
             attributes:[NSForegroundColorAttributeName: postButtonTextColor, NSFontAttributeName: mediumRegularFont]), forState: UIControlState.Normal)
         postButton.backgroundColor = tealColor
         postButton.alpha = 0.5
-        postButton.addTarget(self, action: "postNote:", forControlEvents: .TouchUpInside)
+        postButton.addTarget(self, action: #selector(AddNoteViewController.postNote(_:)), forControlEvents: .TouchUpInside)
         postButton.frame.size = CGSize(width: postButtonW, height: postButtonH)
         postButton.frame.origin.x = self.view.frame.size.width - (labelInset + postButton.frame.width)
         let navBarH = self.navigationController!.navigationBar.frame.size.height
@@ -250,7 +250,7 @@ class AddNoteViewController: UIViewController {
         
         // configure camera button
         cameraButton.setImage(cameraImage, forState: .Normal)
-        cameraButton.addTarget(self, action: "cameraPressed:", forControlEvents: .TouchUpInside)
+        cameraButton.addTarget(self, action: #selector(AddNoteViewController.cameraPressed(_:)), forControlEvents: .TouchUpInside)
         cameraButton.frame.size = cameraImage.size
         let cameraX = 2 * labelInset
         let cameraY = postButton.frame.midY - cameraButton.frame.height / 2
@@ -261,7 +261,7 @@ class AddNoteViewController: UIViewController {
         
         // configure location button
         locationButton.setImage(locationImage, forState: .Normal)
-        locationButton.addTarget(self, action: "locationPressed:", forControlEvents: .TouchUpInside)
+        locationButton.addTarget(self, action: #selector(AddNoteViewController.locationPressed(_:)), forControlEvents: .TouchUpInside)
         locationButton.frame.size = locationImage.size
         let locationX = cameraButton.frame.maxX + 2 * labelInset
         let locationY = postButton.frame.midY - locationButton.frame.height / 2
@@ -274,7 +274,7 @@ class AddNoteViewController: UIViewController {
         overlayHeight = self.view.frame.height
         opaqueOverlay = UIView(frame: CGRectMake(0, -overlayHeight, self.view.frame.width, overlayHeight))
         opaqueOverlay.backgroundColor = blackishLowAlpha
-        let tapGesture = UITapGestureRecognizer(target: self, action: "dropDownMenuPressed")
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(AddNoteViewController.dropDownMenuPressed))
         tapGesture.numberOfTapsRequired = 1
         opaqueOverlay.addGestureRecognizer(tapGesture)
         self.view.addSubview(opaqueOverlay)
@@ -307,11 +307,11 @@ class AddNoteViewController: UIViewController {
         
         // Add observers for notificationCenter to handle keyboard events
         let notificationCenter = NSNotificationCenter.defaultCenter()
-        notificationCenter.addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
-        notificationCenter.addObserver(self, selector: "keyboardDidShow:", name: UIKeyboardDidShowNotification, object: nil)
-        notificationCenter.addObserver(self, selector: Selector("keyboardWillHide:"), name:UIKeyboardWillHideNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(AddNoteViewController.keyboardWillShow(_:)), name: UIKeyboardWillShowNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(AddNoteViewController.keyboardDidShow(_:)), name: UIKeyboardDidShowNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(AddNoteViewController.keyboardWillHide(_:)), name:UIKeyboardWillHideNotification, object: nil)
         // Add an observer to notificationCenter to handle hashtagPress events from HashtagsView
-        notificationCenter.addObserver(self, selector: "hashtagPressed:", name: "hashtagPressed", object: nil)
+        notificationCenter.addObserver(self, selector: #selector(AddNoteViewController.hashtagPressed(_:)), name: "hashtagPressed", object: nil)
     }
     
     // Configure title of navigationBar to given string
@@ -326,7 +326,7 @@ class AddNoteViewController: UIViewController {
         self.navigationItem.titleView = titleView
         
         // tapGesture triggers dropDownMenu to toggle
-        let recognizer = UITapGestureRecognizer(target: self, action: "dropDownMenuPressed")
+        let recognizer = UITapGestureRecognizer(target: self, action: #selector(AddNoteViewController.dropDownMenuPressed))
         titleView.userInteractionEnabled = true
         titleView.addGestureRecognizer(recognizer)
     }
@@ -597,11 +597,11 @@ class AddNoteViewController: UIViewController {
                     let punctuation = NSCharacterSet.punctuationCharacterSet()
                     for char in word.unicodeScalars {
                         if (char == "#" && charsInHashtag == 0) {
-                            charsInHashtag++
+                            charsInHashtag += 1
                             continue
                         }
                         if (!punctuation.longCharacterIsMember(char.value) && !symbols.longCharacterIsMember(char.value)) {
-                            charsInHashtag++
+                            charsInHashtag += 1
                         } else {
                             break
                         }

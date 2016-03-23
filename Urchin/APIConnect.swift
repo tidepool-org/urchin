@@ -483,7 +483,7 @@ class APIConnector {
                     otherUser.processUserDict(userDict)
                     
                     if (notesVC != nil) {
-                        self.groupsFetched++
+                        self.groupsFetched += 1
                         
                         // Insert logic here for DSAs only
                         if (otherUser.patient != nil && (otherUser.patient?.aboutMe != nil || otherUser.patient?.birthday != nil || otherUser.patient?.diagnosisDate != nil)) {
@@ -530,7 +530,7 @@ class APIConnector {
                     var i = 0
                     for key in jsonResult.keyEnumerator() {
                         _ = User(userid: key as! String, apiConnector: self, notesVC: notesVC)
-                        i++
+                        i += 1
                     }
                     self.groupsToFetchFor = i
                 } else {
@@ -555,7 +555,7 @@ class APIConnector {
         
         let preRequest = { () -> Void in
             notesVC.loadingNotes = true
-            notesVC.numberFetches++
+            notesVC.numberFetches += 1
         }
         
         let completion = { (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
@@ -606,7 +606,7 @@ class APIConnector {
                     self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
                 }
                 
-                notesVC.numberFetches--
+                notesVC.numberFetches -= 1
                 if (notesVC.numberFetches == 0) {
                     notesVC.loadingNotes = false
                     let notification = NSNotification(name: "doneFetching", object: nil)
@@ -782,7 +782,7 @@ class APIConnector {
                             break
                         }
                         
-                        i++
+                        i += 1
                     }
                     
                     // filter the notes, sort the notes, reload notes table

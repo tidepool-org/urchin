@@ -144,7 +144,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         let buttonY = self.view.frame.height - (addNoteButtonHeight + CGFloat(64))
         newNoteButton.frame = CGRect(x: 0, y: buttonY, width: buttonWidth, height: addNoteButtonHeight)
         newNoteButton.backgroundColor = tealColor
-        newNoteButton.addTarget(self, action: "newNote:", forControlEvents: .TouchUpInside)
+        newNoteButton.addTarget(self, action: #selector(NotesViewController.newNote(_:)), forControlEvents: .TouchUpInside)
         
         // Configure graphics and title for newNoteButton
         let addNoteImageView = UIImageView(image: noteImage)
@@ -173,26 +173,26 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         // Configure notification center to observe addNote and saveNote
         //      called from addNoteVC and editNoteVC respectively
         let notificationCenter = NSNotificationCenter.defaultCenter()
-        notificationCenter.addObserver(self, selector: "addNote:", name: "addNote", object: nil)
-        notificationCenter.addObserver(self, selector: "saveNote:", name: "saveNote", object: nil)
+        notificationCenter.addObserver(self, selector: #selector(NotesViewController.addNote(_:)), name: "addNote", object: nil)
+        notificationCenter.addObserver(self, selector: #selector(NotesViewController.saveNote(_:)), name: "saveNote", object: nil)
         // Listen for when addNoteVC or editNoteVC has been closed without saving or posting
-        notificationCenter.addObserver(self, selector: "doneAdding:", name: "doneAdding", object: nil)
-        notificationCenter.addObserver(self, selector: "doneEditing:", name: "doneEditing", object: nil)
-        notificationCenter.addObserver(self, selector: "deleteNote:", name: "deleteNote", object: nil)
+        notificationCenter.addObserver(self, selector: #selector(NotesViewController.doneAdding(_:)), name: "doneAdding", object: nil)
+        notificationCenter.addObserver(self, selector: #selector(NotesViewController.doneEditing(_:)), name: "doneEditing", object: nil)
+        notificationCenter.addObserver(self, selector: #selector(NotesViewController.deleteNote(_:)), name: "deleteNote", object: nil)
 
         // Listen for when group metadata has been fetched
-        notificationCenter.addObserver(self, selector: "groupsReady:", name: "groupsReady", object: nil)
+        notificationCenter.addObserver(self, selector: #selector(NotesViewController.groupsReady(_:)), name: "groupsReady", object: nil)
         // Listen for when done fetching notes
-        notificationCenter.addObserver(self, selector: "doneFetching", name: "doneFetching", object: nil)
+        notificationCenter.addObserver(self, selector: #selector(NotesViewController.doneFetching), name: "doneFetching", object: nil)
         // Listen for when to open an NewNoteVC
-        notificationCenter.addObserver(self, selector: "newNote:", name: "newNote", object: nil)
+        notificationCenter.addObserver(self, selector: #selector(NotesViewController.newNote(_:)), name: "newNote", object: nil)
         // Listen for when to refresh session token
-        notificationCenter.addObserver(self, selector: "refreshSessionToken:", name: "refreshSessionToken", object: nil)
+        notificationCenter.addObserver(self, selector: #selector(NotesViewController.refreshSessionToken(_:)), name: "refreshSessionToken", object: nil)
         // Listen for when force a logout
-        notificationCenter.addObserver(self, selector: "forcedLogout:", name: "forcedLogout", object: nil)
+        notificationCenter.addObserver(self, selector: #selector(NotesViewController.forcedLogout(_:)), name: "forcedLogout", object: nil)
 
         // Handle HealthKitDataCache notifications
-        notificationCenter.addObserver(self, selector: "handleUploadedHealthKitDataCacheNotification:", name: HealthKitDataUploader.Notifications.UploadedBloodGlucoseSamples, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(NotesViewController.handleUploadedHealthKitDataCacheNotification(_:)), name: HealthKitDataUploader.Notifications.UploadedBloodGlucoseSamples, object: nil)
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -213,7 +213,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
             configureDropDownMenu()
             
             // Add rightBarButtonItem to down arrow for showing dropdown
-            let rightDropDownMenuButton: UIBarButtonItem = UIBarButtonItem(image: downArrow, style: .Plain, target: self, action: "dropDownMenuPressed")
+            let rightDropDownMenuButton: UIBarButtonItem = UIBarButtonItem(image: downArrow, style: .Plain, target: self, action: #selector(NotesViewController.dropDownMenuPressed))
             self.navigationItem.setRightBarButtonItem(rightDropDownMenuButton, animated: true)
             
             if (groups.count == 1) {
@@ -229,7 +229,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
             loadNotes()
             
             self.refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh", attributes: [NSFontAttributeName: smallRegularFont, NSForegroundColorAttributeName: blackishColor])
-            self.refreshControl.addTarget(self, action: "refresh", forControlEvents: UIControlEvents.ValueChanged)
+            self.refreshControl.addTarget(self, action: #selector(NotesViewController.refresh), forControlEvents: UIControlEvents.ValueChanged)
             self.notesTable.addSubview(refreshControl)
         } else {
             DDLogInfo("No data storage accounts")
@@ -255,7 +255,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
             logoutLabel.frame.size.height += 2 * hitBoxAmount
             logoutLabel.frame.origin.y = errorLabel.frame.maxY + labelSpacing
             logoutLabel.frame.origin.x = self.view.frame.width / 2 - logoutLabel.frame.width / 2
-            let recognizer = UITapGestureRecognizer(target: self, action: "logout")
+            let recognizer = UITapGestureRecognizer(target: self, action: #selector(NotesViewController.logout))
             logoutLabel.userInteractionEnabled = true
             logoutLabel.addGestureRecognizer(recognizer)
             self.view.addSubview(logoutLabel)
@@ -272,7 +272,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
             return $0.fullName < $1.fullName
         }
         
-        for (var i = 0; i < groups.count; i++) {
+        for i in 0 ..< groups.count {
             if (groups[i].userid == user.userid) {
                 
                 let myDSA = groups[i]
@@ -335,7 +335,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         self.navigationItem.titleView = titleView
         
         // tapGesture triggers dropDownMenu to toggle
-        let recognizer = UITapGestureRecognizer(target: self, action: "dropDownMenuPressed")
+        let recognizer = UITapGestureRecognizer(target: self, action: #selector(NotesViewController.dropDownMenuPressed))
         titleView.userInteractionEnabled = true
         titleView.addGestureRecognizer(recognizer)
     }
@@ -382,7 +382,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         numberOfNotes = notes.count
         
         if ((lastAmount + 10) > numberOfNotes && consecutiveFetches < 4) {
-            consecutiveFetches++
+            consecutiveFetches += 1
             loadNotes()
         }
         
@@ -528,7 +528,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         opaqueOverlay = UIView(frame: CGRectMake(0, -overlayHeight, self.view.frame.width, overlayHeight))
         opaqueOverlay.backgroundColor = blackishLowAlpha
         // tapGesture closes the dropDownMenu (and overlay)
-        let tapGesture = UITapGestureRecognizer(target: self, action: "dropDownMenuPressed")
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(NotesViewController.dropDownMenuPressed))
         tapGesture.numberOfTapsRequired = 1
         opaqueOverlay.addGestureRecognizer(tapGesture)
         self.view.addSubview(opaqueOverlay)
@@ -536,9 +536,9 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         // Configure dropDownMenu, same width as view
         var additionalCells = groups.count == 1 ? 1 : 3
         if (HealthKitManager.sharedInstance.isHealthDataAvailable) {
-            additionalCells++
+            additionalCells += 1
             if (HealthKitDataUploader.sharedInstance.lastUploadCountBloodGlucoseSamples > 0) {
-                additionalCells++
+                additionalCells += 1
             }
         }
         let proposedDropDownH = CGFloat(groups.count+additionalCells)*userCellHeight + CGFloat(groups.count)*userCellThinSeparator + 2*userCellThickSeparator
@@ -672,7 +672,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
             
             // editButton tag to be indexPath.row so can be used in editPressed notification handling
             cell.editButton.tag = indexPath.row
-            cell.editButton.addTarget(self, action: "editPressed:", forControlEvents: .TouchUpInside)
+            cell.editButton.addTarget(self, action: #selector(NotesViewController.editPressed(_:)), forControlEvents: .TouchUpInside)
             
             return cell
             
@@ -737,7 +737,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
             }
             
             if (HealthKitManager.sharedInstance.isHealthDataAvailable) {
-                numberOfSections++
+                numberOfSections += 1
             }
         }
         

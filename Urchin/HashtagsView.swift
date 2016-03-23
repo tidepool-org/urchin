@@ -235,7 +235,7 @@ class HashtagsView: UIView {
                 // Append the current row and reset/increment values
                 verticalHashtagButtons.append(buttonRow)
                 buttonRow = []
-                row++
+                row += 1
                 col = 0
                 continue
             } else {
@@ -249,8 +249,8 @@ class HashtagsView: UIView {
             buttonRow[col].frame.origin.x = buttonX
             
             // Increment the index and column
-            index++
-            col++
+            index += 1
+            col += 1
         }
         
         // Take off the extra bit from the end of the totalLinearHashtagsWidth
@@ -285,7 +285,7 @@ class HashtagsView: UIView {
             var i = 0
             for button in bRow {
                 totalButtonWidth += button.frame.width + horizontalHashtagSpacing
-                i++
+                i += 1
             }
             
             // Determine the width between the outer margins
@@ -306,10 +306,10 @@ class HashtagsView: UIView {
                 // increase the buttonX for the next button
                 buttonX = button.frame.maxX + horizontalHashtagSpacing
                 
-                col++
+                col += 1
             }
             
-            row++
+            row += 1
         }
     }
     
@@ -326,7 +326,7 @@ class HashtagsView: UIView {
             } else {
                 button.frame.origin.x = hashtagButtons[index - 1].frame.maxX + horizontalHashtagSpacing
             }
-            index++
+            index += 1
         }
     }
     
@@ -345,12 +345,12 @@ class HashtagsView: UIView {
         hashtagButton.layer.cornerRadius = hashtagButton.frame.height / 2
         hashtagButton.layer.borderWidth = hashtagBorderWidth
         hashtagButton.layer.borderColor = hashtagBorderColor.CGColor
-        hashtagButton.addTarget(self, action: "hashtagHighlight:", forControlEvents: .TouchDown)
-        hashtagButton.addTarget(self, action: "hashtagHighlight:", forControlEvents: .TouchDragInside)
-        hashtagButton.addTarget(self, action: "hashtagNormal:", forControlEvents: .TouchDragOutside)
-        hashtagButton.addTarget(self, action: "hashtagPress:", forControlEvents: .TouchUpInside)
-        hashtagButton.addTarget(self, action: "hashtagNormal:", forControlEvents: .TouchUpInside)
-        hashtagButton.addTarget(self, action: "hashtagNormal:", forControlEvents: .TouchUpOutside)
+        hashtagButton.addTarget(self, action: #selector(HashtagsView.hashtagHighlight(_:)), forControlEvents: .TouchDown)
+        hashtagButton.addTarget(self, action: #selector(HashtagsView.hashtagHighlight(_:)), forControlEvents: .TouchDragInside)
+        hashtagButton.addTarget(self, action: #selector(HashtagsView.hashtagNormal(_:)), forControlEvents: .TouchDragOutside)
+        hashtagButton.addTarget(self, action: #selector(HashtagsView.hashtagPress(_:)), forControlEvents: .TouchUpInside)
+        hashtagButton.addTarget(self, action: #selector(HashtagsView.hashtagNormal(_:)), forControlEvents: .TouchUpInside)
+        hashtagButton.addTarget(self, action: #selector(HashtagsView.hashtagNormal(_:)), forControlEvents: .TouchUpOutside)
         
         return hashtagButton
     }

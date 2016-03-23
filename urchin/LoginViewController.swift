@@ -84,9 +84,9 @@ class LogInViewController :
         let notificationCenter = NSNotificationCenter.defaultCenter()
         
         // add observer for directLogin
-        notificationCenter.addObserver(self, selector: "directLoginAttempt", name: "directLogin", object: nil)
+        notificationCenter.addObserver(self, selector: #selector(LogInViewController.directLoginAttempt), name: "directLogin", object: nil)
         // add observer for prepareLogin
-        notificationCenter.addObserver(self, selector: "prepareLogin", name: "prepareLogin", object: nil)
+        notificationCenter.addObserver(self, selector: #selector(LogInViewController.prepareLogin), name: "prepareLogin", object: nil)
 
         reachLabel.text = "Please try again when you are connected to a wireless network."
         reachLabel.font = mediumSemiboldFont
@@ -100,7 +100,7 @@ class LogInViewController :
         reachLabel.hidden = true
         self.view.addSubview(reachLabel)
         
-        notificationCenter.addObserver(self, selector: "reachabilityChanged:", name: ReachabilityChangedNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(LogInViewController.reachabilityChanged(_:)), name: ReachabilityChangedNotification, object: nil)
         configureForReachability()
         
         let width: CGFloat = 100
@@ -109,7 +109,7 @@ class LogInViewController :
         corners.append(CGRect(x: self.view.frame.width - width, y: 0, width: width, height: height))
         corners.append(CGRect(x: 0, y: self.view.frame.height - height, width: width, height: height))
         corners.append(CGRect(x: self.view.frame.width - width, y: self.view.frame.height - height, width: width, height: height))
-        for (var i = 0; i < corners.count; i++) {
+        for _ in 0 ..< corners.count {
             cornersBool.append(false)
         }
     }
@@ -159,7 +159,7 @@ class LogInViewController :
     }
     
     func showSettingsActionSheet() {
-        for (var i = 0; i < corners.count; i++) {
+        for i in 0 ..< corners.count {
             cornersBool[i] = false
         }
         
@@ -246,11 +246,11 @@ class LogInViewController :
             let notificationCenter = NSNotificationCenter.defaultCenter()
             
             // add NSNotificationCenter observers for keyboard events
-            notificationCenter.addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
-            notificationCenter.addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
+            notificationCenter.addObserver(self, selector: #selector(LogInViewController.keyboardWillShow(_:)), name: UIKeyboardWillShowNotification, object: nil)
+            notificationCenter.addObserver(self, selector: #selector(LogInViewController.keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
             
             // add observer for makeTransition to NotesVC
-            notificationCenter.addObserver(self, selector: "makeTransition", name: "makeTransitionToNotes", object: nil)
+            notificationCenter.addObserver(self, selector: #selector(LogInViewController.makeTransition), name: "makeTransitionToNotes", object: nil)
             
             // configure version number for below Tidepool logo, add version number to view
             version.text = UIApplication.versionBuildServer()
@@ -284,7 +284,7 @@ class LogInViewController :
             signUpView.frame.origin = CGPoint(x: self.view.frame.width - signUpW, y: 0)
             signUpView.backgroundColor = UIColor.clearColor()
             // tapGesture in view triggers sign up process
-            let tapGesture = UITapGestureRecognizer(target: self, action: "signUpPressed:")
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(LogInViewController.signUpPressed(_:)))
             signUpView.addGestureRecognizer(tapGesture)
             // add labels to view
             signUpView.addSubview(signUpImage)
@@ -335,7 +335,7 @@ class LogInViewController :
             emailField.returnKeyType = UIReturnKeyType.Done
             emailField.secureTextEntry = false
             emailField.delegate = self
-            emailField.addTarget(self, action: "textFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
+            emailField.addTarget(self, action: #selector(LogInViewController.textFieldDidChange(_:)), forControlEvents: UIControlEvents.EditingChanged)
             
             // configure password entry field
             let passwordFieldWidth = self.view.frame.width - 2 * loginInset
@@ -363,7 +363,7 @@ class LogInViewController :
             passwordField.returnKeyType = UIReturnKeyType.Done
             passwordField.secureTextEntry = true
             passwordField.delegate = self
-            passwordField.addTarget(self, action: "textFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
+            passwordField.addTarget(self, action: #selector(LogInViewController.textFieldDidChange(_:)), forControlEvents: UIControlEvents.EditingChanged)
             
             // configure the remember me check box
             rememberMeCheckbox.image = uncheckedImage
@@ -384,7 +384,7 @@ class LogInViewController :
             rememberMeView.frame.origin.y = rememberMeCheckbox.frame.minY - labelInset
             rememberMeView.backgroundColor = UIColor.clearColor()
             // tapGesture in view triggers animation
-            let tap = UITapGestureRecognizer(target: self, action: "checkboxPressed:")
+            let tap = UITapGestureRecognizer(target: self, action: #selector(LogInViewController.checkboxPressed(_:)))
             rememberMeView.addGestureRecognizer(tap)
             // add labels to view
             rememberMeView.addSubview(rememberMeCheckbox)
@@ -397,7 +397,7 @@ class LogInViewController :
             logInButton.alpha = 0.5
             logInButton.setAttributedTitle(NSAttributedString(string: loginButtonText,
                 attributes:[NSForegroundColorAttributeName: loginButtonTextColor, NSFontAttributeName: mediumRegularFont]), forState: UIControlState.Normal)
-            logInButton.addTarget(self, action: "logInPressed", forControlEvents: .TouchUpInside)
+            logInButton.addTarget(self, action: #selector(LogInViewController.logInPressed), forControlEvents: .TouchUpInside)
             
             // determine halfHeight of all UI elements
             halfHeight = (titleLabel.frame.height + titleToLogo + logoView.frame.height + logoToEmail + emailField.frame.height + emailToPass + passwordField.frame.height + passToLogin + logInButton.frame.height) / 2
@@ -499,7 +499,7 @@ class LogInViewController :
                     return
                 }
                 
-                i++
+                i += 1
             }
         }
     }
