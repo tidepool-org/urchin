@@ -196,9 +196,8 @@ class HealthKitDataUploader {
         let time = dateFormatter.isoStringFromDate(now)
         let guid = NSUUID().UUIDString
         let uploadIdSuffix = "\(deviceId)_\(time)_\(guid)"
-        var uploadIdSuffixMd5Hash = uploadIdSuffix.md5()
-        uploadIdSuffixMd5Hash = uploadIdSuffixMd5Hash.substringToIndex(uploadIdSuffixMd5Hash.startIndex.advancedBy(12))
-        let uploadId = "upid_HealthKit_\(uploadIdSuffixMd5Hash)"
+        let uploadIdSuffixMd5Hash = uploadIdSuffix.md5()
+        let uploadId = "upid_\(uploadIdSuffixMd5Hash)"
         
         self.currentBatchUploadDict = [String: AnyObject]()
         self.currentBatchUploadDict["type"] = "upload"
