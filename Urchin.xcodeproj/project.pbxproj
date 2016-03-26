@@ -12,6 +12,8 @@
 		4D01F7971C88D7D8006ABE5E /* LogFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D01F7961C88D7D8006ABE5E /* LogFormatter.swift */; };
 		4D01F7981C88D809006ABE5E /* LogFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D01F7961C88D7D8006ABE5E /* LogFormatter.swift */; };
 		4D47CD7D1C18EC4C00AAA8A9 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D47CD7C1C18EC4C00AAA8A9 /* HealthKit.framework */; };
+		4D53181A1CA71E750072CCD6 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D5318191CA71E750072CCD6 /* main.swift */; };
+		4D53181B1CA71E7A0072CCD6 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D5318191CA71E750072CCD6 /* main.swift */; };
 		4D9135431C8F164A00BE2090 /* HealthKitDataUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D9135421C8F164A00BE2090 /* HealthKitDataUploader.swift */; };
 		4D9135441C8F1ADB00BE2090 /* HealthKitDataUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D9135421C8F164A00BE2090 /* HealthKitDataUploader.swift */; };
 		4DBC534D1C30A9230062FDEA /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DBC53491C30A9230062FDEA /* HealthKitManager.swift */; };
@@ -131,6 +133,7 @@
 		4D01F7961C88D7D8006ABE5E /* LogFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LogFormatter.swift; path = Urchin/LogFormatter.swift; sourceTree = SOURCE_ROOT; };
 		4D47CD7B1C18EC4C00AAA8A9 /* urchin.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = urchin.entitlements; sourceTree = "<group>"; };
 		4D47CD7C1C18EC4C00AAA8A9 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
+		4D5318191CA71E750072CCD6 /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = main.swift; path = Urchin/main.swift; sourceTree = SOURCE_ROOT; };
 		4D9135421C8F164A00BE2090 /* HealthKitDataUploader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitDataUploader.swift; path = Urchin/HealthKit/HealthKitDataUploader.swift; sourceTree = SOURCE_ROOT; };
 		4DBC53491C30A9230062FDEA /* HealthKitManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitManager.swift; path = Urchin/HealthKit/HealthKitManager.swift; sourceTree = SOURCE_ROOT; };
 		92E7D795B176FAC800CA8CA9 /* Pods_urchinTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_urchinTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -351,6 +354,7 @@
 			isa = PBXGroup;
 			children = (
 				4D47CD7B1C18EC4C00AAA8A9 /* urchin.entitlements */,
+				4D5318191CA71E750072CCD6 /* main.swift */,
 				AABCEF891B3231910064FE49 /* AppDelegate.swift */,
 				4D01F7961C88D7D8006ABE5E /* LogFormatter.swift */,
 				AABCEF8D1B3231910064FE49 /* Main.storyboard */,
@@ -748,6 +752,7 @@
 				AA3652CE1B34A8E4001F514D /* UserDropDownCell.swift in Sources */,
 				AA3652C41B338525001F514D /* NotesViewController.swift in Sources */,
 				4D9135431C8F164A00BE2090 /* HealthKitDataUploader.swift in Sources */,
+				4D53181A1CA71E750072CCD6 /* main.swift in Sources */,
 				AA8301001B4D986300F8ADE6 /* AddNoteViewController.swift in Sources */,
 				AABCEFAC1B3232C60064FE49 /* NoteCell.swift in Sources */,
 				AA3652C21B33847A001F514D /* User.swift in Sources */,
@@ -786,6 +791,7 @@
 				AA79201E1B62AB430046038B /* LoginViewController.swift in Sources */,
 				AA7920241B62AB760046038B /* UserDropDownCell.swift in Sources */,
 				AA79201A1B62A9070046038B /* APIConnect.swift in Sources */,
+				4D53181B1CA71E7A0072CCD6 /* main.swift in Sources */,
 				AA6A7D7A1B62B1A4008215D8 /* apiConnectorTests.swift in Sources */,
 				48E4A4441BEE5879001A7B35 /* Reachability.swift in Sources */,
 				AA7920221B62AB5F0046038B /* HashtagsView.swift in Sources */,

@@ -294,7 +294,7 @@ class HealthKitManager {
         }
     }
     
-    func readBloodGlucoseSamples(resultsHandler: (([HKSample]?, completion: (NSError?) -> (Void)) -> Void)!)
+    func readBloodGlucoseSamplesFromAnchor(resultsHandler: (([HKSample]?, completion: (NSError?) -> (Void)) -> Void)!)
     {
         DDLogVerbose("trace")
         
@@ -329,6 +329,37 @@ class HealthKitManager {
                         NSUserDefaults.standardUserDefaults().synchronize()
                     }
                 }
+        }
+        healthStore?.executeQuery(sampleQuery)
+    }
+    
+    func readBloodGlucoseSamplesForLast24Hours(resultsHandler: (([HKSample]?, completion: (NSError?) -> (Void)) -> Void)!)
+    {
+        DDLogVerbose("trace")
+        
+        guard isHealthDataAvailable else {
+            DDLogError("Unexpected HealthKitManager call when health data not available")
+            return
+        }
+        
+        let now = NSDate()
+        let oneDayAgo = now.dateByAddingTimeInterval(-60 * 60 * 24)
+        let lastDayPredicate = HKQuery.predicateForSamplesWithStartDate(oneDayAgo, endDate: now, options: .None)
+        let sortDescriptor = NSSortDescriptor(key:HKSampleSortIdentifierStartDate, ascending: false)
+        let limit = 288 // About one day of samples at 5 minute intervals
+        
+        let sampleType = HKObjectType.quantityTypeForIdentifier(HKQuantityTypeIdentifierBloodGlucose)!
+        let sampleQuery = HKSampleQuery(sampleType: sampleType, predicate: lastDayPredicate, limit: limit, sortDescriptors: [sortDescriptor]) {
+            (query, newSamples, error) -> Void in
+            
+            if error != nil {
+                DDLogError("Error observing samples: \(error)")
+            }
+            
+            resultsHandler(newSamples) {
+                (error: NSError?) in
+                // Nothing to do
+            }
         }
         healthStore?.executeQuery(sampleQuery)
     }

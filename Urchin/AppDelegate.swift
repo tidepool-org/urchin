@@ -19,50 +19,11 @@ import CocoaLumberjack
 
 var fileLogger: DDFileLogger!
 
-@UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        // Set up Xcode and system logging
-        DDASLLogger.sharedInstance().logFormatter = LogFormatter()
-        DDTTYLogger.sharedInstance().logFormatter = LogFormatter()
-        DDLog.addLogger(DDASLLogger.sharedInstance())
-        DDLog.addLogger(DDTTYLogger.sharedInstance())
-
-        // Set up file logging
-        fileLogger = DDFileLogger()
-        fileLogger.logFormatter = LogFormatter()
-        fileLogger.rollingFrequency = 60 * 60 * 4; // 2 hour rolling
-        fileLogger.logFileManager.maximumNumberOfLogFiles = 12;
-        // Clear log files
-// Don't clear log files, let's leave them so we can debug background delivery of glucose data
-//        let logFileInfos = fileLogger.logFileManager.unsortedLogFileInfos()
-//        for logFileInfo in logFileInfos {
-//            if let logFilePath = logFileInfo.filePath {
-//                do {
-//                    try NSFileManager.defaultManager().removeItemAtPath(logFilePath)
-//                    logFileInfo.reset()
-//                    DDLogInfo("Removed log file: \(logFilePath)")
-//                } catch let error as NSError {
-//                    DDLogError("Failed to remove log file at path: \(logFilePath) error: \(error), \(error.userInfo)")
-//                }
-//            }
-//        }
-        // Add file logger
-        DDLog.addLogger(fileLogger);
-
-        // Set up log level
-#if DEBUG
-        defaultDebugLevel = DDLogLevel.Verbose
-#else
-        if NSUserDefaults.standardUserDefaults().boolForKey("LoggingEnabled") {
-            defaultDebugLevel = DDLogLevel.Verbose
-        } else {
-            defaultDebugLevel = DDLogLevel.Off
-        }
-#endif
         DDLogVerbose("trace")
 
         // Change navigation bar colors
