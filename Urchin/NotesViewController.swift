@@ -205,6 +205,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
     func groupsReady(notification: NSNotification) {
 
         if (groups.count != 0) {
+            NSLog("Log-in completed to groups ready!")
             
             sortGroups()
             

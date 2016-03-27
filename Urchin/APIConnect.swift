@@ -161,13 +161,7 @@ class APIConnector {
                             self.user = User(userid: jsonResult.valueForKey("userid") as! String, apiConnector: self, notesVC: nil)
                             
                             if (saveLogin) {
-                                if (loginVC!.rememberMe) {
-                                    self.trackMetric("Remember Me Used")
-                                    
-                                    self.saveLogin(base64LoginString)
-                                } else {
-                                    self.saveLogin("")
-                                }
+                                self.saveLogin(base64LoginString)
                             }
                             
                             let notification = NSNotification(name: "makeTransitionToNotes", object: nil)

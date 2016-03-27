@@ -419,7 +419,7 @@ class LogInViewController :
             self.view.addSubview(logoView)
             self.view.addSubview(emailField)
             self.view.addSubview(passwordField)
-            self.view.addSubview(rememberMeView)
+            //self.view.addSubview(rememberMeView)
             self.view.addSubview(logInButton)
         }
     }
