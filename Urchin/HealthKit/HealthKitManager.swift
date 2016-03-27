@@ -130,12 +130,12 @@ class HealthKitManager {
             (query, observerQueryCompletion, error) in
             
             DDLogVerbose("Observation query called")
-
-            observationHandler(error)
             
             if error != nil {
-                DDLogError("HealthKit observation error \(error), \(error!.userInfo)")
+                DDLogError("HealthKit observation error \(error)")
             }
+
+            observationHandler(error)
         }
         healthStore?.executeQuery(bloodGlucoseObservationQuery!)
     }
@@ -294,7 +294,7 @@ class HealthKitManager {
         }
     }
     
-    func readBloodGlucoseSamplesFromAnchor(resultsHandler: (([HKSample]?, completion: (NSError?) -> (Void)) -> Void)!)
+    func readBloodGlucoseSamplesFromAnchor(resultsHandler: ((NSError?, [HKSample]?, completion: (NSError?) -> (Void)) -> Void)!)
     {
         DDLogVerbose("trace")
         
@@ -317,10 +317,10 @@ class HealthKitManager {
                 (query, newSamples, deletedSamples, newAnchor, error) -> Void in
 
                 if error != nil {
-                    DDLogError("Error observing samples: \(error)")
+                    DDLogError("Error reading samples: \(error)")
                 }
                 
-                resultsHandler(newSamples) {
+                resultsHandler(error, newSamples) {
                     (error: NSError?) in
                     
                     if error == nil && newAnchor != nil {
@@ -333,7 +333,7 @@ class HealthKitManager {
         healthStore?.executeQuery(sampleQuery)
     }
     
-    func readBloodGlucoseSamplesForLast24Hours(resultsHandler: (([HKSample]?, completion: (NSError?) -> (Void)) -> Void)!)
+    func readBloodGlucoseSamplesForLast24Hours(resultsHandler: ((NSError?, [HKSample]?, completion: (NSError?) -> (Void)) -> Void)!)
     {
         DDLogVerbose("trace")
         
@@ -343,7 +343,7 @@ class HealthKitManager {
         }
         
         let now = NSDate()
-        let oneDayAgo = now.dateByAddingTimeInterval(-60 * 60 * 24)
+        let oneDayAgo = now.dateByAddingTimeInterval(-60 * 60 * 240) // TODO: my - 0 - put back to 24
         let lastDayPredicate = HKQuery.predicateForSamplesWithStartDate(oneDayAgo, endDate: now, options: .None)
         let sortDescriptor = NSSortDescriptor(key:HKSampleSortIdentifierStartDate, ascending: false)
         let limit = 288 // About one day of samples at 5 minute intervals
@@ -353,10 +353,10 @@ class HealthKitManager {
             (query, newSamples, error) -> Void in
             
             if error != nil {
-                DDLogError("Error observing samples: \(error)")
+                DDLogError("Error reading samples: \(error)")
             }
             
-            resultsHandler(newSamples) {
+            resultsHandler(error, newSamples) {
                 (error: NSError?) in
                 // Nothing to do
             }

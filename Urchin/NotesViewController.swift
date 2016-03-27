@@ -401,6 +401,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
             let groupForVC: User
             if (filter == nil) {
                 // if #nofilter, let note's group be first group
+                // TODO: my - 0 - this can apparently be empty and we crash here!!! Just saw this in staging on 3/26 at 2:08 PM. Is this a regression on staging?
                 groupForVC = groups[0]
             } else {
                 groupForVC = filter
@@ -931,7 +932,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
             if (groups.count == 1) {
                 
                 if (indexPath.section == sectionIndex(TableSection.HealthKit)) {
-                    authorizeAndEnableHealthDataCache()
+                    authorizeAndStartHealthDataUploading()
                 } else if (indexPath.section == sectionIndex(TableSection.Logout)) {
                     self.logout()
                 }
@@ -962,7 +963,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
                     // toggle the dropDownMenu (hides the dropDownMenu)
                     self.dropDownMenuPressed()
                 } else if (indexPath.section == sectionIndex(TableSection.HealthKit)) {
-                    authorizeAndEnableHealthDataCache()
+                    authorizeAndStartHealthDataUploading()
                 } else if (indexPath.section == sectionIndex(TableSection.Logout)) {
                     self.logout()
                 }
@@ -1048,7 +1049,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         return sectionIndex;
     }
     
-    private func authorizeAndEnableHealthDataCache() {
+    private func authorizeAndStartHealthDataUploading() {
         if (HealthKitManager.sharedInstance.isHealthDataAvailable) {
             HealthKitDataUploader.sharedInstance.authorizeAndStartUploading(currentUserId: self.user.userid)
         }
