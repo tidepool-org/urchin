@@ -343,7 +343,7 @@ class HealthKitManager {
         }
         
         let now = NSDate()
-        let oneDayAgo = now.dateByAddingTimeInterval(-60 * 60 * 240) // TODO: my - 0 - put back to 24
+        let oneDayAgo = now.dateByAddingTimeInterval(-60 * 60 * 24)
         let lastDayPredicate = HKQuery.predicateForSamplesWithStartDate(oneDayAgo, endDate: now, options: .None)
         let sortDescriptor = NSSortDescriptor(key:HKSampleSortIdentifierStartDate, ascending: false)
         let limit = 288 // About one day of samples at 5 minute intervals
