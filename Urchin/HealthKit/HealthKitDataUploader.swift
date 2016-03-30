@@ -27,20 +27,29 @@ class HealthKitDataUploader {
         let latestUploaderVersion = 1
         
         let lastExecutedUploaderVersion = NSUserDefaults.standardUserDefaults().integerForKey("lastExecutedUploaderVersion")
+        var resetPersistentData = false
         if latestUploaderVersion != lastExecutedUploaderVersion {
             DDLogInfo("Migrating uploader to \(latestUploaderVersion)")
-            
+            NSUserDefaults.standardUserDefaults().setInteger(latestUploaderVersion, forKey: "lastExecutedUploaderVersion")
+            resetPersistentData = true
+        }
+        
+        initState(resetPersistentData)
+     }
+    
+    private func initState(resetUser: Bool = false) {
+        
+        if resetUser {
             NSUserDefaults.standardUserDefaults().removeObjectForKey("bloodGlucoseQueryAnchor")
             NSUserDefaults.standardUserDefaults().removeObjectForKey("lastUploadTimeBloodGlucoseSamples")
             NSUserDefaults.standardUserDefaults().removeObjectForKey("lastUploadCountBloodGlucoseSamples")
             NSUserDefaults.standardUserDefaults().removeObjectForKey("totalUploadCountBloodGlucoseSamples")
-
-            NSUserDefaults.standardUserDefaults().setInteger(latestUploaderVersion, forKey: "lastExecutedUploaderVersion")
+            NSUserDefaults.standardUserDefaults().removeObjectForKey("workoutQueryAnchor")
             NSUserDefaults.standardUserDefaults().synchronize()
-
+            
             DDLogInfo("Reset upload stats and HealthKit query anchor during migration")
         }
-
+        
         let lastUploadTime = NSUserDefaults.standardUserDefaults().objectForKey("lastUploadTimeBloodGlucoseSamples")
         if lastUploadTime != nil {
             self.lastUploadTimeBloodGlucoseSamples = lastUploadTime as! NSDate
@@ -54,8 +63,9 @@ class HealthKitDataUploader {
         } else {
             DDLogInfo("Anchor exists, we'll upload samples from anchor query")
         }
+        
     }
-    
+
     enum Notifications {
         static let UploadedBloodGlucoseSamples = "HealthKitDataUpload-uploaded-\(HKQuantityTypeIdentifierBloodGlucose)"
     }
@@ -124,6 +134,13 @@ class HealthKitDataUploader {
         HealthKitManager.sharedInstance.disableBackgroundDeliveryWorkoutSamples()
         HealthKitManager.sharedInstance.stopObservingBloodGlucoseSamples()
     }
+
+    // TODO: review; should only be called when a non-current HK user is logged in!
+    func resetHealthKitUploaderForNewUser() {
+        DDLogVerbose("Switching healthkit user, need to reset anchors!")
+        initState(true)
+    }
+    
 
     // MARK: Private - observation and results handlers
 
