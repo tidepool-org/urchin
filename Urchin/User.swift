@@ -31,6 +31,11 @@ class User {
         self.userid = userid
     }
     
+    /// Indicates whether the current user logged in is associated with a Data Storage Account
+    var isDSAUser: Bool {
+        return patient != nil
+    }
+
     func processUserDict(userDict: NSDictionary) {
         if let name = userDict["fullName"] as? String {
             self.fullName = name

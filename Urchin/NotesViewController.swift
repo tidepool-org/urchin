@@ -206,6 +206,9 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
 
         if (groups.count != 0) {
             NSLog("Log-in completed to groups ready!")
+            if let user = apiConnector.user {
+                HealthKitConfiguration.sharedInstance.configureHealthKitInterface(user.userid, isDSAUser: user.isDSAUser)
+            }
             
             sortGroups()
             
@@ -291,6 +294,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         // Unwind VC
         apiConnector.trackMetric("Logged Out")
         apiConnector.logout(self)
+        HealthKitConfiguration.sharedInstance.configureHealthKitInterface(nil, isDSAUser: nil)
     }
     
     func forcedLogout(notification: NSNotification) {
@@ -537,7 +541,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         // Configure dropDownMenu, same width as view
         var additionalCells = groups.count == 1 ? 1 : 3
-        if (HealthKitManager.sharedInstance.isHealthDataAvailable) {
+        if (HealthKitConfiguration.sharedInstance.showHealthKitUI()) {
             additionalCells += 1
             if (HealthKitDataUploader.sharedInstance.lastUploadCountBloodGlucoseSamples > 0) {
                 additionalCells += 1
@@ -738,7 +742,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
                 numberOfSections = 3
             }
             
-            if (HealthKitManager.sharedInstance.isHealthDataAvailable) {
+            if (HealthKitConfiguration.sharedInstance.showHealthKitUI()) {
                 numberOfSections += 1
             }
         }
@@ -1000,7 +1004,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         var sectionIndex = -1
         
         if (groups.count == 1) {
-            if (HealthKitManager.sharedInstance.isHealthDataAvailable) {
+            if (HealthKitConfiguration.sharedInstance.showHealthKitUI()) {
                 switch section {
                 case .HealthKit:
                     sectionIndex = 0
@@ -1022,7 +1026,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
                 }
             }
         } else {
-            if (HealthKitManager.sharedInstance.isHealthDataAvailable) {
+            if (HealthKitConfiguration.sharedInstance.showHealthKitUI()) {
                 switch section {
                 case .Users:
                     sectionIndex = 0
@@ -1051,8 +1055,38 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     private func authorizeAndStartHealthDataUploading() {
+        if !HealthKitManager.sharedInstance.isHealthDataAvailable {
+            return
+        }
+        
+        let healthConfig = HealthKitConfiguration.sharedInstance
+        func enableHealthKit() {
+            healthConfig.enableHealthKitInterface(user.fullName, userid: user.userid, isDSAUser: user.isDSAUser, needsGlucoseReads: true, needsGlucoseWrites: false, needsWorkoutReads: false)
+        }
+        
+        if healthConfig.healthKitInterfaceConfiguredForOtherUser() {
+            // use dialog to confirm delete with user!
+            let curHKUserName = healthConfig.healthKitUserTidepoolUsername() ?? "Unknown"
+            //let curUserName = usernameLabel.text!
+            let titleString = "Are you sure?"
+            let messageString = "A different account (" + curHKUserName + ") is currently associated with Health Data on this device"
+            let alert = UIAlertController(title: titleString, message: messageString, preferredStyle: .Alert)
+            alert.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: { Void in
+                //self.healthKitSwitch.on = false
+                return
+            }))
+            alert.addAction(UIAlertAction(title: "Change Account", style: .Default, handler: { Void in
+                enableHealthKit()
+            }))
+            self.presentViewController(alert, animated: true, completion: nil)
+        } else {
+            enableHealthKit()
+        }
+    }
+    
+    private func disableHealthKit() {
         if (HealthKitManager.sharedInstance.isHealthDataAvailable) {
-            HealthKitDataUploader.sharedInstance.authorizeAndStartUploading(currentUserId: self.user.userid)
+            HealthKitConfiguration.sharedInstance.disableHealthKitInterface()
         }
     }
 }

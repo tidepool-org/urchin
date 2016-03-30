@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		489A98D91CAC31E400A2F4A0 /* HealthKitConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 489A98D81CAC31E400A2F4A0 /* HealthKitConfiguration.swift */; };
+		489A98DA1CAC3F5F00A2F4A0 /* HealthKitConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 489A98D81CAC31E400A2F4A0 /* HealthKitConfiguration.swift */; };
 		48E4A4431BEE5879001A7B35 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E4A4421BEE5879001A7B35 /* Reachability.swift */; };
 		48E4A4441BEE5879001A7B35 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E4A4421BEE5879001A7B35 /* Reachability.swift */; };
 		4D01F7971C88D7D8006ABE5E /* LogFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D01F7961C88D7D8006ABE5E /* LogFormatter.swift */; };
@@ -129,6 +131,7 @@
 
 /* Begin PBXFileReference section */
 		3CBC42BABB0DC09AD9454918 /* Pods-urchin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-urchin.debug.xcconfig"; path = "Pods/Target Support Files/Pods-urchin/Pods-urchin.debug.xcconfig"; sourceTree = "<group>"; };
+		489A98D81CAC31E400A2F4A0 /* HealthKitConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitConfiguration.swift; path = Urchin/HealthKit/HealthKitConfiguration.swift; sourceTree = SOURCE_ROOT; };
 		48E4A4421BEE5879001A7B35 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		4D01F7961C88D7D8006ABE5E /* LogFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LogFormatter.swift; path = Urchin/LogFormatter.swift; sourceTree = SOURCE_ROOT; };
 		4D47CD7B1C18EC4C00AAA8A9 /* urchin.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = urchin.entitlements; sourceTree = "<group>"; };
@@ -225,6 +228,7 @@
 			children = (
 				4D9135421C8F164A00BE2090 /* HealthKitDataUploader.swift */,
 				4DBC53491C30A9230062FDEA /* HealthKitManager.swift */,
+				489A98D81CAC31E400A2F4A0 /* HealthKitConfiguration.swift */,
 			);
 			name = HealthKit;
 			sourceTree = "<group>";
@@ -740,6 +744,7 @@
 				4DBC534D1C30A9230062FDEA /* HealthKitManager.swift in Sources */,
 				AA6932061B66E6B60057F0A0 /* AddNoteVCTableViewDelegate.swift in Sources */,
 				4D01F7971C88D7D8006ABE5E /* LogFormatter.swift in Sources */,
+				489A98D91CAC31E400A2F4A0 /* HealthKitConfiguration.swift in Sources */,
 				AA3484F41B56AED20028C49B /* UIDateFormatterExtension.swift in Sources */,
 				AA6932031B66E5FB0057F0A0 /* AddNoteVCTableViewDataSource.swift in Sources */,
 				AAFBE7DE1B69814B007E480D /* UIApplicationExtension.swift in Sources */,
@@ -777,6 +782,7 @@
 				4D9135441C8F1ADB00BE2090 /* HealthKitDataUploader.swift in Sources */,
 				AA79201F1B62AB470046038B /* NotesViewController.swift in Sources */,
 				AAFBE7DF1B698229007E480D /* UIApplicationExtension.swift in Sources */,
+				489A98DA1CAC3F5F00A2F4A0 /* HealthKitConfiguration.swift in Sources */,
 				AA79201D1B62AB330046038B /* Patient.swift in Sources */,
 				AA7920281B62AB9D0046038B /* AppDelegate.swift in Sources */,
 				AA79201B1B62AB2B0046038B /* Note.swift in Sources */,

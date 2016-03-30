@@ -392,13 +392,6 @@ class APIConnector {
                         let notification = NSNotification(name: "newNote", object: nil)
                         NSNotificationCenter.defaultCenter().postNotification(notification)
                         
-                        // Start uploading - if connected to Health (TODO: my - instead of checking authorizationRequestedForBloodGlucoseSamples, check the status of the user setting for the switch in the UI for enable/disable connect to Health?)
-                        if (HealthKitManager.sharedInstance.authorizationRequestedForBloodGlucoseSamples()) {
-                            DDLogInfo("Authorization has previously been requested, start uploading")
-                            HealthKitDataUploader.sharedInstance.startUploading(currentUserId: self.user?.userid)
-                        } else {
-                            DDLogInfo("Authorization has not previously been requested, user has not connected to Health, don't start uploading")                            
-                        }
                     } else {
                         DDLogError("Could not refresh session token - invalid status code \(httpResponse.statusCode)")
                         

@@ -228,13 +228,6 @@ class LogInViewController :
             notesScene.transitioningDelegate = self
             self.presentViewController(notesScene, animated: true, completion: nil)
             
-            // Start uploading - if connected to Health (TODO: my - instead of checking authorizationRequestedForBloodGlucoseSamples, check the status of the user setting for the switch in the UI for enable/disable connect to Health?)
-            if (HealthKitManager.sharedInstance.authorizationRequestedForBloodGlucoseSamples()) {
-                DDLogInfo("Authorization has previously been requested, start uploading")
-                HealthKitDataUploader.sharedInstance.startUploading(currentUserId: self.apiConnector.user!.userid)
-            } else {
-                DDLogInfo("Authorization has not previously been requested, user has not connected to Health, don't start uploading")
-            }
         } else {
             DDLogInfo("Session token is empty or user was not created")
             prepareLogin()
