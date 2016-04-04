@@ -44,9 +44,8 @@ class User {
         let dateFormatter = NSDateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         
-        self.patient = Patient()
-        
         if let patientDict = userDict["patient"] as? NSDictionary {
+            self.patient = Patient()
             if let birthdayString = patientDict["birthday"] as? String {
                 self.patient!.birthday = dateFormatter.dateFromString(birthdayString)!
             }

@@ -360,51 +360,34 @@ class APIConnector {
         }
         
         let completion = { (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
-            if (error != nil && response == nil && data == nil) {
+            if (error != nil && response == nil) {
                 DDLogError("Could not refresh session token, error: \(error.userInfo)")
                 self.tryLoginFromRefreshToken()
                 return
             }
             
-            let jsonResult: NSDictionary = ((try? NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers)) as? NSDictionary)!
-            
-            if let code = jsonResult.valueForKey("code") as? Int {
-                if (code == 401) {
-                    DDLogError("Could not refresh session token: \(code)")
+            if let httpResponse = response as? NSHTTPURLResponse {
+                if (httpResponse.statusCode == 200) {
+                    DDLogInfo("Refreshed session token")
                     
-                    self.tryLoginFromRefreshToken()
+                    // Store the session token for further use.
+                    self.x_tidepool_session_token = httpResponse.allHeaderFields["x-tidepool-session-token"] as! String
+                    
+                    // Send notification to NotesVC to open new note
+                    let notification = NSNotification(name: "newNote", object: nil)
+                    NSNotificationCenter.defaultCenter().postNotification(notification)
                     
                 } else {
-                    DDLogError("Could not refresh session token: \(code)")
+                    DDLogError("Could not refresh session token - invalid status code \(httpResponse.statusCode)")
                     
                     self.tryLoginFromRefreshToken()
                 }
+                
             } else {
-                if let httpResponse = response as? NSHTTPURLResponse {
-                    
-                    if (httpResponse.statusCode == 200) {
-                        DDLogInfo("Refreshed session token")
-                        
-                        // Store the session token for further use.
-                        self.x_tidepool_session_token = httpResponse.allHeaderFields["x-tidepool-session-token"] as! String
-                        
-                        // Send notification to NotesVC to open new note
-                        let notification = NSNotification(name: "newNote", object: nil)
-                        NSNotificationCenter.defaultCenter().postNotification(notification)
-                        
-                    } else {
-                        DDLogError("Could not refresh session token - invalid status code \(httpResponse.statusCode)")
-                        
-                        self.tryLoginFromRefreshToken()
-                    }
-                    
-                } else {
-                    DDLogError("Could not refresh session token - response could not be parsed")
-                    
-                    self.tryLoginFromRefreshToken()
-                }
+                DDLogError("Could not refresh session token - response could not be parsed")
+                
+                self.tryLoginFromRefreshToken()
             }
-            
         }
         
         // Post the request.

@@ -56,7 +56,7 @@ class App: UIApplication {
             defaultDebugLevel = DDLogLevel.Off
         }
 #endif
-        // TODO: my - 0 - enabling logging all the time for now, probably don't want to ship to App Store this way!
+        // TODO: my - enabling logging all the time for now, probably don't want to ship to App Store this way!
         defaultDebugLevel = DDLogLevel.Verbose
 
         DDLogVerbose("trace")

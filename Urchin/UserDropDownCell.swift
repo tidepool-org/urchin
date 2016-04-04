@@ -16,18 +16,27 @@
 import Foundation
 import UIKit
 
+protocol UserDropDownCellDelegate {
+    func didToggleHealthKit(healthKitSwitch: UISwitch)
+}
+
 class UserDropDownCell: UITableViewCell {
     
     // UI elements
     let nameLabel: UILabel = UILabel()
+    let connectToHealthSwitch: UISwitch = UISwitch()
     let rightView: UIImageView = UIImageView()
     let separator: UIView = UIView()
 
     // Group for the cell
     var group: User!
+
+    var delegate: UserDropDownCellDelegate?
     
     func configure(key: String, arrow: Bool = true, group: User? = nil) {
         separator.removeFromSuperview()
+        connectToHealthSwitch.removeFromSuperview()
+        self.selectionStyle = .Default
         
         self.group = group
         
@@ -53,10 +62,18 @@ class UserDropDownCell: UITableViewCell {
             separator.backgroundColor = whiteQuarterAlpha
             self.addSubview(separator)
         } else if (key == "healthkit") {
+            self.selectionStyle = .None
+
             nameLabel.text = healthKitTitle
             nameLabel.font = mediumBoldFont
             nameLabel.sizeToFit()
             nameLabel.frame.origin.y = userCellThickSeparator + userCellInset
+
+            connectToHealthSwitch.frame.origin.x = nameLabel.frame.origin.x + nameLabel.frame.width + 8
+            connectToHealthSwitch.frame.origin.y = userCellThickSeparator + 12
+            connectToHealthSwitch.on = HealthKitConfiguration.sharedInstance.healthKitInterfaceEnabledForCurrentUser()
+            connectToHealthSwitch.addTarget(self, action: #selector(connectToHealthSwitchValueChanged), forControlEvents: UIControlEvents.ValueChanged)
+            self.addSubview(connectToHealthSwitch)
             
             // Configure the separator at the top
             separator.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: userCellThinSeparator)
@@ -156,6 +173,12 @@ class UserDropDownCell: UITableViewCell {
             separator.frame.size.width = self.frame.width - 4 * noteCellInset
             
             nameLabel.frame.origin.x = self.frame.width / 2 - nameLabel.frame.width / 2
+        }
+    }
+    
+    func connectToHealthSwitchValueChanged(sender: AnyObject) {
+        if let connectToHealthSwitch = sender as? UISwitch {
+            delegate?.didToggleHealthKit(connectToHealthSwitch)
         }
     }
 }

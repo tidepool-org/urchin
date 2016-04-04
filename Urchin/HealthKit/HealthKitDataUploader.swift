@@ -38,7 +38,6 @@ class HealthKitDataUploader {
      }
     
     private func initState(resetUser: Bool = false) {
-        
         if resetUser {
             NSUserDefaults.standardUserDefaults().removeObjectForKey("bloodGlucoseQueryAnchor")
             NSUserDefaults.standardUserDefaults().removeObjectForKey("lastUploadTimeBloodGlucoseSamples")
@@ -55,6 +54,16 @@ class HealthKitDataUploader {
             self.lastUploadTimeBloodGlucoseSamples = lastUploadTime as! NSDate
             self.lastUploadCountBloodGlucoseSamples = NSUserDefaults.standardUserDefaults().integerForKey("lastUploadCountBloodGlucoseSamples")
             self.totalUploadCountBloodGlucoseSamples = NSUserDefaults.standardUserDefaults().integerForKey("totalUploadCountBloodGlucoseSamples")
+        } else {
+            self.lastUploadTimeBloodGlucoseSamples = NSDate.distantPast()
+            self.lastUploadCountBloodGlucoseSamples = 0
+            self.totalUploadCountBloodGlucoseSamples = 0
+        }
+        
+        if resetUser {
+            dispatch_async(dispatch_get_main_queue()) {
+                NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: Notifications.UploadedBloodGlucoseSamples, object: nil))
+            }
         }
         
         if NSUserDefaults.standardUserDefaults().objectForKey("bloodGlucoseQueryAnchor") == nil {
@@ -63,7 +72,6 @@ class HealthKitDataUploader {
         } else {
             DDLogInfo("Anchor exists, we'll upload samples from anchor query")
         }
-        
     }
 
     enum Notifications {

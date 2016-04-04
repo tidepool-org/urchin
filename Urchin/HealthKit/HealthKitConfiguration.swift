@@ -10,8 +10,7 @@ import HealthKit
 import CocoaLumberjack
 
 class HealthKitConfiguration
-{
-    
+{    
     // MARK: Access, availability, authorization
     
     static let sharedInstance = HealthKitConfiguration()
@@ -22,7 +21,7 @@ class HealthKitConfiguration
     private var currentUserId: String?
     private var isDSAUser: Bool?
     
-    func showHealthKitUI() -> Bool {
+    func shouldShowHealthKitUI() -> Bool {
         if let isDSAUser = isDSAUser {
             return HealthKitManager.sharedInstance.isHealthDataAvailable && isDSAUser
         }
@@ -31,6 +30,7 @@ class HealthKitConfiguration
     
     /// Call this whenever the current user changes, at login/logout, token refresh(?), and upon enabling or disabling the HealthKit interface.
     func configureHealthKitInterface(userid: String?, isDSAUser: Bool?) {
+        DDLogVerbose("trace")
         
         if !HealthKitManager.sharedInstance.isHealthDataAvailable {
             return
@@ -65,10 +65,14 @@ class HealthKitConfiguration
 
     // Override for specific HealthKit interface enabling/disabling
     func turnOnInterface() {
+        DDLogVerbose("trace")
+
         HealthKitDataUploader.sharedInstance.startUploading(currentUserId: currentUserId)
     }
 
     func turnOffInterface() {
+        DDLogVerbose("trace")
+
         HealthKitDataUploader.sharedInstance.stopUploading()
     }
 
@@ -85,7 +89,7 @@ class HealthKitConfiguration
     ///
     /// Note: This sets the current tidepool user as the HealthKit user!
     func enableHealthKitInterface(username: String?, userid: String?, isDSAUser: Bool?, needsGlucoseReads: Bool, needsGlucoseWrites: Bool, needsWorkoutReads: Bool) {
-        DDLogVerbose("")
+        DDLogVerbose("trace")
  
         currentUserId = userid
         self.isDSAUser = isDSAUser
@@ -96,6 +100,8 @@ class HealthKitConfiguration
         }
         
         func configureCurrentHealthKitUser() {
+            DDLogVerbose("trace")
+
             let defaults = NSUserDefaults.standardUserDefaults()
             defaults.setBool(true, forKey:self.kHealthKitInterfaceEnabledKey)
             if !self.healthKitInterfaceEnabledForCurrentUser() {
@@ -123,8 +129,10 @@ class HealthKitConfiguration
     
     /// Disables HealthKit for current user
     ///
-    /// Note: This does not NOT clear the current HealthKit user!
+    /// Note: This does NOT clear the current HealthKit user!
     func disableHealthKitInterface() {
+        DDLogVerbose("trace")
+
         NSUserDefaults.standardUserDefaults().setBool(false, forKey:kHealthKitInterfaceEnabledKey)
         NSUserDefaults.standardUserDefaults().synchronize()
         configureHealthKitInterface(self.currentUserId, isDSAUser: self.isDSAUser)
@@ -176,6 +184,4 @@ class HealthKitConfiguration
         let result = NSUserDefaults.standardUserDefaults().stringForKey(kHealthKitInterfaceUserNameKey)
         return result
     }
-    
-    
 }

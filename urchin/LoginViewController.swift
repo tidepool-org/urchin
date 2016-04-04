@@ -235,7 +235,7 @@ class LogInViewController :
     }
     
     func prepareLogin() {
-        DDLogInfo("trace")
+        DDLogVerbose("trace")
         
         HealthKitDataUploader.sharedInstance.stopUploading()
         

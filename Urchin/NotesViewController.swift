@@ -17,7 +17,7 @@ import Foundation
 import UIKit
 import CocoaLumberjack
 
-class NotesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class NotesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UserDropDownCellDelegate {
     
     // All notes
     var notes: [Note] = []
@@ -205,7 +205,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
     func groupsReady(notification: NSNotification) {
 
         if (groups.count != 0) {
-            NSLog("Log-in completed to groups ready!")
+            DDLogInfo("Log-in completed to groups ready!")
             if let user = apiConnector.user {
                 HealthKitConfiguration.sharedInstance.configureHealthKitInterface(user.userid, isDSAUser: user.isDSAUser)
             }
@@ -336,7 +336,9 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         titleView.font = mediumRegularFont
         titleView.textColor = navBarTitleColor
         titleView.sizeToFit()
-        titleView.frame.size.height = self.navigationController!.navigationBar.frame.size.height
+        if self.navigationController != nil {
+            titleView.frame.size.height = self.navigationController!.navigationBar.frame.size.height
+        }
         self.navigationItem.titleView = titleView
         
         // tapGesture triggers dropDownMenu to toggle
@@ -406,7 +408,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
             let groupForVC: User
             if (filter == nil) {
                 // if #nofilter, let note's group be first group
-                // TODO: my - 0 - this can apparently be empty and we crash here!!! Just saw this in staging on 3/26 at 2:08 PM. Is this a regression on staging?
+                // TODO: my - this can apparently be empty and we crash here!!! Just saw this in staging on 3/26 at 2:08 PM. Is this a regression on staging?
                 groupForVC = groups[0]
             } else {
                 groupForVC = filter
@@ -541,9 +543,10 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         // Configure dropDownMenu, same width as view
         var additionalCells = groups.count == 1 ? 1 : 3
-        if (HealthKitConfiguration.sharedInstance.showHealthKitUI()) {
+        if (HealthKitConfiguration.sharedInstance.shouldShowHealthKitUI()) {
             additionalCells += 1
-            if (HealthKitDataUploader.sharedInstance.lastUploadCountBloodGlucoseSamples > 0) {
+            if (HealthKitConfiguration.sharedInstance.healthKitInterfaceEnabledForCurrentUser() &&
+                HealthKitDataUploader.sharedInstance.lastUploadCountBloodGlucoseSamples > 0) {
                 additionalCells += 1
             }
         }
@@ -686,8 +689,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
             // Configure UserDropDownCell
             
             let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(UserDropDownCell), forIndexPath: indexPath) as! UserDropDownCell
-            
-            
+            cell.delegate = self            
             cell.userInteractionEnabled = true
             
             let customSelection = UIView()
@@ -697,7 +699,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
             if (groups.count == 1) {
                 
                 if (indexPath.section == sectionIndex(TableSection.HealthKit) && indexPath.row == 0) {
-                    cell.configure("healthkit", arrow: false)
+                    cell.configure("healthkit", arrow: false, group: groups[0])
                 } else if (indexPath.section == sectionIndex(TableSection.HealthKit) && indexPath.row == 1) {
                     cell.configure("healthkit-status", arrow: false, group: groups[0])
                     cell.userInteractionEnabled = false
@@ -711,7 +713,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
                 if (indexPath.section == sectionIndex(TableSection.Users) && indexPath.row == 0) {
                     cell.configure("all")
                 } else if (indexPath.section == sectionIndex(TableSection.HealthKit) && indexPath.row == 0) {
-                    cell.configure("healthkit", arrow: false)
+                    cell.configure("healthkit", arrow: false, group: groups[0])
                 } else if (indexPath.section == sectionIndex(TableSection.HealthKit) && indexPath.row == 1) {
                     cell.configure("healthkit-status", arrow: false, group: groups[0])
                     cell.userInteractionEnabled = false
@@ -742,7 +744,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
                 numberOfSections = 3
             }
             
-            if (HealthKitConfiguration.sharedInstance.showHealthKitUI()) {
+            if (HealthKitConfiguration.sharedInstance.shouldShowHealthKitUI()) {
                 numberOfSections += 1
             }
         }
@@ -759,14 +761,14 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
             if (groups.count == 1) {
                 numberOfRows = 1
                 if section == sectionIndex(TableSection.HealthKit) {
-                    numberOfRows = HealthKitDataUploader.sharedInstance.lastUploadCountBloodGlucoseSamples > 0 ? 2 : 1
+                    numberOfRows = HealthKitConfiguration.sharedInstance.healthKitInterfaceEnabledForCurrentUser() && HealthKitDataUploader.sharedInstance.lastUploadCountBloodGlucoseSamples > 0 ? 2 : 1
                 }
             } else {
                 if (section == sectionIndex(TableSection.Users)) {
                     // Number of groups + 1 for 'All' / #nofilter
                     numberOfRows = groups.count + 1
                 } else if (section == sectionIndex(TableSection.HealthKit)) {
-                    numberOfRows = HealthKitDataUploader.sharedInstance.lastUploadCountBloodGlucoseSamples > 0 ? 2 : 1
+                    numberOfRows = HealthKitConfiguration.sharedInstance.healthKitInterfaceEnabledForCurrentUser() && HealthKitDataUploader.sharedInstance.lastUploadCountBloodGlucoseSamples > 0 ? 2 : 1
                 } else if (section == sectionIndex(TableSection.Logout)) {
                     numberOfRows = 1
                 } else if (section == sectionIndex(TableSection.Version)) {
@@ -935,10 +937,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
             // dropDownMenu
             
             if (groups.count == 1) {
-                
-                if (indexPath.section == sectionIndex(TableSection.HealthKit)) {
-                    authorizeAndStartHealthDataUploading()
-                } else if (indexPath.section == sectionIndex(TableSection.Logout)) {
+                if (indexPath.section == sectionIndex(TableSection.Logout)) {
                     self.logout()
                 }
             } else {
@@ -967,8 +966,6 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
                     self.notesTable.setContentOffset(CGPointMake(0, -self.notesTable.contentInset.top), animated: true)
                     // toggle the dropDownMenu (hides the dropDownMenu)
                     self.dropDownMenuPressed()
-                } else if (indexPath.section == sectionIndex(TableSection.HealthKit)) {
-                    authorizeAndStartHealthDataUploading()
                 } else if (indexPath.section == sectionIndex(TableSection.Logout)) {
                     self.logout()
                 }
@@ -994,6 +991,55 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         }
     }
     
+    // MARK: - UserDropDownCellDelegate
+
+    func didToggleHealthKit(healthKitSwitch: UISwitch) {
+        if healthKitSwitch.on {
+            enableHealthKitInterfaceForCurrentUser(healthKitSwitch)
+        } else {
+            HealthKitConfiguration.sharedInstance.disableHealthKitInterface()
+        }
+        dropDownMenu.reloadData()
+    }
+    
+    // MARK: - HealthKit enablement
+    
+    private func enableHealthKitInterfaceForCurrentUser(healthKitSwitch: UISwitch) {
+        if !HealthKitManager.sharedInstance.isHealthDataAvailable {
+            return
+        }
+        
+        let healthConfig = HealthKitConfiguration.sharedInstance
+        func enableHealthKit() {
+            healthConfig.enableHealthKitInterface(self.user.fullName, userid: self.user.userid, isDSAUser: self.user.isDSAUser, needsGlucoseReads: true, needsGlucoseWrites: false, needsWorkoutReads: false)
+        }
+        
+        if healthConfig.healthKitInterfaceConfiguredForOtherUser() {
+            // use dialog to confirm delete with user!
+            let curHKUserName = healthConfig.healthKitUserTidepoolUsername() ?? "Unknown"
+            //let curUserName = usernameLabel.text!
+            let titleString = "Are you sure?"
+            let messageString = "A different account (" + curHKUserName + ") is currently associated with Health Data on this device"
+            let alert = UIAlertController(title: titleString, message: messageString, preferredStyle: .Alert)
+            alert.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: { Void in
+                healthKitSwitch.on = false
+                return
+            }))
+            alert.addAction(UIAlertAction(title: "Change Account", style: .Default, handler: { Void in
+                enableHealthKit()
+            }))
+            self.presentViewController(alert, animated: true, completion: nil)
+        } else {
+            enableHealthKit()
+        }
+    }
+    
+    private func disableHealthKit() {
+        if (HealthKitManager.sharedInstance.isHealthDataAvailable) {
+            HealthKitConfiguration.sharedInstance.disableHealthKitInterface()
+        }
+    }
+    
     // MARK: - Private util methods
     
     private enum TableSection {
@@ -1004,7 +1050,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         var sectionIndex = -1
         
         if (groups.count == 1) {
-            if (HealthKitConfiguration.sharedInstance.showHealthKitUI()) {
+            if (HealthKitConfiguration.sharedInstance.shouldShowHealthKitUI()) {
                 switch section {
                 case .HealthKit:
                     sectionIndex = 0
@@ -1026,7 +1072,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
                 }
             }
         } else {
-            if (HealthKitConfiguration.sharedInstance.showHealthKitUI()) {
+            if (HealthKitConfiguration.sharedInstance.shouldShowHealthKitUI()) {
                 switch section {
                 case .Users:
                     sectionIndex = 0
@@ -1052,41 +1098,5 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         }
             
         return sectionIndex;
-    }
-    
-    private func authorizeAndStartHealthDataUploading() {
-        if !HealthKitManager.sharedInstance.isHealthDataAvailable {
-            return
-        }
-        
-        let healthConfig = HealthKitConfiguration.sharedInstance
-        func enableHealthKit() {
-            healthConfig.enableHealthKitInterface(user.fullName, userid: user.userid, isDSAUser: user.isDSAUser, needsGlucoseReads: true, needsGlucoseWrites: false, needsWorkoutReads: false)
-        }
-        
-        if healthConfig.healthKitInterfaceConfiguredForOtherUser() {
-            // use dialog to confirm delete with user!
-            let curHKUserName = healthConfig.healthKitUserTidepoolUsername() ?? "Unknown"
-            //let curUserName = usernameLabel.text!
-            let titleString = "Are you sure?"
-            let messageString = "A different account (" + curHKUserName + ") is currently associated with Health Data on this device"
-            let alert = UIAlertController(title: titleString, message: messageString, preferredStyle: .Alert)
-            alert.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: { Void in
-                //self.healthKitSwitch.on = false
-                return
-            }))
-            alert.addAction(UIAlertAction(title: "Change Account", style: .Default, handler: { Void in
-                enableHealthKit()
-            }))
-            self.presentViewController(alert, animated: true, completion: nil)
-        } else {
-            enableHealthKit()
-        }
-    }
-    
-    private func disableHealthKit() {
-        if (HealthKitManager.sharedInstance.isHealthDataAvailable) {
-            HealthKitConfiguration.sharedInstance.disableHealthKitInterface()
-        }
     }
 }
