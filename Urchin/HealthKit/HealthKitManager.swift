@@ -339,7 +339,7 @@ class HealthKitManager {
         healthStore?.executeQuery(sampleQuery)
     }
     
-    func readBloodGlucoseSamplesForLast24Hours(resultsHandler: ((NSError?, [HKSample]?, completion: (NSError?) -> (Void)) -> Void)!)
+    func readMostRecentBloodGlucoseSamples(resultsHandler: ((NSError?, [HKSample]?, completion: (NSError?) -> (Void)) -> Void)!)
     {
         DDLogVerbose("trace")
         
@@ -349,10 +349,10 @@ class HealthKitManager {
         }
         
         let now = NSDate()
-        let oneDayAgo = now.dateByAddingTimeInterval(-60 * 60 * 24)
+        let oneDayAgo = now.dateByAddingTimeInterval(-60 * 60 * 24 * 10) // Query most recent 10 days
+        let limit = 288 // Limit to 288 samples (about one day of samples at 5 minute intervals)
         let lastDayPredicate = HKQuery.predicateForSamplesWithStartDate(oneDayAgo, endDate: now, options: .None)
         let sortDescriptor = NSSortDescriptor(key:HKSampleSortIdentifierStartDate, ascending: false)
-        let limit = 288 // About one day of samples at 5 minute intervals
         
         let sampleType = HKObjectType.quantityTypeForIdentifier(HKQuantityTypeIdentifierBloodGlucose)!
         let sampleQuery = HKSampleQuery(sampleType: sampleType, predicate: lastDayPredicate, limit: limit, sortDescriptors: [sortDescriptor]) {
