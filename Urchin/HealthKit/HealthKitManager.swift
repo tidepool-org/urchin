@@ -339,6 +339,29 @@ class HealthKitManager {
         healthStore?.executeQuery(sampleQuery)
     }
     
+    func countBloodGlucoseSamples(completion: (error: NSError?, totalSamplesCount: Int, totalDexcomSamplesCount: Int) -> (Void)) {
+        let sampleType = HKObjectType.quantityTypeForIdentifier(HKQuantityTypeIdentifierBloodGlucose)!
+        let sampleQuery = HKSampleQuery(sampleType: sampleType, predicate: nil, limit: HKObjectQueryNoLimit, sortDescriptors: nil) {
+            (query, newSamples, error) -> Void in
+            
+            var totalSamplesCount = 0
+            var totalDexcomSamplesCount = 0
+            if newSamples != nil {
+                for sample in newSamples! {
+                    let sourceRevision = sample.sourceRevision
+                    let source = sourceRevision.source
+                    totalSamplesCount += 1
+                    if source.name.lowercaseString.rangeOfString("dexcom") != nil {
+                        totalDexcomSamplesCount += 1
+                    }
+                }
+            }
+
+            completion(error: error, totalSamplesCount: totalSamplesCount, totalDexcomSamplesCount: totalDexcomSamplesCount)
+        }
+        healthStore?.executeQuery(sampleQuery)
+    }
+    
     func readMostRecentBloodGlucoseSamples(resultsHandler: ((NSError?, [HKSample]?, completion: (NSError?) -> (Void)) -> Void)!)
     {
         DDLogVerbose("trace")

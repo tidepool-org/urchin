@@ -170,7 +170,28 @@ class LogInViewController :
                 self.selectServer(server.0)
             }))
         }
-#if RELEASE
+        actionSheet.addAction(UIAlertAction(title: "Count HealthKit Blood Glucose Samples", style: .Default, handler: { Void in
+            HealthKitManager.sharedInstance.countBloodGlucoseSamples {
+                (error: NSError?, totalSamplesCount: Int, totalDexcomSamplesCount: Int) in
+                
+                var alert: UIAlertController?
+                
+                if error == nil {
+                    DDLogInfo("There are \(totalSamplesCount) blood glocuse samples and \(totalDexcomSamplesCount) Dexcom samples in HealthKit")
+                    alert = UIAlertController(title: "HealthKit Blood Glucose Sample Count", message: "There are \(totalSamplesCount) blood glocuse samples and \(totalDexcomSamplesCount) Dexcom samples in HealthKit", preferredStyle: .Alert)
+                } else if HealthKitManager.sharedInstance.authorizationRequestedForBloodGlucoseSamples() {
+                    DDLogInfo("Error counting samples: \(error)")
+                    alert = UIAlertController(title: "HealthKit Blood Glucose Sample Count", message: "Error counting Dexcom samples: \(error)", preferredStyle: .Alert)
+                } else {
+                    DDLogInfo("Unable to count samples, you haven't connected to Health yet, please login and connect to Health and try again.")
+                    alert = UIAlertController(title: "HealthKit Blood Glucose Sample Count", message: "Unable to count samples, you haven't connected to Health yet, please login and connect to Health and try again.", preferredStyle: .Alert)
+                }
+                alert!.addAction(UIAlertAction(title: addAlertOkay, style: .Default, handler: nil))
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.presentViewController(alert!, animated: true, completion: nil)
+                })
+            }
+        }))
         if defaultDebugLevel == DDLogLevel.Off {
             actionSheet.addAction(UIAlertAction(title: "Enable logging", style: .Default, handler: { Void in
                 defaultDebugLevel = DDLogLevel.Verbose
@@ -185,7 +206,6 @@ class LogInViewController :
                 NSUserDefaults.standardUserDefaults().synchronize()
             }))
         }
-#endif
         actionSheet.addAction(UIAlertAction(title: "Email logs", style: .Default, handler: { Void in
             DDLog.flushLog()
             
