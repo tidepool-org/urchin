@@ -1013,7 +1013,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         let healthConfig = HealthKitConfiguration.sharedInstance
         func enableHealthKit() {
-            healthConfig.enableHealthKitInterface(self.user.fullName, userid: self.user.userid, isDSAUser: self.user.isDSAUser, needsGlucoseReads: true, needsGlucoseWrites: true, needsWorkoutReads: false)
+            healthConfig.enableHealthKitInterface(self.user.fullName, userid: self.user.userid, isDSAUser: self.user.isDSAUser, needsGlucoseReads: true, needsGlucoseWrites: false, needsWorkoutReads: false)
         }
         
         if healthConfig.healthKitInterfaceConfiguredForOtherUser() {
