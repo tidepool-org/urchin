@@ -376,7 +376,6 @@ class APIConnector {
                     // Send notification to NotesVC to open new note
                     let notification = NSNotification(name: "newNote", object: nil)
                     NSNotificationCenter.defaultCenter().postNotification(notification)
-                    
                 } else {
                     DDLogError("Could not refresh session token - invalid status code \(httpResponse.statusCode)")
                     
@@ -640,7 +639,7 @@ class APIConnector {
         request("POST", urlExtension: urlExtension, headerDict: headerDict, body: body, preRequest: preRequest, completion: completion)
     }
     
-    func doUpload(body: NSData, completion: (NSError?) -> (Void)) {
+    func doUpload(body: NSData, completion: (error: NSError?, duplicateItemCount: Int) -> (Void)) {
         DDLogVerbose("trace")
 
         var error: NSError?
@@ -649,7 +648,7 @@ class APIConnector {
             if error != nil {
                 DDLogError("Upload failed: \(error), \(error?.userInfo)")
                 
-                completion(error)
+                completion(error: error, duplicateItemCount: 0)
             }
         }
         
@@ -669,12 +668,16 @@ class APIConnector {
         
         let handleRequestCompletion = { (response: NSURLResponse!, data: NSData!, requestError: NSError!) -> Void in
             var error = requestError
+            var duplicateItemCount = 0
             if error == nil {
                 if let httpResponse = response as? NSHTTPURLResponse {
                     if data != nil {
                         let statusCode = httpResponse.statusCode
-                        let dataString = NSString(data: data!, encoding: NSUTF8StringEncoding)! as String
+                        let duplicateItemIndices: NSArray? = (try? NSJSONSerialization.JSONObjectWithData(data!, options: [])) as? NSArray
+                        duplicateItemCount = duplicateItemIndices?.count ?? 0
+
                         if statusCode >= 400 && statusCode < 600 {
+                            let dataString = NSString(data: data!, encoding: NSUTF8StringEncoding)! as String
                             error = NSError(domain: "APIConnect-doUpload", code: -2, userInfo: [NSLocalizedDescriptionKey:"Upload failed with status code: \(statusCode), error message: \(dataString)"])
                         }
                     }
@@ -685,7 +688,7 @@ class APIConnector {
                 DDLogError("Upload failed: \(error), \(error?.userInfo)")
             }
             
-            completion(error)
+            completion(error: error, duplicateItemCount: duplicateItemCount)
         }
         
         request("POST", urlExtension: urlExtension, headerDict: headerDict, body: body, preRequest: preRequest, subdomainRootOverride: "uploads", completion: handleRequestCompletion)
@@ -866,7 +869,7 @@ class APIConnector {
             
             let alert = UIAlertController(title: title, message: message, preferredStyle: .Alert)
             
-            alert.addAction(UIAlertAction(title: "Okay", style: .Default, handler: { Void in
+            alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: { Void in
                 self.isShowingAlert = false
             }))
             if var topController = UIApplication.sharedApplication().keyWindow?.rootViewController {

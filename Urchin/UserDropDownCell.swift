@@ -15,6 +15,7 @@
 
 import Foundation
 import UIKit
+import CocoaLumberjack
 
 protocol UserDropDownCellDelegate {
     func didToggleHealthKit(healthKitSwitch: UISwitch)
@@ -37,6 +38,8 @@ class UserDropDownCell: UITableViewCell {
         separator.removeFromSuperview()
         connectToHealthSwitch.removeFromSuperview()
         self.selectionStyle = .Default
+        nameLabel.adjustsFontSizeToFitWidth = true
+        nameLabel.minimumScaleFactor = 0.25
         
         self.group = group
         
@@ -72,6 +75,7 @@ class UserDropDownCell: UITableViewCell {
             connectToHealthSwitch.frame.origin.x = nameLabel.frame.origin.x + nameLabel.frame.width + 8
             connectToHealthSwitch.frame.origin.y = userCellThickSeparator + 12
             connectToHealthSwitch.on = HealthKitConfiguration.sharedInstance.healthKitInterfaceEnabledForCurrentUser()
+            DDLogInfo("Switch is: \(connectToHealthSwitch.on.boolValue)")
             connectToHealthSwitch.addTarget(self, action: #selector(connectToHealthSwitchValueChanged), forControlEvents: UIControlEvents.ValueChanged)
             self.addSubview(connectToHealthSwitch)
             
@@ -80,14 +84,18 @@ class UserDropDownCell: UITableViewCell {
             separator.backgroundColor = whiteQuarterAlpha
             self.addSubview(separator)
         } else if (key == "healthkit-status") {
-            let lastCacheDateAndTime = NSDateFormatter.localizedStringFromDate(HealthKitDataUploader.sharedInstance.lastUploadTimeBloodGlucoseSamples, dateStyle: .ShortStyle, timeStyle: .ShortStyle)
-            if group != nil && group?.fullName != nil {
-                nameLabel.text = String(format: healthKitStatusFormat, group!.fullName!, lastCacheDateAndTime)
-                
-                // TODO: This is just temporary for debugging, not to spec, we should probably remove the totalUploadCountBloodGlucoseSamples stats
-                nameLabel.text = "\(group!.fullName!), \(lastCacheDateAndTime), \(HealthKitDataUploader.sharedInstance.totalUploadCountBloodGlucoseSamples) samples"
+            let lastUploadSampleTime = NSDateFormatter.localizedStringFromDate(HealthKitDataUploader.sharedInstance.lastUploadSampleTimeBloodGlucoseSamples, dateStyle: .ShortStyle, timeStyle: .ShortStyle)
+            if HealthKitDataUploader.sharedInstance.shouldUploadMostRecentFirst {
+                nameLabel.text = healthKitUploadStatusMostRecentSamples
             } else {
-                nameLabel.text = lastCacheDateAndTime
+                switch HealthKitDataUploader.sharedInstance.totalUploadCountBloodGlucoseSamplesWithoutDuplicates {
+                case 0:
+                    nameLabel.text = String(format: healthKitUploadStatusNoSamplesFound, lastUploadSampleTime)
+                case 1:
+                    nameLabel.text = String(format: healthKitUploadStatusSamplesUploadedWithCountSingular, HealthKitDataUploader.sharedInstance.totalUploadCountBloodGlucoseSamplesWithoutDuplicates, lastUploadSampleTime)
+                default:
+                    nameLabel.text = String(format: healthKitUploadStatusSamplesUploadedWithCountPlural, HealthKitDataUploader.sharedInstance.totalUploadCountBloodGlucoseSamplesWithoutDuplicates, lastUploadSampleTime)
+                }
             }
             
             nameLabel.font = smallRegularFont

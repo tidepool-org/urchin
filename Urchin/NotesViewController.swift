@@ -191,8 +191,10 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         // Listen for when force a logout
         notificationCenter.addObserver(self, selector: #selector(NotesViewController.forcedLogout(_:)), name: "forcedLogout", object: nil)
 
-        // Handle HealthKitDataCache notifications
-        notificationCenter.addObserver(self, selector: #selector(NotesViewController.handleUploadedHealthKitDataCacheNotification(_:)), name: HealthKitDataUploader.Notifications.UploadedBloodGlucoseSamples, object: nil)
+        // Handle HealthKitDataUploader notifications
+        notificationCenter.addObserver(self, selector: #selector(NotesViewController.handleUploaderNotification(_:)), name: HealthKitDataUploader.Notifications.UploadedBloodGlucoseSamples, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(NotesViewController.handleUploaderNotification(_:)), name: HealthKitDataUploader.Notifications.StartedUploading, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(NotesViewController.handleUploaderNotification(_:)), name: HealthKitDataUploader.Notifications.StoppedUploading, object: nil)
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -524,7 +526,8 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         }
     }
     
-    func handleUploadedHealthKitDataCacheNotification(notification: NSNotification) {
+    func handleUploaderNotification(notification: NSNotification) {
+        DDLogInfo("handleUploaderNotification: \(notification.name)")
         if (dropDownMenu != nil) {
             dropDownMenu.reloadData()
         }
@@ -546,7 +549,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         if (HealthKitConfiguration.sharedInstance.shouldShowHealthKitUI()) {
             additionalCells += 1
             if (HealthKitConfiguration.sharedInstance.healthKitInterfaceEnabledForCurrentUser() &&
-                HealthKitDataUploader.sharedInstance.lastUploadCountBloodGlucoseSamples > 0) {
+                HealthKitDataUploader.sharedInstance.isUploading) {
                 additionalCells += 1
             }
         }
@@ -761,14 +764,14 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
             if (groups.count == 1) {
                 numberOfRows = 1
                 if section == sectionIndex(TableSection.HealthKit) {
-                    numberOfRows = HealthKitConfiguration.sharedInstance.healthKitInterfaceEnabledForCurrentUser() && HealthKitDataUploader.sharedInstance.lastUploadCountBloodGlucoseSamples > 0 ? 2 : 1
+                    numberOfRows = HealthKitConfiguration.sharedInstance.healthKitInterfaceEnabledForCurrentUser() && HealthKitDataUploader.sharedInstance.isUploading ? 2 : 1
                 }
             } else {
                 if (section == sectionIndex(TableSection.Users)) {
                     // Number of groups + 1 for 'All' / #nofilter
                     numberOfRows = groups.count + 1
                 } else if (section == sectionIndex(TableSection.HealthKit)) {
-                    numberOfRows = HealthKitConfiguration.sharedInstance.healthKitInterfaceEnabledForCurrentUser() && HealthKitDataUploader.sharedInstance.lastUploadCountBloodGlucoseSamples > 0 ? 2 : 1
+                    numberOfRows = HealthKitConfiguration.sharedInstance.healthKitInterfaceEnabledForCurrentUser() && HealthKitDataUploader.sharedInstance.isUploading ? 2 : 1
                 } else if (section == sectionIndex(TableSection.Logout)) {
                     numberOfRows = 1
                 } else if (section == sectionIndex(TableSection.Version)) {
@@ -999,7 +1002,6 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         } else {
             HealthKitConfiguration.sharedInstance.disableHealthKitInterface()
         }
-        dropDownMenu.reloadData()
     }
     
     // MARK: - HealthKit enablement
@@ -1011,7 +1013,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         let healthConfig = HealthKitConfiguration.sharedInstance
         func enableHealthKit() {
-            healthConfig.enableHealthKitInterface(self.user.fullName, userid: self.user.userid, isDSAUser: self.user.isDSAUser, needsGlucoseReads: true, needsGlucoseWrites: false, needsWorkoutReads: false)
+            healthConfig.enableHealthKitInterface(self.user.fullName, userid: self.user.userid, isDSAUser: self.user.isDSAUser, needsGlucoseReads: true, needsGlucoseWrites: true, needsWorkoutReads: false)
         }
         
         if healthConfig.healthKitInterfaceConfiguredForOtherUser() {

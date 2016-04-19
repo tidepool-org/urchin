@@ -226,7 +226,12 @@ let allTeamsTitle: String = "All"
 Drop down menu title for HealthKit (NotesVC)
 */
 let healthKitTitle: String = "Connect to Health"
-let healthKitStatusFormat: String = "%@, %@"
+let healthKitUploadStatusMostRecentSamples: String = "Uploading new samples for last two weeks"
+let healthKitUploadStatusNoSamplesFound: String = "No new samples to upload \u{2014} %@"
+let healthKitUploadStatusSamplesUploaded: String = "Uploaded new samples \u{2014} %@"
+let healthKitUploadStatusSamplesUploadedWithCountSingular: String = "Uploaded %d new sample \u{2014} %@"
+let healthKitUploadStatusSamplesUploadedWithCountPlural: String = "Uploaded %d new samples \u{2014} %@"
+
 
 /*
     Drop down menu title for logging out (NotesVC)
@@ -454,7 +459,7 @@ let doneDateText: String = "done"
 let addAlertTitle: String = "Discard Note?"
 let addAlertMessage: String = "If you close this note, your note will be lost."
 let addAlertCancel: String = "Cancel"
-let addAlertOkay: String = "Okay"
+let addAlertOkay: String = "OK"
 
 /*
     Post/Save button text
@@ -476,7 +481,7 @@ let editAlertSave: String = "Save"
 let trashAlertTitle: String = "Delete Note?"
 let trashAlertMessage: String = "Once you delete this note, it cannot be recovered."
 let trashAlertCancel: String = "Cancel"
-let trashAlertOkay: String = "Okay"
+let trashAlertOkay: String = "OK"
 
 /*
     Post button sizing

@@ -317,9 +317,9 @@ class HealthKitManager {
         
         let sampleType = HKObjectType.quantityTypeForIdentifier(HKQuantityTypeIdentifierBloodGlucose)!
         let sampleQuery = HKAnchoredObjectQuery(type: sampleType,
-            predicate: nil,
+            predicate: nil, // TODO: my - We should probably use a LIKE predicate with wildcard to have the query filter Dexcom samples rather than filtering results as we receive them
             anchor: queryAnchor,
-            limit: 100) {
+            limit: 288) { // Limit to 288 samples (about one day of samples at 5 minute intervals)
                 (query, newSamples, deletedSamples, newAnchor, error) -> Void in
 
                 if error != nil {
@@ -362,23 +362,20 @@ class HealthKitManager {
         healthStore?.executeQuery(sampleQuery)
     }
     
-    func readMostRecentBloodGlucoseSamples(resultsHandler: ((NSError?, [HKSample]?, completion: (NSError?) -> (Void)) -> Void)!)
+    func readBloodGlucoseSamples(startDate startDate: NSDate, endDate: NSDate, limit: Int, resultsHandler: ((NSError?, [HKSample]?, completion: (NSError?) -> (Void)) -> Void)!)
     {
-        DDLogVerbose("trace")
+        DDLogInfo("readBloodGlucoseSamples startDate: \(startDate), endDate: \(endDate), limit: \(limit)")
         
         guard isHealthDataAvailable else {
             DDLogError("Unexpected HealthKitManager call when health data not available")
             return
         }
         
-        let now = NSDate()
-        let oneDayAgo = now.dateByAddingTimeInterval(-60 * 60 * 24 * 10) // Query most recent 10 days
-        let limit = 288 // Limit to 288 samples (about one day of samples at 5 minute intervals)
-        let lastDayPredicate = HKQuery.predicateForSamplesWithStartDate(oneDayAgo, endDate: now, options: .None)
+        let predicate = HKQuery.predicateForSamplesWithStartDate(startDate, endDate: endDate, options: [.StrictEndDate, .StrictEndDate])
         let sortDescriptor = NSSortDescriptor(key:HKSampleSortIdentifierStartDate, ascending: false)
         
         let sampleType = HKObjectType.quantityTypeForIdentifier(HKQuantityTypeIdentifierBloodGlucose)!
-        let sampleQuery = HKSampleQuery(sampleType: sampleType, predicate: lastDayPredicate, limit: limit, sortDescriptors: [sortDescriptor]) {
+        let sampleQuery = HKSampleQuery(sampleType: sampleType, predicate: predicate, limit: limit, sortDescriptors: [sortDescriptor]) {
             (query, newSamples, error) -> Void in
             
             if error != nil {

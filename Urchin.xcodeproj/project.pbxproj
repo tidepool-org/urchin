@@ -137,7 +137,7 @@
 		4D47CD7B1C18EC4C00AAA8A9 /* urchin.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = urchin.entitlements; sourceTree = "<group>"; };
 		4D47CD7C1C18EC4C00AAA8A9 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		4D5318191CA71E750072CCD6 /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = main.swift; path = Urchin/main.swift; sourceTree = SOURCE_ROOT; };
-		4D9135421C8F164A00BE2090 /* HealthKitDataUploader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitDataUploader.swift; path = Urchin/HealthKit/HealthKitDataUploader.swift; sourceTree = SOURCE_ROOT; };
+		4D9135421C8F164A00BE2090 /* HealthKitDataUploader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = HealthKitDataUploader.swift; path = Urchin/HealthKit/HealthKitDataUploader.swift; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		4DBC53491C30A9230062FDEA /* HealthKitManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitManager.swift; path = Urchin/HealthKit/HealthKitManager.swift; sourceTree = SOURCE_ROOT; };
 		92E7D795B176FAC800CA8CA9 /* Pods_urchinTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_urchinTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9485591FB1EE6D91767F0C5A /* Pods-urchinTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-urchinTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-urchinTests/Pods-urchinTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -147,7 +147,7 @@
 		AA3652C11B33847A001F514D /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		AA3652C31B338525001F514D /* NotesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotesViewController.swift; sourceTree = "<group>"; };
 		AA3652CB1B34A163001F514D /* Patient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Patient.swift; sourceTree = "<group>"; };
-		AA3652CD1B34A8E4001F514D /* UserDropDownCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDropDownCell.swift; sourceTree = "<group>"; };
+		AA3652CD1B34A8E4001F514D /* UserDropDownCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = UserDropDownCell.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		AA4184FB1B74307700EE53C3 /* UrchinData_2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = UrchinData_2.xcdatamodel; sourceTree = "<group>"; };
 		AA54DBBE1B596DE7005F8448 /* LoadingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		AA66BA771B4C292400CCB008 /* down.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = down.png; sourceTree = "<group>"; };

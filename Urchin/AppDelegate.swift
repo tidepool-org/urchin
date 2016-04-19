@@ -108,7 +108,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             error = NSError(domain: "YOUR_ERROR_DOMAIN", code: 9999, userInfo: dict)
             
             var alert = UIAlertController(title: "Unrecoverable Error Occurred", message: "An unrecoverable error occurred. The application will terminate shortly. Please contact the developer to determine the cause of the issue.", preferredStyle: .Alert)
-            alert.addAction(UIAlertAction(title: "Okay", style: .Default, handler: { Void in
+            alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: { Void in
                 DDLogVerbose("Cancel alert and return to note")
             }))
             if var topController = UIApplication.sharedApplication().keyWindow?.rootViewController {
@@ -152,7 +152,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 
                     let alert = UIAlertController(title: "Unrecoverable Error Occurred", message: "An unrecoverable error occurred. The application will terminate shortly. Please contact the developer to determine the cause of the issue.", preferredStyle: .Alert)
                     
-                    alert.addAction(UIAlertAction(title: "Okay", style: .Default, handler: { Void in
+                    alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: { Void in
                         DDLogVerbose("Cancel alert and return to note")
                     }))
                     if var topController = UIApplication.sharedApplication().keyWindow?.rootViewController {
