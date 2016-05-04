@@ -5,8 +5,8 @@ notifications:
 
 xcode_workspace: Urchin.xcworkspace
 xcode_scheme: Urchin
-osx_image: xcode7.2
-xcode_sdk: iphonesimulator8.3 
+osx_image: xcode7.3
+xcode_sdk: iphonesimulator9.3
 
 before_install:
 - git submodule update --init --recursive
