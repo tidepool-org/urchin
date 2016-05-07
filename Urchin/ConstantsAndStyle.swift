@@ -242,7 +242,7 @@ let healthKitUploadStatusDaysUploaded: String = "%d of %d days"
 let healthKitUploadStatusUploadingCompleteHistory: String = "Uploading complete history of Dexcom data"
 let healthKitUploadStatusLastUploadTime: String = "Last reading %@"
 let healthKitUploadStatusNoDataAvailableToUpload: String = "No data available to upload"
-let healthKitUploadStatusDexcomDataDelayed3Hours: String = "Dexcom is 3 hours delayed from Health"
+let healthKitUploadStatusDexcomDataDelayed3Hours: String = "Dexcom data from Health is delayed 3 hours"
 
 /*
     Drop down menu title for logging out (NotesVC)
