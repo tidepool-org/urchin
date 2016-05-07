@@ -142,6 +142,8 @@ class HealthKitManager {
             }
 
             observationHandler(error)
+            
+            observerQueryCompletion()
         }
         healthStore?.executeQuery(bloodGlucoseObservationQuery!)
     }
@@ -388,6 +390,45 @@ class HealthKitManager {
             }
         }
         healthStore?.executeQuery(sampleQuery)
+    }
+    
+    func findSampleDateRange(sampleType sampleType: HKSampleType, completion: (error: NSError?, startDate: NSDate?, endDate: NSDate?) -> Void)
+    {
+        DDLogVerbose("trace")
+
+        var startDate: NSDate? = nil
+        var endDate: NSDate? = nil
+        
+        let predicate = HKQuery.predicateForSamplesWithStartDate(NSDate.distantPast(), endDate: NSDate.distantFuture(), options: [])
+        let startDateSortDescriptor = NSSortDescriptor(key:HKSampleSortIdentifierStartDate, ascending: true)
+        let endDateSortDescriptor = NSSortDescriptor(key:HKSampleSortIdentifierStartDate, ascending: false)
+
+        // Kick of query to find startDate
+        let startDateSampleQuery = HKSampleQuery(sampleType: sampleType, predicate: predicate, limit: 1, sortDescriptors: [startDateSortDescriptor]) {
+            (query: HKSampleQuery, samples: [HKSample]?, error: NSError?) -> Void in
+            
+            if error == nil && samples != nil {
+                // Get startDate of oldest sample
+                if samples?.count > 0 {
+                    startDate = samples![0].startDate
+                }
+
+                // Kick of query to find endDate
+                let endDateSampleQuery = HKSampleQuery(sampleType: sampleType, predicate: predicate, limit: 1, sortDescriptors: [endDateSortDescriptor]) {
+                    (query: HKSampleQuery, samples: [HKSample]?, error: NSError?) -> Void in
+
+                    if error == nil && samples?.count > 0 {
+                        endDate = samples![0].endDate
+                    }
+                    
+                    completion(error: error, startDate: startDate, endDate: endDate)
+                }
+                self.healthStore?.executeQuery(endDateSampleQuery)
+            } else {
+                completion(error: error, startDate: startDate, endDate: endDate)
+            }
+        }
+        healthStore?.executeQuery(startDateSampleQuery)
     }
     
     func readWorkoutSamples(resultsHandler: (([HKSample]?, [HKDeletedObject]?, NSError?) -> Void)!)

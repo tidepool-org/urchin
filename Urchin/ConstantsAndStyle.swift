@@ -100,6 +100,11 @@ let textFieldBackgroundColor: UIColor = whiteColor
 let tealColor: UIColor = UIColor(red: 0/255, green: 150/255, blue: 171/255, alpha: 1)
 
 /*
+    "Connect to Health" UISwitch
+*/
+let purpleColor: UIColor = UIColor(red: 100/255, green: 128/255, blue: 251/255, alpha: 1)
+
+/*
     addNoteLabel on addNoteButton (NotesVC)
 */
 let whiteColor: UIColor = UIColor.whiteColor()
@@ -138,7 +143,12 @@ let noteTextColor: UIColor = UIColor.blackColor()
 /*
     Separator color (UserDropDownCell)
 */
-let whiteQuarterAlpha: UIColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.2)
+let white20PercentAlpha: UIColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.2)
+
+/*
+    "FYI" text in "Connect to Health" status
+*/
+let white65PercentAlpha: UIColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.65)
 
 // -----
 
@@ -226,12 +236,13 @@ let allTeamsTitle: String = "All"
 Drop down menu title for HealthKit (NotesVC)
 */
 let healthKitTitle: String = "Connect to Health"
-let healthKitUploadStatusMostRecentSamples: String = "Uploading new samples for last two weeks"
-let healthKitUploadStatusNoSamplesFound: String = "No new samples to upload \u{2014} %@"
-let healthKitUploadStatusSamplesUploaded: String = "Uploaded new samples \u{2014} %@"
-let healthKitUploadStatusSamplesUploadedWithCountSingular: String = "Uploaded %d new sample \u{2014} %@"
-let healthKitUploadStatusSamplesUploadedWithCountPlural: String = "Uploaded %d new samples \u{2014} %@"
-
+let healthKitUploadStatusMostRecentSamples: String = "Uploading last 14 days of Dexcom data\u{2026}"
+let healthKitUploadStatusUploadPausesWhenPhoneIsLocked: String = "FYI upload pauses when phone is locked"
+let healthKitUploadStatusDaysUploaded: String = "%d of %d days"
+let healthKitUploadStatusUploadingCompleteHistory: String = "Uploading complete history of Dexcom data"
+let healthKitUploadStatusLastUploadTime: String = "Last reading %@"
+let healthKitUploadStatusNoDataAvailableToUpload: String = "No data available to upload"
+let healthKitUploadStatusDexcomDataDelayed3Hours: String = "Dexcom is 3 hours delayed from Health"
 
 /*
     Drop down menu title for logging out (NotesVC)
@@ -532,7 +543,7 @@ let userCellHeight: CGFloat = 56.0
 let userCellInset: CGFloat = labelInset
 let userCellThickSeparator: CGFloat = 1
 let userCellThinSeparator: CGFloat = 1
-let userCellHealthKitSampleInset: CGFloat = 20
+let userCellConnectToHealthCellHeight: CGFloat = 135.0
 
 // ------------ NoteCell ------------
 

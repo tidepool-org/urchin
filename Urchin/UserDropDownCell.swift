@@ -25,7 +25,10 @@ class UserDropDownCell: UITableViewCell {
     
     // UI elements
     let nameLabel: UILabel = UILabel()
-    let connectToHealthSwitch: UISwitch = UISwitch()
+    let healthConnectionSwitch: UISwitch = UISwitch()
+    let healthStatusLine1: UILabel = UILabel()
+    let healthStatusLine2: UILabel = UILabel()
+    let healthStatusLine3: UILabel = UILabel()
     let rightView: UIImageView = UIImageView()
     let separator: UIView = UIView()
 
@@ -35,8 +38,15 @@ class UserDropDownCell: UITableViewCell {
     var delegate: UserDropDownCellDelegate?
     
     func configure(key: String, arrow: Bool = true, group: User? = nil) {
+        healthConnectionSwitch.tintColor = whiteColor
+        healthConnectionSwitch.thumbTintColor = whiteColor
+        healthConnectionSwitch.onTintColor = purpleColor
+        healthConnectionSwitch.removeFromSuperview()
+        healthStatusLine1.removeFromSuperview()
+        healthStatusLine2.removeFromSuperview()
+        healthStatusLine3.removeFromSuperview()
+        
         separator.removeFromSuperview()
-        connectToHealthSwitch.removeFromSuperview()
         self.selectionStyle = .Default
         nameLabel.adjustsFontSizeToFitWidth = true
         nameLabel.minimumScaleFactor = 0.25
@@ -62,50 +72,45 @@ class UserDropDownCell: UITableViewCell {
             
             // configure thin separator at the bottom
             separator.frame = CGRect(x: 2*userCellInset, y: self.frame.height - userCellThinSeparator, width: self.frame.width - 2*userCellInset, height: userCellThinSeparator)
-            separator.backgroundColor = whiteQuarterAlpha
+            separator.backgroundColor = white20PercentAlpha
             self.addSubview(separator)
         } else if (key == "healthkit") {
             self.selectionStyle = .None
 
+            // Configure nameLabel (label for healthConnectionSwitch)
             nameLabel.text = healthKitTitle
             nameLabel.font = mediumBoldFont
             nameLabel.sizeToFit()
             nameLabel.frame.origin.y = userCellThickSeparator + userCellInset
-
-            connectToHealthSwitch.frame.origin.x = nameLabel.frame.origin.x + nameLabel.frame.width + 8
-            connectToHealthSwitch.frame.origin.y = userCellThickSeparator + 12
-            connectToHealthSwitch.on = HealthKitConfiguration.sharedInstance.healthKitInterfaceEnabledForCurrentUser()
-            DDLogInfo("Switch is: \(connectToHealthSwitch.on.boolValue)")
-            connectToHealthSwitch.addTarget(self, action: #selector(connectToHealthSwitchValueChanged), forControlEvents: UIControlEvents.ValueChanged)
-            self.addSubview(connectToHealthSwitch)
             
             // Configure the separator at the top
             separator.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: userCellThinSeparator)
-            separator.backgroundColor = whiteQuarterAlpha
+            separator.backgroundColor = white20PercentAlpha
             self.addSubview(separator)
-        } else if (key == "healthkit-status") {
-            let lastUploadSampleTime = NSDateFormatter.localizedStringFromDate(HealthKitDataUploader.sharedInstance.lastUploadSampleTimeBloodGlucoseSamples, dateStyle: .ShortStyle, timeStyle: .ShortStyle)
-            if HealthKitDataUploader.sharedInstance.shouldUploadMostRecentFirst {
-                nameLabel.text = healthKitUploadStatusMostRecentSamples
-            } else {
-                switch HealthKitDataUploader.sharedInstance.totalUploadCountBloodGlucoseSamplesWithoutDuplicates {
-                case 0:
-                    nameLabel.text = String(format: healthKitUploadStatusNoSamplesFound, lastUploadSampleTime)
-                case 1:
-                    nameLabel.text = String(format: healthKitUploadStatusSamplesUploadedWithCountSingular, HealthKitDataUploader.sharedInstance.totalUploadCountBloodGlucoseSamplesWithoutDuplicates, lastUploadSampleTime)
-                default:
-                    nameLabel.text = String(format: healthKitUploadStatusSamplesUploadedWithCountPlural, HealthKitDataUploader.sharedInstance.totalUploadCountBloodGlucoseSamplesWithoutDuplicates, lastUploadSampleTime)
+
+            // Configure healthConnectionSwitch
+            healthConnectionSwitch.frame.origin.x = nameLabel.frame.origin.x + nameLabel.frame.width + 8
+            healthConnectionSwitch.frame.origin.y = userCellThickSeparator + 12
+            healthConnectionSwitch.on = HealthKitConfiguration.sharedInstance.healthKitInterfaceEnabledForCurrentUser()
+            DDLogInfo("Switch is: \(healthConnectionSwitch.on.boolValue)")
+            healthConnectionSwitch.addTarget(self, action: #selector(healthConnectionSwitchValueChanged), forControlEvents: UIControlEvents.ValueChanged)
+            self.addSubview(healthConnectionSwitch)
+
+            // Configure status lines
+            if HealthKitConfiguration.sharedInstance.healthKitInterfaceEnabledForCurrentUser() {
+                switch HealthKitDataUploader.sharedInstance.uploadPhaseBloodGlucoseSamples {
+                case .MostRecentSamples:
+                    self.configureHealthStatusLines(phase: HealthKitDataUploader.sharedInstance.uploadPhaseBloodGlucoseSamples)
+                case .HistoricalSamples:
+                    if HealthKitDataUploader.sharedInstance.totalDaysHistoricalBloodGlucoseSamples > 0 {
+                        self.configureHealthStatusLines(phase: HealthKitDataUploader.sharedInstance.uploadPhaseBloodGlucoseSamples)
+                    } else {
+                        self.configureHealthStatusLines(phase: .MostRecentSamples)
+                    }
+                case .CurrentSamples:
+                    self.configureHealthStatusLines(phase: HealthKitDataUploader.sharedInstance.uploadPhaseBloodGlucoseSamples)
                 }
             }
-            
-            nameLabel.font = smallRegularFont
-            nameLabel.sizeToFit()
-            nameLabel.frame.origin = CGPoint(x: 3 * userCellInset, y: userCellThinSeparator + userCellHealthKitSampleInset)
-            
-            // Configure the separator
-            separator.frame = CGRect(x: 2 * userCellInset, y: 0, width: self.frame.width - 2 * userCellInset, height: userCellThinSeparator)
-            separator.backgroundColor = whiteQuarterAlpha
-            self.addSubview(separator)
         } else if (key == "logout") {
             nameLabel.text = logoutTitle
             nameLabel.font = mediumBoldFont
@@ -114,7 +119,7 @@ class UserDropDownCell: UITableViewCell {
             
             // Configure the thin separator at the top
             separator.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: userCellThinSeparator)
-            separator.backgroundColor = whiteQuarterAlpha
+            separator.backgroundColor = white20PercentAlpha
             self.addSubview(separator)
         } else if (key == "group") {
             
@@ -123,7 +128,7 @@ class UserDropDownCell: UITableViewCell {
             
             // configure the thin separator at the bottom of the cell
             separator.frame = CGRect(x: 2*userCellInset, y: self.frame.height - userCellThinSeparator, width: self.frame.width - 2*userCellInset, height: userCellThinSeparator)
-            separator.backgroundColor = whiteQuarterAlpha
+            separator.backgroundColor = white20PercentAlpha
             self.addSubview(separator)
         } else if (key == "grouplast") {
             
@@ -139,7 +144,7 @@ class UserDropDownCell: UITableViewCell {
             
             // Configure the thick separator at the top
             separator.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: userCellThickSeparator)
-            separator.backgroundColor = whiteQuarterAlpha
+            separator.backgroundColor = white20PercentAlpha
             self.addSubview(separator)
             
             rightView.hidden = true
@@ -153,6 +158,69 @@ class UserDropDownCell: UITableViewCell {
         
         self.addSubview(rightView)
         self.addSubview(nameLabel)
+    }
+    
+    func configureHealthStatusLines(phase phase: HealthKitDataUploader.Phases) {
+        switch phase {
+        case .MostRecentSamples:
+            healthStatusLine1.text = healthKitUploadStatusMostRecentSamples
+            healthStatusLine1.font = smallRegularFont
+            healthStatusLine1.textColor = UIColor(red: 253/255, green: 253/255, blue: 253/255, alpha: 1)
+            healthStatusLine1.sizeToFit()
+            healthStatusLine1.frame.origin = CGPoint(x: userCellInset, y: nameLabel.frame.origin.y + nameLabel.frame.height + 16)
+            self.addSubview(healthStatusLine1)
+            
+            healthStatusLine2.text = healthKitUploadStatusUploadPausesWhenPhoneIsLocked
+            healthStatusLine2.font = smallRegularFont
+            healthStatusLine2.textColor = white65PercentAlpha
+            healthStatusLine2.sizeToFit()
+            healthStatusLine2.frame.origin = CGPoint(x: userCellInset, y: healthStatusLine1.frame.origin.y + healthStatusLine1.frame.height + 4)
+            self.addSubview(healthStatusLine2)
+        case .HistoricalSamples:
+            healthStatusLine1.text = healthKitUploadStatusUploadingCompleteHistory
+            healthStatusLine1.font = smallRegularFont
+            healthStatusLine1.textColor = UIColor(red: 253/255, green: 253/255, blue: 253/255, alpha: 1)
+            healthStatusLine1.sizeToFit()
+            healthStatusLine1.frame.origin = CGPoint(x: userCellInset, y: nameLabel.frame.origin.y + nameLabel.frame.height + 16)
+            self.addSubview(healthStatusLine1)
+            
+            var healthKitUploadStatusDaysUploadedText = ""
+            if HealthKitDataUploader.sharedInstance.totalDaysHistoricalBloodGlucoseSamples > 0 {
+                healthKitUploadStatusDaysUploadedText = String(format: healthKitUploadStatusDaysUploaded, HealthKitDataUploader.sharedInstance.currentDayHistoricalBloodGlucoseSamples, HealthKitDataUploader.sharedInstance.totalDaysHistoricalBloodGlucoseSamples)
+            }
+            healthStatusLine2.text = healthKitUploadStatusDaysUploadedText
+            healthStatusLine2.font = smallRegularFont
+            healthStatusLine2.textColor = UIColor(red: 253/255, green: 253/255, blue: 253/255, alpha: 1)
+            healthStatusLine2.sizeToFit()
+            healthStatusLine2.frame.origin = CGPoint(x: userCellInset, y: healthStatusLine1.frame.origin.y + healthStatusLine1.frame.height + 4)
+            self.addSubview(healthStatusLine2)
+            
+            healthStatusLine3.text = healthKitUploadStatusUploadPausesWhenPhoneIsLocked
+            healthStatusLine3.font = smallRegularFont
+            healthStatusLine3.textColor = white65PercentAlpha
+            healthStatusLine3.sizeToFit()
+            healthStatusLine3.frame.origin = CGPoint(x: userCellInset, y: healthStatusLine2.frame.origin.y + healthStatusLine2.frame.height + 4)
+            self.addSubview(healthStatusLine3)
+        case .CurrentSamples:
+            if HealthKitDataUploader.sharedInstance.totalUploadCountBloodGlucoseSamples > 0 {
+                let lastUploadTimeAgoInWords = HealthKitDataUploader.sharedInstance.lastUploadTimeBloodGlucoseSamples.timeAgoInWords(NSDate())
+                healthStatusLine1.text = String(format: healthKitUploadStatusLastUploadTime, lastUploadTimeAgoInWords)
+            } else {
+                healthStatusLine1.text = healthKitUploadStatusNoDataAvailableToUpload
+            }
+            healthStatusLine1.font = smallRegularFont
+            healthStatusLine1.textColor = UIColor(red: 253/255, green: 253/255, blue: 253/255, alpha: 1)
+            healthStatusLine1.sizeToFit()
+            healthStatusLine1.frame.origin = CGPoint(x: userCellInset, y: nameLabel.frame.origin.y + nameLabel.frame.height + 16)
+            self.addSubview(healthStatusLine1)
+            
+            healthStatusLine2.text = healthKitUploadStatusDexcomDataDelayed3Hours
+            healthStatusLine2.font = smallRegularFont
+            healthStatusLine2.textColor = white65PercentAlpha
+            healthStatusLine2.sizeToFit()
+            healthStatusLine2.frame.origin = CGPoint(x: userCellInset, y: healthStatusLine1.frame.origin.y + healthStatusLine1.frame.height + 4)
+            self.addSubview(healthStatusLine2)
+        }
     }
     
     func configure(group: User, last: Bool, arrow: Bool, bold: Bool) {
@@ -184,9 +252,9 @@ class UserDropDownCell: UITableViewCell {
         }
     }
     
-    func connectToHealthSwitchValueChanged(sender: AnyObject) {
-        if let connectToHealthSwitch = sender as? UISwitch {
-            delegate?.didToggleHealthKit(connectToHealthSwitch)
+    func healthConnectionSwitchValueChanged(sender: AnyObject) {
+        if let healthConnectionSwitch = sender as? UISwitch {
+            delegate?.didToggleHealthKit(healthConnectionSwitch)
         }
     }
 }

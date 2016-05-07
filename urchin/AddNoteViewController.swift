@@ -119,7 +119,7 @@ class AddNoteViewController: UIViewController {
         
         // Thicken navBar border
         let border = CALayer()
-        border.borderColor = whiteQuarterAlpha.CGColor
+        border.borderColor = white20PercentAlpha.CGColor
         border.borderWidth = 1
         let navBarLayer = self.navigationController!.navigationBar.layer
         border.frame = CGRect(x: 0, y: navBarLayer.bounds.height, width: navBarLayer.bounds.width, height: 1)

@@ -18,6 +18,8 @@
 		4D53181B1CA71E7A0072CCD6 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D5318191CA71E750072CCD6 /* main.swift */; };
 		4D9135431C8F164A00BE2090 /* HealthKitDataUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D9135421C8F164A00BE2090 /* HealthKitDataUploader.swift */; };
 		4D9135441C8F1ADB00BE2090 /* HealthKitDataUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D9135421C8F164A00BE2090 /* HealthKitDataUploader.swift */; };
+		4DAB1FA21CDD03B500F700FB /* NSDateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DAB1FA11CDD03B500F700FB /* NSDateExtension.swift */; };
+		4DAB1FA31CDD0ECD00F700FB /* NSDateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DAB1FA11CDD03B500F700FB /* NSDateExtension.swift */; };
 		4DBC534D1C30A9230062FDEA /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DBC53491C30A9230062FDEA /* HealthKitManager.swift */; };
 		4DBC534F1C30B3F30062FDEA /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DBC53491C30A9230062FDEA /* HealthKitManager.swift */; };
 		AA03FB8A1B5848FD001B9435 /* APIConnect.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA03FB891B5848FD001B9435 /* APIConnect.swift */; };
@@ -138,6 +140,7 @@
 		4D47CD7C1C18EC4C00AAA8A9 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		4D5318191CA71E750072CCD6 /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = main.swift; path = Urchin/main.swift; sourceTree = SOURCE_ROOT; };
 		4D9135421C8F164A00BE2090 /* HealthKitDataUploader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = HealthKitDataUploader.swift; path = Urchin/HealthKit/HealthKitDataUploader.swift; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		4DAB1FA11CDD03B500F700FB /* NSDateExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NSDateExtension.swift; path = Urchin/NSDateExtension.swift; sourceTree = SOURCE_ROOT; };
 		4DBC53491C30A9230062FDEA /* HealthKitManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitManager.swift; path = Urchin/HealthKit/HealthKitManager.swift; sourceTree = SOURCE_ROOT; };
 		92E7D795B176FAC800CA8CA9 /* Pods_urchinTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_urchinTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9485591FB1EE6D91767F0C5A /* Pods-urchinTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-urchinTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-urchinTests/Pods-urchinTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -262,9 +265,10 @@
 		AA3484F21B56AEBE0028C49B /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				AAA3F3121B508384000EB344 /* HashtagBolder.swift */,
-				AAFBE7DD1B69814B007E480D /* UIApplicationExtension.swift */,
 				AAB6B0521B605C440051472C /* FadeAnimator.swift */,
+				AAA3F3121B508384000EB344 /* HashtagBolder.swift */,
+				4DAB1FA11CDD03B500F700FB /* NSDateExtension.swift */,
+				AAFBE7DD1B69814B007E480D /* UIApplicationExtension.swift */,
 				AA3484F31B56AED20028C49B /* UIDateFormatterExtension.swift */,
 			);
 			name = Extensions;
@@ -740,6 +744,7 @@
 				AAA3F3131B508384000EB344 /* HashtagBolder.swift in Sources */,
 				AA3484F01B559EA10028C49B /* HashtagsView.swift in Sources */,
 				AA993E301B3316C10027804C /* LoginViewController.swift in Sources */,
+				4DAB1FA21CDD03B500F700FB /* NSDateExtension.swift in Sources */,
 				AABCEFAE1B3234360064FE49 /* Note.swift in Sources */,
 				4DBC534D1C30A9230062FDEA /* HealthKitManager.swift in Sources */,
 				AA6932061B66E6B60057F0A0 /* AddNoteVCTableViewDelegate.swift in Sources */,
@@ -782,6 +787,7 @@
 				4D9135441C8F1ADB00BE2090 /* HealthKitDataUploader.swift in Sources */,
 				AA79201F1B62AB470046038B /* NotesViewController.swift in Sources */,
 				AAFBE7DF1B698229007E480D /* UIApplicationExtension.swift in Sources */,
+				4DAB1FA31CDD0ECD00F700FB /* NSDateExtension.swift in Sources */,
 				489A98DA1CAC3F5F00A2F4A0 /* HealthKitConfiguration.swift in Sources */,
 				AA79201D1B62AB330046038B /* Patient.swift in Sources */,
 				AA7920281B62AB9D0046038B /* AppDelegate.swift in Sources */,

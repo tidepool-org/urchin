@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 import CocoaLumberjack
 import MessageUI
+import HealthKit
 
 class LogInViewController :
         UIViewController,
@@ -170,22 +171,44 @@ class LogInViewController :
                 self.selectServer(server.0)
             }))
         }
+        actionSheet.addAction(UIAlertAction(title: "Find date range for blood glucose samples", style: .Default, handler: { Void in
+            let sampleType = HKObjectType.quantityTypeForIdentifier(HKQuantityTypeIdentifierBloodGlucose)!
+            HealthKitManager.sharedInstance.findSampleDateRange(sampleType: sampleType) {                
+                (error: NSError?, startDate: NSDate?, endDate: NSDate?) in
+            
+                var alert: UIAlertController?
+                let title = "Date range for blood glucose samples"
+                var message = ""
+                if error == nil && startDate != nil && endDate != nil {
+                    let days = startDate!.differenceInDays(endDate!) + 1
+                    message = "Start date: \(startDate), end date: \(endDate). Total days: \(days)"
+                } else {
+                    message = "Unable to find date range for blood glucose samples, maybe you haven't connected to Health yet, please login and connect to Health and try again. Or maybe there are no samples in HealthKit."
+                }
+                DDLogInfo(message)
+                alert = UIAlertController(title: title, message: message, preferredStyle: .Alert)
+                alert!.addAction(UIAlertAction(title: addAlertOkay, style: .Default, handler: nil))
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.presentViewController(alert!, animated: true, completion: nil)
+                })
+            }
+        }))
         actionSheet.addAction(UIAlertAction(title: "Count HealthKit Blood Glucose Samples", style: .Default, handler: { Void in
             HealthKitManager.sharedInstance.countBloodGlucoseSamples {
                 (error: NSError?, totalSamplesCount: Int, totalDexcomSamplesCount: Int) in
                 
                 var alert: UIAlertController?
-                
+                let title = "HealthKit Blood Glucose Sample Count"
+                var message = ""
                 if error == nil {
-                    DDLogInfo("There are \(totalSamplesCount) blood glocuse samples and \(totalDexcomSamplesCount) Dexcom samples in HealthKit")
-                    alert = UIAlertController(title: "HealthKit Blood Glucose Sample Count", message: "There are \(totalSamplesCount) blood glocuse samples and \(totalDexcomSamplesCount) Dexcom samples in HealthKit", preferredStyle: .Alert)
+                    message = "There are \(totalSamplesCount) blood glucose samples and \(totalDexcomSamplesCount) Dexcom samples in HealthKit"
                 } else if HealthKitManager.sharedInstance.authorizationRequestedForBloodGlucoseSamples() {
-                    DDLogInfo("Error counting samples: \(error)")
-                    alert = UIAlertController(title: "HealthKit Blood Glucose Sample Count", message: "Error counting Dexcom samples: \(error)", preferredStyle: .Alert)
+                    message = "Error counting samples: \(error)"
                 } else {
-                    DDLogInfo("Unable to count samples, you haven't connected to Health yet, please login and connect to Health and try again.")
-                    alert = UIAlertController(title: "HealthKit Blood Glucose Sample Count", message: "Unable to count samples, you haven't connected to Health yet, please login and connect to Health and try again.", preferredStyle: .Alert)
+                    message = "Unable to count samples, you haven't connected to Health yet, please login and connect to Health and try again."
                 }
+                DDLogInfo(message)
+                alert = UIAlertController(title: title, message: message, preferredStyle: .Alert)
                 alert!.addAction(UIAlertAction(title: addAlertOkay, style: .Default, handler: nil))
                 dispatch_async(dispatch_get_main_queue(), {
                     self.presentViewController(alert!, animated: true, completion: nil)

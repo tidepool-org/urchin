@@ -110,7 +110,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
 
         // Thicken navBar border
         let border = CALayer()
-        border.borderColor = whiteQuarterAlpha.CGColor
+        border.borderColor = white20PercentAlpha.CGColor
         border.borderWidth = 1
         let navBarLayer = self.navigationController!.navigationBar.layer
         border.frame = CGRect(x: 0, y: navBarLayer.bounds.height, width: navBarLayer.bounds.width, height: 1)
@@ -192,9 +192,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         notificationCenter.addObserver(self, selector: #selector(NotesViewController.forcedLogout(_:)), name: "forcedLogout", object: nil)
 
         // Handle HealthKitDataUploader notifications
-        notificationCenter.addObserver(self, selector: #selector(NotesViewController.handleUploaderNotification(_:)), name: HealthKitDataUploader.Notifications.UploadedBloodGlucoseSamples, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(NotesViewController.handleUploaderNotification(_:)), name: HealthKitDataUploader.Notifications.StartedUploading, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(NotesViewController.handleUploaderNotification(_:)), name: HealthKitDataUploader.Notifications.StoppedUploading, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(NotesViewController.handleUploaderNotification(_:)), name: HealthKitDataUploader.Notifications.Updated, object: nil)
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -529,7 +527,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
     func handleUploaderNotification(notification: NSNotification) {
         DDLogInfo("handleUploaderNotification: \(notification.name)")
         if (dropDownMenu != nil) {
-            dropDownMenu.reloadData()
+            self.dropDownMenu.reloadData()
         }
     }
 
@@ -545,15 +543,12 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         self.view.addSubview(opaqueOverlay)
         
         // Configure dropDownMenu, same width as view
-        var additionalCells = groups.count == 1 ? 1 : 3
+        let additionalCells = groups.count == 1 ? 1 : 3
+        var connectToHealthCellHeight: CGFloat = 0.0
         if (HealthKitConfiguration.sharedInstance.shouldShowHealthKitUI()) {
-            additionalCells += 1
-            if (HealthKitConfiguration.sharedInstance.healthKitInterfaceEnabledForCurrentUser() &&
-                HealthKitDataUploader.sharedInstance.isUploading) {
-                additionalCells += 1
-            }
+            connectToHealthCellHeight = userCellConnectToHealthCellHeight
         }
-        let proposedDropDownH = CGFloat(groups.count+additionalCells)*userCellHeight + CGFloat(groups.count)*userCellThinSeparator + 2*userCellThickSeparator
+        let proposedDropDownH = CGFloat(groups.count+additionalCells)*userCellHeight + CGFloat(groups.count)*userCellThinSeparator + 2*userCellThickSeparator + connectToHealthCellHeight
         self.dropDownHeight = min(proposedDropDownH, self.view.frame.height)
         let dropDownWidth = self.view.frame.width
         self.dropDownMenu = UITableView(frame: CGRect(x: 0, y: -dropDownHeight, width: dropDownWidth, height: dropDownHeight))
@@ -600,13 +595,15 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         }
     }
     
-    // Hide the dropDownMenu
     func hideDropDownMenu() {
+        DDLogVerbose("trace")
+
         // Determine final destination of dropDownMenu and opaqueOverlay/obstruction
         var frame: CGRect = self.dropDownMenu.frame
         frame.origin.y = -dropDownHeight
         var overlayFrame: CGRect = self.opaqueOverlay.frame
         overlayFrame.origin.y = -overlayHeight
+        
         // Perform animation
         self.animateDropDownToFrame(frame, overlayFrame: overlayFrame) {
             self.isDropDownDisplayed = false
@@ -614,17 +611,38 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         }
     }
     
-    // Show the dropDownMenu
     func showDropDownMenu() {
+        DDLogVerbose("trace")
+
+        self.dropDownMenu.reloadData()
+        
         // Determine final destination of dropDownMenu and opaqueOverlay/obstruction
         var frame: CGRect = self.dropDownMenu.frame
         frame.origin.y = 0.0
         var overlayFrame: CGRect = self.opaqueOverlay.frame
         overlayFrame.origin.y = 0.0
+        
         // Perform animation
         self.animateDropDownToFrame(frame, overlayFrame: overlayFrame) {
             self.isDropDownDisplayed = true
             self.dropDownMenu.layer.masksToBounds = false
+        }
+        
+        self.scheduleRefreshForTimeAgoDisplayIfNecessary()
+    }
+    
+    func scheduleRefreshForTimeAgoDisplayIfNecessary() {
+        DDLogVerbose("trace")
+
+        if HealthKitConfiguration.sharedInstance.shouldShowHealthKitUI() {
+            let delayTimeInSeconds = dispatch_time(DISPATCH_TIME_NOW, Int64(30 * Double(NSEC_PER_SEC)))
+            dispatch_after(delayTimeInSeconds, dispatch_get_main_queue()) {
+                if self.isDropDownDisplayed {
+                    DDLogInfo("refreshing 'time ago' display")
+                    self.dropDownMenu.reloadData()
+                    self.scheduleRefreshForTimeAgoDisplayIfNecessary()
+                }
+            }
         }
     }
     
@@ -701,11 +719,8 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
             
             if (groups.count == 1) {
                 
-                if (indexPath.section == sectionIndex(TableSection.HealthKit) && indexPath.row == 0) {
+                if (indexPath.section == sectionIndex(TableSection.HealthKit)) {
                     cell.configure("healthkit", arrow: false, group: groups[0])
-                } else if (indexPath.section == sectionIndex(TableSection.HealthKit) && indexPath.row == 1) {
-                    cell.configure("healthkit-status", arrow: false, group: groups[0])
-                    cell.userInteractionEnabled = false
                 } else if (indexPath.section == sectionIndex(TableSection.Logout) && indexPath.row == 0) {
                     cell.configure("logout", arrow: false)
                 } else if (indexPath.section == sectionIndex(TableSection.Version) && indexPath.row == 0) {
@@ -715,11 +730,8 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
             } else {
                 if (indexPath.section == sectionIndex(TableSection.Users) && indexPath.row == 0) {
                     cell.configure("all")
-                } else if (indexPath.section == sectionIndex(TableSection.HealthKit) && indexPath.row == 0) {
+                } else if (indexPath.section == sectionIndex(TableSection.HealthKit)) {
                     cell.configure("healthkit", arrow: false, group: groups[0])
-                } else if (indexPath.section == sectionIndex(TableSection.HealthKit) && indexPath.row == 1) {
-                    cell.configure("healthkit-status", arrow: false, group: groups[0])
-                    cell.userInteractionEnabled = false
                 } else if (indexPath.section == sectionIndex(TableSection.Logout) && indexPath.row == 0) {
                     cell.configure("logout", arrow: false)
                 } else if (indexPath.section == sectionIndex(TableSection.Version) && indexPath.row == 0) {
@@ -763,15 +775,12 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         } else if (tableView.isEqual(dropDownMenu)){
             if (groups.count == 1) {
                 numberOfRows = 1
-                if section == sectionIndex(TableSection.HealthKit) {
-                    numberOfRows = HealthKitConfiguration.sharedInstance.healthKitInterfaceEnabledForCurrentUser() && HealthKitDataUploader.sharedInstance.isUploading ? 2 : 1
-                }
             } else {
                 if (section == sectionIndex(TableSection.Users)) {
                     // Number of groups + 1 for 'All' / #nofilter
                     numberOfRows = groups.count + 1
                 } else if (section == sectionIndex(TableSection.HealthKit)) {
-                    numberOfRows = HealthKitConfiguration.sharedInstance.healthKitInterfaceEnabledForCurrentUser() && HealthKitDataUploader.sharedInstance.isUploading ? 2 : 1
+                    numberOfRows = 1
                 } else if (section == sectionIndex(TableSection.Logout)) {
                     numberOfRows = 1
                 } else if (section == sectionIndex(TableSection.Version)) {
@@ -844,20 +853,8 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
             
             if (groups.count == 1) {
                 
-                if (indexPath.section == sectionIndex(TableSection.HealthKit) && indexPath.row == 0) {
-                    let nameLabel = UILabel()
-                    nameLabel.text = healthKitTitle
-                    nameLabel.font = mediumBoldFont
-                    nameLabel.sizeToFit()
-                    
-                    return userCellInset + nameLabel.frame.height + userCellInset + (userCellThickSeparator - userCellThinSeparator)
-                } else if (indexPath.section == sectionIndex(TableSection.HealthKit) && indexPath.row == 1) {
-                    let nameLabel = UILabel()
-                    nameLabel.text = healthKitTitle
-                    nameLabel.font = mediumBoldFont
-                    nameLabel.sizeToFit()
-                    
-                    return userCellInset + nameLabel.frame.height + userCellInset + (userCellThickSeparator - userCellThinSeparator)
+                if (indexPath.section == sectionIndex(TableSection.HealthKit)) {
+                    return userCellConnectToHealthCellHeight
                 } else if (indexPath.section == sectionIndex(TableSection.Logout) && indexPath.row == 0) {
                     let nameLabel = UILabel()
                     nameLabel.text = logoutTitle
@@ -884,20 +881,8 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
                     nameLabel.sizeToFit()
                     
                     return userCellThickSeparator + userCellInset + nameLabel.frame.height + userCellInset + userCellThinSeparator
-                } else if (indexPath.section == sectionIndex(TableSection.HealthKit) && indexPath.row == 0) {
-                    let nameLabel = UILabel()
-                    nameLabel.text = healthKitTitle
-                    nameLabel.font = mediumBoldFont
-                    nameLabel.sizeToFit()
-                    
-                    return userCellInset + nameLabel.frame.height + userCellInset + (userCellThickSeparator - userCellThinSeparator)
-                } else if (indexPath.section == sectionIndex(TableSection.HealthKit) && indexPath.row == 1) {
-                    let nameLabel = UILabel()
-                    nameLabel.text = healthKitTitle
-                    nameLabel.font = mediumBoldFont
-                    nameLabel.sizeToFit()
-                    
-                    return userCellInset + nameLabel.frame.height + userCellInset + (userCellThickSeparator - userCellThinSeparator)
+                } else if (indexPath.section == sectionIndex(TableSection.HealthKit)) {
+                    return userCellConnectToHealthCellHeight
                 } else if (indexPath.section == sectionIndex(TableSection.Logout) && indexPath.row == 0) {
                     let nameLabel = UILabel()
                     nameLabel.text = logoutTitle

@@ -47,21 +47,15 @@ class App: UIApplication {
         DDLog.addLogger(fileLogger);
         
         // Set up log level
-#if DEBUG
         defaultDebugLevel = DDLogLevel.Verbose
-#else
-        if NSUserDefaults.standardUserDefaults().boolForKey("LoggingEnabled") {
-            defaultDebugLevel = DDLogLevel.Verbose
-        } else {
+        let loggingEnabledObject = NSUserDefaults.standardUserDefaults().objectForKey("LoggingEnabled")
+        if loggingEnabledObject != nil && !loggingEnabledObject!.boolValue {
             defaultDebugLevel = DDLogLevel.Off
         }
-#endif
-        // TODO: my - enabling logging all the time for now, probably don't want to ship to App Store this way!
-        defaultDebugLevel = DDLogLevel.Verbose
 
         DDLogVerbose("trace")
     }
 }
 
-    
+
 UIApplicationMain(Process.argc, Process.unsafeArgv, NSStringFromClass(App), NSStringFromClass(AppDelegate))

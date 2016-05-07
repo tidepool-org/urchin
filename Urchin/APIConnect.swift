@@ -50,6 +50,7 @@ class APIConnector {
                 }
                 request.HTTPBody = body
                 
+                DDLogInfo("request: \(request)")
                 let task = NSURLSession.sharedSession().dataTaskWithRequest(
                     request,
                     completionHandler: {
@@ -667,6 +668,7 @@ class APIConnector {
         let preRequest = { () -> Void in }
         
         let handleRequestCompletion = { (response: NSURLResponse!, data: NSData!, requestError: NSError!) -> Void in
+            // TODO: Per this Trello card (https://trello.com/c/ixKq9mHM/102-ios-bg-uploader-when-updating-uploader-to-new-upload-service-api-consider-that-the-duplicate-item-indices-may-be-going-away), this dup item indices response may be going away in future version of upload service, so we may need to revisit this when we move to the upload service API.            
             var error = requestError
             var duplicateItemCount = 0
             if error == nil {
