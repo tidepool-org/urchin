@@ -171,49 +171,17 @@ class LogInViewController :
                 self.selectServer(server.0)
             }))
         }
-        actionSheet.addAction(UIAlertAction(title: "Find date range for blood glucose samples", style: .Default, handler: { Void in
-            let sampleType = HKObjectType.quantityTypeForIdentifier(HKQuantityTypeIdentifierBloodGlucose)!
-            HealthKitManager.sharedInstance.findSampleDateRange(sampleType: sampleType) {                
-                (error: NSError?, startDate: NSDate?, endDate: NSDate?) in
-            
-                var alert: UIAlertController?
-                let title = "Date range for blood glucose samples"
-                var message = ""
-                if error == nil && startDate != nil && endDate != nil {
-                    let days = startDate!.differenceInDays(endDate!) + 1
-                    message = "Start date: \(startDate), end date: \(endDate). Total days: \(days)"
-                } else {
-                    message = "Unable to find date range for blood glucose samples, maybe you haven't connected to Health yet, please login and connect to Health and try again. Or maybe there are no samples in HealthKit."
-                }
-                DDLogInfo(message)
-                alert = UIAlertController(title: title, message: message, preferredStyle: .Alert)
-                alert!.addAction(UIAlertAction(title: addAlertOkay, style: .Default, handler: nil))
-                dispatch_async(dispatch_get_main_queue(), {
-                    self.presentViewController(alert!, animated: true, completion: nil)
-                })
-            }
+        actionSheet.addAction(UIAlertAction(title: "Count HealthKit Blood Glucose Samples", style: .Default, handler: {
+            Void in
+            self.handleCountBloodGlucoseSamples()
         }))
-        actionSheet.addAction(UIAlertAction(title: "Count HealthKit Blood Glucose Samples", style: .Default, handler: { Void in
-            HealthKitManager.sharedInstance.countBloodGlucoseSamples {
-                (error: NSError?, totalSamplesCount: Int, totalDexcomSamplesCount: Int) in
-                
-                var alert: UIAlertController?
-                let title = "HealthKit Blood Glucose Sample Count"
-                var message = ""
-                if error == nil {
-                    message = "There are \(totalSamplesCount) blood glucose samples and \(totalDexcomSamplesCount) Dexcom samples in HealthKit"
-                } else if HealthKitManager.sharedInstance.authorizationRequestedForBloodGlucoseSamples() {
-                    message = "Error counting samples: \(error)"
-                } else {
-                    message = "Unable to count samples, you haven't connected to Health yet, please login and connect to Health and try again."
-                }
-                DDLogInfo(message)
-                alert = UIAlertController(title: title, message: message, preferredStyle: .Alert)
-                alert!.addAction(UIAlertAction(title: addAlertOkay, style: .Default, handler: nil))
-                dispatch_async(dispatch_get_main_queue(), {
-                    self.presentViewController(alert!, animated: true, completion: nil)
-                })
-            }
+        actionSheet.addAction(UIAlertAction(title: "Find date range for blood glucose samples", style: .Default, handler: {
+            Void in
+            self.handleFindDateRangeBloodGlucoseSamples()
+        }))
+        actionSheet.addAction(UIAlertAction(title: "Email export of HealthKit blood glucose data", style: .Default, handler: {
+            Void in
+            self.handleEmailExportOfBloodGlucoseData()
         }))
         if defaultDebugLevel == DDLogLevel.Off {
             actionSheet.addAction(UIAlertAction(title: "Enable logging", style: .Default, handler: { Void in
@@ -230,32 +198,7 @@ class LogInViewController :
             }))
         }
         actionSheet.addAction(UIAlertAction(title: "Email logs", style: .Default, handler: { Void in
-            DDLog.flushLog()
-            
-            let logFilePaths = fileLogger.logFileManager.sortedLogFilePaths() as! [String]
-            var logFileDataArray = [NSData]()
-            for logFilePath in logFilePaths {
-                let fileURL = NSURL(fileURLWithPath: logFilePath)
-                if let logFileData = try? NSData(contentsOfURL: fileURL, options: NSDataReadingOptions.DataReadingMappedIfSafe) {
-                    // Insert at front to reverse the order, so that oldest logs appear first.
-                    logFileDataArray.insert(logFileData, atIndex: 0)
-                }
-            }
-            
-            if MFMailComposeViewController.canSendMail() {
-                let appName = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleName") as! String
-                let composeVC = MFMailComposeViewController()
-                composeVC.mailComposeDelegate = self
-                composeVC.setSubject("Logs for \(appName)")
-                composeVC.setMessageBody("", isHTML: false)
-                
-                let attachmentData = NSMutableData()
-                for logFileData in logFileDataArray {
-                    attachmentData.appendData(logFileData)
-                }
-                composeVC.addAttachmentData(attachmentData, mimeType: "text/plain", fileName: "\(appName).txt")
-                self.presentViewController(composeVC, animated: true, completion: nil)
-            }
+            self.handleEmailLogs()
         }))
         self.presentViewController(actionSheet, animated: true, completion: nil)
     }
@@ -705,5 +648,140 @@ class LogInViewController :
     func animationControllerForDismissedController(dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         transition.presenting = false
         return transition
+    }
+
+    // MARK: - Debug action handlers
+    
+    func handleCountBloodGlucoseSamples() {
+        HealthKitManager.sharedInstance.countBloodGlucoseSamples {
+            (error: NSError?, totalSamplesCount: Int, totalDexcomSamplesCount: Int) in
+            
+            var alert: UIAlertController?
+            let title = "HealthKit Blood Glucose Sample Count"
+            var message = ""
+            if error == nil {
+                message = "There are \(totalSamplesCount) blood glucose samples and \(totalDexcomSamplesCount) Dexcom samples in HealthKit"
+            } else if HealthKitManager.sharedInstance.authorizationRequestedForBloodGlucoseSamples() {
+                message = "Error counting samples: \(error)"
+            } else {
+                message = "Unable to count sample. Maybe you haven't connected to Health yet. Please login and connect to Health and try again."
+            }
+            DDLogInfo(message)
+            alert = UIAlertController(title: title, message: message, preferredStyle: .Alert)
+            alert!.addAction(UIAlertAction(title: addAlertOkay, style: .Default, handler: nil))
+            dispatch_async(dispatch_get_main_queue(), {
+                self.presentViewController(alert!, animated: true, completion: nil)
+            })
+        }
+    }
+    
+    func handleFindDateRangeBloodGlucoseSamples() {
+        let sampleType = HKObjectType.quantityTypeForIdentifier(HKQuantityTypeIdentifierBloodGlucose)!
+        HealthKitManager.sharedInstance.findSampleDateRange(sampleType: sampleType) {
+            (error: NSError?, startDate: NSDate?, endDate: NSDate?) in
+            
+            var alert: UIAlertController?
+            let title = "Date range for blood glucose samples"
+            var message = ""
+            if error == nil && startDate != nil && endDate != nil {
+                let days = startDate!.differenceInDays(endDate!) + 1
+                message = "Start date: \(startDate), end date: \(endDate). Total days: \(days)"
+            } else {
+                message = "Unable to find date range for blood glucose samples, maybe you haven't connected to Health yet, please login and connect to Health and try again. Or maybe there are no samples in HealthKit."
+            }
+            DDLogInfo(message)
+            alert = UIAlertController(title: title, message: message, preferredStyle: .Alert)
+            alert!.addAction(UIAlertAction(title: addAlertOkay, style: .Default, handler: nil))
+            dispatch_async(dispatch_get_main_queue(), {
+                self.presentViewController(alert!, animated: true, completion: nil)
+            })
+        }
+    }
+    
+    func handleEmailLogs() {
+        DDLog.flushLog()
+        
+        let logFilePaths = fileLogger.logFileManager.sortedLogFilePaths() as! [String]
+        var logFileDataArray = [NSData]()
+        for logFilePath in logFilePaths {
+            let fileURL = NSURL(fileURLWithPath: logFilePath)
+            if let logFileData = try? NSData(contentsOfURL: fileURL, options: NSDataReadingOptions.DataReadingMappedIfSafe) {
+                // Insert at front to reverse the order, so that oldest logs appear first.
+                logFileDataArray.insert(logFileData, atIndex: 0)
+            }
+        }
+        
+        if MFMailComposeViewController.canSendMail() {
+            let appName = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleName") as! String
+            let composeVC = MFMailComposeViewController()
+            composeVC.mailComposeDelegate = self
+            composeVC.setSubject("Logs for \(appName)")
+            composeVC.setMessageBody("", isHTML: false)
+            
+            let attachmentData = NSMutableData()
+            for logFileData in logFileDataArray {
+                attachmentData.appendData(logFileData)
+            }
+            composeVC.addAttachmentData(attachmentData, mimeType: "text/plain", fileName: "\(appName).txt")
+            self.presentViewController(composeVC, animated: true, completion: nil)
+        }
+    }
+
+    func handleEmailExportOfBloodGlucoseData() {
+        let sampleType = HKObjectType.quantityTypeForIdentifier(HKQuantityTypeIdentifierBloodGlucose)!
+        let sampleQuery = HKSampleQuery(sampleType: sampleType, predicate: nil, limit: HKObjectQueryNoLimit, sortDescriptors: nil) {
+            (query, samples, error) -> Void in
+            
+            if error == nil && samples?.count > 0 {
+                // Write header row
+                let rows = NSMutableString()
+                rows.appendString("sequence,sourceBundleId,UUID,date,value,units\n")
+
+                // Write rows
+                let dateFormatter = NSDateFormatter()
+                var sequence = 0
+                for sample in samples! {
+                    sequence += 1
+                    let sourceBundleId = sample.sourceRevision.source.bundleIdentifier
+                    let UUIDString = sample.UUID.UUIDString
+                    let date = dateFormatter.isoStringFromDate(sample.startDate, zone: NSTimeZone(forSecondsFromGMT: 0), dateFormat: iso8601dateZuluTime)
+                    
+                    if let quantitySample = sample as? HKQuantitySample {
+                        let units = "mg/dL"
+                        let unit = HKUnit(fromString: units)
+                        let value = quantitySample.quantity.doubleValueForUnit(unit)
+                        rows.appendString("\(sequence),\(sourceBundleId),\(UUIDString),\(date),\(value),\(units)\n")
+                    } else {
+                        rows.appendString("\(sequence),\(sourceBundleId),\(UUIDString)\n")
+                    }
+                }
+
+                // Send mail
+                if MFMailComposeViewController.canSendMail() {
+                    let composeVC = MFMailComposeViewController()
+                    composeVC.mailComposeDelegate = self
+                    composeVC.setSubject("HealthKit blood glucose samples")
+                    composeVC.setMessageBody("", isHTML: false)
+                    
+                    if let attachmentData = rows.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                        composeVC.addAttachmentData(attachmentData, mimeType: "text/csv", fileName: "HealthKit Samples.csv")
+                    }
+                    self.presentViewController(composeVC, animated: true, completion: nil)
+                }
+                
+            } else {
+                var alert: UIAlertController?
+                let title = "Error"
+                let message = "Unable to export HealthKit blood glucose data. Maybe you haven't connected to Health yet. Please login and connect to Health and try again. Or maybe there is no blood glucose data in Health."
+                DDLogInfo(message)
+                alert = UIAlertController(title: title, message: message, preferredStyle: .Alert)
+                alert!.addAction(UIAlertAction(title: addAlertOkay, style: .Default, handler: nil))
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.presentViewController(alert!, animated: true, completion: nil)
+                })
+            }
+        }
+        
+        HKHealthStore().executeQuery(sampleQuery)
     }
 }

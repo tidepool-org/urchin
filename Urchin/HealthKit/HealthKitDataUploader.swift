@@ -698,6 +698,8 @@ class HealthKitDataUploader {
             if startDateHistoricalBloodGlucoseSamples.compare(endDateHistoricalBloodGlucoseSamples) == .OrderedAscending {
                 totalDaysHistoricalBloodGlucoseSamples = startDateHistoricalBloodGlucoseSamples.differenceInDays(endDateHistoricalBloodGlucoseSamples) + 1
                 currentDayHistoricalBloodGlucoseSamples = startDateHistoricalBloodGlucoseSamples.differenceInDays(lastUploadSampleTimeBloodGlucoseSamples) + 1
+                DDLogInfo(
+                    "Uploaded \(currentDayHistoricalBloodGlucoseSamples) of \(totalDaysHistoricalBloodGlucoseSamples) days of historical data");
             }
         case .CurrentSamples:
             self.totalUploadCountBloodGlucoseSamples += samples.count
