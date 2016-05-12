@@ -640,7 +640,7 @@ class APIConnector {
         request("POST", urlExtension: urlExtension, headerDict: headerDict, body: body, preRequest: preRequest, completion: completion)
     }
     
-    func doUpload(body: NSData, completion: (error: NSError?, duplicateItemCount: Int) -> (Void)) {
+    func doUpload(body: NSData, completion: (error: NSError?, duplicateSampleCount: Int) -> (Void)) {
         DDLogVerbose("trace")
 
         var error: NSError?
@@ -649,7 +649,7 @@ class APIConnector {
             if error != nil {
                 DDLogError("Upload failed: \(error), \(error?.userInfo)")
                 
-                completion(error: error, duplicateItemCount: 0)
+                completion(error: error, duplicateSampleCount: 0)
             }
         }
         
@@ -670,13 +670,13 @@ class APIConnector {
         let handleRequestCompletion = { (response: NSURLResponse!, data: NSData!, requestError: NSError!) -> Void in
             // TODO: Per this Trello card (https://trello.com/c/ixKq9mHM/102-ios-bg-uploader-when-updating-uploader-to-new-upload-service-api-consider-that-the-duplicate-item-indices-may-be-going-away), this dup item indices response may be going away in future version of upload service, so we may need to revisit this when we move to the upload service API.            
             var error = requestError
-            var duplicateItemCount = 0
+            var duplicateSampleCount = 0
             if error == nil {
                 if let httpResponse = response as? NSHTTPURLResponse {
                     if data != nil {
                         let statusCode = httpResponse.statusCode
                         let duplicateItemIndices: NSArray? = (try? NSJSONSerialization.JSONObjectWithData(data!, options: [])) as? NSArray
-                        duplicateItemCount = duplicateItemIndices?.count ?? 0
+                        duplicateSampleCount = duplicateItemIndices?.count ?? 0
 
                         if statusCode >= 400 && statusCode < 600 {
                             let dataString = NSString(data: data!, encoding: NSUTF8StringEncoding)! as String
@@ -690,7 +690,7 @@ class APIConnector {
                 DDLogError("Upload failed: \(error), \(error?.userInfo)")
             }
             
-            completion(error: error, duplicateItemCount: duplicateItemCount)
+            completion(error: error, duplicateSampleCount: duplicateSampleCount)
         }
         
         request("POST", urlExtension: urlExtension, headerDict: headerDict, body: body, preRequest: preRequest, subdomainRootOverride: "uploads", completion: handleRequestCompletion)

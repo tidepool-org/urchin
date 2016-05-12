@@ -223,7 +223,7 @@ class LogInViewController :
     func prepareLogin() {
         DDLogVerbose("trace")
         
-        HealthKitDataUploader.sharedInstance.stopUploading()
+        HealthKitConfiguration.sharedInstance.configureHealthKitInterface(nil, isDSAUser: nil)
         
         if (!loginPrepared) {
             loginPrepared = true

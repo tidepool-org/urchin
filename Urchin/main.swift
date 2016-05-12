@@ -29,20 +29,6 @@ class App: UIApplication {
         fileLogger.logFormatter = LogFormatter()
         fileLogger.rollingFrequency = 60 * 60 * 4; // 2 hour rolling
         fileLogger.logFileManager.maximumNumberOfLogFiles = 12;
-        // Clear log files
-        // Don't clear log files, let's leave them so we can debug background delivery of glucose data
-        //        let logFileInfos = fileLogger.logFileManager.unsortedLogFileInfos()
-        //        for logFileInfo in logFileInfos {
-        //            if let logFilePath = logFileInfo.filePath {
-        //                do {
-        //                    try NSFileManager.defaultManager().removeItemAtPath(logFilePath)
-        //                    logFileInfo.reset()
-        //                    DDLogInfo("Removed log file: \(logFilePath)")
-        //                } catch let error as NSError {
-        //                    DDLogError("Failed to remove log file at path: \(logFilePath) error: \(error), \(error.userInfo)")
-        //                }
-        //            }
-        //        }
         // Add file logger
         DDLog.addLogger(fileLogger);
         
