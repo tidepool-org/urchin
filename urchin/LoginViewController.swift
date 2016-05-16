@@ -153,9 +153,7 @@ class LogInViewController :
         DDLogInfo("Switched to \(serverName) server")
     }
     
-    func mailComposeController(controller: MFMailComposeViewController,
-                               didFinishWithResult result: MFMailComposeResult,
-                               error: NSError?) {
+    func mailComposeController(controller: MFMailComposeViewController, result: MFMailComposeResult, error: NSError?) {
         controller.dismissViewControllerAnimated(true, completion: nil)
     }
     
@@ -185,16 +183,11 @@ class LogInViewController :
         }))
         if defaultDebugLevel == DDLogLevel.Off {
             actionSheet.addAction(UIAlertAction(title: "Enable logging", style: .Default, handler: { Void in
-                defaultDebugLevel = DDLogLevel.Verbose
-                NSUserDefaults.standardUserDefaults().setBool(true, forKey: "LoggingEnabled");
-                NSUserDefaults.standardUserDefaults().synchronize()
-                
+                Logger.sharedInstance.enableLogging()
             }))
         } else {
             actionSheet.addAction(UIAlertAction(title: "Disable logging", style: .Default, handler: { Void in
-                defaultDebugLevel = DDLogLevel.Off
-                NSUserDefaults.standardUserDefaults().setBool(false, forKey: "LoggingEnabled");
-                NSUserDefaults.standardUserDefaults().synchronize()
+                Logger.sharedInstance.disableLogging()
             }))
         }
         actionSheet.addAction(UIAlertAction(title: "Email logs", style: .Default, handler: { Void in
@@ -699,32 +692,7 @@ class LogInViewController :
     }
     
     func handleEmailLogs() {
-        DDLog.flushLog()
-        
-        let logFilePaths = fileLogger.logFileManager.sortedLogFilePaths() as! [String]
-        var logFileDataArray = [NSData]()
-        for logFilePath in logFilePaths {
-            let fileURL = NSURL(fileURLWithPath: logFilePath)
-            if let logFileData = try? NSData(contentsOfURL: fileURL, options: NSDataReadingOptions.DataReadingMappedIfSafe) {
-                // Insert at front to reverse the order, so that oldest logs appear first.
-                logFileDataArray.insert(logFileData, atIndex: 0)
-            }
-        }
-        
-        if MFMailComposeViewController.canSendMail() {
-            let appName = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleName") as! String
-            let composeVC = MFMailComposeViewController()
-            composeVC.mailComposeDelegate = self
-            composeVC.setSubject("Logs for \(appName)")
-            composeVC.setMessageBody("", isHTML: false)
-            
-            let attachmentData = NSMutableData()
-            for logFileData in logFileDataArray {
-                attachmentData.appendData(logFileData)
-            }
-            composeVC.addAttachmentData(attachmentData, mimeType: "text/plain", fileName: "\(appName).txt")
-            self.presentViewController(composeVC, animated: true, completion: nil)
-        }
+        Logger.sharedInstance.emailLogs(self)
     }
 
     func handleEmailExportOfBloodGlucoseData() {
