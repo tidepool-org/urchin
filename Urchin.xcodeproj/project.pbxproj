@@ -16,6 +16,8 @@
 		4D47CD7D1C18EC4C00AAA8A9 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D47CD7C1C18EC4C00AAA8A9 /* HealthKit.framework */; };
 		4D53181A1CA71E750072CCD6 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D5318191CA71E750072CCD6 /* main.swift */; };
 		4D53181B1CA71E7A0072CCD6 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D5318191CA71E750072CCD6 /* main.swift */; };
+		4D68DCBA1CEA5017006A388B /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D68DCB91CEA5017006A388B /* Logger.swift */; };
+		4D68DCBB1CEA51F0006A388B /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D68DCB91CEA5017006A388B /* Logger.swift */; };
 		4D9135431C8F164A00BE2090 /* HealthKitDataUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D9135421C8F164A00BE2090 /* HealthKitDataUploader.swift */; };
 		4D9135441C8F1ADB00BE2090 /* HealthKitDataUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D9135421C8F164A00BE2090 /* HealthKitDataUploader.swift */; };
 		4DAB1FA21CDD03B500F700FB /* NSDateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DAB1FA11CDD03B500F700FB /* NSDateExtension.swift */; };
@@ -139,6 +141,7 @@
 		4D47CD7B1C18EC4C00AAA8A9 /* urchin.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = urchin.entitlements; sourceTree = "<group>"; };
 		4D47CD7C1C18EC4C00AAA8A9 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		4D5318191CA71E750072CCD6 /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = main.swift; path = Urchin/main.swift; sourceTree = SOURCE_ROOT; };
+		4D68DCB91CEA5017006A388B /* Logger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Logger.swift; path = Urchin/Logger.swift; sourceTree = SOURCE_ROOT; };
 		4D9135421C8F164A00BE2090 /* HealthKitDataUploader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = HealthKitDataUploader.swift; path = Urchin/HealthKit/HealthKitDataUploader.swift; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		4DAB1FA11CDD03B500F700FB /* NSDateExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NSDateExtension.swift; path = Urchin/NSDateExtension.swift; sourceTree = SOURCE_ROOT; };
 		4DBC53491C30A9230062FDEA /* HealthKitManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitManager.swift; path = Urchin/HealthKit/HealthKitManager.swift; sourceTree = SOURCE_ROOT; };
@@ -226,6 +229,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4D68DCBC1CEA5BC8006A388B /* Logging */ = {
+			isa = PBXGroup;
+			children = (
+				4D01F7961C88D7D8006ABE5E /* LogFormatter.swift */,
+				4D68DCB91CEA5017006A388B /* Logger.swift */,
+			);
+			name = Logging;
+			sourceTree = "<group>";
+		};
 		4DBC53461C30A6E00062FDEA /* HealthKit */ = {
 			isa = PBXGroup;
 			children = (
@@ -364,10 +376,10 @@
 				4D47CD7B1C18EC4C00AAA8A9 /* urchin.entitlements */,
 				4D5318191CA71E750072CCD6 /* main.swift */,
 				AABCEF891B3231910064FE49 /* AppDelegate.swift */,
-				4D01F7961C88D7D8006ABE5E /* LogFormatter.swift */,
 				AABCEF8D1B3231910064FE49 /* Main.storyboard */,
 				AABCEF921B3231910064FE49 /* LaunchScreen.xib */,
 				AABCEF901B3231910064FE49 /* Images.xcassets */,
+				4D68DCBC1CEA5BC8006A388B /* Logging */,
 				AA03FB881B5848CD001B9435 /* API */,
 				4DBC53461C30A6E00062FDEA /* HealthKit */,
 				AA08280B1B5D7AC80016A7A3 /* Core Data */,
@@ -738,6 +750,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4D68DCBA1CEA5017006A388B /* Logger.swift in Sources */,
 				AA698EED1B545A07004154E0 /* EditNoteViewController.swift in Sources */,
 				AAB6B0531B605C440051472C /* FadeAnimator.swift in Sources */,
 				AA6932141B66EE0C0057F0A0 /* ConstantsAndStyle.swift in Sources */,
@@ -776,6 +789,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AA7920211B62AB5A0046038B /* EditNoteViewController.swift in Sources */,
+				4D68DCBB1CEA51F0006A388B /* Logger.swift in Sources */,
 				AA7920271B62AB920046038B /* FadeAnimator.swift in Sources */,
 				AA6932041B66E6210057F0A0 /* AddNoteVCTableViewDataSource.swift in Sources */,
 				AA6AF8F11B5EA81F0011F246 /* dateFormatterExtensionTests.swift in Sources */,

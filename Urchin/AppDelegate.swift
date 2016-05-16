@@ -17,8 +17,6 @@ import UIKit
 import CoreData
 import CocoaLumberjack
 
-var fileLogger: DDFileLogger!
-
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
