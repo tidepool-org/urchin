@@ -13,7 +13,7 @@ Notes track the user who created them, the user they are for, the message text, 
 
 Using Johnny's Account
 ------------
-Log in using Johnny's login credentials. For frequent use, we recommend checking "remember me."
+Log in using Johnny's login credentials.
 
 Take a look at some of the existing notes that we've created as Johnny. In the main feed, you can see notes that Johnny himself has posted, and that Jane has posted for Johnny.
 
@@ -23,14 +23,18 @@ In the notes feed, some of the notes will have an edit button. This is useful fo
 
 From the same editing view, you can also choose to delete notes that you no longer need. You can only delete a note if you created it.
 
+Johnny can also bring continuous glucose data from his Dexcom into his Blip account using Apple Health. To do this, from the main feed tap the dropdown in the top right corner. Toggle the connection to Health on and allow Blip Notes to read Blood Glucose data. Note: Data will only be uploaded if the user has Blood Glucose data in Apple health from a Dexcom app.
+
 Using Jane's Account
 ------------
-Log in using Jane's credentials. For frequent use, we recommend checking "remember me."
+Log in using Jane's credentials.
 
 Like Johnny, Jane can see all of Johnny's notes in the feed. Jane can add notes for Johnny, and edit the notes she created. She can delete the notes she created.
 
 Jane frequently checks Johnny's blood sugar in the middle of the night to be sure Johnny is not experiencing hyperglycemia, extremely high blood sugar levels, or hypoglycemia, extremely low blood sugar levels. As long as Jane is logged in, as soon as Blip Notes opens, a new note pops up. This is so it is quick and easy to add notes in the middle of the night, and even at other times of day.
 
+Because Jane does not have diabetes, she does not have a Data Storage Account with Tidepool, and thus cannot connect her Blip Notes account to Apple Health.
+
 Miscellaneous
 ------------
-Notes are not stored on the device. Login information is encrypted and stored if the user chooses "remember me." Hashtag usage information is stored to provide users with their most common hashtags at all times.
+Notes are not stored on the device. Login information is encrypted and stored by default until the user logs out. Hashtag usage information is stored to provide users with their most common hashtags at all times.
