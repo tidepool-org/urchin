@@ -983,8 +983,10 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
 
     func didToggleHealthKit(healthKitSwitch: UISwitch) {
         if healthKitSwitch.on {
+            self.apiConnector.trackMetric("Connect to Health - On")
             enableHealthKitInterfaceForCurrentUser(healthKitSwitch)
         } else {
+            self.apiConnector.trackMetric("Connect to Health - Off")
             HealthKitConfiguration.sharedInstance.disableHealthKitInterface()
         }
     }
@@ -1010,6 +1012,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
             let alert = UIAlertController(title: titleString, message: messageString, preferredStyle: .Alert)
             alert.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: { Void in
                 healthKitSwitch.on = false
+                self.apiConnector.trackMetric("Connect to Health - Off")
                 return
             }))
             alert.addAction(UIAlertAction(title: "Change Account", style: .Default, handler: { Void in
