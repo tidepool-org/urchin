@@ -193,6 +193,9 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
 
         // Handle HealthKitDataUploader notifications
         notificationCenter.addObserver(self, selector: #selector(NotesViewController.handleUploaderNotification(_:)), name: HealthKitDataUploader.Notifications.Updated, object: nil)
+        
+        // Listen to DismissButtonTapped from ConnectToHealthCelebrationViewController
+        notificationCenter.addObserver(self, selector: #selector(NotesViewController.handleCelebrationDismissButtonTapped), name: ConnectToHealthCelebrationViewController.Notifications.DismissButtonTapped, object: nil)
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -227,6 +230,16 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
                 configureTitleView(allNotesTitle)
             }
             
+            // Show connect to health celebration
+            if (HealthKitConfiguration.sharedInstance.shouldShowHealthKitUI() &&
+                !NSUserDefaults.standardUserDefaults().boolForKey("ConnectToHealthCelbrationHasBeenShown")) {
+                NSUserDefaults.standardUserDefaults().setBool(true, forKey: "ConnectToHealthCelbrationHasBeenShown")
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let viewController = storyboard.instantiateViewControllerWithIdentifier("ConnectToHealthCelebrationViewController") as! ConnectToHealthCelebrationViewController
+                self.presentViewController(viewController, animated: true, completion: nil)
+                justLoggedIn = false
+            }
+
             groupsReadyForTransition = true
             initialAddNote()
             
@@ -393,6 +406,16 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
             loadNotes()
         }
         
+    }
+    
+    func handleCelebrationDismissButtonTapped(notification: NSNotification) {
+        let viewController = notification.object as! UIViewController
+        viewController.dismissViewControllerAnimated(true)  {
+            Void in
+            DDLogVerbose("trace")
+        
+            self.dropDownMenuPressed()
+        }
     }
     
     // Called on newNoteButton press

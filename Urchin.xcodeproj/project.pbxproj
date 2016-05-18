@@ -22,6 +22,14 @@
 		4D9135441C8F1ADB00BE2090 /* HealthKitDataUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D9135421C8F164A00BE2090 /* HealthKitDataUploader.swift */; };
 		4DAB1FA21CDD03B500F700FB /* NSDateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DAB1FA11CDD03B500F700FB /* NSDateExtension.swift */; };
 		4DAB1FA31CDD0ECD00F700FB /* NSDateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DAB1FA11CDD03B500F700FB /* NSDateExtension.swift */; };
+		4DB754021CEBBF8900DD0991 /* ConnectToHealthCelebrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DB754011CEBBF8900DD0991 /* ConnectToHealthCelebrationViewController.swift */; };
+		4DB754031CEBC02700DD0991 /* ConnectToHealthCelebrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DB754011CEBBF8900DD0991 /* ConnectToHealthCelebrationViewController.swift */; };
+		4DB754071CEC0B0900DD0991 /* celebration-animated-dots.gif in Resources */ = {isa = PBXBuildFile; fileRef = 4DB754041CEC0B0900DD0991 /* celebration-animated-dots.gif */; };
+		4DB754081CEC0B0900DD0991 /* celebration-arc@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4DB754051CEC0B0900DD0991 /* celebration-arc@2x.png */; };
+		4DB754091CEC0B0900DD0991 /* celebration-arc.png in Resources */ = {isa = PBXBuildFile; fileRef = 4DB754061CEC0B0900DD0991 /* celebration-arc.png */; };
+		4DB7540A1CEC0B1900DD0991 /* celebration-arc@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4DB754051CEC0B0900DD0991 /* celebration-arc@2x.png */; };
+		4DB7540B1CEC0B1C00DD0991 /* celebration-animated-dots.gif in Resources */ = {isa = PBXBuildFile; fileRef = 4DB754041CEC0B0900DD0991 /* celebration-animated-dots.gif */; };
+		4DB7540C1CEC0B1F00DD0991 /* celebration-arc.png in Resources */ = {isa = PBXBuildFile; fileRef = 4DB754061CEC0B0900DD0991 /* celebration-arc.png */; };
 		4DBC534D1C30A9230062FDEA /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DBC53491C30A9230062FDEA /* HealthKitManager.swift */; };
 		4DBC534F1C30B3F30062FDEA /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DBC53491C30A9230062FDEA /* HealthKitManager.swift */; };
 		AA03FB8A1B5848FD001B9435 /* APIConnect.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA03FB891B5848FD001B9435 /* APIConnect.swift */; };
@@ -144,6 +152,10 @@
 		4D68DCB91CEA5017006A388B /* Logger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Logger.swift; path = Urchin/Logger.swift; sourceTree = SOURCE_ROOT; };
 		4D9135421C8F164A00BE2090 /* HealthKitDataUploader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = HealthKitDataUploader.swift; path = Urchin/HealthKit/HealthKitDataUploader.swift; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		4DAB1FA11CDD03B500F700FB /* NSDateExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NSDateExtension.swift; path = Urchin/NSDateExtension.swift; sourceTree = SOURCE_ROOT; };
+		4DB754011CEBBF8900DD0991 /* ConnectToHealthCelebrationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ConnectToHealthCelebrationViewController.swift; path = Urchin/ConnectToHealthCelebrationViewController.swift; sourceTree = SOURCE_ROOT; };
+		4DB754041CEC0B0900DD0991 /* celebration-animated-dots.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = "celebration-animated-dots.gif"; path = "Urchin/celebration-animated-dots.gif"; sourceTree = SOURCE_ROOT; };
+		4DB754051CEC0B0900DD0991 /* celebration-arc@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "celebration-arc@2x.png"; path = "Urchin/celebration-arc@2x.png"; sourceTree = SOURCE_ROOT; };
+		4DB754061CEC0B0900DD0991 /* celebration-arc.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "celebration-arc.png"; path = "Urchin/celebration-arc.png"; sourceTree = SOURCE_ROOT; };
 		4DBC53491C30A9230062FDEA /* HealthKitManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitManager.swift; path = Urchin/HealthKit/HealthKitManager.swift; sourceTree = SOURCE_ROOT; };
 		92E7D795B176FAC800CA8CA9 /* Pods_urchinTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_urchinTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9485591FB1EE6D91767F0C5A /* Pods-urchinTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-urchinTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-urchinTests/Pods-urchinTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -308,6 +320,9 @@
 				AADECC771B4F34AA0043E888 /* location@2x.png */,
 				AADECC781B4F34AA0043E888 /* camera.png */,
 				AADECC791B4F34AA0043E888 /* camera@2x.png */,
+				4DB754041CEC0B0900DD0991 /* celebration-animated-dots.gif */,
+				4DB754051CEC0B0900DD0991 /* celebration-arc@2x.png */,
+				4DB754061CEC0B0900DD0991 /* celebration-arc.png */,
 			);
 			name = Images;
 			sourceTree = "<group>";
@@ -454,6 +469,7 @@
 			isa = PBXGroup;
 			children = (
 				AA6931FD1B66E5280057F0A0 /* AddNoteVC */,
+				4DB754011CEBBF8900DD0991 /* ConnectToHealthCelebrationViewController.swift */,
 				AA698EEC1B545A07004154E0 /* EditNoteViewController.swift */,
 				AA993E2F1B3316C10027804C /* LoginViewController.swift */,
 				AA3652C31B338525001F514D /* NotesViewController.swift */,
@@ -582,12 +598,14 @@
 			files = (
 				AA66BA931B4C7CC400CCB008 /* checked.png in Resources */,
 				AABCEF8F1B3231910064FE49 /* Main.storyboard in Resources */,
+				4DB754071CEC0B0900DD0991 /* celebration-animated-dots.gif in Resources */,
 				AA66BA941B4C7CC400CCB008 /* checked@2x.png in Resources */,
 				AA66BA961B4C7CC400CCB008 /* unchecked@2x.png in Resources */,
 				AADECC7C1B4F34AA0043E888 /* camera.png in Resources */,
 				AADECC7A1B4F34AA0043E888 /* location.png in Resources */,
 				AA8301041B4DB4A400F8ADE6 /* closex@2x.png in Resources */,
 				AA66BA7D1B4C2D5500CCB008 /* right.png in Resources */,
+				4DB754081CEC0B0900DD0991 /* celebration-arc@2x.png in Resources */,
 				AA66BA7A1B4C292400CCB008 /* down@2x.png in Resources */,
 				AA66BA8D1B4C695400CCB008 /* notesicon.png in Resources */,
 				AA66BA791B4C292400CCB008 /* down.png in Resources */,
@@ -599,6 +617,7 @@
 				AAE778A51B4B408F00949CEE /* note@2x.png in Resources */,
 				AADECC7B1B4F34AA0043E888 /* location@2x.png in Resources */,
 				AA8301031B4DB4A400F8ADE6 /* closex.png in Resources */,
+				4DB754091CEC0B0900DD0991 /* celebration-arc.png in Resources */,
 				AACC18081B7A6E2500EA6425 /* OpenSans-Semibold.ttf in Resources */,
 				AA66BA8E1B4C695400CCB008 /* notesicon@2x.png in Resources */,
 				AA66BA8A1B4C426E00CCB008 /* OpenSans-Regular.ttf in Resources */,
@@ -612,8 +631,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4DB7540B1CEC0B1C00DD0991 /* celebration-animated-dots.gif in Resources */,
 				AAB95BA31B682E6300912D83 /* closex@2x.png in Resources */,
 				AAB95BA41B682E6300912D83 /* down.png in Resources */,
+				4DB7540A1CEC0B1900DD0991 /* celebration-arc@2x.png in Resources */,
 				AAB95BAB1B682E6300912D83 /* notesicon.png in Resources */,
 				AAB95BB21B682E6300912D83 /* location@2x.png in Resources */,
 				AAB95BA81B682E6300912D83 /* note.png in Resources */,
@@ -623,6 +644,7 @@
 				AAB95BA21B682E6300912D83 /* closex.png in Resources */,
 				AAB95BAA1B682E6300912D83 /* tidepoollogo.png in Resources */,
 				AAB95BA11B682E5600912D83 /* OpenSans-Regular.ttf in Resources */,
+				4DB7540C1CEC0B1F00DD0991 /* celebration-arc.png in Resources */,
 				AAB95BB41B682E6300912D83 /* camera@2x.png in Resources */,
 				AACC18091B7A6E2500EA6425 /* OpenSans-Semibold.ttf in Resources */,
 				AAB95BA91B682E6300912D83 /* note@2x.png in Resources */,
@@ -761,6 +783,7 @@
 				AABCEFAE1B3234360064FE49 /* Note.swift in Sources */,
 				4DBC534D1C30A9230062FDEA /* HealthKitManager.swift in Sources */,
 				AA6932061B66E6B60057F0A0 /* AddNoteVCTableViewDelegate.swift in Sources */,
+				4DB754021CEBBF8900DD0991 /* ConnectToHealthCelebrationViewController.swift in Sources */,
 				4D01F7971C88D7D8006ABE5E /* LogFormatter.swift in Sources */,
 				489A98D91CAC31E400A2F4A0 /* HealthKitConfiguration.swift in Sources */,
 				AA3484F41B56AED20028C49B /* UIDateFormatterExtension.swift in Sources */,
@@ -793,6 +816,7 @@
 				AA7920271B62AB920046038B /* FadeAnimator.swift in Sources */,
 				AA6932041B66E6210057F0A0 /* AddNoteVCTableViewDataSource.swift in Sources */,
 				AA6AF8F11B5EA81F0011F246 /* dateFormatterExtensionTests.swift in Sources */,
+				4DB754031CEBC02700DD0991 /* ConnectToHealthCelebrationViewController.swift in Sources */,
 				AA7920251B62AB790046038B /* NoteCell.swift in Sources */,
 				4D01F7981C88D809006ABE5E /* LogFormatter.swift in Sources */,
 				AA6932071B66E6D30057F0A0 /* AddNoteVCTableViewDelegate.swift in Sources */,

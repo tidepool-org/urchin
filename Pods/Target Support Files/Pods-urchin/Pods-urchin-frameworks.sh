@@ -86,10 +86,12 @@ strip_invalid_archs() {
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "Pods-urchin/CocoaLumberjack.framework"
   install_framework "Pods-urchin/CryptoSwift.framework"
+  install_framework "Pods-urchin/FLAnimatedImage.framework"
   install_framework "Pods-urchin/twitter_text.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "Pods-urchin/CocoaLumberjack.framework"
   install_framework "Pods-urchin/CryptoSwift.framework"
+  install_framework "Pods-urchin/FLAnimatedImage.framework"
   install_framework "Pods-urchin/twitter_text.framework"
 fi
