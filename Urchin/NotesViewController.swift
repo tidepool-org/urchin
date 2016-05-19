@@ -234,6 +234,7 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
             if (HealthKitConfiguration.sharedInstance.shouldShowHealthKitUI() &&
                 !NSUserDefaults.standardUserDefaults().boolForKey("ConnectToHealthCelbrationHasBeenShown")) {
                 NSUserDefaults.standardUserDefaults().setBool(true, forKey: "ConnectToHealthCelbrationHasBeenShown")
+                NSUserDefaults.standardUserDefaults().synchronize()
                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
                 let viewController = storyboard.instantiateViewControllerWithIdentifier("ConnectToHealthCelebrationViewController") as! ConnectToHealthCelebrationViewController
                 self.presentViewController(viewController, animated: true, completion: nil)
