@@ -6,7 +6,9 @@
     <customFonts key="customFonts">
         <mutableArray key="OpenSans-Regular.ttf">
             <string>OpenSans</string>
-            <string>OpenSans</string>
+        </mutableArray>
+        <mutableArray key="OpenSans-Semibold.ttf">
+            <string>OpenSans-Semibold</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -46,41 +48,41 @@
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="celebration-arc.png" translatesAutoresizingMaskIntoConstraints="NO" id="l68-YE-IFO">
-                                        <rect key="frame" x="77" y="22" width="166.5" height="89"/>
+                                        <rect key="frame" x="86.5" y="30" width="148" height="80"/>
                                         <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="89" id="O0p-tb-jhC"/>
-                                            <constraint firstAttribute="width" constant="166.5" id="gg2-lm-sDL"/>
+                                            <constraint firstAttribute="height" constant="80" id="O0p-tb-jhC"/>
+                                            <constraint firstAttribute="width" constant="148" id="gg2-lm-sDL"/>
                                         </constraints>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Now you can get Dexcom data into Blip easy peasy." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="YcK-o7-kfm">
-                                        <rect key="frame" x="70" y="133" width="180" height="36"/>
+                                        <rect key="frame" x="40" y="125" width="240" height="48"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="180" id="Gq2-l1-3kF"/>
-                                            <constraint firstAttribute="height" constant="36" id="KhD-GB-7oS"/>
+                                            <constraint firstAttribute="width" constant="240" id="Gq2-l1-3kF"/>
+                                            <constraint firstAttribute="height" constant="48" id="KhD-GB-7oS"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="13"/>
+                                        <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="17.5"/>
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="OLE-sK-WZM">
-                                        <rect key="frame" x="60" y="179" width="200" height="38"/>
+                                        <rect key="frame" x="10" y="186" width="300" height="48"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="38" id="tiM-Aq-4hu"/>
-                                            <constraint firstAttribute="width" constant="200" id="voH-3O-gJX"/>
+                                            <constraint firstAttribute="height" constant="48" id="tiM-Aq-4hu"/>
+                                            <constraint firstAttribute="width" constant="300" id="voH-3O-gJX"/>
                                         </constraints>
                                         <string key="text">1. Connect Dexcom app to Health
 2. Connect Blip Notes to Health</string>
-                                        <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="12"/>
+                                        <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="17.5"/>
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ulf-da-qBF">
-                                        <rect key="frame" x="100" y="239" width="120" height="30"/>
+                                        <rect key="frame" x="86" y="256" width="148" height="30"/>
                                         <color key="backgroundColor" red="0.36862745098039218" green="0.44705882352941173" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="XC4-Zs-uE0"/>
-                                            <constraint firstAttribute="width" constant="120" id="vnw-vy-3GU"/>
+                                            <constraint firstAttribute="width" constant="148" id="vnw-vy-3GU"/>
                                         </constraints>
                                         <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <state key="normal" title="ok, AWESOME">
@@ -106,10 +108,10 @@
                                         </connections>
                                     </button>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DTP-cQ-avT">
-                                        <rect key="frame" x="80" y="291" width="160" height="188"/>
+                                        <rect key="frame" x="76" y="291" width="168" height="196"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YQH-ab-roC" customClass="FLAnimatedImageView">
-                                                <rect key="frame" x="0.0" y="0.0" width="160" height="188"/>
+                                                <rect key="frame" x="2" y="0.0" width="168" height="196"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             </view>
@@ -117,9 +119,9 @@
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <constraints>
-                                            <constraint firstItem="YQH-ab-roC" firstAttribute="centerX" secondItem="DTP-cQ-avT" secondAttribute="centerX" id="2fw-Pi-XJ0"/>
-                                            <constraint firstAttribute="width" constant="160" id="9qX-Qd-rkh"/>
-                                            <constraint firstAttribute="height" constant="188" id="ZQL-ro-D7i"/>
+                                            <constraint firstItem="YQH-ab-roC" firstAttribute="centerX" secondItem="DTP-cQ-avT" secondAttribute="centerX" constant="2" id="2fw-Pi-XJ0"/>
+                                            <constraint firstAttribute="width" constant="168" id="9qX-Qd-rkh"/>
+                                            <constraint firstAttribute="height" constant="196" id="ZQL-ro-D7i"/>
                                             <constraint firstItem="YQH-ab-roC" firstAttribute="width" secondItem="DTP-cQ-avT" secondAttribute="width" id="f6j-i7-DVe"/>
                                             <constraint firstItem="YQH-ab-roC" firstAttribute="height" secondItem="DTP-cQ-avT" secondAttribute="height" id="kLl-bu-Isx"/>
                                             <constraint firstItem="YQH-ab-roC" firstAttribute="centerY" secondItem="DTP-cQ-avT" secondAttribute="centerY" id="nud-dp-yie"/>
@@ -127,16 +129,16 @@
                                     </view>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="OLE-sK-WZM" firstAttribute="top" secondItem="YcK-o7-kfm" secondAttribute="bottom" constant="10" id="D2t-D1-XKl"/>
+                                    <constraint firstItem="OLE-sK-WZM" firstAttribute="top" secondItem="YcK-o7-kfm" secondAttribute="bottom" constant="13" id="D2t-D1-XKl"/>
                                     <constraint firstItem="l68-YE-IFO" firstAttribute="centerX" secondItem="hLi-rw-BsA" secondAttribute="centerX" id="E8d-0S-ndb"/>
                                     <constraint firstItem="ulf-da-qBF" firstAttribute="centerX" secondItem="hLi-rw-BsA" secondAttribute="centerX" id="FTF-TS-sBo"/>
                                     <constraint firstItem="OLE-sK-WZM" firstAttribute="centerX" secondItem="hLi-rw-BsA" secondAttribute="centerX" id="K1D-s3-RCw"/>
                                     <constraint firstAttribute="height" constant="480" id="N0d-hE-5yF"/>
-                                    <constraint firstItem="DTP-cQ-avT" firstAttribute="top" secondItem="ulf-da-qBF" secondAttribute="bottom" constant="22" id="PJY-Wg-EM5"/>
+                                    <constraint firstItem="DTP-cQ-avT" firstAttribute="top" secondItem="ulf-da-qBF" secondAttribute="bottom" constant="5" id="PJY-Wg-EM5"/>
                                     <constraint firstItem="DTP-cQ-avT" firstAttribute="centerX" secondItem="hLi-rw-BsA" secondAttribute="centerX" id="QS5-RX-Gzk"/>
                                     <constraint firstItem="YcK-o7-kfm" firstAttribute="centerX" secondItem="hLi-rw-BsA" secondAttribute="centerX" id="b43-iD-hI1"/>
-                                    <constraint firstItem="l68-YE-IFO" firstAttribute="top" secondItem="hLi-rw-BsA" secondAttribute="top" constant="22" id="djl-n0-n4m"/>
-                                    <constraint firstItem="YcK-o7-kfm" firstAttribute="top" secondItem="l68-YE-IFO" secondAttribute="bottom" constant="22" id="ea8-bt-HMx"/>
+                                    <constraint firstItem="l68-YE-IFO" firstAttribute="top" secondItem="hLi-rw-BsA" secondAttribute="top" constant="30" id="djl-n0-n4m"/>
+                                    <constraint firstItem="YcK-o7-kfm" firstAttribute="top" secondItem="l68-YE-IFO" secondAttribute="bottom" constant="15" id="ea8-bt-HMx"/>
                                     <constraint firstItem="ulf-da-qBF" firstAttribute="top" secondItem="OLE-sK-WZM" secondAttribute="bottom" constant="22" id="gpe-c2-Ala"/>
                                     <constraint firstAttribute="width" constant="320" id="pSA-DP-ScS"/>
                                 </constraints>
@@ -163,6 +165,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="celebration-arc.png" width="333" height="178"/>
+        <image name="celebration-arc.png" width="148" height="80"/>
     </resources>
 </document>
