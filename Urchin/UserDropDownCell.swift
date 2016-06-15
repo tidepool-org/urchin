@@ -17,7 +17,7 @@ import Foundation
 import UIKit
 import CocoaLumberjack
 
-protocol UserDropDownCellDelegate {
+protocol UserDropDownCellDelegate: class {
     func didToggleHealthKit(healthKitSwitch: UISwitch)
 }
 
@@ -35,7 +35,7 @@ class UserDropDownCell: UITableViewCell {
     // Group for the cell
     var group: User!
 
-    var delegate: UserDropDownCellDelegate?
+    weak var delegate: UserDropDownCellDelegate?
     
     func configure(key: String, arrow: Bool = true, group: User? = nil) {
         healthConnectionSwitch.tintColor = whiteColor

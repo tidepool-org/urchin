@@ -662,10 +662,13 @@ class NotesViewController: UIViewController, UITableViewDataSource, UITableViewD
         if HealthKitConfiguration.sharedInstance.shouldShowHealthKitUI() {
             let delayTimeInSeconds = dispatch_time(DISPATCH_TIME_NOW, Int64(30 * Double(NSEC_PER_SEC)))
             dispatch_after(delayTimeInSeconds, dispatch_get_main_queue()) {
-                if self.isDropDownDisplayed {
-                    DDLogInfo("refreshing 'time ago' display")
-                    self.dropDownMenu.reloadData()
-                    self.scheduleRefreshForTimeAgoDisplayIfNecessary()
+                [weak self] in
+                guard let strongSelf = self else {
+                    return
+                }
+                if strongSelf.isDropDownDisplayed {
+                    strongSelf.dropDownMenu.reloadData()
+                    strongSelf.scheduleRefreshForTimeAgoDisplayIfNecessary()
                 }
             }
         }
