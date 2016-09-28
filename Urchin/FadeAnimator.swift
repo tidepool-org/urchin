@@ -24,7 +24,7 @@ class FadeAnimator: NSObject, UIViewControllerAnimatedTransitioning {
         let containerView = transitionContext.containerView()
         let toViewController = transitionContext.viewControllerForKey(UITransitionContextToViewControllerKey)
         
-        containerView!.addSubview(toViewController!.view)
+        containerView.addSubview(toViewController!.view)
         
         toViewController!.view.alpha = 0.0
         

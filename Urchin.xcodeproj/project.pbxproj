@@ -1027,6 +1027,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.tidepool.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_VERSION = 2.3;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/urchin.app/urchin";
 			};
 			name = Debug;
@@ -1043,6 +1044,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.tidepool.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_VERSION = 2.3;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/urchin.app/urchin";
 			};
 			name = Release;
