@@ -30,7 +30,7 @@ class Logger: NSObject, MFMailComposeViewControllerDelegate {
         
         // Set up file logging
         fileLogger.logFormatter = LogFormatter()
-        fileLogger.rollingFrequency = 60 * 60 * 4; // 2 hour rolling
+        fileLogger.rollingFrequency = 60 * 60 * 4;
         fileLogger.logFileManager.maximumNumberOfLogFiles = 12;
         DDLog.addLogger(fileLogger);
         

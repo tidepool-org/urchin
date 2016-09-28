@@ -7,7 +7,7 @@ class LogFormatter: DDDispatchQueueLogFormatter {
     override init() {
         df = NSDateFormatter()
         df.formatterBehavior = .Behavior10_4
-        df.dateFormat = "HH:mm:ss.SSS"
+        df.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"
         
         super.init()
     }

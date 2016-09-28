@@ -866,6 +866,10 @@ class APIConnector {
      }
     
     func alertWithOkayButton(title: String, message: String) {
+        DDLogInfo("title: \(title), message: \(message)")
+        let callStackSymbols = NSThread.callStackSymbols()
+        DDLogInfo("callStackSymbols: \(callStackSymbols)")
+        
         if (!isShowingAlert) {
             isShowingAlert = true
             
