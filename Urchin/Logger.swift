@@ -131,9 +131,11 @@ class Logger: NSObject, MFMailComposeViewControllerDelegate {
         }
     }
 
-    func mailComposeController(controller: MFMailComposeViewController, result: MFMailComposeResult, error: NSError?) {
+    func mailComposeController(controller: MFMailComposeViewController,
+                               didFinishWithResult result: MFMailComposeResult,
+                               error: NSError?) {
         DDLogVerbose("trace")
-
+        
         controller.dismissViewControllerAnimated(true, completion: nil)
     }
     
