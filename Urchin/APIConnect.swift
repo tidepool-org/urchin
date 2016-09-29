@@ -56,6 +56,16 @@ class APIConnector {
                     completionHandler: {
                         (data, response, error) -> Void in                        
                         dispatch_async(dispatch_get_main_queue(), {
+                            
+                            if defaultDebugLevel != DDLogLevel.Off {
+                                if data != nil {
+                                    let dataStr = String(data: data!, encoding: NSUTF8StringEncoding)
+                                    DDLogInfo("response: \(response), data: \(dataStr), error: \(error)")
+                                } else {
+                                    DDLogInfo("response: \(response), data: \(data), error: \(error)")
+                                }
+                            }
+                            
                             completion(response: response, data: data, error: error)
                         })
                     })
