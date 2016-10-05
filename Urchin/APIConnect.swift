@@ -50,30 +50,63 @@ class APIConnector {
                 }
                 request.HTTPBody = body
                 
-                DDLogInfo("request: \(request)")
-                let task = NSURLSession.sharedSession().dataTaskWithRequest(
-                    request,
-                    completionHandler: {
-                        (data, response, error) -> Void in                        
-                        dispatch_async(dispatch_get_main_queue(), {
-                            
-                            if defaultDebugLevel != DDLogLevel.Off {
-                                if data != nil {
-                                    let dataStr = String(data: data!, encoding: NSUTF8StringEncoding)
-                                    DDLogInfo("response: \(response), data: \(dataStr), error: \(error)")
-                                } else {
-                                    DDLogInfo("response: \(response), data: \(data), error: \(error)")
-                                }
+                var attemptsRemaining = 1
+                if method == "GET" {
+                    // Tidepool api isn't necessarily idempotent for mutating methods, so, only retry GET requests
+                    attemptsRemaining = 3
+                    request.timeoutInterval = 8
+                }
+                tryRequest(attemptsRemaining, request: request, completion: {
+                    response, data, error -> Void in
+                    
+                    dispatch_async(dispatch_get_main_queue(), {
+                        
+                        if defaultDebugLevel != DDLogLevel.Off {
+                            if data != nil {
+                                let dataStr = String(data: data!, encoding: NSUTF8StringEncoding)
+                                DDLogInfo("response: \(response), data: \(dataStr), error: \(error)")
+                            } else {
+                                DDLogInfo("response: \(response), data: \(data), error: \(error)")
                             }
-                            
-                            completion(response: response, data: data, error: error)
-                        })
+                        }
+                        
+                        completion(response: response, data: data, error: error)
                     })
-                task.resume()
+                })
             } else {
                 DDLogInfo("Not connected to network")
                 self.alertWithOkayButton("Not Connected to Network", message: "Please restart Blip notes when you are connected to a network.")
             }
+    }
+
+    func tryRequest(attemptsRemaining: Int, request: NSURLRequest, completion: (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void) {
+        DDLogInfo("request: \(request), attemptsRemaining: \(attemptsRemaining), headers: \(request.allHTTPHeaderFields)")
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(
+            request,
+            completionHandler: {
+                data, response, error -> Void in
+                
+                dispatch_async(dispatch_get_main_queue(), {                    
+                    if defaultDebugLevel != DDLogLevel.Off {
+                        if data != nil {
+                            let dataStr = String(data: data!, encoding: NSUTF8StringEncoding)
+                            DDLogInfo("response: \(response), data: \(dataStr), error: \(error)")
+                        } else {
+                            DDLogInfo("response: \(response), data: \(data), error: \(error)")
+                        }
+                    }
+                    
+                    if error != nil && attemptsRemaining > 1 {
+                        let delayTimeInSeconds = dispatch_time(DISPATCH_TIME_NOW, Int64(1 * Double(NSEC_PER_SEC)))
+                        dispatch_after(delayTimeInSeconds, dispatch_get_main_queue()) {
+                            self.tryRequest(attemptsRemaining - 1, request: request, completion: completion)
+                        }
+                    } else {
+                        completion(response: response, data: data, error: error)
+                    }
+                })
+        })
+        task.resume()
     }
     
     func trackMetric(metricName: String) {
@@ -877,8 +910,10 @@ class APIConnector {
     
     func alertWithOkayButton(title: String, message: String) {
         DDLogInfo("title: \(title), message: \(message)")
-        let callStackSymbols = NSThread.callStackSymbols()
-        DDLogInfo("callStackSymbols: \(callStackSymbols)")
+        if defaultDebugLevel != DDLogLevel.Off {
+            let callStackSymbols = NSThread.callStackSymbols()
+            DDLogInfo("callStackSymbols: \(callStackSymbols)")
+        }
         
         if (!isShowingAlert) {
             isShowingAlert = true
@@ -902,7 +937,8 @@ class APIConnector {
 
         do {
             let reachability = try Reachability.reachabilityForInternetConnection()
-            return reachability.isReachable()
+            let reachable = reachability.isReachable()
+            return reachable
         } catch ReachabilityError.FailedToCreateWithAddress(let address) {
             DDLogError("Unable to create\nReachability with address:\n\(address)")
             return true
