@@ -14,6 +14,7 @@
 */
 
 import Foundation
+import CocoaLumberjack
 
 class User {
     
@@ -45,19 +46,26 @@ class User {
         dateFormatter.dateFormat = "yyyy-MM-dd"
         
         if let patientDict = userDict["patient"] as? NSDictionary {
-            self.patient = Patient()
-            if let birthdayString = patientDict["birthday"] as? String {
-                self.patient!.birthday = dateFormatter.dateFromString(birthdayString)!
+            let patient = Patient()
+            if let birthdayString = patientDict["birthday"] as? String,
+               let birthday = dateFormatter.dateFromString(birthdayString) {
+                patient.birthday = birthday
+            } else {
+                DDLogInfo("Patient birthday not present or invalid: \(patientDict["birthday"] as? String)")
             }
-            if let diagnosisString = patientDict["diagnosisDate"] as? String {
-                self.patient!.diagnosisDate = dateFormatter.dateFromString(diagnosisString)!
+            if let diagnosisDateString = patientDict["diagnosisDate"] as? String,
+               let diagnosisDate = dateFormatter.dateFromString(diagnosisDateString) {
+                patient.diagnosisDate = diagnosisDate
+            } else {
+                DDLogInfo("Patient diagnosisDate not present or invalid: \(patientDict["diagnosisDate"] as? String)")
             }
             if let aboutMe = patientDict["aboutMe"] as? String {
-                self.patient!.aboutMe = aboutMe
+                patient.aboutMe = aboutMe
             }
             if let aboutMe = patientDict["about"] as? String {
-                self.patient!.aboutMe = aboutMe
+                patient.aboutMe = aboutMe
             }
+            self.patient = patient
         }
     }
 }
