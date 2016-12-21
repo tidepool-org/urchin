@@ -565,7 +565,8 @@ class APIConnector {
     func getNotesForUserInDateRange(notesVC: NotesViewController, userid: String, start: NSDate, end: NSDate) {
         
         let dateFormatter = NSDateFormatter()
-        let urlExtension = "/message/notes/" + userid + "?starttime=" + dateFormatter.isoStringFromDate(start, zone: nil) + "&endtime="  + dateFormatter.isoStringFromDate(end, zone: nil)
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        let urlExtension = "/message/notes/" + userid + "?starttime=" + dateFormatter.stringFromDate(start) + "&endtime="  + dateFormatter.stringFromDate(end)
         
         let headerDict = ["x-tidepool-session-token":"\(x_tidepool_session_token)"]
         
@@ -581,7 +582,7 @@ class APIConnector {
             
             if let httpResponse = response as? NSHTTPURLResponse {
                 if (httpResponse.statusCode == 200) {
-                    DDLogInfo("Got notes for user (\(userid)) in given date range: \(dateFormatter.isoStringFromDate(start, zone: nil)) to \(dateFormatter.isoStringFromDate(end, zone: nil))")
+                    DDLogInfo("Got notes for user (\(userid)) in given date range: \(dateFormatter.stringFromDate(start)) to \(dateFormatter.stringFromDate(end))")
                     
                     var notes: [Note] = []
                     
